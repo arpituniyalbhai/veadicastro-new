@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default: deny all access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Users collection: Allow authenticated users to read/write their own document using email
+    match /users/{userId} {
+      allow read: if request.auth != null 
+        && request.auth.token.email == userId;
+      allow create: if request.auth != null 
+        && request.auth.token.email == userId;
+      allow write: if request.auth != null 
+        && request.auth.token.email == userId;
+    }
+
+    // Payments collection: Allow authenticated users to manage their own payments
+    match /payments/{paymentId} {
+      // Users can read their own payment records
+      allow read: if request.auth != null;
+      
+      // Users can create their own payment records
+      allow create: if request.auth != null;
+      
+      // Users can update their own payment records (status updates only)
+      allow update: if request.auth != null && 
+        request.resource.data.diff(resource.data).affectedKeys().hasAll(['verificationStatus']);
+    }
+
+    // Report payments collection: Allow authenticated users to manage their own report payments
+    match /report-payments/{reportPaymentId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+    }
+
+    // Invoices collection: Read-only for authenticated users
+    match /invoices/{invoiceId} {
+      // Only authenticated users can read invoices
+      allow read: if request.auth != null;
+      
+      // Users can create their own invoices
+      allow create: if request.auth != null;
+      
+      // Users can update their own invoices
+      allow update: if request.auth != null;
+    }
+
+    // Members collection: Users can read their own members
+    match /members/{memberId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+  }
+}

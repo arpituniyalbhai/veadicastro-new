@@ -1,0 +1,12 @@
+},
+  {
+    id: "11",
+    title: "Marriage Compatibility Based on Your Zodiac Sign (2026 Guide)",
+    excerpt: "Discover your best marriage matches based on zodiac signs. Complete 2026 guide to astrological compatibility for all 12 signs — from Aquarius to Capricorn. Find your perfect partner.",
+    author: "Veadicastro Team",
+    date: "2026-03-21",
+    readTime: "18 min read",
+    category: "Relationship Astrology",
+    image: "/optimized/marriage-compatibility.webp",
+    externalLink: "/blog/marriage-compatibility-based-on-your-zodiac-sign"
+  }

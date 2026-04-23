@@ -1,0 +1,82 @@
+{
+  "name": "Veadicastro - Free AI Astrology",
+  "short_name": "Veadicastro",
+  "description": "India's most accurate Free AI Astrology Platform - Get daily horoscopes, kundli, and personalized predictions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#0a0a0f",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["lifestyle", "utilities", "education"],
+  "icons": [
+    {
+      "src": "/optimized/social-sharing.webp",
+      "sizes": "any",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/optimized/social-sharing.webp",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Veadicastro AI Astrology Dashboard"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI Astrology Chat",
+      "short_name": "Chat",
+      "description": "Start a free AI astrology chat session",
+      "url": "/free-ai-astrology-chat",
+      "icons": [
+        {
+          "src": "/optimized/social-sharing.webp",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Free Kundli",
+      "short_name": "Kundli",
+      "description": "Generate your free birth chart",
+      "url": "/free-kundli-generator",
+      "icons": [
+        {
+          "src": "/optimized/social-sharing.webp",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Daily Horoscope",
+      "short_name": "Horoscope",
+      "description": "Get your daily predictions",
+      "url": "/lucky-colour-for-today",
+      "icons": [
+        {
+          "src": "/optimized/social-sharing.webp",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "auto"]
+  }
+}

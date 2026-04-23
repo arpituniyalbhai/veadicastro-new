@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+/* Prevent horizontal scrolling and zoom on mobile */
+html, body {
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Logo magenta background match */
+    --primary: 324 70% 33%;
+    --primary-foreground: 0 0% 95%;
+
+    --secondary: 324 70% 42%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 324 70% 50%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 324 70% 45%;
+
+    --radius: 0.75rem;
+
+    /* Cosmic colors - Magenta / Purple-Red */
+    --cosmic-purple: 324 70% 33%;
+    --cosmic-maroon: 324 70% 42%;
+    --cosmic-deep-purple: 324 70% 28%;
+    --cosmic-light-purple: 324 70% 55%;
+    
+    /* Gradients - driven by primary/secondary */
+    --gradient-cosmic: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-radial: radial-gradient(circle at center, hsl(var(--primary) / 0.2) 0%, transparent 70%);
+    
+    /* Shadows & Glows */
+    --glow-purple: 0 0 40px hsl(var(--primary) / 0.4);
+    --glow-maroon: 0 0 30px hsl(var(--secondary) / 0.3);
+    --shadow-cosmic: 0 10px 40px hsl(var(--primary) / 0.3);
+
+    --sidebar-background: 240 40% 12%;
+    --sidebar-foreground: 270 20% 96%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 270 20% 96%;
+    --sidebar-accent: 240 30% 20%;
+    --sidebar-accent-foreground: 270 20% 96%;
+    --sidebar-border: 240 30% 20%;
+    --sidebar-ring: 320 82% 58%;
+  }
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    background-image: 
+      radial-gradient(circle at 20% 30%, hsl(var(--primary) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, hsl(var(--secondary) / 0.08) 0%, transparent 50%);
+  }
+}
+
+@layer utilities {
+  .cosmic-glow {
+    box-shadow: var(--glow-purple);
+  }
+  
+  .text-gradient {
+    background: var(--gradient-cosmic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  
+  /* Hide scrollbars */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Dark themed scrollbars */
+  .scrollbar-dark {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+  }
+  .scrollbar-dark::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scrollbar-dark::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  .scrollbar-dark::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--background));
+  }
+  .scrollbar-dark::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--border));
+  }
+  
+  /* Black themed scrollbars */
+  .scrollbar-black {
+    scrollbar-width: thin;
+    scrollbar-color: #000000 hsl(var(--background));
+  }
+  .scrollbar-black::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scrollbar-black::-webkit-scrollbar-track {
+    background: hsl(var(--background));
+  }
+  .scrollbar-black::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 9999px;
+    border: 2px solid hsl(var(--background));
+  }
+  .scrollbar-black::-webkit-scrollbar-thumb:hover {
+    background-color: #333333;
+  }
+  
+  @keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.95); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+  
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes thinking-pulse {
+    0%, 60%, 100% { 
+      opacity: 0.3;
+      transform: translateY(0);
+    }
+    30% { 
+      opacity: 1;
+      transform: translateY(-8px);
+    }
+  }
+
+  @keyframes thinking-wave {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+  }
+
+  .thinking-dots {
+    display: inline-flex;
+    gap: 5px;
+    align-items: flex-end;
+  }
+
+  .thinking-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: hsl(var(--secondary));
+    animation: thinking-pulse 1.2s ease-in-out infinite;
+    box-shadow: 0 0 8px hsl(var(--secondary) / 0.5);
+  }
+
+  .thinking-dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  .thinking-dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
