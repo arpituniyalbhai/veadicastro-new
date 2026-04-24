@@ -357,6 +357,9 @@ const AiAstrologerVsHumanAstrologer = () => {
                 <Link to="/blog/ai-astrology-prediction-for-2026" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrology Predictions for 2026 - What to Expect
                 </Link>
+                <Link to="/blog/the-great-astrology-scam" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Online Astrologer Per Minute Scam — The Truth About Industry Pricing
+                </Link>
                 <Link to="/blog/ai-jyotish-vedic-astrology" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Jyotish - Where Vedic Astrology Meets Artificial Intelligence
                 </Link>

@@ -69,6 +69,7 @@ const AiAstrologerVsHumanAstrologer = lazy(() => import("../blogs/ai-astrology/a
 const AiAstrologyRealOrFake = lazy(() => import("../blogs/ai-astrology/ai-astrology-real-or-fake"));
 const WhyChatGptFailsAtAiAstrology = lazy(() => import("../blogs/ai-astrology/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt"));
 const AiAstrologyPredictionFor2026 = lazy(() => import("../blogs/ai-astrology/ai-astrology-prediction-for-2026"));
+const TheGreatAstrologyScam = lazy(() => import("../blogs/The-Great-Astrology-Scam"));
 
 // Lazy load tool pages
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
@@ -156,6 +157,7 @@ const RouterShell = () => {
         <Route path="/blog/ai-astrology-real-or-fake" element={<Suspense fallback={<PageLoading />}><AiAstrologyRealOrFake /></Suspense>} />
         <Route path="/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt" element={<Suspense fallback={<PageLoading />}><WhyChatGptFailsAtAiAstrology /></Suspense>} />
         <Route path="/blog/ai-astrology-prediction-for-2026" element={<Suspense fallback={<PageLoading />}><AiAstrologyPredictionFor2026 /></Suspense>} />
+        <Route path="/blog/the-great-astrology-scam" element={<Suspense fallback={<PageLoading />}><TheGreatAstrologyScam /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoading />}><Terms /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoading />}><Privacy /></Suspense>} />
         <Route path="/disclaimer" element={<Suspense fallback={<PageLoading />}><Disclaimer /></Suspense>} />

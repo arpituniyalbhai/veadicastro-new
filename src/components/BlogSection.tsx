@@ -16,6 +16,17 @@ type BlogPost = {
 // Latest 3 blog posts (sorted by date, most recent first)
 const latestBlogPosts: BlogPost[] = [
   {
+    id: "20",
+    title: "Online Astrologer Per Minute Scam — The Truth",
+    excerpt: "Online astrologers charge ₹15–₹50 per minute. A 45-min session costs ₹2,250. See how the industry traps you — and how VeadicAstro charges ₹799 flat with no per-minute billing.",
+    author: "Arpit Uniyal",
+    date: "2026-04-24",
+    readTime: "9 min read",
+    category: "Industry Analysis",
+    image: "/blog-images/astrologer-scal-blog.webp",
+    externalLink: "/blog/the-great-astrology-scam"
+  },
+  {
     id: "17",
     title: "Is AI Astrology Accurate? We Tested It (2026)",
     excerpt: "A honest review of AI astrology accuracy. We tested AI predictions against real life experiences. Learn how AI astrology works, what makes it accurate, and whether it can replace traditional astrologers.",
@@ -36,17 +47,6 @@ const latestBlogPosts: BlogPost[] = [
     category: "AI & Technology",
     image: "/Ai-Astrology-image/ai-jyotish-vedic-astrology.webp",
     externalLink: "/blog/ai-jyotish-vedic-astrology"
-  },
-  {
-    id: "19",
-    title: "AI Astrologer vs Human Astrologer - Which is Better? (2026)",
-    excerpt: "Comprehensive comparison between AI astrologer and human astrologer. Discover accuracy, cost, privacy, and convenience differences. Find out which option is better for your needs.",
-    author: "Arpit Uniyal",
-    date: "2026-04-11",
-    readTime: "35 min read",
-    category: "AI & Technology",
-    image: "/Ai-Astrology-image/ai-astrologer-vs-human-astrologer.webp",
-    externalLink: "/blog/ai-astrologer-vs-human-astrologer"
   }
 ];
 const BlogSection = () => {

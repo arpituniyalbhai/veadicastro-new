@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "23",
+    title: "The Great Astrology Scam",
+    excerpt: "Every second on the clock costs you money. Here's how the astrology industry is milking that — and who's actually doing it differently. Expose the per-minute pricing trap and discover VeadicAstro's ₹799 flat-rate solution.",
+    author: "Arpit Uniyal",
+    date: "2026-04-24",
+    readTime: "28 min read",
+    category: "Astrology Industry",
+    image: "/blog-images/astrologer-scal-blog.webp",
+    externalLink: "/blog/the-great-astrology-scam"
+  },
+  {
     id: "2",
     title: "Vedic Astrology AI Kaise Kaam Karta Hai? Complete Guide in Hindi",
     excerpt: "जानिए Vedic Astrology AI कैसे काम करता है। Artificial Intelligence और Jyotish Shastra का संगम। Kundli बनाने, Prediction और Pattern Recognition की पूरी प्रक्रिया।",

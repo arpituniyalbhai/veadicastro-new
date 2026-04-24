@@ -1934,9 +1934,7 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
         />
       )}
 
-      {/* Personalized Welcome Popup - shows only first time after onboarding */}
-      <PersonalizedWelcomePopup />
-
+      
       {/* Monthly Loading Toast - Left Bottom */}
       {showMonthlyLoadingPopup && (
         <div className="fixed bottom-4 left-4 z-50 bg-background border border-border rounded-lg p-4 max-w-sm shadow-lg">
