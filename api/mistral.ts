@@ -356,7 +356,11 @@ FORMAT:
 
 END:
 
-* End with ONE follow-up question that references ONE specific life situation the user is currently facing — career, relationship, or family — based on their dasha. Make it uncomfortably accurate and specific.
+* End with ONE question about a feeling or pattern 
+the user is currently experiencing — based on their 
+dasha theme only. Never mention specific people, 
+events, or dates. Ask about emotions, tensions, or 
+decisions only.
 
 GOAL:
 Make astrology feel practical, logical, and useful - not mystical or vague.
