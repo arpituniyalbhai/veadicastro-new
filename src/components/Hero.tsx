@@ -36,14 +36,23 @@ const Hero = () => {
   
   return (
     <section id="hero" className="relative min-h-screen md:min-h-screen flex items-center justify-center overflow-hidden py-12 md:py-20">
-      {/* Clean Background */}
-      <div className="absolute inset-0 z-0 bg-background" />
+      {/* Clean Background with explicit color for Googlebot */}
+      <div className="absolute inset-0 z-0 bg-background" style={{ backgroundColor: '#0a0a0f' }} />
+
+      {/* Noscript fallback for Googlebot - static content always visible */}
+      <noscript>
+        <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)', textAlign:'center', color:'white', zIndex:20}}>
+          <h1 style={{fontSize:'2.5rem', fontWeight:'bold', color:'white', marginBottom:'1rem'}}>AI Powered Vedic Astrology</h1>
+          <p style={{color:'#d1d5db', marginTop:'1rem', fontSize:'1.125rem'}}>Get your personalized prediction in 60 seconds</p>
+          <p style={{color:'#9ca3af', marginTop:'0.5rem', fontSize:'1rem'}}>Knows what's coming next in your love, career and money</p>
+        </div>
+      </noscript>
 
       {/* Content */}
       <div className="container relative z-10 px-4 sm:px-6 py-12 md:py-20 mx-auto">
         <div className="flex items-center justify-center">
           {/* Centered Content */}
-          <div className="text-center space-y-6 md:space-y-10 animate-fade-in max-w-6xl">
+          <div className="text-center space-y-6 md:space-y-10 max-w-6xl">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-secondary/40 bg-secondary/10 backdrop-blur-md shadow-lg shadow-secondary/20">
               <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-secondary animate-pulse flex-shrink-0" />
@@ -51,12 +60,12 @@ const Hero = () => {
             </div>
 
             <h1 className="font-sans text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-tight tracking-normal relative">
-              <span className="block text-white">AI Powered Vedic Astrology —</span>
+              <span className="block text-white" style={{color:'#f2f2f2'}}>AI Powered Vedic Astrology —</span>
               <div className="relative inline-block h-[1.2em]">
                 <div className="hero-headline-wrapper relative">
                   {/* Visible static glow behind the cycling text */}
                   <div className="absolute inset-0 -left-3 -right-3 -top-2 -bottom-2 bg-gradient-to-r from-[#8B0050]/50 via-[#6B0040]/40 to-[#8B0050]/50 blur-xl opacity-70 -z-10"></div>
-                  <span className={`relative z-10 block text-accent font-bold transition-all duration-500 ease-in-out ${
+                  <span style={{color:'#d9277a'}} className={`relative z-10 block text-accent font-bold transition-all duration-500 ease-in-out ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
                   }`}>
                     {cyclingTexts[currentTextIndex]}
@@ -65,7 +74,7 @@ const Hero = () => {
               </div>
             </h1>
             
-            <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
+            <p style={{color:'#d1d5db'}} className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
             Get your personalized prediction in 60 seconds<br />
             Knows whats coming next in your love, career and money
             </p>
@@ -104,7 +113,7 @@ const Hero = () => {
                   </div>
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground">
-                  <span className="font-semibold text-foreground">Chosen by 14500+ Users Worldwide</span>
+                  <span style={{color:'#f2f2f2'}} className="font-semibold text-foreground">Chosen by 14500+ Users Worldwide</span>
                 </p>
               </div>
             </div>
