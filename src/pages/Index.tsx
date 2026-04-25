@@ -72,17 +72,8 @@ const Index = () => {
     }
   }, [user, loading, navigate]);
 
-  // Show loading while checking auth
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
-      </div>
-    );
-  }
-
-  // Don't render landing page if user is logged in
-  if (user) {
+  // Don't render landing page if user is logged in (but only after auth check completes)
+  if (!loading && user) {
     return null;
   }
 
