@@ -15,14 +15,9 @@ const VALID_PLAN_PRICES: Record<string, number> = {
 
 // Micro-transaction pricing
 const MICRO_PRICES: Record<string, number> = {
-  'Single Report': 19900,     // ₹199 in paise
-  'Life Guidance Report': 19900,  // ₹199 in paise
-  'Career Report': 19900,       // ₹199 in paise
-  'Relationship Report': 19900,  // ₹199 in paise
-  'Health Report': 19900,       // ₹199 in paise
-  'Finance Report': 19900,       // ₹199 in paise
-  'Marriage Report': 19900,      // ₹199 in paise
-  'Complete Life Report': 19900, // ₹199 in paise
+  'Personal Growth': 19900,     // ₹199 in paise
+  'Love & Relationships': 19900, // ₹199 in paise
+  'Career & Wealth': 19900,      // ₹199 in paise
 };
 
 // Compatibility credit pricing

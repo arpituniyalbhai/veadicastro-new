@@ -754,44 +754,22 @@ const Pricing = () => {
         {/* Report Pricing Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-foreground mb-4 text-center">Detailed Reports</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto">
-            {[
-              {
-                name: "Life Guidance Report",
-                description: "Complete life guidance based on your birth chart",
-                price: 199
-              },
-              {
-                name: "Career Report",
-                description: "Complete career guidance based on your birth chart",
-                price: 199
-              },
-              {
-                name: "Relationship Report",
-                description: "Complete relationship guidance based on your birth chart",
-                price: 199
-              },
-              {
-                name: "Health Report",
-                description: "Complete health guidance based on your birth chart",
-                price: 199
-              },
-              {
-                name: "Finance Report",
-                description: "Complete finance guidance based on your birth chart",
-                price: 199
-              },
-              {
-                name: "Marriage Report",
-                description: "Marriage timing and compatibility analysis",
-                price: 199
-              },
-              {
-                name: "Complete Life Report",
-                description: "Comprehensive analysis of all life aspects",
-                price: 199
-              }
-            ].map((report) => (
+          <div className="grid gap-6 md:grid-cols-3 max-w-4xl mx-auto">
+            {[{
+              name: "Personal Growth",
+              description: "Complete personal growth guidance based on your birth chart",
+              price: 199
+            },
+            {
+              name: "Love & Relationships",
+              description: "Complete love and relationship guidance based on your birth chart",
+              price: 199
+            },
+            {
+              name: "Career & Wealth",
+              description: "Complete career and wealth guidance based on your birth chart",
+              price: 199
+            }].map((report) => (
               <Card
                 key={report.name}
                 className="p-6 rounded-2xl border border-border/60 bg-card/40 transition-all duration-300 hover:shadow-lg hover:scale-105 cursor-pointer relative"
@@ -799,7 +777,7 @@ const Pricing = () => {
                   navigate(`/pricing/onboarding?plan=${encodeURIComponent(report.name)}&amount=${report.price}&type=report`);
                 }}
               >
-                {report.name === "Career Report" && (
+                {report.name === "Career & Wealth" && (
                   <div className="absolute -top-2 -left-2">
                     <span className="bg-green-500/10 border-green-500/30 text-green-400 text-xs px-2 py-0.5 rounded-full font-medium">
                       🔥156 people bought in 24h
