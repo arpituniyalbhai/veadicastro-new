@@ -14,12 +14,6 @@ export type BirthDetails = {
 
 export type AstroDetail = { label: string; value: string };
 
-export type MemberRecord = BirthDetails & {
-  id: string;
-  createdAt: number;
-  details: AstroDetail[];
-  astroPayload?: AstroPayload | null;
-};
 
 const COLOURS = ["Purple", "Gold", "Blue", "Emerald", "Crimson", "Indigo", "Teal", "Amber", "Rose"];
 
@@ -79,30 +73,5 @@ const buildDetailsFromPayload = (payload?: AstroPayload | null): AstroDetail[] =
   ];
 };
 
-export function buildMemberRecord(b: BirthDetails, astro?: AstroPayload | null): MemberRecord {
-  const details = astro ? buildDetailsFromPayload(astro) : randomDetailFromSeed(`${b.name}|${b.date}|${b.time}|${b.place}`);
-  return {
-    id: `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-    ...b,
-    createdAt: Date.now(),
-    details,
-    astroPayload: astro ?? null,
-  };
-}
 
-export function loadMembers(): MemberRecord[] {
-  if (typeof window === "undefined") return [];
-  try {
-    return JSON.parse(localStorage.getItem("members") || "[]") as MemberRecord[];
-  } catch {
-    return [];
-  }
-}
 
-export function saveMembers(members: MemberRecord[]) {
-  try {
-    localStorage.setItem("members", JSON.stringify(members));
-  } catch {
-    /* ignore */
-  }
-}

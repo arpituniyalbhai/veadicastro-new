@@ -24,7 +24,6 @@ Veadicastro is an AI-powered Vedic astrology platform that combines classical Ve
 - Life Instructions based on your kundali
 - Future predictions (6-12 months ahead)
 - Detailed astrological reports
-- Family member management (Premium feature)
 - AI-powered chat for astrological questions
 - Multi-language support (English, Hindi)
 
@@ -98,7 +97,6 @@ Veadicastro is an AI-powered Vedic astrology platform that combines classical Ve
 - /reports (Astrological Reports)
 - /pricing (Pricing plans)
 - /profile (User profile)
-- /members (Family Members - Premium only)
 - /settings/language (Language settings)
 
 ## How to Guide Users

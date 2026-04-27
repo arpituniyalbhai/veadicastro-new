@@ -6,7 +6,6 @@ import { ArrowLeft, Loader } from "lucide-react";
 import { generateGemini } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
-import { loadMembers } from "@/lib/astroMock";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
 
@@ -17,12 +16,11 @@ const Instruction = () => {
   const { planName, loading: planLoading } = usePlan();
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  const memberId = useMemo(() => new URLSearchParams(location.search).get("member"), [location.search]);
   
   // Cache helpers
-  const getCachedContent = (type: string, memberId: string | null, language: string) => {
+  const getCachedContent = (type: string, language: string) => {
     try {
-      const key = `${type}_${memberId || 'user'}_${language}`;
+      const key = `${type}_user_${language}`;
       const cached = localStorage.getItem(key);
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
@@ -38,9 +36,9 @@ const Instruction = () => {
     return null;
   };
 
-  const setCachedContent = (type: string, data: string, memberId: string | null, language: string) => {
+  const setCachedContent = (type: string, data: string, language: string) => {
     try {
-      const key = `${type}_${memberId || 'user'}_${language}`;
+      const key = `${type}_user_${language}`;
       localStorage.setItem(key, JSON.stringify({
         data,
         timestamp: Date.now()
@@ -51,14 +49,6 @@ const Instruction = () => {
   };
   
   const featureAllowed = planName === "Premium";
-  const selectedMember = useMemo(() => {
-    if (!memberId) return null;
-    try {
-      return loadMembers().find((m) => m.id === memberId) || null;
-    } catch {
-      return null;
-    }
-  }, [memberId]);
 
   const sanitizeMarkdown = (text: string) => {
     // Remove all markdown formatting while keeping content
@@ -95,24 +85,13 @@ const Instruction = () => {
       setLoading(true);
       try {
         // Check cache first
-        const cached = getCachedContent("instruction", memberId || null, lang);
+        const cached = getCachedContent("instruction", lang);
         if (cached) {
           setContent(cached);
           setLoading(false);
           return;
         }
         const details = (() => {
-          if (selectedMember) {
-            return {
-              dob: selectedMember.date,
-              time: selectedMember.time,
-              place: selectedMember.place,
-              lat: selectedMember.lat,
-              lng: selectedMember.lon,
-              tzone: selectedMember.tzone,
-              gender: selectedMember.gender,
-            };
-          }
           try {
             return JSON.parse(localStorage.getItem("onboarding_details") || "null");
           } catch {
@@ -199,7 +178,7 @@ Focus ONLY on guidance for the year 2026. Do not provide general life instructio
           : "Unable to generate your life instructions at this moment. Please try again later."));
         setContent(finalContent);
         // Cache the content
-        setCachedContent("instruction", finalContent, memberId || null, lang);
+        setCachedContent("instruction", finalContent, lang);
       } catch (error) {
         console.error("Error fetching instruction content:", error);
         setContent("Unable to load your life instructions at this moment. Please try again later.");
@@ -209,7 +188,7 @@ Focus ONLY on guidance for the year 2026. Do not provide general life instructio
     };
 
     fetchContent();
-  }, [selectedMember, memberId, lang]);
+  }, [lang]);
 
   if (planLoading) {
     return (

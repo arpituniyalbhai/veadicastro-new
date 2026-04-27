@@ -15,7 +15,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db, primaryDb } from "@/lib/firebase";
 
 const AuthModal = () => {
@@ -37,19 +37,22 @@ const AuthModal = () => {
   // Create user document in Firestore immediately after authentication
   const createUserDocument = async (userEmail: string, userName: string, uid: string) => {
     try {
-      console.log("Creating user document immediately after auth:", userEmail);
-      console.log("Current auth user:", auth.currentUser);
-      console.log("Auth user email:", auth.currentUser?.email);
-      
-      // Use the authenticated user's email to ensure consistency with Firestore rules
-      const authenticatedEmail = auth.currentUser?.email || userEmail;
-      const normalizedEmail = authenticatedEmail.toLowerCase().trim();
-      
-      console.log("Using email for document ID:", normalizedEmail);
-      
+      const normalizedEmail = (auth.currentUser?.email || userEmail).toLowerCase().trim();
       const userDocRef = doc(db, "users", normalizedEmail);
+      
+      // Check if doc already exists
+      const existing = await getDoc(userDocRef);
+      
+      if (existing.exists()) {
+        // User already has a doc — don't touch anything
+        // Their credits, plan, purchased reports are safe
+        console.log("Existing user, skipping doc creation:", normalizedEmail);
+        return;
+      }
+      
+      // First time only — create fresh doc with 2 free credits
       await setDoc(userDocRef, {
-        uid: uid,
+        uid,
         email: normalizedEmail,
         displayName: userName,
         planName: "Free",
@@ -60,20 +63,11 @@ const AuthModal = () => {
         unlimitedExpiry: null,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-      }, { merge: true });
-      
-      console.log("User document created successfully for:", normalizedEmail);
-    } catch (error) {
-      console.error("Error creating user document:", error);
-      console.error("Error details:", {
-        code: (error as any).code,
-        message: (error as any).message,
-        userEmail,
-        uid,
-        authEmail: auth.currentUser?.email
       });
-      // Don't block the auth flow if document creation fails
-      // PlanContext will handle it later via the listener
+      
+      console.log("New user doc created with 2 free credits:", normalizedEmail);
+    } catch (error) {
+      console.error("Error in createUserDocument:", error);
     }
   };
 

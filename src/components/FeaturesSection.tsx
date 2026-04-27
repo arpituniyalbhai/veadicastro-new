@@ -17,24 +17,7 @@ const FeaturesSection = () => {
   }, []);
 
   const features = [
-    {
-      icon: Users,
-      title: "Add Your Loved Ones",
-      description: "Just enter their birth details and let AI generate accurate, personalized insights for them.",
-      badge: "Family Members",
-      color: "from-primary to-accent",
-      steps: [
-        "Enter Birth Details",
-        "AI Generates Insights", 
-        "Manage & Compare"
-      ],
-      stepDetails: [
-        "Name, date, time, and place — accuracy matters for better guidance.",
-        "From daily tips to full life overview — tailored for each person.",
-        "Switch between members, compare trends, and share highlights."
-      ]
-    },
-    {
+        {
       icon: FileText,
       title: "Your Personalized Astrology Report",
       description: "A clear, structured, and deeply insightful reading built from your birth details and current planetary positions.",

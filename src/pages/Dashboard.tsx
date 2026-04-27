@@ -51,7 +51,17 @@ export default function Dashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { t, lang } = useI18n();
+
+  // Handle potential race condition with lazy loading
+  let i18nContext;
+  try {
+    i18nContext = useI18n();
+  } catch (error) {
+    // Fallback values if context is not available yet
+    i18nContext = { t: (key: any) => String(key), lang: 'en' };
+  }
+
+  const { t, lang } = i18nContext;
   const { planName, canAccess, requireFeature, credits, purchasedReports, reportCredits, usedQuestions, canAskMoreQuestions, registerQuestionUsage } = usePlan();
 
   // Get referral from query params
@@ -64,8 +74,7 @@ export default function Dashboard() {
   const [activeSection, setActiveSection] = useState("home");
   const [question, setQuestion] = useState("");
   const [activeTab, setActiveTab] = useState("today");
-  const [familyOpen, setFamilyOpen] = useState(false);
-  const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [rateOpen, setRateOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [sending, setSending] = useState(false);
@@ -121,7 +130,6 @@ export default function Dashboard() {
     { id: "astrologer", label: "Talk to Astrologer", icon: MessageCircle },
     { id: "compatibility", label: "Compatibility", icon: Heart },
     { id: "report", label: "Report", icon: FileText },
-    { id: "family", label: "Family Members", icon: Users },
     { id: "Pricing", label: "Pricing", icon: Receipt },
   ];
 
@@ -243,8 +251,6 @@ export default function Dashboard() {
       case "report":
       case "reports":
         return t("reportMenu");
-      case "family":
-        return t("familyMembers");
       case "Pricing":
         return t("pricing");
       default:
@@ -271,9 +277,6 @@ export default function Dashboard() {
         break;
       case "Pricing":
         window.open("/pricing?referral=dashboard", "_blank");
-        break;
-      case "family":
-        navigate(`/members?referral=dashboard`);
         break;
       case "language":
         navigate(`/settings/language?referral=dashboard`);
@@ -1810,7 +1813,7 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
         </div>
       </main>
 
-      {/* Family Members Modal - Coming Soon */}
+      {/* Vedika Assistant Modal */}
       <Dialog open={assistantOpen} onOpenChange={setAssistantOpen}>
         <DialogContent className="sm:max-w-sm bg-transparent border-none shadow-none p-0">
           <VedikaAssistantPanel
@@ -1818,20 +1821,6 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
             className="w-full sm:w-[24rem]"
             hideCloseButton
           />
-        </DialogContent>
-      </Dialog>
-      <Dialog open={familyOpen} onOpenChange={setFamilyOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Family Members</DialogTitle>
-            <DialogDescription>Feature is under construction. Stay tuned!</DialogDescription>
-          </DialogHeader>
-          <div className="text-sm text-muted-foreground">
-            We are crafting a smooth experience to manage and consult for your loved ones.
-          </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button variant="secondary" onClick={() => setFamilyOpen(false)}>Close</Button>
-          </div>
         </DialogContent>
       </Dialog>
 

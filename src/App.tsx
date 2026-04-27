@@ -37,8 +37,6 @@ const AboutFounder = lazy(() => import("@/pages/AboutFounder"));
 const DynamicPage = lazy(() => import("@/pages/DynamicPage"));
 const Mission = lazy(() => import("@/pages/Mission"));
 const HowItWorks = lazy(() => import("@/pages/HowItWorks"));
-const Members = lazy(() => import("@/pages/Members"));
-const AddMember = lazy(() => import("@/pages/AddMember"));
 const Contact = lazy(() => import("@/pages/Contact"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const Compatibility = lazy(() => import("@/pages/Compatibility"));
@@ -100,14 +98,11 @@ const RouterShell = () => {
     "/dynamic",
     "/reports",
     "/pricing",
-    "/members",
-    "/members/add",
     "/settings/language",
     "/profile",
     "/chat",
     "/compatibility",
     "/compatibility/result",
-    "/talk-to-astrologer",
   ];
   
   const hideFooter =
@@ -175,8 +170,6 @@ const RouterShell = () => {
         <Route path="/dynamic/:id" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><DynamicPage /></Suspense></ProtectedRoute>} />
         <Route path="/settings/language" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><LanguageSettings /></Suspense></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Profile /></Suspense></ProtectedRoute>} />
-        <Route path="/members" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Members /></Suspense></ProtectedRoute>} />
-        <Route path="/members/add" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><AddMember /></Suspense></ProtectedRoute>} />
         <Route path="/compatibility" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Compatibility /></Suspense></ProtectedRoute>} />
         <Route path="/compatibility/result" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><CompatibilityResult /></Suspense></ProtectedRoute>} />
         <Route path="/talk-to-astrologer" element={<Suspense fallback={<PageLoading />}><TalkToAstrologer /></Suspense>} />

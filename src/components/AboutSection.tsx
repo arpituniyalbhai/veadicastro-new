@@ -100,7 +100,7 @@ const AboutSection = () => {
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm text-muted-foreground">Family Hub Management</span>
+                    <span className="text-sm text-muted-foreground">Personalized Birth Chart Analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-secondary mt-0.5 flex-shrink-0" />
