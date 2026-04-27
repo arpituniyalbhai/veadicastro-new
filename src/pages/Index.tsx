@@ -72,10 +72,11 @@ const Index = () => {
     }
   }, [user, loading, navigate]);
 
-  // Don't render landing page if user is logged in (but only after auth check completes)
-  if (!loading && user) {
-    return null;
-  }
+  // ✅ Agar user instantly mila (sessionStorage se) — seedha null return
+  if (user) return null;
+
+  // ✅ loading ho ya na ho — landing page hamesha render karo (SEO ke liye)
+  // Baad mein useEffect handle karega redirect
 
   const websiteSchema = {
     "@context": "https://schema.org",
