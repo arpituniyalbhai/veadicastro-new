@@ -11,65 +11,53 @@ import Footer from "@/components/Footer";
 const astrologers = [
   {
     id: 1,
-    name: "P. Aman Sharma",
+    name: "P. Aman Uniyal",
     title: "Vedic Astrology Expert",
     experience: "10+ Years",
     rating: 4.7,
-    reviews: 2847,
+    reviews: 156,
     specialties: ["Career Guidance", "Marriage Compatibility", "Vedic Astrology", "Vastu Consultation"],
     languages: ["Hindi", "English", "Sanskrit"],
     callPrice: 799,
     chatPrice: 599,
     available: true,
-    image: "/optimized/reviews.webp",
+    image: "/amanuniyalastrologe.webp",
     nextAvailable: "Available Now",
     qualifications: ["Ph.D. in Vedic Astrology", "Gold Medalist", "Jyotish Visharad"],
     description: "Expert in traditional Vedic astrology with deep knowledge of ancient scriptures and helping people find clarity."
-  },
-  {
-    id: 2,
-    name: "Pt. Anjali Verma",
-    title: "Kundali & Relationship Specialist",
-    experience: "12+ Years",
-    rating: 4.8,
-    reviews: 1956,
-    specialties: ["Love & Relationships", "Kundali Matching", "Gemstone Therapy"],
-    languages: ["Hindi", "English", "Punjabi"],
-    callPrice: 799,
-    chatPrice: 599,
-    available: true,
-    image: "/optimized/reviews.webp",
-    nextAvailable: "Available Now",
-    qualifications: ["M.A. in Astrology", "Relationship Counselor", "Gemstone Expert"],
-    description: "Specialized in relationship astrology and kundali matching with a compassionate approach to love and marriage guidance."
-  },
-  {
-    id: 3,
-    name: "Acharya Vikram Singh",
-    title: "Numerology & Remedy Expert",
-    experience: "18+ Years",
-    rating: 5.0,
-    reviews: 3214,
-    specialties: ["Numerology", "Vedic Remedies", "Business Astrology"],
-    languages: ["Hindi", "English", "Gujarati"],
-    callPrice: 799,
-    chatPrice: 599,
-    available: true,
-    image: "/optimized/reviews.webp",
-    nextAvailable: "Available Now",
-    qualifications: ["Numerology Master", "Vedic Remedies Expert", "Business Consultant"],
-    description: "Renowned numerologist and remedy specialist helping people overcome obstacles through ancient Vedic solutions."
   }
 ];
 
 const TalkToAstrologer = () => {
   const navigate = useNavigate();
   const [selectedAstrologer, setSelectedAstrologer] = useState<number | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleConsultation = (astrologerId: number) => {
     setSelectedAstrologer(astrologerId);
-    // Navigate to booking details page
-    navigate(`/astrologer-booking/${astrologerId}`);
+    setShowPopup(true);
+  };
+
+  const handleCallSupport = () => {
+    setShowPopup(false);
+    window.location.href = 'tel:9411761184';
+  };
+
+  const handleEmailBooking = () => {
+    setIsLoading(true);
+    
+    // Send email to support
+    const subject = encodeURIComponent("Booking Request - P. Aman Uniyal");
+    const body = encodeURIComponent("Hey, I want to book a consultation with P. Aman Uniyal");
+    const mailtoUrl = `mailto:support@veadicastro.in?subject=${subject}&body=${body}`;
+    
+    // Simulate loading delay before redirect
+    setTimeout(() => {
+      // Open email client
+      window.location.href = mailtoUrl;
+      setIsLoading(false);
+    }, 1500);
   };
 
   return (
@@ -113,11 +101,6 @@ const TalkToAstrologer = () => {
                 "name": astrologer.name,
                 "jobTitle": astrologer.title,
                 "knowsAbout": astrologer.specialties.join(", "),
-                "aggregateRating": {
-                  "@type": "AggregateRating",
-                  "ratingValue": astrologer.rating.toString(),
-                  "reviewCount": astrologer.reviews.toString()
-                },
                 "image": `https://veadicastro.in${astrologer.image}`,
                 "sameAs": `https://veadicastro.in/talk-to-astrologer`
               })),
@@ -164,42 +147,50 @@ const TalkToAstrologer = () => {
                 "mainEntity": [
                   {
                     "@type": "Question",
-                    "name": "What is the cost of talking to an astrologer online?",
+                    "name": "Is consultation available in Hindi?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Chat consultations start at ₹599 for 20 minutes. Call consultations available at ₹799 for unlimited calls. No hidden fees."
+                      "text": "Yes. Pandit Aman Uniyal consults in Hindi and English. Most clients from North India prefer Hindi and he is fully comfortable with that."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "How accurate is Vedic astrology consultation?",
+                    "name": "What details do I need to provide before the session?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Our astrologers have 10–18 years of experience with accurate birth chart analysis."
+                      "text": "You need your date of birth, time of birth, and place of birth. Birth time determines your Lagna (ascendant) in Vedic astrology. If you do not know your exact birth time, inform us in advance — approximate times can also be worked with."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "Which astrologer is best for marriage compatibility?",
+                    "name": "Is the call consultation really unlimited?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Pt. Anjali Verma specializes in kundali matching with 12+ years of experience."
+                      "text": "Yes. The ₹799 call package gives you unlimited call duration on the day of your session with Pandit Aman Uniyal. No per-minute charges."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "Can I talk to an astrologer in Hindi?",
+                    "name": "How is Veadicastro different from other astrology apps?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes! All our astrologers are fluent in Hindi and English."
+                      "text": "Most platforms route you to whoever is available from a large pool of astrologers. At Veadicastro, you book specifically with Pandit Aman Uniyal — a verified astrologer from a traditional Brahmin background in Uttarakhand with over 10 years of experience."
                     }
                   },
                   {
                     "@type": "Question",
-                    "name": "How do I book an astrology consultation online?",
+                    "name": "Can I consult about someone else's chart?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Simply click 'Book Now' on any astrologer profile or contact our support directly at 9411761184 or support@veadicastro.in."
+                      "text": "Yes. You can consult about your child, spouse, or another family member's chart as long as you provide their date, time, and place of birth."
+                    }
+                  },
+                  {
+                    "@type": "Question",
+                    "name": "Do you offer consultations outside India?",
+                    "acceptedAnswer": {
+                      "@type": "Answer",
+                      "text": "Yes. We have clients in the US, UK, Canada, UAE, and other countries. Sessions are held via phone or online and can be scheduled across time zones. Payment can be made through standard online methods."
                     }
                   }
                 ]
@@ -208,6 +199,75 @@ const TalkToAstrologer = () => {
           })}
         </script>
       </Helmet>
+      
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-12 h-12 animate-spin rounded-full border-4 border-accent border-t-transparent mx-auto mb-4"></div>
+            <p className="text-white font-semibold">Redirecting to email...</p>
+            <p className="text-muted-foreground text-sm mt-2">Please wait while we prepare your booking request</p>
+          </div>
+        </div>
+      )}
+
+      {/* Booking Popup */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-card/95 border border-border/60 rounded-2xl p-8 max-w-md mx-4 shadow-2xl">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Contact for Booking</h3>
+              <p className="text-muted-foreground">Choose how you'd like to book P. Aman Uniyal</p>
+            </div>
+
+            <div className="bg-card/20 rounded-lg p-6 mb-6">
+              <div className="text-center mb-4">
+                <p className="text-sm text-muted-foreground mb-2">Customer Support Number:</p>
+                <p className="text-2xl font-bold text-accent">9411761184</p>
+                <p className="text-xs text-muted-foreground mt-1">Call our customer support for booking</p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <Button
+                className="w-full h-12 rounded-lg font-semibold bg-accent hover:bg-accent/90 text-accent-foreground mb-3"
+                onClick={handleCallSupport}
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Call Now for Booking
+              </Button>
+              
+              <Button
+                variant="outline"
+                className="w-full h-12 rounded-lg font-semibold border-border/60 hover:bg-card/40"
+                onClick={handleEmailBooking}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-accent-foreground border-t-transparent"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Book by Email
+                  </>
+                )}
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full"
+                onClick={() => setShowPopup(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       
       <Navbar />
       
@@ -242,11 +302,11 @@ const TalkToAstrologer = () => {
           </div>
 
         {/* Astrologers Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
+        <div className="flex justify-center mb-12">
           {astrologers.map((astrologer) => (
             <Card
               key={astrologer.id}
-              className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-all duration-300 hover:shadow-lg hover:scale-105 relative min-h-[600px] lg:min-h-[700px]"
+              className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-all duration-300 hover:shadow-lg hover:scale-105 relative min-h-[500px] max-w-md w-full"
             >
               {/* Availability Badge */}
               <div className="absolute top-4 right-4">
@@ -284,33 +344,32 @@ const TalkToAstrologer = () => {
 
               {/* Basic Info */}
               <div className="text-center mb-4">
-                <h2 className="text-xl font-bold text-white mb-1">Talk to {astrologer.name} – {astrologer.title}</h2>
-                <p className="text-accent text-sm mb-2">{astrologer.title}</p>
+                <h2 className="text-xl font-bold text-white mb-1">Talk to Aman Uniyal – Vedic Astrologer</h2>
+                <p className="text-accent text-sm mb-2">Expert in Vedic Astrology</p>
                 <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-2">
-                  <span>{astrologer.experience}</span>
+                  <span>10+ years of experience</span>
                   <span>·</span>
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span>{astrologer.rating}</span>
-                    <span>({astrologer.reviews})</span>
+                    <span>4.9/5</span>
+                    <span>(100+ reviews)</span>
                   </div>
                 </div>
               </div>
 
               {/* Description */}
               <p className="text-sm text-muted-foreground text-center mb-4">
-                {astrologer.description}
+                Aman Uniyal is a renowned Vedic astrologer with over 10 years of experience in providing personalized guidance on career, marriage, love, and life decisions. He is an expert in Vedic astrology and has helped numerous clients achieve their goals and overcome challenges.
               </p>
 
               {/* Specialties */}
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-white mb-2">Specialties:</h4>
                 <div className="flex flex-wrap gap-1">
-                  {astrologer.specialties.map((specialty, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {specialty}
-                    </Badge>
-                  ))}
+                  <Badge variant="secondary" className="text-xs">Vedic Astrology</Badge>
+                  <Badge variant="secondary" className="text-xs">Career Guidance</Badge>
+                  <Badge variant="secondary" className="text-xs">Marriage and Relationships</Badge>
+                  <Badge variant="secondary" className="text-xs">Life Decisions</Badge>
                 </div>
               </div>
 
@@ -318,11 +377,8 @@ const TalkToAstrologer = () => {
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-white mb-2">Languages:</h4>
                 <div className="flex flex-wrap gap-1">
-                  {astrologer.languages.map((language, index) => (
-                    <Badge key={index} variant="outline" className="text-xs border-border/60">
-                      {language}
-                    </Badge>
-                  ))}
+                  <Badge variant="outline" className="text-xs border-border/60">Hindi</Badge>
+                  <Badge variant="outline" className="text-xs border-border/60">English</Badge>
                 </div>
               </div>
 
@@ -330,12 +386,14 @@ const TalkToAstrologer = () => {
               <div className="mb-4">
                 <h4 className="text-sm font-semibold text-white mb-2">Qualifications:</h4>
                 <div className="space-y-1">
-                  {astrologer.qualifications.map((qual, index) => (
-                    <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle className="w-3 h-3 text-green-400" />
-                      {qual}
-                    </div>
-                  ))}
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <CheckCircle className="w-3 h-3 text-green-400" />
+                    Certified Vedic Astrologer
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <CheckCircle className="w-3 h-3 text-green-400" />
+                    10+ years of experience
+                  </div>
                 </div>
               </div>
 
@@ -383,245 +441,395 @@ const TalkToAstrologer = () => {
                 </Button>
               </div>
             </Card>
-          ))}
+          ))}</div>
         </div>
 
-        {/* Trust Section */}
+        {/* Reviews Section */}
         <div className="mt-12 p-6 rounded-xl border border-border/60 bg-background/50">
-          <div className="text-center mb-6">
-            <h3 className="text-xl font-semibold mb-2">Why Choose Our Astrologers?</h3>
+          <div className="text-center mb-8">
+            <h3 className="text-xl font-semibold mb-2">What Our Clients Say About Pandit Aman Uniyal</h3>
             <p className="text-sm text-muted-foreground">
-              All our astrologers are verified experts with years of experience in Vedic astrology
+              Real experiences from people who have consulted with our Vedic astrology expert
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle className="w-6 h-6 text-accent" />
-              </div>
-              <h4 className="font-semibold mb-1">Verified Experts</h4>
-              <p className="text-xs text-muted-foreground">All astrologers undergo strict verification process</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Clock className="w-6 h-6 text-accent" />
-              </div>
-              <h4 className="font-semibold mb-1">Instant Availability</h4>
-              <p className="text-xs text-muted-foreground">Get connected with astrologers within minutes</p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Star className="w-6 h-6 text-accent" />
-              </div>
-              <h4 className="font-semibold mb-1">100% Privacy</h4>
-              <p className="text-xs text-muted-foreground">Your consultations are completely private and secure</p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-
-      {/* FAQ Section */}
-      <div className="mt-16 p-8 bg-card/20 backdrop-blur-sm border-border/60 rounded-2xl">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
-          
-          <div className="grid gap-8 md:grid-cols-2">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-accent mb-2">What is the cost of talking to an astrologer online?</h3>
-              <p className="text-muted-foreground">Chat consultations start at ₹599 for 20 minutes. Call consultations available at ₹799 for unlimited calls. No hidden fees.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-accent mb-2">How accurate is Vedic astrology consultation?</h3>
-              <p className="text-muted-foreground">Our astrologers have 10–18 years of experience with accurate birth chart analysis.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-accent mb-2">Which astrologer is best for marriage compatibility?</h3>
-              <p className="text-muted-foreground">Pt. Anjali Verma specializes in kundali matching with 12+ years of experience.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-accent mb-2">Can I talk to an astrologer in Hindi?</h3>
-              <p className="text-muted-foreground">Yes! All our astrologers are fluent in Hindi and English.</p>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-accent mb-2">How do I book an astrology consultation online?</h3>
-              <p className="text-muted-foreground">Simply click "Book Now" on any astrologer profile or contact our support directly:</p>
-              <div className="mt-3 space-y-2">
-                <div className="flex items-center gap-2 bg-card/40 rounded-lg p-3">
-                  <Phone className="w-4 h-4 text-accent" />
-                  <span className="text-white font-semibold">Call Support: 9411761184</span>
-                </div>
-                <div className="flex items-center gap-2 bg-card/40 rounded-lg p-3">
-                  <MessageCircle className="w-4 h-4 text-accent" />
-                  <span className="text-white font-semibold">Email: support@veadicastro.in</span>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Rohit Sharma" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Rohit Sharma</h4>
+                  <p className="text-xs text-muted-foreground">Delhi</p>
                 </div>
               </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Honestly pehle mujhe doubt tha, but session lene ke baad clear ho gaya ki sir ko kaafi deep knowledge hai. 799 me unlimited call milna is actually crazy value. Maine 3 baar call kiya same din."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Neha Verma" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Neha Verma</h4>
+                  <p className="text-xs text-muted-foreground">Lucknow</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Bhai sach bolu toh expectations low thi, but experience mast raha. Jo problems chal rahi thi, unpe proper guidance mila. Aur unlimited calls ka option toh next level hai."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Aman Gupta" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Aman Gupta</h4>
+                  <p className="text-xs text-muted-foreground">Jaipur</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Mujhe sabse achha ye laga ki wo jaldi jaldi answer nahi dete, pura samajh ke batate hai. 799 me itna detailed consultation milna rare hai, plus unlimited calls ka option bhi diya."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Pooja Singh" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Pooja Singh</h4>
+                  <p className="text-xs text-muted-foreground">Bhopal</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Main thoda emotional phase me tha, unse baat karke clarity mili. Vibe bhi kaafi calm thi. Unlimited call feature helpful raha kyunki baad me aur doubts aaye toh phir se call kar liya."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Karan Mehta" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Karan Mehta</h4>
+                  <p className="text-xs text-muted-foreground">Chandigarh</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Pehli baar astrology try ki aur honestly kaafi accurate nikla. Jo career ke baare me bola wo relatable tha. 799 me unlimited baat kar sakte ho, worth it laga mujhe."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Sneha Iyer" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Sneha Iyer</h4>
+                  <p className="text-xs text-muted-foreground">Bengaluru</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Sir ka approach simple aur practical hai, bas faltu ke complicated words nahi use karte. Unlimited call ka option best part hai, ek hi session me sab clear nahi hota toh baar baar connect ho sakte ho."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Rahul Nair" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Rahul Nair</h4>
+                  <p className="text-xs text-muted-foreground">Kochi</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "I wasn't sure what to expect at first, but the consultation turned out to be really insightful. The astrologer explained things in a very calm and structured way. The unlimited calls for 799 is honestly a great deal."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Priya Shah" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Priya Shah</h4>
+                  <p className="text-xs text-muted-foreground">Ahmedabad</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "What I liked most is that the session didn't feel rushed. I had multiple questions, and being able to call again without extra charges made a big difference. Definitely worth trying."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Vikram Reddy" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Vikram Reddy</h4>
+                  <p className="text-xs text-muted-foreground">Hyderabad</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "The predictions were surprisingly accurate, especially regarding my career situation. Having unlimited access for 799 makes it much more comfortable to clarify doubts later."
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-4 rounded-lg border border-border/40">
+              <div className="flex items-center gap-2 mb-3">
+                <img src="/optimized/reviews.webp" alt="Anjali Kulkarni" className="w-8 h-8 rounded-full" />
+                <div>
+                  <h4 className="text-sm font-semibold text-white">Anjali Kulkarni</h4>
+                  <p className="text-xs text-muted-foreground">Pune</p>
+                </div>
+              </div>
+              <div className="flex gap-1 mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                "Very genuine experience. No unnecessary upselling, just straight guidance. The unlimited call feature is super helpful because real clarity often comes after asking follow-up questions."
+              </p>
             </div>
           </div>
         </div>
+        </div>
+
+        {/* Section 1: How It Works */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">How Online Vedic Astrology Consultation Works</h2>
+          <div className="grid gap-8 md:grid-cols-3">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center">
+                  <span className="text-accent font-bold">1</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white">Choose Your Mode</h3>
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                Booking a consultation with Pandit Aman Uniyal is simple and takes less than two minutes. Here's what happens after you click "Book Now":
+              </p>
+              <div className="space-y-3 mt-4">
+                <div className="flex gap-3">
+                  <span className="text-accent font-semibold">Step 1 — Choose Your Mode:</span>
+                  <p className="text-muted-foreground">
+                    Decide whether you want a call consultation (₹799, unlimited duration) or a chat consultation (₹599, 20 minutes). Both options give you direct, one-on-one access to Pandit Aman Uniyal — no bots, no automated responses, no junior assistants. You speak directly with the astrologer himself.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="text-accent font-semibold">Step 2 — Confirm Your Booking:</span>
+                  <p className="text-muted-foreground">
+                    After clicking Book Now, you'll be connected to our support team via call or email. Share your preferred time slot and basic birth details — date, time, and place of birth. These three details are the foundation of any Vedic chart reading and the more accurate they are, the more precise your consultation will be.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <span className="text-accent font-semibold">Step 3 — Your Consultation Begins:</span>
+                  <p className="text-muted-foreground">
+                    At your scheduled time, Pandit Aman Uniyal will call you directly on your registered number, or connect via chat mode you selected. He will have already reviewed your chart before the session begins, so the conversation starts from a place of genuine preparation — not generic advice.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 2: About Pandit Aman Uniyal */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Meet Your Astrologer — Pandit Aman Uniyal</h2>
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Pandit Aman Uniyal comes from a traditional Brahmin family in Uttarakhand, where Vedic astrology has been a living practice across generations — not just an academic subject. He has spent over a decade studying Jyotisha Shastra, Parashari system, and Vastu Vidya, and has personally guided thousands of individuals across India on matters of career, marriage, health, and life decisions.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  What makes his approach different from most online astrology platforms is this: he reads your chart the way it was meant to be read — through the lens of your specific planetary placements, dasha periods, and transits — not through generic Sun sign predictions that apply to one-twelfth of the entire population.
+                </p>
+              </div>
+            </div>
+            <div className="space-y-6">
+              <div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  He holds a Jyotish Visharad certification and has been recognised with a gold medal for academic excellence in Vedic astrology. He consults in Hindi, English, and Sanskrit, making him accessible to both traditional households and modern professionals looking for clarity.
+                </p>
+                <p className="text-accent font-semibold mb-2">Over the years, clients have consulted him for:</p>
+                <ul className="space-y-2 text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent">•</span>
+                    <span>Career transitions and business timing using Raj Yoga and Dasha analysis</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent">•</span>
+                    <span>Marriage compatibility through Kundali Milan and Ashtakoot matching</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent">•</span>
+                    <span>Remedies for Manglik Dosha, Shani Sade Sati, and Rahu-Ketu transits</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent">•</span>
+                    <span>Muhurat selection for weddings, property purchases, and new ventures</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent">•</span>
+                    <span>Vastu consultation for home and office layouts</span>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-muted-foreground leading-relaxed">
+                  He does not believe in fear-based astrology. His goal in every session is to give you clarity, timing, and practical remedies — not to overwhelm you with doom-laden predictions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 3: What You Can Ask */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">What Can You Discuss in Your Consultation?</h2>
+          <p className="text-muted-foreground leading-relaxed mb-8 text-center">
+            A lot of people come into their first astrology consultation unsure of what to ask. Here is a broad overview of what Pandit Aman Uniyal covers in his sessions — and what people most commonly seek guidance on.
+          </p>
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-3">Career and Finance</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                If you are at a crossroads in your professional life — whether to switch jobs, start a business, pursue a government exam, or wait for the right opportunity — Vedic astrology can offer remarkable clarity. Through analysis of your 10th house, its lord, and active Dasha periods, it becomes possible to identify windows of time when career moves are naturally supported. Many clients have used this timing framework to make major decisions with far more confidence than they would have otherwise.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-3">Marriage and Relationships</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Marriage-related questions are among the most common reasons people seek a Vedic consultation. Whether you are looking for Kundali matching before an engagement, trying to understand compatibility issues in an existing relationship, or navigating delays in marriage despite being of eligible age — all of these can be addressed through a detailed chart reading. Pandit ji also explains Manglik Dosha in its correct context, which is often misunderstood and unnecessarily feared by many families.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-3">Health and Mental Wellbeing</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Vedic astrology identifies periods of physical and mental vulnerability through planetary transits and Dasha sequences. While astrology is never a substitute for medical advice, understanding these cycles can help you be more proactive during sensitive periods — whether that means taking better care of your health, reducing stress, or making lifestyle adjustments. The 6th and 8th house in a natal chart carry significant information about recurring health patterns.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-3">Children and Family</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Questions around delayed pregnancy, children's education, family disputes, and generational patterns are frequently addressed in consultations. The 5th house in Vedic astrology governs children and creative intelligence, and a detailed reading of this house — along with the charts of family members — can provide meaningful perspective.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-3">Spirituality and Life Purpose</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Some people come not with a specific problem but with a deeper question: what am I here to do? Vedic astrology, at its highest level, is a tool for self-understanding. The 9th house governs dharma, 12th governs spiritual liberation, and the overall chart — read holistically — can reveal your natural strengths, karmic patterns, and the broad arc of your life's purpose.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 4: Why Human Astrology Still Matters */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Why Talking to a Real Astrologer Still Makes a Difference</h2>
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  Veadicastro offers AI-powered astrology tools, and we are proud of them. Vedika AI can generate Kundali reports, answer general astrology questions, and help you understand your chart at any time of day or night. For many queries, that level of access is genuinely transformative.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  But there are moments in life where a conversation matters more than a report.
+                </p>
+              </div>
+              <div>
+                <p className="text-muted-foreground leading-relaxed mb-4">
+                  When you are dealing with a genuinely difficult decision — a marriage proposal, a business risk, a health scare, a family conflict — what you need is not just data. You need someone who can listen to your specific situation, hold your chart in mind, ask the right follow-up questions, and give you an honest, experience-backed perspective. That is what a real astrologer brings to the table.
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  Pandit Aman Uniyal has had thousands of such conversations. He has seen how the same planetary combination expresses differently depending on a person's background, their chart's overall strength, and phase of life they are in. That pattern recognition — built over a decade of real consultations — is not something any algorithm can fully replicate yet.
+                </p>
+              </div>
+            </div>
+            <div className="mt-8 p-6 bg-card/20 rounded-lg border border-border/40">
+              <p className="text-accent font-semibold mb-3">We see AI and human astrology not as competitors but as complements.</p>
+              <p className="text-muted-foreground leading-relaxed">
+                Use Vedika AI when you want quick answers, chart generation, or everyday guidance. Come to Pandit Aman Uniyal when the stakes are higher and you want a real conversation with a real expert.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 5: FAQ */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Frequently Asked Questions</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">Is the consultation available in Hindi?</h3>
+              <p className="text-muted-foreground">Yes. Pandit Aman Uniyal consults primarily in Hindi and also in English. Most clients from North India prefer conversing in Hindi, and he is completely comfortable with that.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">What details do I need to provide before the session?</h3>
+              <p className="text-muted-foreground">You will need your date of birth, time of birth, and place of birth. The birth time is particularly important in Vedic astrology as it determines your Lagna (ascendant), which shapes the entire chart reading. If you do not know your exact birth time, inform us in advance — there are techniques to work with approximate times as well.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">Is the call consultation really unlimited?</h3>
+              <p className="text-muted-foreground">Yes. The ₹799 call package gives you unlimited call duration on the day of your session with Pandit Aman Uniyal. Many clients use this to ask follow-up questions they think of after the initial discussion, without worrying about per-minute charges.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">How is Veadicastro different from other astrology apps?</h3>
+              <p className="text-muted-foreground">Most astrology apps, including larger platforms, work with a pool of hundreds of astrologers with varying levels of experience and quality. At Veadicastro, you are consulting with one verified astrologer who has been vetted by our team and comes from a genuine traditional background. There is no algorithm routing your call to whoever is available. You book with Pandit Aman Uniyal specifically.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">Can I consult about someone else's chart — like my child or spouse?</h3>
+              <p className="text-muted-foreground">Yes. You can consult about your child, spouse, or another family member's chart as long as you provide their date, time, and place of birth.</p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-accent mb-2">Do you offer consultations outside India?</h3>
+              <p className="text-muted-foreground">Yes. We have clients in the US, UK, Canada, UAE, and other countries. Sessions are conducted via phone or online and can be scheduled across time zones. Payment can be made through standard online methods.</p>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
 
-      {/* SEO Content Block */}
-      <div className="max-w-4xl mx-auto px-4 py-16 space-y-12">
-        {/* Section 1 */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                Talk to an Astrologer Online — Real Guidance, Not Generic Horoscopes
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-                There is something deeply personal about astrology. Most people who come to an astrologer are not just looking for predictions — they are looking for clarity. They have a question on their mind that they cannot seem to answer on their own, and they want someone who has studied the stars, planets, and ancient science of Jyotish to help them find direction.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-                At Veadicastro, that is exactly what we offer. A real conversation with a real, experienced astrologer — available to you from wherever you are, at any time that works for you. Our astrologers are not reading from a script or giving you a recycled sun-sign prediction. They are reading your personal birth chart, your current planetary periods, and giving you guidance that is specific to your life situation.
-          </p>
-        </section>
-
-        {/* Section 2 */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                What Is Vedic Astrology and Why Is It Different?
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-                Most people's first experience with astrology is their sun sign — Aries, Taurus, Libra. They read a horoscope in a magazine or app, find it too generic, and assume astrology doesn't really work. That is a fair conclusion to draw from sun-sign astrology, because sun-sign columns are written for one-twelfth of world's population at once. They cannot possibly be accurate for any one individual.
-          </p>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-                Vedic astrology — also called Jyotish Shastra — is something entirely different. Jyotish is a system that has been refined over more than 5,000 years in India. It is based on your exact birth chart, which is a map of where every planet in the solar system was positioned at the precise moment and location of your birth. No two birth charts are the same.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-                A trained Vedic astrologer does not read from a generic template. They read your kundali — your planetary placements, your dasha sequence, your current transits — and give you guidance that is specific to your life situation. That is why people who have tried generic horoscopes and found them useless are often surprised by how accurate a proper Vedic consultation can be.
-          </p>
-        </section>
-
-        {/* Section 3 */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                What Can You Ask an Astrologer About?
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-6">
-                This is one of the questions we get asked most often, and the honest answer is: almost anything that is weighing on your mind. Here are the areas our astrologers help with most:
-          </p>
-          <div className="grid md:grid-cols-2 gap-6">
-                {[
-                  {
-                        title: "Career & Professional Life",
-                        text: "Should I change my job right now? Is this business idea likely to succeed? Why is my career feeling stuck despite all my effort? The 10th house, position of Saturn and Mercury, and your current dasha all have a strong bearing on your professional trajectory."
-                  },
-                  {
-                        title: "Marriage & Relationships",
-                        text: "Whether you are looking for a life partner, wondering about compatibility with someone specific, going through a difficult phase in your marriage, or trying to understand why relationships keep not working out — kundali matching and relationship astrology can offer real insight."
-                  },
-                  {
-                        title: "Finance & Wealth",
-                        text: "The 2nd house, 8th house, and Jupiter's position all relate to wealth and financial growth. If you are making a significant financial decision, understanding what your chart says about your current planetary period can be genuinely useful context."
-                  },
-                  {
-                        title: "Gemstones & Vedic Remedies",
-                        text: "A proper gemstone recommendation requires looking at your full chart, your lagna, and the strength of specific planets. Our astrologers do not recommend gemstones or remedies casually — every remedy is based on your individual chart."
-                  },
-                  {
-                        title: "Health & Family",
-                        text: "Certain planetary placements and periods can indicate times when health requires more attention. Many people consult astrologers during health challenges for perspective, Vedic remedies, and timing guidance alongside their medical treatment."
-                  },
-                  {
-                        title: "Vastu Shastra",
-                        text: "The ancient Indian science of space and direction is closely related to Jyotish and can have a real impact on the energy of your home or workplace. Our Vastu specialists help you understand how your living space aligns with favorable energies."
-                  }
-                ].map((item, i) => (
-                  <div key={i} className="p-4 rounded-xl border border-border/60 bg-card/20">
-                        <h3 className="text-base font-semibold text-accent mb-2">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
-                  </div>
-                ))}
-          </div>
-        </section>
-
-        {/* Section 4 */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                How Online Astrology Consultation Works — Step by Step
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-6">
-                Online astrology consultation simply means speaking to a Vedic astrologer through a call or chat instead of visiting them in person. The experience is just as personal, just as detailed, and in many ways more convenient — because you do not have to travel, wait in a queue, or adjust your schedule around someone else's availability.
-          </p>
-          <div className="grid md:grid-cols-3 gap-4">
-                {[
-                  { step: "01", title: "Choose Your Astrologer", text: "Browse our verified Vedic experts by specialty, experience, and ratings. Read their profiles and pick the one that feels right for your question." },
-                  { step: "02", title: "Select Call or Chat", text: "Start an unlimited voice call at ₹799 or a 20-minute text chat at ₹599 — whichever you are more comfortable with. Both are fully private and secure." },
-                  { step: "03", title: "Get Personal Guidance", text: "Share your date, time, and place of birth. Your astrologer will prepare your kundali and give you chart-based, honest, personalized guidance." }
-                ].map((item, i) => (
-                  <div key={i} className="p-4 rounded-xl border border-border/60 bg-card/20 text-center">
-                        <div className="text-3xl font-bold text-accent/40 mb-2">{item.step}</div>
-                        <h3 className="text-base font-semibold text-white mb-2">{item.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
-                  </div>
-                ))}
-          </div>
-        </section>
-
-        {/* Section 5 */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                How Much Does It Cost to Talk to an Astrologer Online?
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-                At Veadicastro, we have kept the pricing straightforward and accessible. Chat consultations are ₹599 for 20 minutes, and call consultations are ₹799 for unlimited calls — giving you comprehensive guidance without worrying about time limits.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-                We deliberately kept prices at this level because we believe astrology should not be a luxury available only to people who can spend thousands of rupees on a single session. The wisdom of Jyotish is for everyone. There are no hidden charges, no forced packages, and no pressure to extend your session. You decide how long you want to talk, and you pay only for that time.
-          </p>
-        </section>
-
-        {/* Section 6 - Glossary */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                Common Vedic Astrology Terms Explained
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-6">
-                If you are new to Vedic astrology, some of the terms your astrologer uses might be unfamiliar. Here is a simple guide to the most important ones:
-          </p>
-          <div className="grid md:grid-cols-2 gap-4">
-                {[
-                  { term: "Kundali", def: "Your birth chart — a diagram showing position of all planets at exact time and location of your birth." },
-                  { term: "Lagna", def: "Your rising sign — zodiac sign rising on eastern horizon at birth. Often more important than your sun sign in Vedic astrology." },
-                  { term: "Rashi", def: "Your moon sign — zodiac sign the moon occupied at your birth. This is what Vedic astrologers primarily use for general guidance." },
-                  { term: "Dasha", def: "Planetary periods — Vedic astrology divides your life into major and minor periods ruled by different planets, strongly influencing current life events." },
-                  { term: "Nakshatra", def: "Lunar mansions — 27 star clusters the moon travels through, each with distinct qualities that shape your personality and destiny." },
-                  { term: "Gochar", def: "Planetary transits — current movement of planets and how they interact with your birth chart right now." },
-                  { term: "Dosha", def: "A challenging combination in chart — Mangal dosha (Mars affliction) is most commonly discussed in marriage compatibility readings." },
-                  { term: "Jyotish", def: "The Sanskrit name for Vedic astrology — literally meaning 'science of light.' One of the six Vedangas (limbs of Vedas)." }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3 p-3 rounded-lg border border-border/40 bg-card/10">
-                        <span className="text-accent font-semibold text-sm min-w-fit">{item.term}:</span>
-                        <span className="text-muted-foreground text-sm leading-relaxed">{item.def}</span>
-                  </div>
-                ))}
-          </div>
-        </section>
-
-        {/* Section 7 - Cities */}
-        <section>
-          <h2 className="text-2xl font-bold text-white mb-4">
-                Online Astrology Consultation Available Across India
-          </h2>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-                Our astrologers provide online Vedic astrology consultations to clients across all of India and internationally. Whether you are in Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, Pune, Jaipur, Ahmedabad, Lucknow, Chandigarh, Dehradun, Indore, Bhopal, Nagpur, Patna, Ranchi, Kochi, Coimbatore, or any other city — genuine Vedic astrology guidance is just a few clicks away.
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-                We also serve the Indian diaspora internationally — clients in the USA, UK, Canada, Australia, and Singapore who want authentic Vedic guidance from qualified Indian astrologers. Language is no barrier — our astrologers consult in Hindi, English, Punjabi, Gujarati, and Sanskrit.
-          </p>
-        </section>
-
-        {/* Disclaimer */}
-        <p className="text-xs text-muted-foreground/60 border-t border-border/30 pt-6">
-                All consultations on Veadicastro are conducted by verified, qualified Vedic astrologers. Astrology is a complementary guidance system and should not replace professional medical, legal, or financial advice.
-        </p>
-      </div>
-    <Footer />
+      <Footer />
     </>
   );
 };

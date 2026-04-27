@@ -38,15 +38,15 @@ const latestBlogPosts: BlogPost[] = [
     externalLink: "/blog/is-ai-astrology-accurate"
   },
   {
-    id: "18",
-    title: "AI Jyotish — Where Vedic Astrology Meets Artificial Intelligence",
-    excerpt: "Discover how AI jyotish is revolutionizing Vedic astrology. Learn about authentic vedic astrology ai that combines traditional Jyotish principles with artificial intelligence for accurate personalized readings.",
+    id: "24",
+    title: "Vedika AI — India's Most Accurate AI Astrologer",
+    excerpt: "Meet Vedika AI — India's most accurate AI astrologer. Get free AI astrology chat, daily predictions, kundli analysis in Hindi & English. Built on authentic Vedic knowledge with Lahiri sidereal system.",
     author: "Arpit Uniyal",
-    date: "2026-04-11",
-    readTime: "30 min read",
+    date: "2026-04-27",
+    readTime: "20 min read",
     category: "AI & Technology",
-    image: "/Ai-Astrology-image/ai-jyotish-vedic-astrology.webp",
-    externalLink: "/blog/ai-jyotish-vedic-astrology"
+    image: "/optimized/vedika-ai-16.5-image.webp",
+    externalLink: "/blog/vedika-ai-astrologer-india"
   }
 ];
 const BlogSection = () => {

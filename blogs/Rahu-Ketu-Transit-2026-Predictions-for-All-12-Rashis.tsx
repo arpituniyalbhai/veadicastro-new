@@ -20,8 +20,8 @@ const RahuKetuTransit2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Rahu-Ketu Transit 2026: Predictions, Effects & Remedies for All 12 Rashis | Veadicastro</title>
-        <meta name="description" content="Rahu-Ketu Transit 2026 predictions for all 12 rashis. Understand shadow planets effects, remedies, and how current Rahu in Pisces & Ketu in Virgo impacts your life." />
+        <title>Rahu Ketu Transit 2026 — Shocking Changes for All 12 Rashis</title>
+        <meta name="description" content="Rahu Ketu transit 2026 will change your life. See exact predictions for your rashi — career, marriage, money. India's most accurate Vedic AI analysis." />
         <meta name="keywords" content="Rahu Ketu transit 2026, Rahu Pisces 2026, Ketu Virgo 2026, shadow planets Vedic astrology, Rahu Ketu remedies, Rahu Ketu effects all rashis, Rahu Mahadasha, Ketu Beej Mantra, Rahu transit predictions" />
         <link rel="canonical" href="https://veadicastro.in/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />

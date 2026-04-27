@@ -271,8 +271,19 @@ const blogPosts: BlogPost[] = [
     date: "2026-04-20",
     readTime: "25 min read",
     category: "AI & Technology",
-    image: "/Ai-Astrology-image/ai-astrology-pridiction.webp",
+    image: "/Ai-Astrology-image/ai-astrology-prediction.webp",
     externalLink: "/blog/ai-astrology-prediction-for-2026"
+  },
+  {
+    id: "24",
+    title: "Vedika AI — India's First Vedic AI Astrologer",
+    excerpt: "Meet Vedika AI — India's first Vedic AI astrologer. Get free AI astrology chat, daily predictions, kundli analysis in Hindi & English. Built on authentic Vedic knowledge with Lahiri sidereal system.",
+    author: "Arpit Uniyal",
+    date: "2026-04-27",
+    readTime: "20 min read",
+    category: "AI & Technology",
+    image: "/optimized/vedika-ai-16.5-image.webp",
+    externalLink: "/blog/vedika-ai-astrologer-india"
   }
 ];
 

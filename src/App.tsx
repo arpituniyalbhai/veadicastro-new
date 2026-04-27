@@ -42,7 +42,6 @@ const Blog = lazy(() => import("@/pages/Blog"));
 const Compatibility = lazy(() => import("@/pages/Compatibility"));
 const CompatibilityResult = lazy(() => import("@/pages/CompatibilityResult"));
 const TalkToAstrologer = lazy(() => import("@/pages/TalkToAstrologer"));
-const AstrologerBooking = lazy(() => import("@/pages/AstrologerBooking"));
 const BlogDetail = lazy(() => import("@/pages/BlogDetail"));
 
 // Lazy load blog components
@@ -68,6 +67,7 @@ const AiAstrologyRealOrFake = lazy(() => import("../blogs/ai-astrology/ai-astrol
 const WhyChatGptFailsAtAiAstrology = lazy(() => import("../blogs/ai-astrology/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt"));
 const AiAstrologyPredictionFor2026 = lazy(() => import("../blogs/ai-astrology/ai-astrology-prediction-for-2026"));
 const TheGreatAstrologyScam = lazy(() => import("../blogs/The-Great-Astrology-Scam"));
+const VedikaAiAstrologerIndia = lazy(() => import("../blogs/vedika-ai-astrologer-india"));
 
 // Lazy load tool pages
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
@@ -153,6 +153,7 @@ const RouterShell = () => {
         <Route path="/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt" element={<Suspense fallback={<PageLoading />}><WhyChatGptFailsAtAiAstrology /></Suspense>} />
         <Route path="/blog/ai-astrology-prediction-for-2026" element={<Suspense fallback={<PageLoading />}><AiAstrologyPredictionFor2026 /></Suspense>} />
         <Route path="/blog/the-great-astrology-scam" element={<Suspense fallback={<PageLoading />}><TheGreatAstrologyScam /></Suspense>} />
+        <Route path="/blog/vedika-ai-astrologer-india" element={<Suspense fallback={<PageLoading />}><VedikaAiAstrologerIndia /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoading />}><Terms /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoading />}><Privacy /></Suspense>} />
         <Route path="/disclaimer" element={<Suspense fallback={<PageLoading />}><Disclaimer /></Suspense>} />
@@ -174,7 +175,6 @@ const RouterShell = () => {
         <Route path="/compatibility/result" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><CompatibilityResult /></Suspense></ProtectedRoute>} />
         <Route path="/talk-to-astrologer" element={<Suspense fallback={<PageLoading />}><TalkToAstrologer /></Suspense>} />
         <Route path="/report/:reportId" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><ReportPage /></Suspense></ProtectedRoute>} />
-        <Route path="/astrologer-booking/:astrologerId" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><AstrologerBooking /></Suspense></ProtectedRoute>} />
         
         {/* 301 Redirects */}
         <Route path="/ipl-2026-winner-prediction-astrology" element={<RedirectComponent to="/blog/ipl-2026-winner-prediction-astrology" />} />

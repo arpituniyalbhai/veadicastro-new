@@ -300,8 +300,8 @@ const LuckyColourForToday = () => {
   return (
     <>
       <Helmet>
-        <title>Lucky Colour for Today by Date of Birth — {todayDate} | Veadicastro</title>
-        <meta name="description" content="Find your lucky colour for today by date of birth using Vedic astrology and planetary positions. Get personalized colour recommendations updated daily with cosmic insights based on your birth details." />
+        <title>Lucky Colour for Today — Based on Your Rashi & Birth Chart</title>
+        <meta name="description" content="Find your lucky colour today based on Vedic astrology and your rashi. Daily updated lucky colors for all 12 rashis. Free, instant, accurate." />
         <meta name="keywords" content="lucky colour today, daily colour astrology, Vedic astrology colours, planetary colours, colour therapy Jyotish, rang chikitsa, today's lucky colour" />
         <link rel="canonical" href="https://veadicastro.in/lucky-colour-for-today" />
         <meta name="robots" content="index, follow" />

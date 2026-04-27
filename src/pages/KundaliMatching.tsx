@@ -11,8 +11,8 @@ const KundaliMatching = () => {
   return (
     <>
       <Helmet>
-        <title>How to Do Kundali Matching for Marriage: A Complete 2026 Guide | Veadicastro</title>
-        <meta name="description" content="Learn how to do Kundali matching for marriage step by step. Understand all 8 Gunas, Doshas, and remedies in this complete 2026 guide." />
+        <title>Free Kundali Matching 2026 — Check Compatibility Instantly</title>
+        <meta name="description" content="Free Kundali matching based on Vedic astrology. Check love compatibility, marriage timing and guna milan instantly. Powered by AI." />
         <meta name="keywords" content="kundali matching for marriage, guna milan, kundli milan, ashtakoot system, 36 gunas in kundali matching, nadi dosha, mangal dosha, bhakoot dosha, marriage compatibility, vedic astrology matching, kundali matching online, kundali matching calculator, guna milan points, kundali matching process, nakshatra matching, marriage horoscope matching, kundali matching guide, how to match kundali, kundali matching steps, marriage astrology, vedic marriage compatibility, kundali matching 2026, kundali matching remedies" />
         <link rel="canonical" href="https://veadicastro.in/kundali-matching" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />

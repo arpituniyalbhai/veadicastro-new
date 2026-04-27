@@ -1716,90 +1716,65 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
           </Card>
           )}
 
-          {/* Human Astrologer Banner - Enhanced with Emotional Triggers */}
-          <Card className="p-4 sm:p-6 bg-gradient-to-r from-accent/10 to-secondary/10 border-border/60 rounded-2xl relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10" style={{
-              background: 'radial-gradient(circle at 20% 20%, rgba(236,72,153,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(59,130,246,0.3) 0%, transparent 50%)'
-            }} />
-            <div className="relative z-10">
-              {/* Scarcity + Urgency Header */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="bg-red-500/20 text-red-400 text-xs px-2 py-1 rounded-full font-semibold animate-pulse">
-                    Only 3 slots left today
-                  </span>
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  <span className="font-semibold text-green-400">47 people consulted today</span>
-                  <span className="ml-2">• Rahul from Delhi booked 2 min ago</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="flex-1">
-                  {/* Loss Aversion + Price Anchoring */}
-                  <div className="mb-3">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-gray-400 text-lg line-through">₹1,499</span>
-                      <span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full font-semibold">47% OFF</span>
+          {/* AI Prediction Section */}
+          <Card className="bg-gradient-to-br from-accent/10 to-primary/10 border-border/60">
+            <div className="p-6">
+              <div className="grid gap-8 lg:grid-cols-2 items-center">
+                <div className="space-y-6">
+                  <div className="bg-card/30 p-6 rounded-lg border border-border/40">
+                    <div className="flex items-center gap-3 mb-4">
+                      <img src="/optimized/vedika.webp" alt="Vedika AI" className="w-12 h-12 rounded-full object-cover ring-2 ring-accent/40" />
+                      <h2 className="text-xl font-bold text-white">Vedika AI Predicts</h2>
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                      Don't Miss Your Saturn Transit Window!
-                    </h3>
-                    <p className="text-sm text-red-400 font-semibold mb-2">
-                      Your Saturn transit starts in 6 days — missing guidance now costs more
+                    <h3 className="text-2xl font-bold text-accent mb-4">Your Planets Are Shifting — Find Out What's Coming Next</h3>
+                    <p className="text-muted-foreground leading-relaxed mb-6">
+                      Discover the secrets of your birth chart and unlock your full potential with Pandit JI.
                     </p>
-                    <p className="text-sm text-muted-foreground mb-3">
-                      Get clarity before it's too late. Expert Vedic astrologers ready now.
-                    </p>
-                  </div>
-
-                  
-                  {/* Features */}
-                  <div className="flex items-center gap-4 mb-3">
-                    <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span className="text-xs text-white">Unlimited Call Time</span>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <span className="text-white">Jupiter's current transit is activating key houses in most charts</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <span className="text-white">Your active Dasha period holds answers about money and career</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500" />
+                        <span className="text-white">Pandit ji will tell you exactly what your chart says — live on call</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span className="text-xs text-white">Expert Astrologers</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <CheckCircle className="w-4 h-4 text-green-400" />
-                      <span className="text-xs text-white">100% Privacy</span>
-                    </div>
-                  </div>
-
-                  {/* Zero-Risk Guarantee - Enhanced */}
-                  <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-500/50 rounded-lg p-3 mb-3 shadow-lg">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Lock className="w-4 h-4 text-red-400" />
-                      <span className="text-sm font-bold text-red-400">100% MONEY BACK GUARANTEE</span>
-                    </div>
-                    <p className="text-xs text-red-300 font-semibold leading-relaxed">
-                      Full refund if not satisfied — No questions asked, No forms to fill, Instant processing
-                    </p>
                   </div>
                 </div>
-
-                {/* Price Section with Anchoring */}
-                <div className="flex flex-col items-center gap-3">
-                  <div className="text-center">
-                    <div className="text-gray-400 text-sm line-through mb-1">₹1,499</div>
-                    <div className="text-3xl sm:text-4xl font-bold text-accent mb-1">₹799</div>
-                    <div className="text-xs text-green-400 font-semibold">Save ₹700 (47% OFF)</div>
-                    <div className="text-xs text-muted-foreground">Unlimited Call</div>
+                
+                <div className="text-center space-y-6">
+                  <div className="relative inline-block">
+                    <img 
+                      src="/amanuniyalastrologe.webp" 
+                      alt="Pandit Aman Uniyal - Expert Vedic Astrologer" 
+                      className="w-48 h-48 rounded-full mx-auto border-4 border-accent/30 shadow-xl"
+                    />
+                    <span className="absolute -top-2 -right-2 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full font-semibold">Available Today</span>
                   </div>
-                  <Button
-                    className="bg-gradient-to-r from-accent to-pink-500 hover:from-accent/90 hover:to-pink-500/90 text-accent-foreground font-bold px-8 py-4 rounded-lg text-base shadow-lg transform hover:scale-105 transition-all duration-200"
-                    onClick={() => window.location.href = '/astrologer-booking/1'}
-                  >
-                    Book Now - Get Instant Access
-                  </Button>
-                  <p className="text-xs text-muted-foreground text-center">
-                    Connect in under 2 minutes
-                  </p>
+                  <div className="bg-card/30 p-6 rounded-lg border border-border/40">
+                    <h3 className="text-2xl font-bold text-white mb-2">Talk to P. Aman Uniyal</h3>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      <span className="text-3xl font-bold text-accent">₹799</span>
+                      <span className="text-muted-foreground">Unlimited</span>
+                    </div>
+                    <p className="text-muted-foreground mb-6">
+                      Share your birth details and Pandit Aman Uniyal will read your actual chart — career, money, relationships, whatever's on your mind. Unlimited call, no timer running.
+                    </p>
+                    <Button
+                      onClick={() => navigate('/talk-to-astrologer')}
+                      className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+                    >
+                      Book Now - ₹799 Unlimited
+                    </Button>
+                    <p className="text-xs text-muted-foreground mt-3">
+                      ⚡ Available Now | 📞 Direct Call | 🔒 100% Private
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
