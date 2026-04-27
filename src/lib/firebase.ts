@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { getFirestore, serverTimestamp, doc, setDoc, Timestamp } from "firebase/firestore";
 
 // SECURITY: Firebase config loaded from environment variables
@@ -37,6 +37,8 @@ let authInstance: ReturnType<typeof getAuth> | null = null;
 export const getAuthInstance = () => {
   if (!authInstance) {
     authInstance = getAuth(app);
+    // Enable browser persistence for faster auth loading
+    setPersistence(authInstance, browserLocalPersistence);
   }
   return authInstance;
 };
