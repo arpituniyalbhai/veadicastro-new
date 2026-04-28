@@ -458,35 +458,15 @@ export default function Dashboard() {
       const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (0123456789).";
       const languageDirective = `Respond in English only. ${numeralRule}`;
       
-      const systemPrompt = `You are a professional Vedic astrology assistant. Generate predictions in clear, proper English only.
-
-${languageDirective}
-
-Generate personalized monthly predictions for ${monthName} ${currentYear}. 
-
-IMPORTANT: You must respond with valid JSON only. Format your entire response as:
-{
-  "text": "Your comprehensive monthly prediction text here (200-300 words, plain text, no markdown)"
-}
-
-CRITICAL FORMATTING RULES:
-- Do NOT use markdown, asterisks (**), underscores, or any special formatting
-- Use simple Hindi or English only
-- No bold, italic, or decorative symbols
-- Plain text responses only
-- Use simple line breaks and clear headings in the same language
-
-Rules:
-- Return ONLY the JSON object, nothing else
-- Cover love, career, health, finance, and spiritual growth
-- Be direct, practical, and based on user's chart, dashas, and transits
-- 200-300 words maximum
-
-CRITICAL: Output must be valid JSON only. NO explanations, NO markdown, NO asterisks, NO special formatting outside the JSON structure.`;
+      const systemPrompt = `You are a Vedic astrology expert. Respond with valid JSON only:
+{"text": "monthly prediction here (150-200 words, plain text, no markdown)"}
+Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold.`;
 
       const prompt = `Generate monthly predictions for ${monthName} ${currentYear} based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'Basic chart'}
-${planets ? `Planetary Data: ${JSON.stringify(planets)}` : ''}
+${planets ? `Key Planets: ${planets.slice(0,7).map((p: any) => 
+  `${p.name||p.planet} in ${p.sign} H${p.house||''}` 
+).join(', ')}` : ''}
 Current Date: ${now.toISOString()}
 
 Provide comprehensive monthly guidance covering all life areas for ${monthName} ${currentYear}.`;
@@ -544,12 +524,6 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
       setMonthlyLoadingTimer(null);
     }
   }, [lang, user?.uid]);
-
-  useEffect(() => {
-    if (showMonthlyPredictions) {
-      fetchMonthlyPrediction();
-    }
-  }, [showMonthlyPredictions, fetchMonthlyPrediction]);
 
   // Initialize countdown on component mount
   useEffect(() => {
@@ -1610,39 +1584,22 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
           <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-lg">{t("monthlyPredictions")}</h2>
-              {/* Show generate icon only when generation failed */}
-              {monthlyGenerationFailed && !monthlyLoading && (
-                <Button 
-                  variant="cosmic" 
-                  size="sm" 
-                  onClick={fetchMonthlyPrediction}
-                  className="gap-2"
-                >
+              {!monthlyPrediction && !monthlyLoading && (
+                <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction} className="gap-2">
+                  <Sparkles className="w-4 h-4" />
                   Generate
                 </Button>
               )}
               {monthlyPrediction && !monthlyLoading && (
-                <>
-                  {planName === 'Free' ? (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => navigate("/pricing?referral=monthly-regenerate")}
-                      className="gap-2"
-                    >
-                      Upgrade to Regenerate
-                    </Button>
-                  ) : (
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={fetchMonthlyPrediction}
-                      className="gap-2"
-                    >
-                      Regenerate
-                    </Button>
-                  )}
-                </>
+                planName === 'Free' ? (
+                  <Button variant="outline" size="sm" onClick={() => navigate("/pricing?referral=monthly-regenerate")}>
+                    Upgrade to Regenerate
+                  </Button>
+                ) : (
+                  <Button variant="outline" size="sm" onClick={fetchMonthlyPrediction}>
+                    Regenerate
+                  </Button>
+                )
               )}
             </div>
             {/* Show skeleton loading while fetching */}
@@ -1700,7 +1657,18 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
                   })}
                 </div>
               </div>
-            ) : monthlyGenerationFailed ? (
+            ) : !monthlyGenerationFailed ? (
+              <div className="text-center py-10">
+                <Sparkles className="w-8 h-8 text-secondary mx-auto mb-3 opacity-60" />
+                <p className="text-sm text-muted-foreground mb-4">
+                  Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction is ready to generate
+                </p>
+                <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction} className="gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Generate My Monthly Prediction
+                </Button>
+              </div>
+            ) : (
               <div className="text-center py-8">
                 <p className="text-sm text-muted-foreground mb-4">Unable to generate monthly predictions. Please try again.</p>
                 <Button 
@@ -1712,7 +1680,7 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
                   Try Again
                 </Button>
               </div>
-            ) : null}
+            )}
           </Card>
           )}
 
