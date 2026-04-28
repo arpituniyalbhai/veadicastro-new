@@ -4,7 +4,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // Frontend CANNOT override these prices
 const VALID_PLAN_PRICES: Record<string, number> = {
   'Quick Ask': 14900,      // ₹49 in paise
-  'Deep Dive': 39900,      // ₹99 in paise
+  'Deep Dive': 100,      // ₹99 in paise
   'The Power Pack': 69900, // ₹199 in paise
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,

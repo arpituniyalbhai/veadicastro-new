@@ -392,6 +392,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               verificationStatus: 'verified',
               createdAt: existingUserData?.createdAt || admin.firestore.FieldValue.serverTimestamp(),
               updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+              // Preserve existing plan and credits - CRITICAL!
+              planName: existingUserData?.planName || 'Free',
+              credits: existingUserData?.credits || 0,
+              isPremium: existingUserData?.isPremium || false,
+              premiumSince: existingUserData?.premiumSince || null,
+              subscriptionExpiresAt: existingUserData?.subscriptionExpiresAt || null,
+              unlimitedExpiry: existingUserData?.unlimitedExpiry || null,
+              compatibilitycredits: existingUserData?.compatibilitycredits || 0,
               // Preserve existing data
               questionPacks: existingUserData?.questionPacks || {},
               questionsUsed: existingUserData?.questionsUsed || {},
@@ -426,6 +434,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               verificationStatus: 'verified',
               createdAt: existingUserData?.createdAt || admin.firestore.FieldValue.serverTimestamp(),
               updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+              // Preserve existing plan and credits - CRITICAL!
+              planName: existingUserData?.planName || 'Free',
+              credits: existingUserData?.credits || 0,
+              isPremium: existingUserData?.isPremium || false,
+              premiumSince: existingUserData?.premiumSince || null,
+              subscriptionExpiresAt: existingUserData?.subscriptionExpiresAt || null,
+              unlimitedExpiry: existingUserData?.unlimitedExpiry || null,
+              reportCredits: existingUserData?.reportCredits || 0,
               // Preserve existing data
               questionPacks: existingUserData?.questionPacks || {},
               questionsUsed: existingUserData?.questionsUsed || {},

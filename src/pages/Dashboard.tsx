@@ -913,7 +913,7 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
                     <MessageCircle className="w-5 h-5 text-muted-foreground" />
                     <div>
                       <p className="text-sm font-medium">
-                        {credits} Credits {t("available")}
+                        {credits} Question Credits {t("available")}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {planName} Plan
