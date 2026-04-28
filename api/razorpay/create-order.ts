@@ -5,7 +5,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const VALID_PLAN_PRICES: Record<string, number> = {
   'Quick Ask': 14900,      // ₹49 in paise
   'Deep Dive': 39900,      // ₹99 in paise
-  'The Power Pack': 64900, // ₹199 in paise
+  'The Power Pack': 69900, // ₹199 in paise
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
   'Standard': 19900,    // ₹199 in paise
@@ -15,7 +15,7 @@ const VALID_PLAN_PRICES: Record<string, number> = {
 
 // Micro-transaction pricing
 const MICRO_PRICES: Record<string, number> = {
-  'Personal Growth': 19900,     // ₹199 in paise
+  'Personal Growth': 100,     // ₹199 in paise
   'Love & Relationships': 19900, // ₹199 in paise
   'Career & Wealth': 19900,      // ₹199 in paise
 };
