@@ -207,10 +207,13 @@ const PricingOnboarding = () => {
             console.log('[Payment] Verification successful:', verifyData);
             setSelectedPlan(planName);
             setSuccessPopupOpen(true);
-            
-            const normalizedTier = normalizePlanTier(planName || "Premium");
-            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-            applyPlanLocally(normalizedTier, expiresAt);
+
+            // Only update plan state for actual plans, NOT reports or compatibility
+            if (planType !== 'report' && planType !== 'compatibility') {
+              const normalizedTier = normalizePlanTier(planName || "Premium");
+              const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+              applyPlanLocally(normalizedTier, expiresAt);
+            }
             await new Promise(resolve => setTimeout(resolve, 1000));
             await refreshPlan();
 
