@@ -19,6 +19,7 @@ const PricingOnboarding = () => {
   const [searchParams] = useSearchParams();
   const planName = searchParams.get("plan") || "";
   const planAmount = parseFloat(searchParams.get("amount") || "0");
+  const planType = searchParams.get("type") || "";
   
   const [step, setStep] = useState(1);
   const [fullName, setFullName] = useState("");
@@ -184,6 +185,7 @@ const PricingOnboarding = () => {
               userId: current.uid,
               email: current.email || null,
               displayName: current.displayName || current.email?.split("@")[0] || null,
+              type: planType,
             };
 
             const verifyResponse = await fetch(`${API_BASE}/api/razorpay/verify-payment`, {

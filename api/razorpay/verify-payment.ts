@@ -99,6 +99,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       userId,
       email,
       displayName,
+      type,
     } = req.body;
 
     // Use email as primary identifier for user documents
@@ -370,10 +371,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const existingUserData = userDoc.exists ? userDoc.data() : {};
           
           // Check if this is a report purchase
-          const isReportPurchase = planName.includes('Report');
+          const isReportPurchase = type === 'report' || 
+                                 planName.includes('Report') ||
+                                 ['Personal Growth', 'Love & Relationships', 'Career & Wealth'].includes(planName);
           
           // Check if this is a compatibility credit purchase
-          const isCompatibilityPurchase = planName.includes('Compatibility Credit');
+          const isCompatibilityPurchase = type === 'compatibility' || planName.includes('Compatibility Credit');
           
           if (isReportPurchase) {
             // Handle report purchase - add 1 report credit
