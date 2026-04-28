@@ -15,7 +15,7 @@ import SEO from "@/components/SEO";
 const plans = [
   {
     name: "Quick Ask",
-    price: 149,
+    price: 99,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions — get clarity fast",
