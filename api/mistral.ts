@@ -366,9 +366,6 @@ GOAL:
 Make astrology feel practical, logical, and useful - not mystical or vague.
 `;
 
-    // Use Mistral mediu
-const model = 'mistral-medium-latest';
-
     const contents = [
       // Limit history to last 3 messages to prevent token overflow
       ...(Array.isArray(history) ? history.slice(-3) : []).map((h: any) => ({
@@ -406,6 +403,9 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : 350;
+    
+    // Use Mistral medium for general, ministral for monthly (faster)
+    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-medium-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),

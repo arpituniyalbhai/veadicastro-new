@@ -1530,46 +1530,6 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
                 <div className="prose prose-sm max-w-none">
                   <p className="text-muted-foreground leading-relaxed">{weeklyPrediction.text}</p>
                 </div>
-                
-                {/* Weekly highlights */}
-                <div className="border-t border-border/40 pt-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-4 rounded-lg bg-background/60 border border-border/60">
-                      <div className="text-xs text-muted-foreground mb-1">Week Focus</div>
-                      <div className="text-sm font-medium">
-                        {(() => {
-                          const weekStart = new Date(weeklyPrediction.weekStart);
-                          const weekEnd = new Date(weeklyPrediction.weekEnd);
-                          const startDay = weekStart.toLocaleDateString('en-US', { weekday: 'long' });
-                          const endDay = weekEnd.toLocaleDateString('en-US', { weekday: 'long' });
-                          return `${startDay} - ${endDay}`;
-                        })()}
-                      </div>
-                    </div>
-                    <div className="text-center p-4 rounded-lg bg-background/60 border border-border/60">
-                      <div className="text-xs text-muted-foreground mb-1">Peak Day</div>
-                      <div className="text-sm font-medium">
-                        {(() => {
-                          const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-                          const userId = localStorage.getItem('user_prediction_id') || 'default';
-                          const weekSeed = new Date(weeklyPrediction.weekStart).getTime() + userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                          return days[Math.abs(weekSeed) % 7];
-                        })()}
-                      </div>
-                    </div>
-                    <div className="text-center p-4 rounded-lg bg-background/60 border border-border/60">
-                      <div className="text-xs text-muted-foreground mb-1">Energy Level</div>
-                      <div className="text-sm font-medium">
-                        {(() => {
-                          const levels = ['High', 'Moderate', 'Balanced', 'Dynamic', 'Steady', 'Intense', 'Calm'];
-                          const userId = localStorage.getItem('user_prediction_id') || 'default';
-                          const weekSeed = new Date(weeklyPrediction.weekStart).getTime() + userId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) + 1;
-                          return levels[Math.abs(weekSeed) % 7];
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             ) : (
               /* Show empty state only when not loading and no data */
