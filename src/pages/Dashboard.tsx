@@ -411,13 +411,17 @@ export default function Dashboard() {
     // Check cache first
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      console.log('Monthly cache check:', { cacheKey, cached, currentMonth, currentYear });
       if (cached && cached.month === currentMonth && cached.year === currentYear && cached.text) {
+        console.log('Using cached monthly prediction');
         setMonthlyPrediction(cached);
         setMonthlyLoading(false);
         setMonthlyGenerationFailed(false); // Reset failed state on success
         return;
       }
-    } catch {}
+    } catch (e) {
+      console.error('Cache check error:', e);
+    }
 
     let details: any = null;
     let planets: any = null;
@@ -507,7 +511,9 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
       setMonthlyPrediction(result);
       setMonthlyGenerationFailed(false); // Reset failed state on success
       try {
+        console.log('Saving monthly prediction to cache:', { cacheKey, result });
         localStorage.setItem(cacheKey, JSON.stringify(result));
+        console.log('Monthly prediction saved successfully');
       } catch (e) {
         console.warn("Failed to cache monthly prediction", e);
       }

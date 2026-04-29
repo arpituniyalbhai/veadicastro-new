@@ -402,7 +402,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('"luckyColor"') ||
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
-    const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : 350;
+    const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : isMonthly ? 600 : 350;
     
     // Use Mistral medium for general, ministral for monthly (faster)
     const model = isMonthly ? 'ministral-8b-latest' : 'mistral-medium-latest';
