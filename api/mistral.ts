@@ -397,6 +397,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Wealth Potential') ||
       prompt.includes('Your Romantic Style') ||
       prompt.includes('Year Overview');
+    const isMonthly = prompt.includes('Generate monthly predictions');
     const isJsonRequest = 
       prompt.includes('Return ONLY the JSON object') || 
       prompt.includes('"luckyNumber"') ||
@@ -418,6 +419,12 @@ Wrong format = rewrite before sending.`;
       {
         role: 'system',
         content: `${dateContext}\n\nYou must respond with valid JSON only. No prose, no markdown, no explanation. Just the raw JSON object.` 
+      },
+      { role: 'user', content: prompt }
+    ] : isMonthly ? [
+      {
+        role: 'system',
+        content: `You are a Vedic astrologer. Today: ${todayIST}. Respond with valid JSON only: {"text":"prediction here"}. Plain text, no markdown, 150 words max.` 
       },
       { role: 'user', content: prompt }
     ] : isReport ? [
