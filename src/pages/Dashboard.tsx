@@ -616,7 +616,39 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
     return () => window.removeEventListener('scroll', handleScroll);
   }, [monthlyLoading, showMonthlyLoadingPopup]);
 
-  // Remove automatic monthly prediction fetch - now requires user action
+  // Cache se monthly prediction load karo on mount
+useEffect(() => {
+  if (!showMonthlyPredictions) return;
+  
+  // User load hone ka wait karo
+  const loadFromCache = () => {
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+    
+    // Dono keys try karo — guest aur uid wali
+    const keys = [
+      `ai_monthly_${user?.uid || 'guest'}_${currentYear}_${currentMonth}`,
+      `ai_monthly_guest_${currentYear}_${currentMonth}`,
+    ];
+    
+    for (const key of keys) {
+      try {
+        const cached = JSON.parse(localStorage.getItem(key) || "null");
+        if (cached && cached.month === currentMonth && cached.year === currentYear && cached.text) {
+          console.log('Found cached monthly prediction with key:', key);
+          setMonthlyPrediction(cached);
+          setMonthlyGenerationFailed(false);
+          return;
+        }
+      } catch {}
+    }
+  };
+  
+  loadFromCache();
+}, [showMonthlyPredictions, user?.uid]); // user?.uid dependency — jab uid aaye tab dobara check karo
+
+// Remove automatic monthly prediction fetch - now requires user action
 
   const luckyToday = todayPrediction?.luckyNumber;
   const luckyTomorrow = tomorrowPrediction?.luckyNumber;
@@ -1834,19 +1866,10 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
 
       
       {/* Monthly Loading Toast - Left Bottom */}
-      {showMonthlyLoadingPopup && (
-        <div className="fixed bottom-4 left-4 z-50 bg-background border border-border rounded-lg p-4 max-w-sm shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="w-6 h-6 border-2 border-secondary/20 border-t-secondary rounded-full animate-spin"></div>
-            <div className="flex-1">
-              <div className="font-semibold text-sm">Please wait...</div>
-              <div className="text-xs text-muted-foreground mt-1">
-                Your data is loading, generating personalized insights...
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+      {/* Removed Monthly Loading Toast Popup */}
+
+      
+      {/* Removed Monthly Loading Toast Popup */}
+      </div>
   );
 }
