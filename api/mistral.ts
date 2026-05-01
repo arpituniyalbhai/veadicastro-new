@@ -404,8 +404,8 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : isMonthly ? 600 : 350;
     
-    // Use Mistral medium for general, ministral for monthly (faster)
-    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-medium-latest';
+    // Use Mistral small for general, ministral for monthly (faster)
+    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-small-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
@@ -460,20 +460,34 @@ Wrong format = rewrite before sending.`;
       console.log('👉 USER_PROMPT (STREAM):', prompt);
       
       const url = 'https://api.mistral.ai/v1/chat/completions';
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`
-        },
-        body: JSON.stringify({
-          model,
-          messages: messagesWithReminder,
-          temperature: 0.4,
-          max_tokens: maxTokens,
-          stream: true,
-        }),
-      });
+      const abortController = new AbortController();
+      const abortTimeout = setTimeout(() => abortController.abort(), 22000);
+      
+      let response: Response;
+      try {
+        response = await fetch(url, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${key}`
+          },
+          body: JSON.stringify({
+            model,
+            messages: messagesWithReminder,
+            temperature: 0.4,
+            max_tokens: maxTokens,
+            stream: true,
+          }),
+          signal: abortController.signal,
+        });
+        clearTimeout(abortTimeout);
+      } catch (fetchErr: any) {
+        clearTimeout(abortTimeout);
+        return new Response(
+          `data: ${JSON.stringify({ error: 'Request timed out. Please try again.' })}\n\n`,
+          { status: 504, headers: { 'Content-Type': 'text/event-stream' } }
+        );
+      }
 
       if (!response.ok) {
         return new Response(

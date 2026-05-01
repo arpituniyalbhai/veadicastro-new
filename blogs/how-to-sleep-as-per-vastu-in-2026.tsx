@@ -194,8 +194,8 @@ const HowToSleepAsPerVastuIn2026 = () => {
               <p className="mb-4 text-lg leading-relaxed">
                 The Earth has a magnetic field. This field runs from the North Pole to the South Pole. Your body also has its own energy system. When these two energies are not aligned, your body feels it even during sleep. You may wake up tired, feel restless at night or have strange dreams.
               </p>
-              <p className="mb-4 leading-relaxed">
-                Vastu Shastra says that the direction your head points while sleeping plays a big role in how well you sleep. It also affects your mood, your health and even your success in life. This is not just an old belief. Many people who follow Vastu sleeping rules notice a real difference within just a few weeks.
+              <p className="mb-4 text-lg leading-relaxed">
+                Vastu Shastra says that the direction your head points while sleeping plays a big role in how well you sleep. It also affects your mood, your health and even your success in life. This is not just an old belief. Many people who follow Vastu sleeping rules notice a real difference within just a few weeks. Our advanced <Link to="/ai-astrology" className="text-blue-400 hover:text-blue-700 underline">AI astrology platform</Link> can help you understand how cosmic energies affect your sleep patterns.
               </p>
               <p className="leading-relaxed">
                 In 2026, more and more people are going back to these old but powerful ways of living. This guide will help you understand exactly how to sleep as per Vastu so you can improve your sleep quality, your health and your peace of mind.

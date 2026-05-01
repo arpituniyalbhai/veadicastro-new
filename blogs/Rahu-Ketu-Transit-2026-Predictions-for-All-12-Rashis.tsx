@@ -273,7 +273,7 @@ const RahuKetuTransit2026 = () => {
 
               <div className="mb-8">
                 <p className="text-lg leading-relaxed text-white/80">
-                  They always sit exactly opposite each other in the birth chart, forming an axis. Every 18 months, they shift together to a new pair of signs, and that shift reshuffles fortunes for all 12 rashis. This is why Rahu-Ketu transits are considered among the most powerful and life-changing transits in Jyotish.
+                  They always sit exactly opposite each other in the birth chart, forming an axis. Every 18 months, they shift together to a new pair of signs, and that shift reshuffles fortunes for all 12 rashis. This is why Rahu-Ketu transits are considered among the most powerful and life-changing transits in Jyotish. Our comprehensive <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> can help you understand how these shadow planets specifically affect your chart.
                 </p>
               </div>
             </div>

@@ -252,7 +252,7 @@ const AiAstrologyPredictionFor2026 = () => {
                 AI Astrology Predictions for 2026 — What to Expect
               </h1>
               <p className="text-lg text-purple-200 mb-8 leading-relaxed max-w-2xl mx-auto">
-                Astrology has been a part of Indian culture for thousands of years. From deciding the right time for a wedding to understanding why a certain phase of life feels so difficult, people have always turned to astrology for answers. But the way we access astrology is changing fast. Today, you do not need to wait for an appointment with a pandit or travel to a famous jyotish just to get a reading. AI astrology is here, and in 2026, it is becoming more accurate, more personal, and more accessible than ever before.
+                Astrology has been a part of Indian culture for thousands of years. From deciding the right time for a wedding to understanding why a certain phase of life feels so difficult, people have always turned to astrology for answers. But the way we access astrology is changing fast. Today, you do not need to wait for an appointment with a pandit or travel to a famous jyotish just to get a reading. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> is here, and in 2026, it is becoming more accurate, more personal, and more accessible than ever before.
               </p>
               <div className="flex flex-wrap gap-4 justify-center text-sm text-gray-400">
                 <span>By Arpit Uniyal</span>
@@ -538,6 +538,18 @@ const AiAstrologyPredictionFor2026 = () => {
               </p>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

@@ -6,7 +6,6 @@ import { ArrowLeft, Star, Phone, MessageCircle, Clock, CheckCircle, Award, Calen
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const astrologers = [
   {
@@ -297,7 +296,7 @@ const TalkToAstrologer = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Connect with India's top Vedic astrologers for personalized guidance on career, marriage, love, and life decisions. Our verified experts provide real-time astrology consultation via call or chat — in Hindi and English — starting at just ₹40/min.
+              Connect with India's top Vedic astrologers for personalized guidance on career, marriage, love, and life decisions. Our verified experts provide real-time astrology consultation via call or chat — in Hindi and English — starting at just ₹40/min. <a href="/" className="text-accent hover:text-accent/80 underline">Try India's best astrologer</a> or explore our <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" className="text-accent hover:text-accent/80 underline">free AI astrology chat</a> for quick guidance.
             </p>
           </div>
 
@@ -829,7 +828,6 @@ const TalkToAstrologer = () => {
         </section>
       </div>
 
-      <Footer />
     </>
   );
 };

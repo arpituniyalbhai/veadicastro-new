@@ -196,7 +196,7 @@ const AiAstrologerVsHumanAstrologer = () => {
                 That experience has a weight to it that's hard to replicate through a screen. But things are changing. A new kind of option has entered the picture - the AI astrologer. And a lot of people are genuinely curious: is this real? Can it actually match what a human astrologer does? Or is it just a fancy chatbot giving you vague answers dressed up in astrology language?
               </p>
               <p className="leading-relaxed">
-                Let's go through this properly.
+                Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> and <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">free AI astrologer chat</Link> represent the cutting edge of this evolution. Let's go through this properly.
               </p>
             </section>
 
@@ -381,6 +381,18 @@ const AiAstrologerVsHumanAstrologer = () => {
               </div>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

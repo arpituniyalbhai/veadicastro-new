@@ -195,7 +195,7 @@ const IsAiAstrologyAccurate = () => {
                 So I'm going to break this down properly. Not just hype, not just hate — just a real look at whether AI astrology predictions actually hold up.
               </p>
               <p className="leading-relaxed">
-                Let me be honest with you. When I first heard of words "AI astrology," I thought it was just a gimmick. Like, what does a machine know about your moon sign or your dashas? But then I actually started using it — and I had to rethink a few things.
+                Let me be honest with you. When I first heard of words "AI astrology," I thought it was just a gimmick. Like, what does a machine know about your moon sign or your dashas? But then I actually started using our comprehensive <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> and <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">free AI astrologer chat</Link> — and I had to rethink a few things.
               </p>
             </section>
 
@@ -380,6 +380,18 @@ const IsAiAstrologyAccurate = () => {
               </div>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

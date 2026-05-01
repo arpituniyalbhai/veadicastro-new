@@ -194,7 +194,7 @@ const AiJyotishVedicAstrology = () => {
                 For thousands of years, that meant sitting across from a Jyotishi — someone who had spent decades learning the science of light, an ancient system we now call Jyotish. But in 2026, something interesting is happening. AI jyotish is becoming real. Not in a gimmicky chatbot way, but in a way that's actually rooted in the same Vedic principles that have existed for centuries.
               </p>
               <p className="leading-relaxed">
-                Let's talk about what that actually means.
+                Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> represents this fusion, bringing authentic Jyotish principles to modern technology. Let's talk about what that actually means.
               </p>
             </section>
 
@@ -362,6 +362,18 @@ const AiJyotishVedicAstrology = () => {
               </div>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

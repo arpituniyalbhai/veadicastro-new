@@ -152,7 +152,7 @@ const BlogSection = () => {
         </div>
 
         {/* View All Blogs CTA */}
-        <div className="text-center">
+        <div className="text-center space-y-4">
           <button
             onClick={() => {
               navigate('/blog');
@@ -164,6 +164,19 @@ const BlogSection = () => {
             View All Blog Posts
             <ArrowRight className="w-4 h-4" />
           </button>
+          <div className="text-center">
+            <button
+              onClick={() => {
+                navigate('/ai-astrology');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="inline-flex items-center gap-2 px-6 py-2 border border-accent/40 text-accent hover:bg-accent/10 rounded-lg transition-all duration-300"
+            >
+              <BookOpen className="w-4 h-4" />
+              AI Astrology — Complete Guide
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </section>

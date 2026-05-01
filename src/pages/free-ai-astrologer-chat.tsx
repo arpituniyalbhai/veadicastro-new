@@ -526,8 +526,16 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         </p>
         
         <div className="flex flex-wrap justify-center gap-4 mt-6">
+          <a href="/ai-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Platform</a>
+          <a href="/blog/ai-astrology-prediction-for-2026" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions for 2026</a>
+          <a href="/blog/the-great-astrology-scam" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Astrologer Per Minute Scam</a>
+          <a href="/blog/ai-jyotish-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Jyotish</a>
+          <a href="/blog/is-ai-astrology-accurate" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Is AI Astrology Accurate?</a>
+          <a href="/blog/ai-astrologer-vs-human-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Human Astrologer</a>
+          <a href="/blog/how-ai-is-transforming-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI is Transforming Vedic Astrology</a>
+          <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Jyotishi vs AI Astrologer</a>
+          <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
           <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
-          <a href="/blogs/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Traditional Jyotish</a>
           <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>
         </div>
       </section>

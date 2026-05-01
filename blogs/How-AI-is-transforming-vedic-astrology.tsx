@@ -205,7 +205,7 @@ const HowAITransformingVedicAstrology = () => {
                 But something has shifted in the last few years.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                Artificial Intelligence has entered the picture. And it's changing Vedic astrology in ways nobody could have predicted even a decade ago. The future of vedic astrology is being shaped by these technological advances. As we explore <Link to="/blog/is-ai-astrology-accurate" className="text-blue-600 hover:text-blue-700 underline">is AI astrology accurate</Link>, we find that these technological advances are creating unprecedented opportunities for authentic astrological guidance.
+                Artificial Intelligence has entered the picture. And it's changing Vedic astrology in ways nobody could have predicted even a decade ago. The future of vedic astrology is being shaped by these technological advances. Our advanced <Link to="/ai-astrology" className="text-blue-600 hover:text-blue-700 underline">AI astrology platform</Link> and <Link to="/free-ai-astrologer-chat" className="text-blue-600 hover:text-blue-700 underline">free AI astrologer chat</Link> represent the cutting edge of this transformation. As we explore <Link to="/blog/is-ai-astrology-accurate" className="text-blue-600 hover:text-blue-700 underline">is AI astrology accurate</Link>, we find that these technological advances are creating unprecedented opportunities for authentic astrological guidance.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-8">
                 The integration of <Link to="/blog/ai-jyotish-vedic-astrology" className="text-blue-600 hover:text-blue-700 underline">AI Jyotish</Link> with traditional Vedic principles is making astrology more accessible than ever before. Many people are now exploring <Link to="/blog/ai-astrologer-vs-human-astrologer" className="text-blue-600 hover:text-blue-700 underline">AI astrologer vs human astrologer</Link> comparisons to understand which approach best suits their needs.
@@ -439,6 +439,18 @@ What has changed is who gets to listen.
                         Yes. Advanced AI astrology platforms can deliver reliable astrology readings with high accuracy when trained on authentic Vedic texts. However, they should complement rather than replace human astrologers for complex life decisions.
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Back to AI Astrology Hub */}
+            <div className="container mx-auto px-4 py-8">
+              <div className="max-w-3xl mx-auto">
+                <Link
+                  to="/ai-astrology"
+                  className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+                >
+                  ← AI Astrology — Complete Guide
+                </Link>
               </div>
             </div>
 

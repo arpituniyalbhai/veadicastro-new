@@ -35,7 +35,7 @@ const Footer = () => {
           <div className="flex flex-col items-start gap-3">
             <span className="text-sm font-medium text-white/60 uppercase tracking-wider">Quick Links</span>
             <Link to="/free-ai-astrologer-chat" className="text-white/80 hover:text-white transition-colors">
-              Free Ai Chat Without Sign Up
+             Chat with vedika AI Astrologer in free
             </Link>
             <Link to="/talk-to-astrologer" className="text-white/80 hover:text-white transition-colors">
               Talk to Astrologer
@@ -48,6 +48,12 @@ const Footer = () => {
             </Link>
             <Link to="/lucky-colour-for-today" className="text-white/80 hover:text-white transition-colors">
               Lucky Colour for Today
+            </Link>
+            <Link to="/free-kundli-generator" className="text-white/80 hover:text-white transition-colors">
+              Free Kundali Generator
+            </Link>
+            <Link to="/ai-astrology" className="text-white/80 hover:text-white transition-colors">
+              AI Astrology Guide
             </Link>
             <Link to="/kundali-matching" className="text-white/80 hover:text-white transition-colors">
               Kundali Matching for Marriage

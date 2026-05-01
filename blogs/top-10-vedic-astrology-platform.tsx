@@ -131,7 +131,7 @@ const Top10VedicAstrologyPlatform = () => {
             <p className="text-lg leading-relaxed text-white/80 mb-6">
               Today, Vedic AI astrology tools offer real-time, hyper-personalized insights with unprecedented consistency. 
               These platforms combine ancient wisdom with modern technology to provide accurate predictions and guidance 
-              for users seeking astrological insights. As we explore <Link to="/blog/is-ai-astrology-accurate" className="text-purple-400 underline">is AI astrology accurate</Link>, we find that modern platforms are achieving impressive results through advanced algorithms and Vedic principles.
+              for users seeking astrological insights. As we explore <Link to="/blog/is-ai-astrology-accurate" className="text-purple-400 underline">is AI astrology accurate</Link>, we find that modern platforms are achieving impressive results through advanced algorithms and Vedic principles. Our comprehensive <Link to="/ai-astrology" className="text-purple-400 underline">AI astrology platform</Link> leads the industry in accuracy and user satisfaction.
             </p>
             
             <p className="text-lg leading-relaxed text-white/80 mb-4">

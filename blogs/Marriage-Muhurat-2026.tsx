@@ -188,7 +188,7 @@ const MarriageMuhurat2026 = () => {
                 This right date and time is called a Marriage Muhurat. It is a special moment when the planets and stars are in a good position. Marrying at this time is believed to bring love, happiness, and good luck to the couple.
               </p>
               <p className="text-gray-300 leading-relaxed mb-5">
-                This guide covers all marriage muhurat 2026 dates, also known as shadi muhurat 2026 or vivah muhurat 2026 in Hindi-speaking families. This article gives you all the auspicious marriage dates for 2026 month by month. It also explains the best Nakshatras and Tithis so you can plan your wedding with full confidence.
+                This guide covers all marriage muhurat 2026 dates, also known as shadi muhurat 2026 or vivah muhurat 2026 in Hindi-speaking families. This article gives you all the auspicious marriage dates for 2026 month by month. It also explains the best Nakshatras and Tithis so you can plan your wedding with full confidence. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you understand how these cosmic alignments affect your specific relationship.
               </p>
               <div className="bg-purple-900/20 border-l-4 border-purple-500 rounded-r-xl p-5">
                 <p className="text-gray-200 leading-relaxed font-medium">

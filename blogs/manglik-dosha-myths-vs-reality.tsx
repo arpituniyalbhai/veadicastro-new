@@ -182,7 +182,7 @@ const ManglikDoshaMythsVsReality = () => {
                 I explained this to her family. It took time. But eventually they agreed to the match. They got married. Four years later, they are doing well.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                I share this not to dismiss Manglik Dosha — the concept is real and has a place in classical Vedic thought. I share it because this story repeats itself far more often than it should. Somewhere between ancient wisdom and modern fear, the actual meaning of Manglik Dosha has gotten completely lost. So let us go back to basics and be honest about what this concept really means.
+                I share this not to dismiss Manglik Dosha — the concept is real and has a place in classical Vedic thought. I share it because this story repeats itself far more often than it should. Somewhere between ancient wisdom and modern fear, the actual meaning of Manglik Dosha has gotten completely lost. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you understand these concepts accurately. So let us go back to basics and be honest about what this concept really means.
               </p>
             </section>
 

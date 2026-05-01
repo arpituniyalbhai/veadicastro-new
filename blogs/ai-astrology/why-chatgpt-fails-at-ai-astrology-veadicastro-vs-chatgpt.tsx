@@ -293,37 +293,35 @@ const WhyChatGptFailsAtAiAstrology = () => {
         </div>
 
         {/* MAIN CONTENT */}
-        <div className="container mx-auto px-4 py-12">
-          <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
 
-            {/* INTRO */}
-            <section>
-              <p className="mb-4 text-lg leading-relaxed">
-                While ChatGPT is a marvel of modern technology, it is fundamentally flawed when it comes to the ancient, precision-based science of Jyotish. In this deep dive, we will explore why ChatGPT is not a reliable Vedic Astrologer and why a specialized powerhouse like Veadicastro is the only way to get the cosmic clarity you deserve.
-              </p>
-            </section>
+  {/* MAIN CONTENT */}
+  <div className="container mx-auto px-4 py-12">
+    <div className="max-w-3xl mx-auto space-y-8 text-gray-300">
 
-            {/* THE FUNDAMENTAL FLAW */}
-            <section id="the-fundamental-flaw-language-models-vs-astronomical-engines">
-              <h2 className="text-3xl font-bold text-gray-300 mb-6">The Fundamental Flaw: Language Models vs. Astronomical Engines</h2>
-              
-              <h3 className="text-xl font-semibold text-gray-300 mb-4">ChatGPT is a Poet, Not a Mathematician</h3>
-              <p className="mb-4 leading-relaxed">
-                The first thing you need to understand is that ChatGPT is a Large Language Model (LLM). Its entire purpose is to predict the next most likely word in a sentence. It has read millions of books on astrology, but it does not actually "see" the planets. It is essentially an expert storyteller.
-              </p>
-              <p className="mb-4 leading-relaxed">
-                Vedic Astrology is not a story; it is high-level mathematics. When you ask for your ChatGPT Kundli accuracy, you are getting a hallucination based on probability. It cannot calculate the exact Planetary degrees at your specific moment of birth because it does not have an internal calculator geared for the heavens. It is guessing based on patterns, and in the world of Karma, a guess is as good as a lie.
-              </p>
-              
-              <h3 className="text-xl font-semibold text-gray-300 mb-4 mt-6">The Veadicastro Edge</h3>
-              <p className="leading-relaxed">
-                This is where Veadicastro bridges the gap. Unlike general models, Veadicastro is built on a Mathematical Precision Engine. We do not just "chat." Our system is hard-wired to NASA grade API and the Swiss Ephemeris. When you use our Vedika AI chatbot, it is not just pulling words from a database; it is performing trillions of calculations per second to map the sky exactly as it appeared at your birth. We calculate. ChatGPT guesses.
-              </p>
-            </section>
+      <section>
+        <p className="mb-4 text-lg leading-relaxed">
+          While ChatGPT is a marvel of modern technology, it is fundamentally flawed when it comes to the ancient, precision-based science of Jyotish. In this deep dive, we will explore why ChatGPT is not a reliable Vedic Astrologer and why a specialized powerhouse like Veadicastro with our <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">free AI astrologer chat</Link> is the only way to get the cosmic clarity you deserve.
+        </p>
+      </section>
 
-            {/* THE AYANAMSA DISASTER */}
-            <section id="the-ayanamsa-disaster-why-chatgpt-gets-your-sign-wrong">
-              <h2 className="text-3xl font-bold text-gray-300 mb-6">The Ayanamsa Disaster: Why ChatGPT Gets Your Sign Wrong</h2>
+      <section>
+        {/* THE FUNDAMENTAL FLAW */}
+        <section id="the-fundamental-flaw-language-models-vs-astronomical-engines">
+          <h2 className="text-3xl font-bold text-gray-300 mb-6">The Fundamental Flaw: Language Models vs. Astronomical Engines</h2>
+          
+          <h3 className="text-xl font-semibold text-gray-300 mb-4">ChatGPT is a Poet, Not a Mathematician</h3>
+          <p className="mb-4 leading-relaxed">
+            The first thing you need to understand is that ChatGPT is a Large Language Model (LLM). Its entire purpose is to predict the next most likely word in a sentence. It has read millions of books on astrology, but it does not actually "see" the planets. It is essentially an expert storyteller.
+          </p>
+          <p className="mb-4 leading-relaxed">
+            Vedic Astrology is not a story; it is high-level mathematics. When you ask for your ChatGPT Kundli accuracy, you are getting a hallucination based on probability. It cannot calculate the exact Planetary degrees at your specific moment of birth because it does not have an internal calculator geared for the heavens. It is guessing based on patterns, and in the world of Karma, a guess is as good as a lie.
+          </p>
+          
+          <h3 className="text-xl font-semibold text-gray-300 mb-4 mt-6">The Veadicastro Edge</h3>
+          <p className="leading-relaxed">
+            This is where Veadicastro bridges the gap. Unlike general models, Veadicastro is built on a Mathematical Precision Engine. We do not just "chat." Our system is hard-wired to NASA grade API and the Swiss Ephemeris. When you use our Vedika AI chatbot, it is not just pulling words from a database; it is performing trillions of calculations per second to map the sky exactly as it appeared at your birth. We calculate. ChatGPT guesses.
+          </p>
+        </section>
               <p className="mb-4 leading-relaxed">
                 One of the most frustrating experiences for a user is finding out their AI-generated horoscope is using the wrong zodiac. This is the classic Sidereal zodiac AI conflict.
               </p>
@@ -512,6 +510,18 @@ const WhyChatGptFailsAtAiAstrology = () => {
               </div>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

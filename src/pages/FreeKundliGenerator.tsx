@@ -633,7 +633,7 @@ Respond in English only.`;
               Free Janam Kundli by Date of Birth — <span className="fkg-pink-glow" style={{ color:"#ec4899" }}>Instant Online</span>
             </h1>
             <p style={{ color:"rgba(255,255,255,0.45)", fontSize:"16px", maxWidth:"540px", margin:"0 auto" }}>
-              Generate your kundali online instantly. Our Vedic astrology calculator provides accurate planetary positions, dosha analysis, and personalized remedies.
+              Generate your kundali online instantly. Our Vedic astrology calculator provides accurate planetary positions, dosha analysis, and personalized remedies. <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>See Your Future in Just 30 Second</a> or explore our <a href="/ai-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" style={{color:"#ec4899", textDecoration:"underline"}}>free AI astrology chat</a> for quick guidance. Explore our <a href="/blog" style={{color:"#ec4899", textDecoration:"underline"}}>astrology blogs</a> for more knowledge.
             </p>
           </section>
 

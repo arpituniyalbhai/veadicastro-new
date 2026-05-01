@@ -207,30 +207,33 @@ const OnlineJyotishiVsAIAstrologer = () => {
               <a href="#future-vedic" className="block text-white/80 hover:text-pink-400 transition-colors py-2">• The Future of Vedic Astrology</a>
               <a href="#conclusion" className="block text-white/80 hover:text-pink-400 transition-colors py-2">• Conclusion</a>
             </div>
-          </div>
 
-          {/* Introduction */}
-          <div id="introduction" className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Introduction</h2>
-            <p className="text-lg leading-relaxed text-white/80 mb-6">
-              You have a big decision coming up — maybe a job change, a marriage proposal, or a property purchase. Your instinct says
-              consult an astrologer. But now you have two options staring at you: book an online jyotishi for ₹500–₹5,000, or open an AI
-              astrologer app and get answers in 30 seconds for free.
-            </p>
-            
-            <p className="text-lg leading-relaxed text-white/80 mb-6">
-              So which one actually works? Let's break it down honestly. The rise of AI-powered astrology has completely transformed how Indians access Vedic wisdom. When considering <strong>ai vs human astrologer</strong> options, traditional jyotishis who once charged premium rates now compete with free AI tools that deliver instant predictions based on authentic Vedic principles.
-            </p>
-            
-            <p className="text-lg leading-relaxed text-white/80 mb-6">
-              An AI astrologer is a software application that analyzes your birth chart using algorithms based on Vedic astrology principles. When you use <strong>jyotish online free</strong> tools like Vedika AI, you get instant analysis without waiting for appointments or paying consultation fees.
-            </p>
-            
-            <p className="text-lg leading-relaxed text-white/80">
-              This isn't just about convenience anymore — it's about accuracy, privacy, cost, and the very future of Vedic astrology in India. Let's explore both options in detail so you can make an informed decision for your specific needs.
-            </p>
-          </div>
+              {/* Introduction */}
+              <div id="introduction" className="mb-12">
+                <h2 className="text-2xl font-bold mb-6">Introduction</h2>
+                <p className="text-lg leading-relaxed text-white/80 mb-6">
+                  So which one actually works? Let's break it down honestly. The rise of AI-powered astrology has completely transformed how Indians access Vedic wisdom. When considering <strong>ai vs human astrologer</strong> options, traditional jyotishis who once charged premium rates now compete with free AI tools that deliver instant predictions based on authentic Vedic principles. Our comprehensive <Link to="/ai-astrology" className="text-purple-400 underline">AI astrology platform</Link> represents the cutting edge of this transformation.
+                </p>
+                <p className="text-lg leading-relaxed text-white/80">
+                  This isn't just about convenience anymore — it's about accuracy, privacy, cost, and the very future of Vedic astrology in India. Let's explore both options in detail so you can make an informed decision for your specific needs.
+                </p>
+              </div>
 
+              {/* The Rise of AI in Vedic Astrology */}
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold mb-6">The Rise of AI in Vedic Astrology</h2>
+                <p className="text-lg leading-relaxed text-white/80 mb-6">
+                  Vedic astrology has always been a science of precision. Ancient rishis calculated planetary positions manually, creating complex mathematical systems to predict life events. Today, AI has simply automated these calculations while preserving the authentic Vedic methodology.
+                </p>
+                
+                <p className="text-lg leading-relaxed text-white/80 mb-6">
+                  Modern AI astrologers like Vedika AI use the same fundamental principles that traditional jyotishis have used for centuries — House analysis, Lord placement, Sign characteristics, Nakshatra influences, Dasha periods, and Transit effects. The difference is that AI can process these calculations instantly without human error or bias.
+                </p>
+                
+                <p className="text-lg leading-relaxed text-white/80">
+                  What's fascinating is that AI has actually made Vedic astrology more accessible to younger generations who might have found traditional consultations intimidating or expensive. The technology hasn't replaced the wisdom — it has democratized access to it.
+                </p>
+              </div>
           {/* The Rise of AI in Vedic Astrology */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6">The Rise of AI in Vedic Astrology</h2>
@@ -520,10 +523,9 @@ const OnlineJyotishiVsAIAstrologer = () => {
               👉 Generate your <strong>online kundli with predictions</strong> + Chat with Vedika AI at Veadicastro.in
             </p>
           </div>
-
-
-        </div>{/* end max-w-4xl */}
-      </div>{/* end min-h-screen */}
+        </div>
+        </div>
+      </div>
     </>
   );
 };

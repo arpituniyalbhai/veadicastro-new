@@ -147,7 +147,7 @@ const JobVsBusinessWhatYourChartSay = () => {
                 Job vs Business — What Your Vedic Birth Chart Really Says
               </h1>
               <p className="text-lg text-purple-200 mb-8 leading-relaxed max-w-2xl mx-auto">
-                So you're sitting there confused. Job karo ya business? Everyone has an opinion. Your parents say job is safe. Your friend says business is the future. But honestly, your birth chart was always trying to tell you the answer.
+                So you're sitting there confused. Job karo ya business? Everyone has an opinion. Your parents say job is safe. Your friend says business is the future. But honestly, your birth chart was always trying to tell you the answer. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you decode these cosmic signals for your career path.
               </p>
               <div className="flex flex-wrap gap-4 justify-center text-sm text-gray-400">
                 <span>By Arpit Uniyal</span>

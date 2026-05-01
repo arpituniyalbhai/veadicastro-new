@@ -480,7 +480,7 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
                 The entire experience is designed to feel like talking to a knowledgeable astrologer — not filling out a form and getting a PDF in return.
               </p>
               <p className="leading-relaxed font-semibold text-purple-300">
-                <Link to="/" className="text-purple-400 hover:text-purple-300 underline">Try Vedika AI free on Veadicastro</Link> and see for yourself.
+                <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">Try Vedika AI free on Veadicastro</Link> and see for yourself.
               </p>
             </section>
 
@@ -617,8 +617,8 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
                 <Link to="/blog/ai-astrologer-vs-human-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrologer vs Human Astrologer — Complete Comparison
                 </Link>
-                <Link to="/blog/ai-jyotish-vedic-astrology-meets-ai" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
-                  AI Jyotish — Vedic Astrology Meets Artificial Intelligence
+                <Link to="/ai-astrology" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Ai Astrology
                 </Link>
                 <Link to="/blog/is-ai-astrology-accurate" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Is AI Astrology Accurate? We Tested It

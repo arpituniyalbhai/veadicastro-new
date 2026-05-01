@@ -489,7 +489,7 @@ Then one day, I came across Vedic astrology. Someone read my Vedic chart and tol
 </p>
 
 <p className="text-lg leading-relaxed text-white/80 italic">
-That feeling is what this blog is all about.
+That feeling is what this blog is all about. Our advanced <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> can help you experience this same level of personal insight with Vedic astrology.
 </p>
 
 </section>

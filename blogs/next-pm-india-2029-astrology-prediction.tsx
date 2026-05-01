@@ -277,7 +277,7 @@ const NextPMIndia2029AstrologyPrediction = () => {
             </div>
             
             <p className="text-lg leading-relaxed text-white/80">
-              The cosmic energies suggest that 2027-2029 will be a watershed period in Indian politics, where traditional power dynamics will be challenged and new leadership will emerge from unexpected quarters. For those interested in understanding their own career potential, check out our comprehensive guide on the <Link to="/blog/best-careers-for-each-zodiac-sign-in-2026" className="text-pink-400 hover:text-pink-300 underline transition-colors">best careers for each zodiac sign in 2026</Link>.
+              The cosmic energies suggest that 2027-2029 will be a watershed period in Indian politics, where traditional power dynamics will be challenged and new leadership will emerge from unexpected quarters. Our advanced <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> provides detailed analysis of how these planetary movements affect political careers. For those interested in understanding their own career potential, check out our comprehensive guide on the <Link to="/blog/best-careers-for-each-zodiac-sign-in-2026" className="text-pink-400 hover:text-pink-300 underline transition-colors">best careers for each zodiac sign in 2026</Link>.
             </p>
           </div>
 

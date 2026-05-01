@@ -205,7 +205,7 @@ const YearlyHoroscope2026CompleteZodiacPredictionsForAll12Rashis = () => {
                 2026 is not a quiet year. Jupiter moving into Cancer mid-year is exalted, which in Vedic astrology is a big deal. Saturn is in its own sign Aquarius, demanding accountability from every single rashi without exception. Rahu in Pisces and Ketu in Virgo are slowly dissolving our obsession with perfectionism and routine while pulling us toward something more intuitive and meaningful.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                We have read hundreds of charts at VedicAstro and years with this kind of planetary setup tend to be the ones people remember. Not always because they were easy, but because they were real.
+                We have read hundreds of charts at VedicAstro and years with this kind of planetary setup tend to be the ones people remember. Not always because they were easy, but because they were real. Our comprehensive <Link to="/ai-astrology" className="text-blue-600 hover:text-blue-700 underline">AI astrology platform</Link> can help you navigate these cosmic energies with personalized insights.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed font-semibold">
                 Here is our honest assessment for all 12 rashis.

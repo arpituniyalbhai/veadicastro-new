@@ -232,7 +232,7 @@ const AiAstrologyRealOrFake = () => {
                 It is a fair question. And honestly, most people asking it deserve a proper, honest answer, not a sales pitch.
               </p>
               <p className="leading-relaxed">
-                So let us talk about it. No filters. No agenda.
+                Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> and <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">free AI astrologer chat</Link> represent genuine Vedic principles applied through technology. So let us talk about it. No filters. No agenda.
               </p>
             </section>
 
@@ -445,6 +445,18 @@ const AiAstrologyRealOrFake = () => {
               </div>
             </section>
 
+          </div>
+        </div>
+
+        {/* Back to AI Astrology Hub */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-3xl mx-auto">
+            <Link
+              to="/ai-astrology"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              ← AI Astrology — Complete Guide
+            </Link>
           </div>
         </div>
 

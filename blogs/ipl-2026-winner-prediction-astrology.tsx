@@ -507,14 +507,12 @@ const WhichTeamWinIPL2026 = () => {
               <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline transition-colors">
                 check your own horoscope
               </Link>{" "}
-              to see if your favorite team aligns with your cosmic destiny!
+              to see if your favorite team aligns with your cosmic destiny! You can also use our comprehensive <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> for detailed match analysis and predictions.
             </p>
           </div>
 
-
           {/* ── Daily Match Predictions ── */}
           <MatchPredictionsSection />
-
 
           {/* Section 1: MI */}
           <div className="mb-12">

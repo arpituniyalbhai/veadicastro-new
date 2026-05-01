@@ -471,7 +471,7 @@ const LuckyColourForToday = () => {
               margin:"0 auto",
               lineHeight:1.6
             }}>
-              Discover your personalized lucky colour based on Vedic astrology and today's planetary alignments
+              Discover your personalized lucky colour based on Vedic astrology and today's planetary alignments. <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>Try India's best astrologer</a> or explore our <a href="/ai-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" style={{color:"#ec4899", textDecoration:"underline"}}>free AI astrology chat</a> for quick guidance.
             </p>
           </div>
 
