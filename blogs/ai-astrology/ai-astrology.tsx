@@ -2,14 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { Card } from "../../src/components/ui/card";
 
 export default function AiAstrology() {
   return (
     <>
       <Helmet>
-        <title>AI Astrology — Free & Most Accurate AI Vedic Astrology Platform India | Veadicastro</title>
-        <meta name="description" content="Get free AI Vedic astrology predictions with India's most accurate AI astrologer. Ask questions to Vedika AI, generate Kundali free, and access all astrology tools. Authentic Vedic Jyotish combined with AI precision." />
+        <title>AI Astrology — Free Vedic AI Astrologer India | Veadicastro</title>
+        <meta name="description" content="AI Astrology by Veadicastro — India's most accurate free Vedic AI astrologer. Get personalized predictions, kundali analysis, and instant answers from authentic Vedic Jyotish combined with AI precision." />
         <meta name="keywords" content="free ai astrology, accurate ai astrology, vedic astrology ai, kundli generator free, ask ai astrologer free, vedika ai, jyotish ai, birth chart analysis, planetary predictions, dasha analysis, nakshatra predictions" />
         <link rel="canonical" href="https://veadicastro.in/ai-astrology" />
         <meta name="robots" content="index, follow" />
@@ -66,10 +66,10 @@ export default function AiAstrology() {
               <span className="text-sm font-medium text-accent">India's Most Trusted AI Astrology Platform</span>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-none mb-6">
-              AI Astrology India: Complete Guide 2026
+              AI Astrology India: Free Vedic AI Astrologer
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-              AI Astrology is a modern approach that combines Vedic astrology with artificial intelligence by Veadicastro. Get accurate kundali analysis, dasha predictions, and personalized answers from India's most trusted AI astrology platform.
+              Try India's most trusted free AI astrologer - get instant kundali analysis, personalized predictions, and answers to your questions. No signup required for your first consultation.
             </p>
             
             {/* Social Proof Section */}

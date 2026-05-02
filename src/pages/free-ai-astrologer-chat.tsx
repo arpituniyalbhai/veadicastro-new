@@ -512,36 +512,32 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         </div>
       </header>
 
-      {/* ── HERO STRIP ── */}
-      <section className="relative py-14 text-center px-4">
-        <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 border border-pink-500/30 rounded-full px-4 py-1.5 mb-6">
-          <Sparkles className="w-3 h-3" /> Astrology AI Consultation - AI Astrology Free Chat
-        </p>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
-          Chat with Your Personal Ai Assistant<br />
-          <span className="text-pink-400 pink-glow">Vedika AI</span>
-        </h1>
-        <p className="text-white/50 max-w-xl mx-auto text-base">
-          We trained Vedika AI on actual Sanskrit scriptures like Bṛhat Parāśara Horāśāstra and Saravali to give you predictions that feel like talking to a real Guru. Your birth chart analysis is based on authentic Parashari principles. AI astrology free chat available 24/7.
-        </p>
-        
-        <div className="flex flex-wrap justify-center gap-4 mt-6">
-          <a href="/ai-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Platform</a>
-          <a href="/blog/ai-astrology-prediction-for-2026" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions for 2026</a>
-          <a href="/blog/the-great-astrology-scam" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Astrologer Per Minute Scam</a>
-          <a href="/blog/ai-jyotish-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Jyotish</a>
-          <a href="/blog/is-ai-astrology-accurate" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Is AI Astrology Accurate?</a>
-          <a href="/blog/ai-astrologer-vs-human-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Human Astrologer</a>
-          <a href="/blog/how-ai-is-transforming-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI is Transforming Vedic Astrology</a>
-          <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Jyotishi vs AI Astrologer</a>
-          <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
-          <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
-          <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>
-        </div>
-      </section>
+    {/* ── HERO STRIP ── */}
+    <section className="relative py-14 text-center px-4">
+      <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 border border-pink-500/30 rounded-full px-4 py-1.5 mb-6">
+        <Sparkles className="w-3 h-3" /> Astrology AI Consultation - AI Astrology Free Chat
+      </p>
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
+        Chat with Your Personal Ai Assistant<br />
+        <span className="text-pink-400 pink-glow">Vedika AI</span>
+      </h1>
+      <div className="flex flex-wrap justify-center gap-4 mt-6">
+        <a href="/blog/free-ai-astrology-chat-india" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free AI Astrology Chat India</a>
+        <a href="/blog/ai-astrology-prediction-for-2026" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions for 2026</a>
+        <a href="/blog/the-great-astrology-scam" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Astrologer Per Minute Scam</a>
+        <a href="/blog/ai-jyotish-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Jyotish</a>
+        <a href="/blog/is-ai-astrology-accurate" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Is AI Astrology Accurate?</a>
+        <a href="/blog/ai-astrologer-vs-human-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Human Astrologer</a>
+        <a href="/blog/how-ai-is-transforming-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI is Transforming Vedic Astrology</a>
+        <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Jyotishi vs AI Astrologer</a>
+        <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
+        <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
+        <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>
+      </div>
+    </section>
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="max-w-5xl mx-auto px-4 pb-8">
+    {/* ── MAIN CONTENT ── */}
+    <div className="max-w-5xl mx-auto px-4 pb-8">
 
           {!kundliGenerated ? (
             /* ── KUNDLI FORM ── */

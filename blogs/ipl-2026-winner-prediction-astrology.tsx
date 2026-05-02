@@ -283,10 +283,10 @@ const WhichTeamWinIPL2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Today IPL Match Winner Prediction | IPL 2026 Kaun Jitega | Aaj ka IPL Match</title>
+        <title>IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?</title>
         <meta
           name="description"
-          content="Today IPL match winner prediction - Who will win today's IPL match? Get accurate aaj ka IPL match kaun jitega astrology predictions with 95% accuracy. Daily updated today IPL match predictions, toss predictions, and Vedic astrology analysis."
+          content="Vedic astrology predictions for IPL 2026 winner. Which team's stars are aligned? Free AI analysis of all team charts."
         />
         <meta
           name="keywords"
@@ -297,7 +297,7 @@ const WhichTeamWinIPL2026 = () => {
         <meta name="theme-color" content="#0a0a0f" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Today IPL Match Winner Prediction | IPL 2026 Kaun Jitega | Aaj ka IPL Match" />
+        <meta property="og:title" content="IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?" />
         <meta property="og:description" content="Today IPL match winner prediction - Who will win today's IPL match? Get accurate aaj ka IPL match kaun jitega astrology predictions with 95% accuracy. Daily updated predictions." />
         <meta property="og:url" content="https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology" />
         <meta property="og:type" content="article" />
@@ -308,7 +308,7 @@ const WhichTeamWinIPL2026 = () => {
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Today IPL Match Winner Prediction | IPL 2026 Kaun Jitega" />
+        <meta name="twitter:title" content="IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?" />
         <meta name="twitter:description" content="Today IPL match winner prediction - Who will win today's IPL match? Get accurate aaj ka IPL match kaun jitega astrology predictions." />
         <meta name="twitter:image" content="https://vedicaastro.in/optimized/ipl-2026.webp" />
         <meta name="twitter:site" content="@vedicaastro" />
@@ -740,11 +740,11 @@ const WhichTeamWinIPL2026 = () => {
                 </thead>
                 <tbody>
                   {[
-                    { team: "Mumbai Indians", color: "text-blue-400", edge: "Strong Saturn (Discipline)", prob: "35%", probColor: "text-green-400" },
-                    { team: "CSK", color: "text-yellow-300", edge: "Favorable Jupiter (Luck)", prob: "25%", probColor: "text-green-400" },
-                    { team: "RCB", color: "text-red-400", edge: "High Mars Energy (Passion)", prob: "20%", probColor: "text-yellow-400" },
-                    { team: "GT / KKR", color: "text-purple-400", edge: "Rahu/Venus Influence (Surprise)", prob: "15%", probColor: "text-yellow-400" },
-                    { team: "Others", color: "text-white/50", edge: "Average Transits", prob: "5%", probColor: "text-red-400" },
+                    { team: "Punjab Kings", color: "text-rose-400", edge: "Strong Moon (Momentum)", prob: "30%", probColor: "text-green-400" },
+                    { team: "RCB", color: "text-red-400", edge: "High Mars Energy (Passion)", prob: "25%", probColor: "text-green-400" },
+                    { team: "SRH", color: "text-orange-400", edge: "Balanced Transits (Consistency)", prob: "20%", probColor: "text-yellow-400" },
+                    { team: "Mumbai Indians", color: "text-blue-400", edge: "Strong Saturn (Discipline)", prob: "15%", probColor: "text-yellow-400" },
+                    { team: "Others", color: "text-white/50", edge: "Average Transits", prob: "10%", probColor: "text-red-400" },
                   ].map((row, i) => (
                     <tr key={i} className="border-b border-white/5 last:border-0">
                       <td className={`px-6 py-4 font-semibold ${row.color}`}>{row.team}</td>
@@ -786,7 +786,7 @@ const WhichTeamWinIPL2026 = () => {
               {[
                 {
                   q: "Who will win IPL 2026 according to astrology?",
-                  a: "According to Vedic astrology analysis, Mumbai Indians have the strongest planetary alignment with 35% probability, followed by CSK at 25%. Saturn's powerful position in 2026 favors MI's disciplined approach, while Jupiter's influence supports CSK's strategic brilliance.",
+                  a: "According to Vedic astrology analysis, Punjab Kings have the strongest planetary alignment with 30% probability, followed by RCB at 25%. Moon's powerful position in 2026 favors PBKS's momentum, while Mars' influence supports RCB's aggressive approach.",
                 },
                 {
                   q: "Which team is favored by planets in IPL 2026?",

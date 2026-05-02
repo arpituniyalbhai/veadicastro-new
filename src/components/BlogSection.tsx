@@ -27,15 +27,15 @@ const latestBlogPosts: BlogPost[] = [
     externalLink: "/blog/the-great-astrology-scam"
   },
   {
-    id: "17",
-    title: "Is AI Astrology Accurate? We Tested It (2026)",
-    excerpt: "A honest review of AI astrology accuracy. We tested AI predictions against real life experiences. Learn how AI astrology works, what makes it accurate, and whether it can replace traditional astrologers.",
+    id: "25",
+    title: "Free AI Astrology Chat India — Ask Vedika AI Your Question",
+    excerpt: "Chat with Vedika AI — India's free AI astrology chat built on Vedic Jyotish. Ask about marriage, career, finance. Get answers based on your real Kundali, not generic horoscopes.",
     author: "Arpit Uniyal",
-    date: "2026-04-11",
-    readTime: "25 min read",
+    date: "2026-05-02",
+    readTime: "12 min read",
     category: "AI & Technology",
-    image: "/Ai-Astrology-image/ai-astrology-accurate.webp",
-    externalLink: "/blog/is-ai-astrology-accurate"
+    image: "/Ai-Astrology-image/free-ai-astrology-chat-india.webp",
+    externalLink: "/blog/free-ai-astrology-chat-india"
   },
   {
     id: "24",

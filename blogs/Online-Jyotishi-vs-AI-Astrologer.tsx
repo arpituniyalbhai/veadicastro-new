@@ -2,10 +2,10 @@ import React, { lazy, Suspense } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Calendar, Clock, Star } from "lucide-react";
-import { ButtonLite } from "@/components/ui/button-lite";
+import { ButtonLite } from "../src/components/ui/button-lite";
 
 // Lazy load heavy components
-const LazyImage = lazy(() => import("@/components/ui/lazy-image"));
+const LazyImage = lazy(() => import("../src/components/ui/lazy-image"));
 
 const OnlineJyotishiVsAIAstrologer = () => {
   return (

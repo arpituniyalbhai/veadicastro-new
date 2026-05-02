@@ -15,12 +15,12 @@ import SEO from "@/components/SEO";
 const plans = [
   {
     name: "Quick Ask",
-    price: 99,
+    price: 149,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions — get clarity fast",
-    buyers: 588,
-    recentBuyers: 501,
+    buyers: 688,
+    recentBuyers: 389,
     benefits: [
       "5 Personalized Questions",
       "Career, love, finance & more",
@@ -37,7 +37,7 @@ const plans = [
     questions: 15,
     description: "Most popular — serious guidance for life's big decisions",
     buyers: 1243,
-    recentBuyers: 892,
+    recentBuyers: 786,
     benefits: [
       "15 Personalized Questions",
       "Ideal for career, marriage & life planning",
@@ -54,7 +54,7 @@ const plans = [
     questions: 30,
     description: "Best value — unlimited clarity for an entire year of decisions",
     buyers: 241,
-    recentBuyers: 344,
+    recentBuyers: 321,
     benefits: [
       "30 Personalized Questions",
       "Vedika Advanced AI — Highest Thinking Mode",

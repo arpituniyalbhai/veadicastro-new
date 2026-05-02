@@ -269,9 +269,8 @@ const blogPosts: BlogPost[] = [
     excerpt: "Discover what AI astrology predicts for 2026. Learn about major planetary movements, career insights, marriage prospects, and how VeadicAstro.in's Vedika AI provides accurate predictions based on your Vedic birth chart.",
     author: "Arpit Uniyal",
     date: "2026-04-20",
-    readTime: "25 min read",
+    readTime: "18 min read",
     category: "AI & Technology",
-    image: "/Ai-Astrology-image/ai-astrology-prediction.webp",
     externalLink: "/blog/ai-astrology-prediction-for-2026"
   },
   {
@@ -284,6 +283,17 @@ const blogPosts: BlogPost[] = [
     category: "AI & Technology",
     image: "/optimized/vedika-ai-16.5-image.webp",
     externalLink: "/blog/vedika-ai-astrologer-india"
+  },
+  {
+    id: "25",
+    title: "Free AI Astrology Chat India — Ask Vedika AI Your Question",
+    excerpt: "Chat with Vedika AI — India's free AI astrology chat built on Vedic Jyotish. Ask about marriage, career, finance. Get answers based on your real Kundali, not generic horoscopes.",
+    author: "Arpit Uniyal",
+    date: "2026-05-02",
+    readTime: "12 min read",
+    category: "AI & Technology",
+    image: "/Ai-Astrology-image/free-ai-astrology-chat-india.webp",
+    externalLink: "/blog/free-ai-astrology-chat-india"
   }
 ];
 
@@ -328,10 +338,10 @@ const Blog = () => {
           </Button>
 
           <article className="space-y-6">
-            <div>
+            <div className="space-y-4">
               <span className="text-sm text-secondary font-medium">{selectedPost.category}</span>
-              <h1 className="text-3xl md:text-4xl font-bold mt-2">{selectedPost.title}</h1>
-              <div className="flex items-center gap-4 mt-4 text-sm text-muted-foreground">
+              <h1 className="text-3xl md:text-4xl font-bold mt-3">{selectedPost.title}</h1>
+              <div className="flex items-center gap-4 mt-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   {formatDate(selectedPost.date)}
@@ -364,11 +374,11 @@ const Blog = () => {
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="px-6 pb-6 space-y-4">
-                    <div>
+                  <div className="px-6 pb-6 space-y-6">
+                    <div className="space-y-4">
                       <span className="text-xs text-secondary font-medium">Astrology Comparison</span>
-                      <h2 className="text-xl font-semibold mt-2 line-clamp-2">Online Jyotishi vs AI Astrologer</h2>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-3">Confused between consulting an online jyotishi or an AI astrologer? We compare accuracy, cost, privacy & convenience — and show you why Vedika AI on Veadicastro is different. Try it free.</p>
+                      <h2 className="text-xl font-semibold mt-3 line-clamp-2">Online Jyotishi vs AI Astrologer</h2>
+                      <p className="text-sm text-muted-foreground mt-3 line-clamp-3">Confused between consulting an online jyotishi or an AI astrologer? We compare accuracy, cost, privacy & convenience — and show you why Vedika AI on Veadicastro is different. Try it free.</p>
                     </div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/40">
                       <div className="flex items-center gap-3">
@@ -395,11 +405,11 @@ const Blog = () => {
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="px-6 pb-6 space-y-4">
-                    <div>
+                  <div className="px-6 pb-6 space-y-6">
+                    <div className="space-y-4">
                       <span className="text-xs text-secondary font-medium">Jyotish AI Technology</span>
-                      <h2 className="text-xl font-semibold mt-2 line-clamp-2">Vedic Astrology AI Kaise Kaam Karta Hai?</h2>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-3">जानिए Vedic Astrology AI कैसे काम करता है। Artificial Intelligence और Jyotish Shastra का संगम। Kundli बनाने, Prediction और Pattern Recognition की पूरी प्रक्रिया।</p>
+                      <h2 className="text-xl font-semibold mt-3 line-clamp-2">Vedic Astrology AI Kaise Kaam Karta Hai?</h2>
+                      <p className="text-sm text-muted-foreground mt-3 line-clamp-3">जानिए Vedic Astrology AI कैसे काम करता है। Artificial Intelligence और Jyotish Shastra का संगम। Kundli बनाने, Prediction और Pattern Recognition की पूरी प्रक्रिया।</p>
                     </div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/40">
                       <div className="flex items-center gap-3">
@@ -426,11 +436,11 @@ const Blog = () => {
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
-                  <div className="px-6 pb-6 space-y-4">
-                    <div>
+                  <div className="px-6 pb-6 space-y-6">
+                    <div className="space-y-4">
                       <span className="text-xs text-secondary font-medium">Political Astrology</span>
-                      <h2 className="text-xl font-semibold mt-2 line-clamp-2">Who Will Become the Next PM of India in 2029?</h2>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-3">Who will be the next PM of India in 2029? Detailed Vedic astrology analysis of Narendra Modi, Yogi Adityanath, Rahul Gandhi, and Amit Shah. Get expert predictions and probability table for India's next Prime Minister.</p>
+                      <h2 className="text-xl font-semibold mt-3 line-clamp-2">Who Will Become the Next PM of India in 2029?</h2>
+                      <p className="text-sm text-muted-foreground mt-3 line-clamp-3">Who will be the next PM of India in 2029? Detailed Vedic astrology analysis of Narendra Modi, Yogi Adityanath, Rahul Gandhi, and Amit Shah. Get expert predictions and probability table for India's next Prime Minister.</p>
                     </div>
                     <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/40">
                       <div className="flex items-center gap-3">
@@ -506,11 +516,11 @@ const Blog = () => {
                     />
                   </div>
                 )}
-                <div className="px-6 pb-6 space-y-4">
-                  <div>
+                <div className="px-6 pb-6 space-y-6">
+                  <div className="space-y-4">
                     <span className="text-xs text-secondary font-medium">{post.category}</span>
-                    <h2 className="text-xl font-semibold mt-2 line-clamp-2">{post.title}</h2>
-                    <p className="text-sm text-muted-foreground mt-2 line-clamp-3">{post.excerpt}</p>
+                    <h2 className="text-xl font-semibold mt-3 line-clamp-2">{post.title}</h2>
+                    <p className="text-sm text-muted-foreground mt-3 line-clamp-3">{post.excerpt}</p>
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/40">
                     <div className="flex items-center gap-3">

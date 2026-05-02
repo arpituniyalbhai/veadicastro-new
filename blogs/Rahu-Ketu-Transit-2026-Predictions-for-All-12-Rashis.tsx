@@ -20,8 +20,8 @@ const RahuKetuTransit2026 = () => {
   return (
     <>
       <Helmet>
-        <title>Rahu Ketu Transit 2026 — Shocking Changes for All 12 Rashis</title>
-        <meta name="description" content="Rahu Ketu transit 2026 will change your life. See exact predictions for your rashi — career, marriage, money. India's most accurate Vedic AI analysis." />
+        <title>Rahu Ketu Transit 2026: Predictions & Effects for All 12 Rashis | Veadicastro</title>
+        <meta name="description" content="Rahu in Pisces, Ketu in Virgo 2026 — complete Vedic analysis for all 12 rashis. Career, marriage, finance predictions with remedies. Free personalized analysis by Vedika AI." />
         <meta name="keywords" content="Rahu Ketu transit 2026, Rahu Pisces 2026, Ketu Virgo 2026, shadow planets Vedic astrology, Rahu Ketu remedies, Rahu Ketu effects all rashis, Rahu Mahadasha, Ketu Beej Mantra, Rahu transit predictions" />
         <link rel="canonical" href="https://veadicastro.in/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -32,7 +32,7 @@ const RahuKetuTransit2026 = () => {
         <meta name="ICBM" content="20.5937,78.9629" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="Rahu-Ketu Transit 2026: Predictions, Effects & Remedies for All 12 Rashis | Veadicastro" />
+        <meta property="og:title" content="Rahu Ketu Transit 2026: Predictions & Remedies for All 12 Rashis | Veadicastro" />
         <meta property="og:description" content="Complete guide to Rahu-Ketu Transit 2026. Detailed predictions for all 12 rashis with remedies, effects, and spiritual insights." />
         <meta property="og:url" content="https://veadicastro.in/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" />
         <meta property="og:type" content="article" />
@@ -543,7 +543,7 @@ const RahuKetuTransit2026 = () => {
             <div className="mb-12">
               <h3 className="text-xl font-semibold mb-6 text-pink-400">Important Note</h3>
               <p className="text-white/80 leading-relaxed">
-                For those experiencing Kala Sarpa Dosha — where all seven planets sit between Rahu-Ketu axis — specialized pujas and remedies are recommended beyond the standard Navagraha approach. Consult a trusted Jyotishi for personalized guidance.
+                For those experiencing Kala Sarpa Dosha — where all seven planets sit between Rahu-Ketu axis — specialized pujas and remedies are recommended beyond the standard Navagraha approach. Our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">free AI astrologer</Link> can help identify if you have this dosha and provide personalized guidance.
               </p>
             </div>
           </section>
@@ -555,13 +555,13 @@ const RahuKetuTransit2026 = () => {
             </div>
             <div className="mb-12">
               <p className="text-lg leading-relaxed text-white/80">
-                One of the most significant developments in modern Jyotish is the ability to combine ancient Vedic principles with artificial intelligence. At Veadicastro, our AI platform — Vedika AI — analyzes your complete birth chart including your Rahu-Ketu axis placement, current Dasha period, and how the 2026 transit specifically impacts your natal positions.
+                One of the most significant developments in modern Jyotish is the ability to combine ancient Vedic principles with artificial intelligence. At Veadicastro, our <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> — Vedika AI — analyzes your complete birth chart including your Rahu-Ketu axis placement, current Dasha period, and how the 2026 transit specifically impacts your natal positions.
               </p>
             </div>
 
             <div className="mb-12">
               <p className="text-lg leading-relaxed text-white/80">
-                Unlike generic horoscope predictions based only on Moon sign or Sun sign, Vedika AI calculates the exact degree of your Rahu and Ketu, identifies which houses are being activated in your personal chart, cross-references your current Mahadasha and Antardasha, and generates a personalized prediction that accounts for the full complexity of your Kundli.
+                Unlike generic horoscope predictions based only on Moon sign or Sun sign, Vedika AI calculates the exact degree of your Rahu and Ketu, identifies which houses are being activated in your personal chart, cross-references your current Mahadasha and Antardasha, and generates a personalized prediction that accounts for the full complexity of your Kundli. Try our <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline">free kundali generator</Link> to see your exact Rahu-Ketu placement.
               </p>
             </div>
 

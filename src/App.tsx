@@ -69,6 +69,7 @@ const AiAstrologyPredictionFor2026 = lazy(() => import("../blogs/ai-astrology/ai
 const TheGreatAstrologyScam = lazy(() => import("../blogs/The-Great-Astrology-Scam"));
 const VedikaAiAstrologerIndia = lazy(() => import("../blogs/vedika-ai-astrologer-india"));
 const AiAstrology = lazy(() => import("../blogs/ai-astrology/ai-astrology"));
+const FreeAiAstrologyChat = lazy(() => import("../blogs/ai-astrology/free-ai-astrology-chat-india"));
 
 // Lazy load tool pages
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
@@ -155,6 +156,7 @@ const RouterShell = () => {
         <Route path="/blog/ai-astrology-prediction-for-2026" element={<Suspense fallback={<PageLoading />}><AiAstrologyPredictionFor2026 /></Suspense>} />
         <Route path="/blog/the-great-astrology-scam" element={<Suspense fallback={<PageLoading />}><TheGreatAstrologyScam /></Suspense>} />
         <Route path="/blog/vedika-ai-astrologer-india" element={<Suspense fallback={<PageLoading />}><VedikaAiAstrologerIndia /></Suspense>} />
+        <Route path="/blog/free-ai-astrology-chat-india" element={<Suspense fallback={<PageLoading />}><FreeAiAstrologyChat /></Suspense>} />
         <Route path="/ai-astrology" element={<Suspense fallback={<PageLoading />}><AiAstrology /></Suspense>} />
         <Route path="/terms" element={<Suspense fallback={<PageLoading />}><Terms /></Suspense>} />
         <Route path="/privacy" element={<Suspense fallback={<PageLoading />}><Privacy /></Suspense>} />
