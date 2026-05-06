@@ -29,6 +29,38 @@ const ReportDetail = () => {
   
   // Get user birth details from localStorage
   const birthDetails = JSON.parse(localStorage.getItem("onboarding_details") || "{}");
+
+  // Pull real astro data from localStorage (same as Dashboard)
+  const astroData = (() => {
+    try {
+      const planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
+      const ascendant = localStorage.getItem("ascendant") || "—";
+      const astroPayload = JSON.parse(localStorage.getItem("astro_payload") || "null");
+
+      const moon = Array.isArray(planets)
+        ? planets.find((p: any) => (p.name || p.planet)?.toLowerCase() === "moon")
+        : null;
+
+      const sun = Array.isArray(planets)
+        ? planets.find((p: any) => (p.name || p.planet)?.toLowerCase() === "sun")
+        : null;
+
+      return {
+        ascendant,
+        moonSign: moon?.sign || "—",
+        sunSignVedic: sun?.sign || "—",
+        sunSignWestern: astroPayload?.western_sun_sign || sun?.sign || "—",
+        nakshatra: moon?.nakshatra?.name || "—",
+        nakshatraCharan: moon?.nakshatra?.pada ?? moon?.nakshatra?.charan ?? "—",
+      };
+    } catch {
+      return {
+        ascendant: "—", moonSign: "—", sunSignVedic: "—",
+        sunSignWestern: "—", nakshatra: "—", nakshatraCharan: "—",
+      };
+    }
+  })();
+  
   const displayName = user?.displayName || user?.email?.split("@")[0] || "User";
   const avatarUrl = (user as any)?.photoURL ||
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU";
@@ -542,42 +574,42 @@ Continue for all 8 sections.`,
                       <Sparkles className="w-4 h-4" />
                       <span>Sun Sign (Vedic)</span>
                     </div>
-                    <span className="font-medium">Pisces</span>
+                    <span className="font-medium">{astroData.sunSignVedic}</span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-border/40">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Sparkles className="w-4 h-4" />
                       <span>Sun Sign (Western)</span>
                     </div>
-                    <span className="font-medium">Pisces</span>
+                    <span className="font-medium">{astroData.sunSignWestern}</span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-border/40">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Sparkles className="w-4 h-4" />
                       <span>Moon Sign</span>
                     </div>
-                    <span className="font-medium">Gemini</span>
+                    <span className="font-medium">{astroData.moonSign}</span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-border/40">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Sparkles className="w-4 h-4" />
                       <span>Ascendant</span>
                     </div>
-                    <span className="font-medium">Scorpio</span>
+                    <span className="font-medium">{astroData.ascendant}</span>
                   </div>
                   <div className="flex items-center justify-between py-2 border-b border-border/40">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Sparkles className="w-4 h-4" />
                       <span>Birth Nakshatra</span>
                     </div>
-                    <span className="font-medium">Mrigashira</span>
+                    <span className="font-medium">{astroData.nakshatra}</span>
                   </div>
                   <div className="flex items-center justify-between py-2">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Sparkles className="w-4 h-4" />
                       <span>Nakshatra Charan</span>
                     </div>
-                    <span className="font-medium">4</span>
+                    <span className="font-medium">{astroData.nakshatraCharan}</span>
                   </div>
                 </div>
               </div>
@@ -631,18 +663,9 @@ Continue for all 8 sections.`,
               <Button variant="outline" onClick={() => navigate("/reports")}>
                 Back to Reports
               </Button>
-              {planName !== "Free" ? (
-                <Button variant="cosmic" onClick={() => window.print()}>
-                  Download Report
-                </Button>
-              ) : (
-                <Button 
-                  variant="cosmic" 
-                  onClick={() => navigate("/pricing?referral=pdf-download")}
-                >
-                  Upgrade to Download PDF
-                </Button>
-              )}
+              <Button variant="cosmic" onClick={() => window.print()}>
+                Download Report
+              </Button>
             </div>
           </>
         )}
