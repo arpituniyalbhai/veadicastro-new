@@ -15,6 +15,7 @@ import { getPlanetaryData, type AstroPayload } from "@/lib/astroCalc";
 import { generateGeminiStream, type ChatTurn } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { cn } from "@/lib/utils";
+import AdBanner from "@/components/AdBanner";
 
 type Gender = "male" | "female";
 type Lang = "en" | "hi";
@@ -325,7 +326,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>Astrologer ai— free Ai Astrology Chat | Veadicastro</title>
+        <title>free ai astrologer - No signup | Veadicastro</title>
         <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta name="keywords" content="astrology ai, ai astrology free chat, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology" />
         <link rel="canonical" href="https://veadicastro.in/vedika-ai-astrology-chat" />
@@ -538,6 +539,10 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
 
     {/* ── MAIN CONTENT ── */}
     <div className="max-w-5xl mx-auto px-4 pb-8">
+      {/* AdSense Ad - Above Content */}
+      <div className="my-6 flex justify-center">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+      </div>
 
           {!kundliGenerated ? (
             /* ── KUNDLI FORM ── */
@@ -667,6 +672,11 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                   </button>
                 </div>
               </div>
+              
+              {/* Ad 1 - After User Birth Details Box */}
+              <div className="flex justify-center my-8">
+                <AdBanner adSlot="4882345526" className="w-full max-w-[728px]" />
+              </div>
             </div>
           ) : (
             /* ── CHAT INTERFACE ── */
@@ -769,6 +779,11 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             </div>
           )}
         </div>
+        
+        {/* Ad 3 - After AI Chatbox */}
+        <div className="flex justify-center my-8">
+          <AdBanner adSlot="4882345528" className="w-full max-w-[728px]" />
+        </div>
 
         {/* ══════════════════════════════════════════════════════════════════
             BOTTOM CONTENT SECTION — How it works + AI tech details
@@ -820,6 +835,11 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             ))}
           </div>
         </section>
+        
+        {/* Ad 2 - After Why Thousands Choose Veadicastro */}
+        <div className="flex justify-center my-8">
+          <AdBanner adSlot="4882345527" className="w-full max-w-[728px]" />
+        </div>
 
         {/* Advanced Vedic Technology Section */}
         <section className="max-w-5xl mx-auto px-4 mb-20">

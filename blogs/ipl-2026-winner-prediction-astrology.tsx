@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Calendar, Clock, Star, ChevronRight, UserPlus, ChevronDown, ChevronUp, TrendingUp, Zap } from "lucide-react";
 import { useAuth } from "../src/context/AuthContext";
 import { ButtonLite } from "../src/components/ui/button-lite";
+import AdBanner from "../src/components/AdBanner";
 
 const LazyImage = lazy(() => import("../src/components/ui/lazy-image"));
 
@@ -270,6 +271,11 @@ const MatchPredictionsSection = () => {
       <p className="text-xs text-white/30 text-center mt-3">
         Predictions based on planetary transits · Updated per Vedic astrology analysis
       </p>
+      
+      {/* Ad 3 - After Show All 51 Blog */}
+      <div className="flex justify-center my-8">
+        <AdBanner adSlot="4882345525" className="w-full max-w-[728px]" />
+      </div>
     </div>
   );
 };
@@ -463,6 +469,10 @@ const WhichTeamWinIPL2026 = () => {
                 </Suspense>
               </div>
 
+              {/* Ad 1 - After Hero Image */}
+              <div className="flex justify-center my-8">
+                <AdBanner adSlot="4882345523" className="w-full max-w-[728px]" />
+              </div>
 
               <div className="flex flex-wrap justify-center gap-4 mb-12">
                 <div className="flex items-center gap-2 text-sm text-white/60">
@@ -512,6 +522,12 @@ const WhichTeamWinIPL2026 = () => {
           </div>
 
           {/* ── Daily Match Predictions ── */}
+          
+          {/* Ad 2 - Before Today Match Prediction Box */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345524" className="w-full max-w-[728px]" />
+          </div>
+          
           <MatchPredictionsSection />
 
           {/* Section 1: MI */}
@@ -936,6 +952,11 @@ const WhichTeamWinIPL2026 = () => {
           </div>
         </div>
 
+      </div>
+      
+      {/* AdSense Ad - Below Content */}
+      <div className="flex justify-center my-6">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
       </div>
     </>
   );

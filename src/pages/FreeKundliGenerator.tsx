@@ -12,6 +12,7 @@ import { analyzeKundali, type KundaliAnalysis } from "@/lib/astroUtils";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { ButtonLite } from "@/components/ui/button-lite";
+import AdBanner from "@/components/AdBanner";
 
 interface BirthDetails {
   name: string;
@@ -610,6 +611,10 @@ Respond in English only.`;
 
         {/* ── ALL PAGE CONTENT — sits above bg ── */}
         <div style={{ position:"relative", zIndex:1 }}>
+          {/* AdSense Ad - Above Content */}
+          <div className="my-6 flex justify-center">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
 
           {/* HEADER */}
           <header style={{ position:"sticky", top:0, zIndex:50, borderBottom:"1px solid rgba(255,255,255,0.05)", background:"rgba(5,3,10,0.80)", backdropFilter:"blur(18px)" }}>

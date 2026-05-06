@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { Calendar, Brain, TrendingUp, Shield, Clock, Zap, Star, MessageSquare, ChevronRight, Sparkles, BarChart3, Cpu, Target, Award, Share2, Facebook, Twitter, Linkedin } from "lucide-react";
+import AdBanner from "../src/components/AdBanner";
 
 const Top10VedicAstrologyPlatform = () => {
   return (
@@ -62,6 +63,11 @@ const Top10VedicAstrologyPlatform = () => {
         `}
         </script>
       </Helmet>
+
+      {/* AdSense Ad - Above Content */}
+      <div className="flex justify-center my-6">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+      </div>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#1a1020] to-[#0a0a0f] text-white">
         {/* Hero Section */}
@@ -141,6 +147,11 @@ const Top10VedicAstrologyPlatform = () => {
             <p className="text-lg leading-relaxed text-white/80">
               For those interested in understanding <Link to="/blog/ai-jyotish-vedic-astrology" className="text-purple-400 underline">AI Jyotish</Link> and how it differs from traditional approaches, this comprehensive comparison will help you make informed decisions about which platform suits your needs best.
             </p>
+          </div>
+          
+          {/* Ad 1 - After Introduction */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345529" className="w-full max-w-[728px]" />
           </div>
 
           {/* Comparison Table */}
@@ -231,6 +242,11 @@ const Top10VedicAstrologyPlatform = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+          
+          {/* Ad 2 - After Comparison Table */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345530" className="w-full max-w-[728px]" />
           </div>
 
           {/* Platform Rankings */}
@@ -706,6 +722,11 @@ const Top10VedicAstrologyPlatform = () => {
 
           </div>
 
+          {/* Ad 3 - Before FAQ */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345531" className="w-full max-w-[728px]" />
+          </div>
+
           {/* Comprehensive FAQ Section */}
           <div id="common-questions" className="mb-12">
             <h2 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">Frequently Asked Questions</h2>
@@ -851,6 +872,11 @@ const Top10VedicAstrologyPlatform = () => {
             </p>
           </div>
         </div>
+      </div>
+      
+      {/* AdSense Ad - Below Content */}
+      <div className="flex justify-center my-6">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
       </div>
     </>
   );

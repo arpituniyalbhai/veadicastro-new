@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield } from "lucide-react";
 import { Card } from "../../src/components/ui/card";
+import AdBanner from "../../src/components/AdBanner";
 
 export default function AiAstrology() {
   return (
@@ -56,6 +57,11 @@ export default function AiAstrology() {
         })}
         </script>
       </Helmet>
+
+      {/* AdSense Ad - Above Content */}
+      <div className="flex justify-center my-6">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+      </div>
 
       <div className="min-h-screen bg-[#0a0a0f] text-white">
         {/* Hero Section */}
@@ -231,6 +237,11 @@ export default function AiAstrology() {
           </div>
         </section>
 
+        {/* AdSense Ad - Mid Content 1 */}
+        <div className="flex justify-center my-6">
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        </div>
+
         {/* What is AI Astrology */}
         <section id="what-is-ai-astrology" className="py-16 px-4">
           <div className="max-w-4xl mx-auto">
@@ -301,7 +312,7 @@ export default function AiAstrology() {
                     <h3 className="text-xl font-semibold mb-2">Data Input (Birth Details)</h3>
                     <p className="text-white/60 mb-3">Date, time, and place of birth for accurate calculations</p>
                     <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                      <p className="text-sm text-white/50">AI uses your exact birth coordinates to calculate planetary positions with precision. Try our <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline">free AI kundali generator with date of birth</Link> to see these calculations in real-time.</p>
+                      <p className="text-sm text-white/50">AI uses your exact birth coordinates to calculate planetary positions with precision. Try our <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline">free kundali generator with date of birth</Link> to see these calculations in real-time.</p>
                     </div>
                   </div>
                 </div>
@@ -533,6 +544,11 @@ export default function AiAstrology() {
             </div>
           </div>
         </section>
+
+        {/* AdSense Ad - Mid Content 2 */}
+        <div className="flex justify-center my-6">
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        </div>
 
         {/* AI vs Human */}
         <section id="ai-vs-human" className="py-16 px-4">
@@ -1003,6 +1019,11 @@ export default function AiAstrology() {
             </div>
           </div>
         </section>
+      </div>
+      
+      {/* AdSense Ad - Below Content */}
+      <div className="flex justify-center my-6">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
       </div>
     </>
   );
