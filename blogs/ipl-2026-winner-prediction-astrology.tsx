@@ -448,6 +448,12 @@ const WhichTeamWinIPL2026 = () => {
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 <span className="text-pink-400">Today IPL Match Winner</span> Prediction 2026: Who Will Win Today's Match?
               </h1>
+              
+              {/* AdSense Ad - After Title */}
+              <div className="flex justify-center my-8">
+                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+              </div>
+              
               <p className="text-xl text-white/70 mb-4 leading-relaxed max-w-3xl mx-auto">
                 🏏 <strong>Today IPL match kaun jitega?</strong> Get accurate astrology predictions for today's IPL 2026 match. 
                 Vedic astrology analysis with win probabilities, toss predictions, and planetary insights.
@@ -468,8 +474,8 @@ const WhichTeamWinIPL2026 = () => {
                   />
                 </Suspense>
               </div>
-
-              {/* Ad 1 - After Hero Image */}
+              
+              {/* AdSense Ad - After Image */}
               <div className="flex justify-center my-8">
                 <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
               </div>
@@ -529,6 +535,11 @@ const WhichTeamWinIPL2026 = () => {
           </div>
           
           <MatchPredictionsSection />
+          
+          {/* AdSense Ad - After Daily Match Predictions */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
 
           {/* Section 1: MI */}
           <div className="mb-12">

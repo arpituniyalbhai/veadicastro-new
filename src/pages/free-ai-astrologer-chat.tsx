@@ -673,8 +673,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 </div>
               </div>
               
-              {/* Ad 1 - After User Birth Details Box */}
-              <div className="flex justify-center my-8">
+              {/* AdSense Ad - After Generate Birth Chart Button */}
+              <div className="flex justify-center my-2">
                 <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
               </div>
             </div>
@@ -780,8 +780,13 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
           )}
         </div>
         
+        {/* AdSense Ad - Below Chat Section */}
+        <div className="flex justify-center my-2">
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        </div>
+        
         {/* Ad 3 - After AI Chatbox */}
-        <div className="flex justify-center my-8">
+        <div className="flex justify-center my-2">
           <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
 

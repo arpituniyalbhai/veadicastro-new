@@ -93,6 +93,11 @@ const Top10VedicAstrologyPlatform = () => {
                 Top 10 AI Powered <span className="text-pink-400">Astrology Platforms</span> (2026)
               </h1>
               
+              {/* AdSense Ad - After Title */}
+              <div className="flex justify-center my-8">
+                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+              </div>
+              
               <p className="text-xl text-white/70 mb-8 leading-relaxed max-w-3xl mx-auto">
                 The integration of ancient Jyotish principles with cutting-edge Machine Learning has reached its peak in 2026. 
                 Discover the definitive ranking of **best free AI Kundali** tools and **accurate AI astrology chat** platforms. 
@@ -244,7 +249,12 @@ const Top10VedicAstrologyPlatform = () => {
             </div>
           </div>
           
-          {/* Ad 2 - After Comparison Table */}
+          {/* AdSense Ad - After Comparison Table */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
+          
+          {/* Additional Ad - After Comparison Table */}
           <div className="flex justify-center my-8">
             <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
