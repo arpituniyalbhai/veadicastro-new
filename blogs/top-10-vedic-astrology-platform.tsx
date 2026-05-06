@@ -151,7 +151,7 @@ const Top10VedicAstrologyPlatform = () => {
           
           {/* Ad 1 - After Introduction */}
           <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345529" className="w-full max-w-[728px]" />
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Comparison Table */}
@@ -246,7 +246,7 @@ const Top10VedicAstrologyPlatform = () => {
           
           {/* Ad 2 - After Comparison Table */}
           <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345530" className="w-full max-w-[728px]" />
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Platform Rankings */}
@@ -724,7 +724,7 @@ const Top10VedicAstrologyPlatform = () => {
 
           {/* Ad 3 - Before FAQ */}
           <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345531" className="w-full max-w-[728px]" />
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Comprehensive FAQ Section */}

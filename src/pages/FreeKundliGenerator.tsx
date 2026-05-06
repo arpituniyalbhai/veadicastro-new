@@ -611,7 +611,7 @@ Respond in English only.`;
 
         {/* ── ALL PAGE CONTENT — sits above bg ── */}
         <div style={{ position:"relative", zIndex:1 }}>
-          {/* AdSense Ad - Above Content */}
+          {/* // // // AdSense Ad - Above Content - REMOVED - REMOVED - REMOVED */}
           <div className="my-6 flex justify-center">
             <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
@@ -637,6 +637,12 @@ Respond in English only.`;
             <h1 className="fkg-serif" style={{ fontSize:"clamp(30px,6vw,54px)", fontWeight:900, lineHeight:1.1, marginBottom:"14px" }}>
               Free Janam Kundli by Date of Birth — <span className="fkg-pink-glow" style={{ color:"#ec4899" }}>Instant Online</span>
             </h1>
+            
+            {/* AdSense Ad - After Main Title */}
+            <div className="flex justify-center my-6">
+              <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+            </div>
+            
             <p style={{ color:"rgba(255,255,255,0.45)", fontSize:"16px", maxWidth:"540px", margin:"0 auto" }}>
               Generate your kundali online instantly. Our Vedic astrology calculator provides accurate planetary positions, dosha analysis, and personalized remedies. <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>See Your Future in Just 30 Second</a> or explore our <a href="/ai-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" style={{color:"#ec4899", textDecoration:"underline"}}>free AI astrology chat</a> for quick guidance. Explore our <a href="/blog" style={{color:"#ec4899", textDecoration:"underline"}}>astrology blogs</a> for more knowledge.
             </p>

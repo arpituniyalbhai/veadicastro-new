@@ -274,7 +274,7 @@ const MatchPredictionsSection = () => {
       
       {/* Ad 3 - After Show All 51 Blog */}
       <div className="flex justify-center my-8">
-        <AdBanner adSlot="4882345525" className="w-full max-w-[728px]" />
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
       </div>
     </div>
   );
@@ -471,7 +471,7 @@ const WhichTeamWinIPL2026 = () => {
 
               {/* Ad 1 - After Hero Image */}
               <div className="flex justify-center my-8">
-                <AdBanner adSlot="4882345523" className="w-full max-w-[728px]" />
+                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
               </div>
 
               <div className="flex flex-wrap justify-center gap-4 mb-12">
@@ -525,7 +525,7 @@ const WhichTeamWinIPL2026 = () => {
           
           {/* Ad 2 - Before Today Match Prediction Box */}
           <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345524" className="w-full max-w-[728px]" />
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
           
           <MatchPredictionsSection />

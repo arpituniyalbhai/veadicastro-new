@@ -675,7 +675,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               
               {/* Ad 1 - After User Birth Details Box */}
               <div className="flex justify-center my-8">
-                <AdBanner adSlot="4882345526" className="w-full max-w-[728px]" />
+                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
               </div>
             </div>
           ) : (
@@ -782,7 +782,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* Ad 3 - After AI Chatbox */}
         <div className="flex justify-center my-8">
-          <AdBanner adSlot="4882345528" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════
@@ -838,7 +838,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* Ad 2 - After Why Thousands Choose Veadicastro */}
         <div className="flex justify-center my-8">
-          <AdBanner adSlot="4882345527" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
 
         {/* Advanced Vedic Technology Section */}
