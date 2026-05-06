@@ -122,7 +122,11 @@ export async function generateGeminiStream(
     return fullText;
   } catch (error) {
     console.error('Streaming failed, falling back to non-streaming:', error);
-    // Fallback to non-streaming
+    
+    // Add delay before fallback to prevent rate limiting
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Fallback to non-streaming (only once)
     return await generateGemini(prompt, history, systemExtra);
   }
 }

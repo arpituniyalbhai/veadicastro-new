@@ -242,6 +242,9 @@ function checkRateLimit(ip: string): boolean {
 
 export default async function handler(req: Request) {
   try {
+    // Add request logging for debugging
+    console.log('🔥 API HIT:', Date.now(), 'Method:', req.method);
+    
     // SECURITY: Rate limiting
     const clientIp = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     if (!checkRateLimit(clientIp)) {
