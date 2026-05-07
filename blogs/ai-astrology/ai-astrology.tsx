@@ -133,6 +133,11 @@ export default function AiAstrology() {
           </div>
         </section>
 
+        {/* AdSense Ad - Before AI Astrology Tools Hub */}
+        <div className="flex justify-center my-6">
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        </div>
+
         {/* All Free Tools Section */}
         <section id="tools" className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
@@ -242,61 +247,10 @@ export default function AiAstrology() {
           <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
 
-        {/* What is AI Astrology */}
-        <section id="what-is-ai-astrology" className="py-16 px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="card-glass rounded-3xl p-8">
-              <h2 className="text-3xl font-bold mb-6 text-center">What is AI Astrology?</h2>
-              
-              <div className="space-y-6 text-white/70 leading-relaxed">
-                <p>
-                  <strong>AI Astrology</strong> is a revolutionary approach that combines 5,000-year-old Vedic Jyotish with modern artificial intelligence. Traditional astrology relies on manual calculations and generic predictions, but AI astrology by Veadicastro uses your exact birth chart — Lagna, planetary positions, Dasha periods, and Nakshatras — for detailed analysis. You can <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline">generate your free AI kundali in India</Link> to see this in action.
-                </p>
-                
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-xl font-semibold mb-3 text-white">AI's Role in Vedic Astrology</h3>
-                  <ul className="space-y-2">
-                    <li>• <strong>Complex Calculations:</strong> Shadbala, Ashtakavarga, Dasha calculations automated by Veadicastro</li>
-                    <li>• <strong>Pattern Recognition:</strong> Identifies patterns from thousands of authentic Vedic charts</li>
-                    <li>• <strong>Personalization:</strong> Predictions based on your exact birth chart</li>
-                    <li>• <strong>Speed:</strong> <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">Instant answers</Link> versus manual hours of calculation</li>
-                  </ul>
-                </div>
-                
-                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                  <h3 className="text-xl font-semibold mb-3 text-white">Vedic Roots + Modern Technology</h3>
-                  <p>
-                    Veadicastro's AI astrology is not just technology — it uses authentic Vedic principles like the Parashari system, Brihat Parashara Hora Shastra, and ancient calculations. The difference is that these calculations now happen in seconds with 100% accuracy. Our <Link to="/blog/ai-jyotish-vedic-astrology" className="text-pink-400 hover:text-pink-300 underline">AI Jyotish system</Link> maintains these traditional values while leveraging modern technology.
-                  </p>
-                </div>
-                
-                <div className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-xl p-6 border border-pink-500/30">
-                  <h3 className="text-xl font-semibold mb-3 text-white">Daily Horoscope vs AI Vedic Astrology</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-green-400 mb-2">Generic Horoscope</h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Sun sign based</li>
-                        <li>• Same for millions</li>
-                        <li>• Vague predictions</li>
-                        <li>• No personalization</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-green-400 mb-2">Veadicastro AI Vedic Astrology</h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Complete birth chart</li>
-                        <li>• 100% personalized</li>
-                        <li>• Dasha-based timing</li>
-                        <li>• Exact life predictions</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* AdSense Ad - Before How AI Astrology Works */}
+        <div className="flex justify-center my-6">
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        </div>
 
         {/* How AI Astrology Works */}
         <section id="how-ai-astrology-works" className="py-16 px-4">

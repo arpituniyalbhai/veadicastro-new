@@ -541,6 +541,11 @@ const WhichTeamWinIPL2026 = () => {
             <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
+          {/* Ad 4 - Before Mumbai Indians Section */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
+
           {/* Section 1: MI */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6">Mumbai Indians (MI) — The Saturnian Powerhouse & Shani Mahadasha IPL</h2>
@@ -782,6 +787,11 @@ const WhichTeamWinIPL2026 = () => {
                 </tbody>
               </table>
             </div>
+          </div>
+
+          {/* Ad 5 - After Final Winning Probability Table */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Conclusion */}
