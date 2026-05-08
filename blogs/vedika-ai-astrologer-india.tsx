@@ -374,7 +374,7 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
               </p>
               
               <p className="mt-6 leading-relaxed">
-                To get the most out of Vedika, start by generating your Kundli first. You can do that for free here: <Link to="/" className="text-purple-400 hover:text-purple-300 underline">Get your free AI kundli on Veadicastro</Link>. Once your chart is ready, Vedika has the full picture — and her answers become significantly more specific and useful.
+                To get the most out of Vedika, start by generating your Kundli first. You can do that for free here: <Link to="/" className="text-purple-400 hover:text-purple-300 underline">Get your free AI kundli on Veadicastro</Link>. If you're looking for marriage compatibility, try our <Link to="/free-kundali-matching" className="text-purple-400 hover:text-purple-300 underline">Kundli Matching</Link> tool. Once your chart is ready, Vedika has the full picture — and her answers become significantly more specific and useful.
               </p>
             </section>
 

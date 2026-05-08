@@ -40,7 +40,7 @@ const Footer = () => {
             <Link to="/talk-to-astrologer" className="text-white/80 hover:text-white transition-colors">
               Talk to Astrologer
             </Link>
-            <Link to="/kundali-matching" className="text-white/80 hover:text-white transition-colors">
+            <Link to="/free-kundali-matching" className="text-white/80 hover:text-white transition-colors">
               Kundali Matching for Marriage
             </Link>
             <Link to="/angel-number-calculator" className="text-white/80 hover:text-white transition-colors">

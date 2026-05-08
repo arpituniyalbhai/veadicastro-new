@@ -46,7 +46,7 @@ const blogPosts: BlogPost[] = [
   {
     id: "3",
     title: "Top 10 AI-Powered Astrology Platforms (2026)",
-    excerpt: "Discover best AI-powered Vedic astrology platforms in 2026. Detailed ranking of Melooha, KundliGPT, Veadicastro, and more. Compare features, accuracy, and pricing.",
+    excerpt: "Discover best AI-powered Vedic astrology platforms in 2026. Detailed ranking of Melooha, KundliGPT, Veadicastro, and more. Compare features, accuracy, and pricing. <Link to='/free-kundali-matching' className='text-pink-400 hover:text-pink-300 underline'>Try our Free Kundli Matching Calculator</Link> for accurate compatibility analysis.",
     author: "Veadicastro Team",
     date: "2026-03-09",
     readTime: "10 min read",

@@ -6,7 +6,7 @@ import { useEffect, Suspense, lazy } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { ButtonLite } from "@/components/ui/button-lite";
-import { Plus, MessageCircle, Sparkles, Brain, Send, ArrowRight } from "lucide-react";
+import { Plus, MessageCircle, Sparkles, Brain, Send, ArrowRight, Heart } from "lucide-react";
 
 // Get current date for SEO
 const getCurrentDate = () => {
@@ -531,7 +531,7 @@ const Index = () => {
 
                   {/* Tool Name */}
                   <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
-                    Free Kundli
+                    Free AI Kundli
                   </h3>
 
                   {/* Description */}
@@ -566,63 +566,63 @@ const Index = () => {
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
 
-              {/* Lucky Color Generator Tool */}
+              {/* Kundli Matching Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
                    itemScope itemType="https://schema.org/SoftwareApplication"
                    itemProp="mainEntity"
                    onClick={() => {
-                     navigate('/lucky-color-generator');
+                     navigate('/free-kundali-matching');
                      window.scrollTo({ top: 0, behavior: 'smooth' });
                    }}>
-                <link itemProp="url" href="https://veadicastro.in/lucky-color-generator" />
-                <meta itemProp="name" content="Lucky Color Generator - Veadicastro" />
+                <link itemProp="url" href="https://veadicastro.in/free-kundali-matching" />
+                <meta itemProp="name" content="Kundli Matching - Veadicastro" />
                 <meta itemProp="applicationCategory" content="LifestyleApplication" />
                 <meta itemProp="operatingSystem" content="Web Browser" />
                 <meta itemProp="price" content="0" />
                 <meta itemProp="priceCurrency" content="USD" />
-                <span itemProp="description" className="hidden">Discover your lucky colors based on your rashi and birth chart. Get personalized color recommendations for success, love, health, and prosperity in daily life.</span>
+                <span itemProp="description" className="hidden">Check marriage compatibility with accurate Kundli matching. Get detailed Guna Milan analysis, Manglik dosha check, and compatibility predictions based on Vedic astrology.</span>
                 
                 <div className="relative p-6">
                   {/* Tool Icon */}
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-accent to-secondary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="w-6 h-6" />
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-accent to-primary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Heart className="w-6 h-6" />
                   </div>
 
                   {/* Tool Name */}
                   <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
-                    Lucky Colors
+                    Kundli Matching
                   </h3>
 
                   {/* Description */}
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                    Discover your lucky colors based on your rashi and birth chart. Get personalized color recommendations for success, love, health, and prosperity in daily life.
+                    Check marriage compatibility with accurate Kundli matching. Get detailed Guna Milan analysis, Manglik dosha check, and compatibility predictions based on Vedic astrology.
                   </p>
 
                   {/* Features */}
                   <ul className="space-y-1 text-xs text-muted-foreground mb-4">
                     <li className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-accent"></div>
-                      Personalized color analysis
+                      <div className="w-1 h-1 rounded-full bg-primary"></div>
+                      36 Guna Milan system
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-accent"></div>
-                      Daily color guidance
+                      <div className="w-1 h-1 rounded-full bg-primary"></div>
+                      Manglik dosha analysis
                     </li>
                     <li className="flex items-center gap-2">
-                      <div className="w-1 h-1 rounded-full bg-accent"></div>
-                      Vedic astrology based
+                      <div className="w-1 h-1 rounded-full bg-primary"></div>
+                      Swiss Ephemeris accuracy
                     </li>
                   </ul>
 
                   {/* CTA */}
                   <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
-                    <span>Find Colors</span>
+                    <span>Check Compatibility</span>
                     <ArrowRight className="w-3 h-3" />
                   </div>
                 </div>
 
                 {/* Hover Effect */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent/20 via-secondary/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
             </div>
 

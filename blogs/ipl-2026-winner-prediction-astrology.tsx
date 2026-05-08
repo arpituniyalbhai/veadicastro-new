@@ -503,47 +503,19 @@ const WhichTeamWinIPL2026 = () => {
         </div>
 
         {/* ── Main Content ─────────────────────────────────────────────── */}
-        <div className="max-w-4xl mx-auto px-4 py-12">
 
-          {/* Introduction - SEO Optimized */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-4 text-pink-400">Today IPL Match Winner Prediction - Astrology Analysis</h2>
-            <p className="text-lg leading-relaxed text-white/80 mb-6">
-              <strong>Today IPL match kaun jitega</strong>? Get the most accurate astrology predictions for today's IPL 2026 match. 
-              Our Vedic astrology experts analyze planetary positions, Moon transits, and captain horoscopes to predict 
-              today's match winner with precision. Whether you're searching for "<strong>today IPL match winner</strong>" or 
-              "<strong>aaj ka IPL match kaun jitega</strong>", we provide daily updated predictions.
-            </p>
-            <p className="text-lg leading-relaxed text-white/80 mb-6">
-              Looking for <strong>today IPL match prediction</strong>? Our advanced astrology system considers:
-              <a href="https://www.iplt20.com" target="_blank" rel="noopener noreferrer" className="text-pink-400 hover:text-pink-300 underline">
-                IPL 2026 official schedule
-              </a>
-              for complete match timings, or{" "}
-              <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline transition-colors">
-                check your own horoscope
-              </Link>{" "}
-              to see if your favorite team aligns with your cosmic destiny! You can also use our comprehensive <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> for detailed match analysis and predictions.
-            </p>
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <div className="flex items-center gap-2 text-sm text-white/60">
+            <Clock className="w-4 h-4" />
+            <span>Updated: {new Date().toLocaleDateString()}</span>
           </div>
-
-          {/* ── Daily Match Predictions ── */}
-          
-          {/* Ad 2 - Before Today Match Prediction Box */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          <div className="flex items-center gap-2 text-sm text-white/60">
+            <Calendar className="w-4 h-4" />
+            <span>Daily Updates</span>
           </div>
-          
-          <MatchPredictionsSection />
-          
-          {/* AdSense Ad - After Daily Match Predictions */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-          </div>
-
-          {/* Ad 4 - Before Mumbai Indians Section */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          <div className="flex items-center gap-2 text-sm text-white/60">
+            <Star className="w-4 h-4" />
+            <span>95% Accuracy</span>
           </div>
 
           {/* Section 1: MI */}
@@ -958,6 +930,12 @@ const WhichTeamWinIPL2026 = () => {
                 className="inline-flex items-center justify-center px-8 py-3 bg-pink-500 text-white font-semibold rounded-xl hover:bg-pink-600 transition-colors"
               >
                 Generate Free Kundli
+              </Link>
+              <Link
+                to="/free-kundali-matching"
+                className="inline-flex items-center justify-center px-8 py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20"
+              >
+                Kundli Matching
               </Link>
               <Link
                 to="/free-ai-astrologer-chat"

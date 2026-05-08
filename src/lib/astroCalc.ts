@@ -37,7 +37,7 @@ export type AstroPayload = {
   houses: number[];
   julianDayUT: number;
   julianDayET: number;
-  nakshatra: { name: string; pada: number } | null;
+  nakshatra: { name: string; index: number; pada: number } | null;
   moonSign: string | null;
   sunSign: string | null;
   lagnaSign: string;
@@ -353,7 +353,7 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     houses: houseCusps,
     julianDayUT: julianUT,
     julianDayET: julianET,
-    nakshatra: moonNakshatra ? { name: moonNakshatra.name, pada: moonNakshatra.pada } : null,
+    nakshatra: moonNakshatra ? { name: moonNakshatra.name, index: moonNakshatra.index, pada: moonNakshatra.pada } : null,
     moonSign: moonData?.sign || null,
     sunSign: sunData?.sign || null,
     lagnaSign: ascendantSign,
