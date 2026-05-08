@@ -1153,7 +1153,7 @@ return (
 
             {/* Ad Banner after Guna Milan Analysis */}
             <div className="flex justify-center my-8">
-              <AdBanner adSlot="4882345525" className="w-full max-w-[728px]" />
+              <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
             </div>
 
             {/* Additional Compatibility Checks */}
@@ -1276,7 +1276,7 @@ return (
 
         {/* Ad Banner */}
         <div className="flex justify-center mt-8 mb-8">
-          <AdBanner adSlot="4882345523" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
 
         {/* SEO Content Section */}
@@ -1298,7 +1298,7 @@ return (
 
             {/* Ad Banner after What is Kundli Matching Section */}
             <div className="flex justify-center my-8">
-              <AdBanner adSlot="4882345524" className="w-full max-w-[728px]" />
+              <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
             </div>
 
             <section>
