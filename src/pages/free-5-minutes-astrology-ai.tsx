@@ -248,7 +248,14 @@ KEY INSIGHTS:
       }
 
       const data = await response.json();
-      const reportText = data.response;
+      console.log('API Response:', data); // Debug log
+      const reportText = data.text || data.response; // Handle both formats for compatibility
+
+      // Check if reportText exists
+      if (!reportText) {
+        console.error('Missing report data. Full API response:', data);
+        throw new Error('Invalid response from server: missing report data');
+      }
 
       // Parse response to extract report and insights
       const reportMatch = reportText.match(/REPORT:\n([\s\S]*?)\n\nKEY INSIGHTS:/);
