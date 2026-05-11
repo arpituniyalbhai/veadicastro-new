@@ -939,64 +939,72 @@ export default function Chat() {
       </main>
       {/* Limit Warning Alert */}
       {showLimitWarning && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 px-4 bg-black backdrop-blur-sm">
-          <div className="w-full max-w-md">
-            <div className="bg-gradient-to-br from-zinc-950 to-zinc-900 border border-zinc-800 rounded-2xl p-3 md:p-6 shadow-2xl">
-              {/* Header */}
-              <div className="text-center mb-4 md:mb-6">
-                {/* Social Proof Tag */}
-                <div className="inline-flex items-center gap-1 px-2 py-1 bg-green-500/20 text-green-400 text-xs font-medium rounded-full mb-3 md:mb-4">
-                  <span className="text-xs">??</span>
-                  <span>{t('socialProofCount')}</span>
-                </div>
-                <div className="w-12 h-12 md:w-14 md:h-14 mx-auto mb-2 md:mb-3 rounded-full overflow-hidden border-2 border-zinc-700">
-                  <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" />
-                </div>
-                <div className="mb-3">
-                  <p className="text-orange-500 text-sm md:text-base mb-2 font-semibold">
-                    {t('importantSignFound')}
-                  </p>
-                  <p className="text-zinc-400 text-sm md:text-base mb-2">
-                    {t('bigChangeComing')}
-                  </p>
-                  <p className="text-zinc-400 text-sm md:text-base mb-2">
-                    {t('ignoreWarning')}
-                  </p>
-                                  </div>
-                <div className="text-center">
-                  <p className="text-lg md:text-xl font-semibold text-white mb-2">
-                    {t('unlockOffer')}
-                  </p>
-                  <p className="text-zinc-400 text-sm md:text-base mb-2">
-                    {t('psychoTrigger')}
-                  </p>
-                  <p className="text-base md:text-lg font-semibold text-secondary mb-4 animate-pulse">
-                    {t('specialOfferExpires').replace('  ', '')} <span className="inline-flex items-center space-x-1">
-                      <span className="inline-block font-mono font-bold text-lg md:text-xl text-foreground bg-card/50 px-2 py-1 rounded">{String(timeRemaining.hours).padStart(2, '0')}</span>
-                      <span className="text-muted-foreground font-mono text-lg md:text-xl font-bold leading-none">:</span>
-                      <span className="inline-block font-mono font-bold text-lg md:text-xl text-foreground bg-card/50 px-2 py-1 rounded">{String(timeRemaining.minutes).padStart(2, '0')}</span>
-                      <span className="text-muted-foreground font-mono text-lg md:text-xl font-bold leading-none">:</span>
-                      <span className="inline-block font-mono font-bold text-lg md:text-xl text-foreground bg-card/50 px-2 py-1 rounded">{String(timeRemaining.seconds).padStart(2, '0')}</span>
-                    </span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4 md:mb-6">
-                <div className="flex flex-col items-center">
-                  <button
-                    className="bg-gradient-to-r from-secondary to-primary text-white font-semibold py-2 px-4 rounded-full hover:shadow-lg transition-all text-xs md:text-sm flex items-center justify-center gap-2 relative"
-                    onClick={() => {
-                      navigate('/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack');
-                      setShowLimitWarning(false);
-                    }}
-                  >
-                    {t('seeFullTruth')} 
-                  </button>
-                </div>
-              </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.85)' }}>
+          <div className="rounded-2xl p-6 md:p-8 max-w-sm w-full text-center" style={{ background: '#0d0d0d', border: '0.5px solid #222' }}>
+            {/* Social proof badge */}
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
+              style={{ background: '#0a1f0a', border: '0.5px solid #1a4d1a' }}
+            >
+              <span className="flex-shrink-0 rounded-full" style={{ width: 7, height: 7, background: '#22c55e', display: 'inline-block' }} />
+              <span className="text-xs font-medium" style={{ color: '#22c55e' }}>
+                687 people upgraded in last 24 hours
+              </span>
             </div>
+
+            {/* Avatar */}
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border-2"
+              style={{ borderColor: '#e91e8c' }}
+            >
+              <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" />
+            </div>
+
+            {/* Heading */}
+            <h2 className="text-lg font-medium text-white mb-2">
+              Your credits are over
+            </h2>
+            <p className="text-sm leading-relaxed mb-6" style={{ color: '#888' }}>
+              Upgrade to keep asking Vedika AI — unlimited questions, Dasha predictions & full birth chart insights.
+            </p>
+
+            {/* Benefits */}
+            <div className="rounded-xl p-4 mb-6 text-left" style={{ background: '#111' }}>
+              <p className="text-xs font-medium uppercase tracking-wider mb-3" style={{ color: '#555' }}>
+                What you unlock
+              </p>
+              {[
+                '15 questions to Vedika AI',
+                'Dasha & transit predictions',
+                'Full birth chart analysis',
+                'Compatibility & relationship insights',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2 text-sm mb-2" style={{ color: '#ccc' }}>
+                  <span style={{ color: '#e91e8c' }}>✓</span> {item}
+                </div>
+              ))}
+            </div>
+
+            {/* Upgrade button */}
+            <button
+              onClick={() => {
+                navigate('/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack');
+                setShowLimitWarning(false);
+              }}
+              className="w-full py-3 rounded-xl text-white text-sm font-medium mb-3 transition-opacity hover:opacity-90"
+              style={{ background: '#e91e8c', border: 'none' }}
+            >
+              Upgrade — Only ₹399
+            </button>
+
+            <button
+              onClick={() => setShowLimitWarning(false)}
+              className="w-full py-2 text-sm transition-colors"
+              style={{ color: '#555', background: 'transparent', border: 'none' }}
+            >
+              Maybe later
+            </button>
+
           </div>
         </div>
       )}

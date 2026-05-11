@@ -685,22 +685,7 @@ KEY INSIGHTS:
                 </div>
               </div>
 
-              {/* Key Insights */}
-              <div className="card-glass rounded-3xl p-8 mb-8">
-                <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-                  <Zap className="w-6 h-6 text-yellow-400 mr-3" />
-                  Key Insights
-                </h3>
-                <div className="space-y-4">
-                  {report.keyInsights.map((insight, index) => (
-                    <div key={index} className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-white leading-relaxed">{insight}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
+              
               {/* CTA */}
               <div className="rounded-3xl p-10 text-center relative overflow-hidden" style={{ background: "linear-gradient(135deg, rgba(236,72,153,0.15), rgba(168,85,247,0.1))", border: "1px solid rgba(236,72,153,0.2)" }}>
                 <div className="absolute inset-0 pointer-events-none overflow-hidden">
