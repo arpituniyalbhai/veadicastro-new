@@ -48,6 +48,7 @@ const BlogDetail = lazy(() => import("@/pages/BlogDetail"));
 const RahuKetuTransit2026 = lazy(() => import("../blogs/Rahu-Ketu-Transit-2026-Predictions-for-All-12-Rashis"));
 const VedAstrologyAIKaiseKaamKartaHai = lazy(() => import("../blogs/vedic-astrology-ai-kese-kaam-karta-ha"));
 const Top10VedicAstrologyPlatform = lazy(() => import("../blogs/top-10-vedic-astrology-platform"));
+const Free5MinutesAstrologyAI = lazy(() => import("@/pages/free-5-minutes-astrology-ai"));
 const OnlineJyotishiVsAIAstrologer = lazy(() => import("../blogs/Online-Jyotishi-vs-AI-Astrologer"));
 const WhichTeamWinIPL2026 = lazy(() => import("../blogs/ipl-2026-winner-prediction-astrology"));
 const BestCareersForZodiacSign2026 = lazy(() => import("../blogs/Best-Careers-for-Each-Zodiac-Sign-in-2026"));
@@ -124,6 +125,7 @@ const RouterShell = () => {
         {/* Public Routes */}
         <Route path="/" element={<Index />} />
         <Route path="/free-ai-astrologer-chat" element={<Suspense fallback={<PageLoading />}><FreeAiAstrologerChat /></Suspense>} />
+        <Route path="/free-5-minutes-astrology-ai" element={<Suspense fallback={<PageLoading />}><Free5MinutesAstrologyAI /></Suspense>} />
         <Route path="/free-kundli-generator" element={<Suspense fallback={<PageLoading />}><FreeKundliGenerator /></Suspense>} />
         <Route path="/free-kundali-matching" element={<Suspense fallback={<PageLoading />}><FreeKundliMatching /></Suspense>} />
         <Route path="/angel-number-calculator" element={<Suspense fallback={<PageLoading />}><AngelNumberCalculator /></Suspense>} />

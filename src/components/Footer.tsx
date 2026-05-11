@@ -37,6 +37,9 @@ const Footer = () => {
             <Link to="/free-ai-astrologer-chat" className="text-white/80 hover:text-white transition-colors">
              Chat with vedika AI Astrologer in free
             </Link>
+            <Link to="/free-5-minutes-astrology-ai" className="text-white/80 hover:text-white transition-colors">
+              Free 5-Minutes Astrology
+            </Link>
             <Link to="/talk-to-astrologer" className="text-white/80 hover:text-white transition-colors">
               Talk to Astrologer
             </Link>

@@ -1256,6 +1256,13 @@ return (
             <div className="text-center">
               <div className="inline-flex gap-4 flex-wrap justify-center">
                 <ButtonLite
+                  onClick={() => navigate('/free-5-minutes-astrology-ai')}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-6 py-3 rounded-full font-semibold"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Free 5-Minutes Astrology
+                </ButtonLite>
+                <ButtonLite
                   onClick={() => navigate('/free-ai-astrologer-chat')}
                   className="bg-gradient-to-r from-pink-500 to-violet-500 hover:from-pink-600 hover:to-violet-600 text-white px-6 py-3 rounded-full font-semibold"
                 >

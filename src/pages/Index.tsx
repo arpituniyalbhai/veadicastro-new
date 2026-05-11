@@ -446,8 +446,8 @@ const Index = () => {
               </p>
             </div>
 
-            {/* Tools Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Tools Cards - First Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               {/* AI Chat Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
                    itemScope itemType="https://schema.org/SoftwareApplication"
@@ -623,6 +623,68 @@ const Index = () => {
 
                 {/* Hover Effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+            </div>
+
+            {/* Tools Cards - Second Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+              {/* Free 5-Minutes Astrology Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden max-w-2xl mx-auto w-full"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/free-5-minutes-astrology-ai');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/free-5-minutes-astrology-ai" />
+                <meta itemProp="name" content="Free 5-Minutes Astrology AI - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Get instant free Vedic astrology readings in 5 minutes. Personalized predictions for love, career, health, and life based on your birth chart.</span>
+                
+                <div className="relative p-6">
+                  {/* Tool Icon */}
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+
+                  {/* Tool Name */}
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    Free 5-Minutes Astrology
+                  </h3>
+
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Get instant free Vedic astrology readings in 5 minutes. Personalized predictions for love, career, health, and life based on your authentic birth chart.
+                  </p>
+
+                  {/* Features */}
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      No signup required
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Instant AI predictions
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Based on Vedic astrology
+                    </li>
+                  </ul>
+
+                  {/* CTA */}
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Get Reading</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                {/* Hover Effect */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-secondary/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
             </div>
 

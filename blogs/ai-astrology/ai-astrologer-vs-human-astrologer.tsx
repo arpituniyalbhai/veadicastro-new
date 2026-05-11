@@ -404,12 +404,20 @@ const AiAstrologerVsHumanAstrologer = () => {
               <p className="text-lg text-purple-200 mb-8">
                 Try Vedika - VeadicAstro's AI astrologer that works with your actual birth chart. Get accurate, personalized readings anytime, anywhere.
               </p>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
-              >
-                Try AI Astrologer Free
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/free-5-minutes-astrology-ai"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                >
+                  Free 5-Minutes Astrology
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+                >
+                  Try AI Astrologer Free
+                </Link>
+              </div>
             </div>
           </div>
         </div>

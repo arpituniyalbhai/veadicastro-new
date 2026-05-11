@@ -623,6 +623,9 @@ Respond in English only.`;
                 <img src="/logo.jpg" alt="Veadicastro kundali online" style={{ width:"36px", height:"36px", borderRadius:"50%" }} />
                 <span className="fkg-serif" style={{ fontSize:"17px", fontWeight:700 }}>Veadicastro</span>
               </button>
+              <button onClick={() => navigate("/free-5-minutes-astrology-ai")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
+                Free 5-Minutes Astrology
+              </button>
               <button onClick={() => navigate("/free-ai-astrologer-chat")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
                 ← Free AI Chat
               </button>

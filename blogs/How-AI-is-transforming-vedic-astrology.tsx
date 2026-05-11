@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { MessageCircle, UserPlus } from "lucide-react";
+import { MessageCircle, UserPlus, Zap } from "lucide-react";
 import Footer from "../src/components/Footer";
 
 const HowAITransformingVedicAstrology = () => {
@@ -463,6 +463,13 @@ What has changed is who gets to listen.
                 Experience the future of Jyotish with our AI astrologer. Get instant Kundali analysis, personalized predictions, and answers to your questions — all powered by advanced AI trained on classical Vedic texts.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  to="/free-5-minutes-astrology-ai"
+                  className="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all"
+                >
+                  <Zap className="w-4 h-4 mr-2" />
+                  Free 5-Minutes Astrology
+                </Link>
                 <Link 
                   to="/free-ai-astrologer-chat"
                   className="inline-flex items-center justify-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"

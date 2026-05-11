@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import AdBanner from "../src/components/AdBanner";
 
 const NextPMIndia2029AstrologyPrediction = () => {
   const [votes, setVotes] = useState({
@@ -10,7 +11,7 @@ const NextPMIndia2029AstrologyPrediction = () => {
     amitShah: 0,
   });
 
-  const handleVote = (candidate) => {
+  const handleVote = (candidate: keyof typeof votes) => {
     setVotes((prevVotes) => ({ ...prevVotes, [candidate]: prevVotes[candidate] + 1 }));
   };
 
@@ -229,6 +230,11 @@ const NextPMIndia2029AstrologyPrediction = () => {
                 Next PM of India 2029 — Astrology Predictions | Yogi vs Modi vs Rahul vs Amit Shah
               </h1>
 
+              {/* AdSense Ad - After Title */}
+              <div className="flex justify-center my-8">
+                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+              </div>
+
               <p className="text-xl text-white/70 mb-8 leading-relaxed max-w-3xl mx-auto">
                 Who will be the next PM of India in 2029? Detailed Vedic astrology analysis of India's top political leaders reveals fascinating cosmic insights about the future of Indian democracy.
               </p>
@@ -253,6 +259,11 @@ const NextPMIndia2029AstrologyPrediction = () => {
               <a href="#guru-mangal-yoga" className="block text-white/80 hover:text-pink-400 transition-colors py-2">• The "Guru-Mangal" Yoga: The Deciding Factor</a>
               <a href="#conclusion" className="block text-white/80 hover:text-pink-400 transition-colors py-2">• Conclusion: Who Will Lead?</a>
             </div>
+          </div>
+
+          {/* AdSense Ad - After Table of Contents */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Introduction */}
@@ -453,6 +464,11 @@ const NextPMIndia2029AstrologyPrediction = () => {
             </div>
           </div>
 
+          {/* AdSense Ad - Before 2029 PM Winning Probability Table */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
+
           {/* Probability Table */}
           <div id="probability-table" className="mb-12">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
@@ -562,6 +578,10 @@ const NextPMIndia2029AstrologyPrediction = () => {
           </div>
 
           {/* Conclusion */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          </div>
+
           <div id="conclusion" className="mb-12">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <h2 className="text-2xl font-bold mb-6 text-center">Conclusion: Who Will Lead?</h2>

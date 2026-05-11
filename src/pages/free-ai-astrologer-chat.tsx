@@ -523,6 +523,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <span className="text-pink-400 pink-glow">Vedika AI</span>
       </h1>
       <div className="flex flex-wrap justify-center gap-4 mt-6">
+        <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
         <a href="/blog/free-ai-astrology-chat-india" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free AI Astrology Chat India</a>
         <a href="/blog/ai-astrology-prediction-for-2026" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions for 2026</a>
         <a href="/blog/the-great-astrology-scam" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Astrologer Per Minute Scam</a>
@@ -534,7 +535,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
         <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
         <a href="/free-kundali-matching" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Kundli Matching</a>
-        <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>
+        <a href="/" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Best Vedic astrology Platform</a>
       </div>
     </section>
 
@@ -1008,6 +1009,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         {/* Additional Links Before Blog */}
         <div className="max-w-5xl mx-auto px-4 mb-8">
           <div className="flex flex-wrap justify-center gap-4">
+            <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
             <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
             <a href="/blogs/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Traditional Jyotish</a>
             <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>

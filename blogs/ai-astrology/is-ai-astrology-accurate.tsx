@@ -403,18 +403,25 @@ const IsAiAstrologyAccurate = () => {
               <p className="text-lg text-purple-200 mb-8">
                 Enter your real birth details. Ask a specific question. Get an honest reading based on your actual Vedic chart.
               </p>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
-              >
-                Try AI Astrology Free
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/free-5-minutes-astrology-ai"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                >
+                  Free 5-Minutes Astrology
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+                >
+                  Try AI Astrology Free
+                </Link>
+              </div>
             </div>
           </div>
         </div>
 
       </div>
-
       <Footer />
     </>
   );

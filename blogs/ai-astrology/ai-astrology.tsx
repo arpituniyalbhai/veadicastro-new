@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield } from "lucide-react";
+import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap } from "lucide-react";
 import { Card } from "../../src/components/ui/card";
 import AdBanner from "../../src/components/AdBanner";
 
@@ -57,11 +57,6 @@ export default function AiAstrology() {
         })}
         </script>
       </Helmet>
-
-      {/* AdSense Ad - Above Content */}
-      <div className="flex justify-center my-6">
-        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-      </div>
 
       <div className="min-h-screen bg-[#0a0a0f] text-white">
         {/* Hero Section */}
@@ -133,20 +128,22 @@ export default function AiAstrology() {
           </div>
         </section>
 
-        {/* AdSense Ad - Before AI Astrology Tools Hub */}
-        <div className="flex justify-center my-6">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-        </div>
-
         {/* All Free Tools Section */}
         <section id="tools" className="py-16 px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl font-bold text-center mb-6">AI Astrology Tools Hub</h2>
             <p className="text-center text-white/70 mb-12 max-w-3xl mx-auto">
-              Here are the most powerful AI astrology tools you can use to generate kundali, ask questions, and get predictions based on authentic Vedic principles.
+              Here are most powerful AI astrology tools you can use to generate kundali, ask questions, and get predictions based on authentic Vedic principles.
             </p>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
+                {
+                  title: "Free 5-Minutes Astrology",
+                  desc: "Quick AI astrology readings in just 5 minutes",
+                  icon: <Zap className="w-6 h-6" />,
+                  link: "/free-5-minutes-astrology-ai",
+                  free: true
+                },
                 {
                   title: "Ask Vedika AI",
                   desc: "Get personalized answers to your astrology questions",
@@ -165,7 +162,7 @@ export default function AiAstrology() {
                   title: "Kundali Matching",
                   desc: "Check marriage compatibility with your partner",
                   icon: <CheckCircle2 className="w-6 h-6" />,
-                  link: "/kundali-matching",
+                  link: "/free-kundali-matching", 
                   free: true
                 },
                 {
@@ -962,6 +959,13 @@ export default function AiAstrology() {
                 Get Your Free AI Kundali in 30 Seconds. Limited free questions per day - ask about marriage, career, or life predictions today!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link 
+                  to="/free-5-minutes-astrology-ai" 
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 transition-all"
+                >
+                  Free 5-Minutes Astrology
+                  <Zap className="w-4 h-4" />
+                </Link>
                 <Link 
                   to="/" 
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-purple-700 transition-all"
