@@ -229,7 +229,15 @@ export default function Chat() {
   const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const displayName = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || user?.email?.split("@")[0] || "User"; } catch { return user?.displayName || user?.email?.split("@")[0] || "User"; } })();
+  const displayName = (() => { 
+    try { 
+      return localStorage.getItem('profile_name') || 
+             user?.displayName ||    // Google ka actual name
+             "User";                 // email split hatao, sirf "User" fallback
+    } catch { 
+      return user?.displayName || "User"; 
+    } 
+  })();
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
 
   const historyKey = useMemo(() => `chat_history_${user?.email || "guest"}`, [user?.email]);
