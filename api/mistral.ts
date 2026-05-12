@@ -310,8 +310,12 @@ export default async function handler(req: Request) {
     // Language and formatting rules
     const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
     const languageRule = lang === "hi"
-      ? `CRITICAL: Respond ONLY in pure Hindi (Devanagari script). Use complete Hindi sentences. Never use English words like 'career', 'marriage', 'money' - always use Hindi equivalents like 'career', 'vivah', 'dhan'. If you use any English words, the response is incorrect. Respond entirely in Hindi Devanagari script only. ${numeralRule}`
-      : `Respond in English only. Do not mention anything about language choice. ${numeralRule}`;
+      ? `CRITICAL: Respond ONLY in pure Hindi (Devanagari script). Complete Hindi sentences only. ${numeralRule}` 
+      : `CRITICAL: Detect the user's language from their message and mirror it exactly.
+     - If user writes in English → respond in clean English only. Zero Hindi words.
+     - If user writes in Hinglish (Hindi+English mix) → respond in Hinglish. Mix naturally.
+     - If user writes in Hindi → respond in Hindi only.
+     Never switch language on your own. Match user's exact style. ${numeralRule}`;
     const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
     const languageFormatting = `${languageRule}\n${formattingBan}`;
 

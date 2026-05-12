@@ -574,6 +574,8 @@ export default function Chat() {
         out = out.replace(/^.*(मैं .*हिंदी.* दूँग[ाि]).*$/gmi, '').trim();
         // Normalize numerals to English digits
         out = normalizeDigits(out);
+        // Add spacing between digits and letters
+        out = out.replace(/([a-zA-Z\u0900-\u097F])(\d)/g, '$1 $2').replace(/(\d)([a-zA-Z\u0900-\u097F])/g, '$1 $2');
         return out;
       };
 
@@ -596,10 +598,10 @@ export default function Chat() {
           return copy;
         });
         deltaCount++;
-      }, systemExtra, lang);
+      }, systemExtra, lang, displayName);
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages, systemExtra, lang);
+        const final = await generateGemini(promptText, messages, systemExtra, lang, displayName);
           setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;

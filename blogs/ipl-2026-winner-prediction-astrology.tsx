@@ -86,20 +86,26 @@ const allMatches = [
   { date: "May 07", team1: "LSG",  team2: "RCB",  p1: 50, p2: 50, planet: "Balanced — watch toss" },
   { date: "May 08", team1: "DC",   team2: "KKR",  p1: 49, p2: 51, planet: "Rahu edges KKR" },
   { date: "May 09", team1: "RR",   team2: "GT",   p1: 52, p2: 48, planet: "Venus favors RR" },
-  { date: "May 10", team1: "CSK",  team2: "LSG",  p1: 55, p2: 45, planet: "Jupiter strongly backs CSK" },
+  { date: "May 10", team1: "CSK",  team2: "LSG", p1: 55, p2: 45, planet: "Jupiter strongly backs CSK" },
   { date: "May 10", team1: "RCB",  team2: "MI",   p1: 49, p2: 51, planet: "Saturn edges MI" },
+  { date: "May 12", team1: "GT",   team2: "SRH", p1: 52, p2: 48, planet: "Saturn favors GT" },
 ];
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
 const getTodayDateString = () => {
   const today = new Date();
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  return `${months[today.getMonth()]} ${String(today.getDate()).padStart(2, '0')}`;
+  const dateStr = `${months[today.getMonth()]} ${String(today.getDate()).padStart(2, '0')}`;
+  console.log('Today date string:', dateStr); // Debug log
+  return dateStr;
 };
 
 const getTodayMatch = () => {
   const todayStr = getTodayDateString();
-  return allMatches.find(match => match.date === todayStr);
+  console.log('Looking for match with date:', todayStr); // Debug log
+  const match = allMatches.find(match => match.date === todayStr);
+  console.log('Found match:', match); // Debug log
+  return match;
 };
 
 // ─── Match Card Component ──────────────────────────────────────────────────────
@@ -111,66 +117,121 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
   return (
     <div className={`rounded-xl border p-4 transition-all ${
       isToday
-        ? "bg-pink-500/10 border-pink-500/40 shadow-lg shadow-pink-500/10"
-        : "bg-white/5 border-white/10 hover:bg-white/8"
+        ? "bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-500/40 shadow-lg"
+        : "bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-md"
     }`}>
       {isToday && (
-        <div className="flex items-center gap-1.5 mb-3">
-          <span className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
-          <span className="text-xs font-semibold text-pink-400 uppercase tracking-wider">Today's Match</span>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+            <span className="text-xs font-semibold text-pink-300 uppercase tracking-wider">Today's Match</span>
+          </div>
+          <span className="text-xs text-pink-300 bg-pink-500/30 px-2 py-1 rounded-full">
+            {match.date}
+          </span>
         </div>
       )}
 
       {/* Date + Planet */}
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs text-white/50 font-medium">{match.date}</span>
+        <span className="text-xs text-white/60 font-medium">{match.date}</span>
         <span className="text-xs text-purple-300/80 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20">
           ✦ {match.planet}
         </span>
       </div>
 
-      {/* Teams Row */}
-      <div className="flex items-center gap-2">
+      {/* Teams Section */}
+      <div className="flex items-center gap-3 mb-3">
         {/* Team 1 */}
-        <div className="flex-1">
-          <div className={`flex items-center gap-2 rounded-lg px-3 py-2 border ${t1Color} ${winner === match.team1 ? "ring-1 ring-yellow-400/50" : ""}`}>
-            <span className="font-bold text-sm">{match.team1}</span>
-            {winner === match.team1 && <span className="text-yellow-400 text-xs ml-auto">★</span>}
-          </div>
-          <div className="text-center mt-1">
-            <span className={`text-sm font-bold ${match.p1 > match.p2 ? "text-green-400" : match.p1 === match.p2 ? "text-yellow-400" : "text-white/50"}`}>
+        <div className="flex-1 text-center">
+          <div className={`p-3 rounded-lg border transition-all ${
+            winner === match.team1 
+              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30" 
+              : t1Color + " hover:scale-105"
+          }`}>
+            <div className={`font-bold text-lg mb-1 ${winner === match.team1 ? "text-green-600" : ""}`}>
+              {match.team1}
+            </div>
+            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+              {fullTeamName[match.team1]}
+            </div>
+            <div className={`text-2xl font-bold ${
+              winner === match.team1 
+                ? "text-green-400" 
+                : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
+            }`}>
               {match.p1}%
-            </span>
+            </div>
+            {winner === match.team1 && (
+              <div className="mt-2 text-xs font-bold text-green-600">
+                🏆 WINNER
+              </div>
+            )}
           </div>
         </div>
 
         {/* VS */}
-        <div className="text-xs text-white/30 font-bold">VS</div>
+        <div className="text-lg font-bold text-gray-400 mx-2">VS</div>
 
         {/* Team 2 */}
-        <div className="flex-1">
-          <div className={`flex items-center gap-2 rounded-lg px-3 py-2 border ${t2Color} ${winner === match.team2 ? "ring-1 ring-yellow-400/50" : ""}`}>
-            {winner === match.team2 && <span className="text-yellow-400 text-xs">★</span>}
-            <span className="font-bold text-sm ml-auto">{match.team2}</span>
-          </div>
-          <div className="text-center mt-1">
-            <span className={`text-sm font-bold ${match.p2 > match.p1 ? "text-green-400" : match.p1 === match.p2 ? "text-yellow-400" : "text-white/50"}`}>
+        <div className="flex-1 text-center">
+          <div className={`p-3 rounded-lg border transition-all ${
+            winner === match.team2 
+              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30" 
+              : t2Color + " hover:scale-105"
+          }`}>
+            <div className={`font-bold text-lg mb-1 ${winner === match.team2 ? "text-green-600" : ""}`}>
+              {match.team2}
+            </div>
+            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+              {fullTeamName[match.team2]}
+            </div>
+            <div className={`text-2xl font-bold ${
+              winner === match.team2 
+                ? "text-green-400" 
+                : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
+            }`}>
               {match.p2}%
-            </span>
+            </div>
+            {winner === match.team2 && (
+              <div className="mt-2 text-xs font-bold text-green-600">
+                🏆 WINNER
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="mt-3 h-1.5 rounded-full bg-white/10 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all"
-          style={{ width: `${match.p1}%` }}
-        />
+      <div className="mt-3">
+        <div className="h-2 rounded-full bg-gray-700/30 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              winner === match.team1 
+                ? "bg-gradient-to-r from-green-500 to-green-600 shadow-lg" 
+                : winner === match.team2 
+                ? "bg-gradient-to-r from-red-500 to-red-600 shadow-lg"
+                : "bg-gradient-to-r from-blue-500 to-purple-500"
+            }`}
+            style={{ width: `${match.p1}%` }}
+          />
+        </div>
+        <div className="flex justify-between text-xs text-white/50 mt-1">
+          <span>{match.p1}%</span>
+          <span>{match.p2}%</span>
+        </div>
       </div>
-      <div className="flex justify-between text-xs text-white/30 mt-1">
-        <span>{fullTeamName[match.team1]}</span>
-        <span>{fullTeamName[match.team2]}</span>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-3 border-t border-white/10">
+        <div className="text-xs text-white/40">
+          <span className="font-medium">Astrology:</span> {match.planet}
+        </div>
+        {isToday && (
+          <div className="text-xs text-pink-300 animate-pulse">
+            ● LIVE
+          </div>
+        )}
       </div>
     </div>
   );
@@ -216,6 +277,40 @@ const MatchPredictionsSection = () => {
 
   return (
     <div className="mb-12">
+      {/* Today's Match Teams Highlight */}
+      {todayMatch && (
+        <div className="mb-8 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl border border-yellow-500/40 p-6 shadow-lg shadow-yellow-500/10">
+          <div className="flex items-center gap-2 mb-4">
+            <Zap className="w-6 h-6 text-yellow-400 animate-pulse" />
+            <h3 className="text-2xl font-bold text-white">Today's Match Teams</h3>
+            <span className="px-3 py-1 bg-yellow-500/30 text-yellow-300 rounded-full text-sm font-medium animate-pulse">
+              LIVE NOW
+            </span>
+          </div>
+          
+          {/* Teams Highlight */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className={`text-center px-6 py-4 rounded-xl border-2 ${teamColors[todayMatch.team1]} border-yellow-400/50 shadow-lg`}>
+              <div className="text-3xl font-bold mb-2">{todayMatch.team1}</div>
+              <div className="text-sm text-white/70">{fullTeamName[todayMatch.team1]}</div>
+              <div className="text-xl font-bold text-green-400 mt-2">{todayMatch.p1}%</div>
+            </div>
+            
+            <div className="text-2xl font-bold text-yellow-400">VS</div>
+            
+            <div className={`text-center px-6 py-4 rounded-xl border-2 ${teamColors[todayMatch.team2]} border-yellow-400/50 shadow-lg`}>
+              <div className="text-3xl font-bold mb-2">{todayMatch.team2}</div>
+              <div className="text-sm text-white/70">{fullTeamName[todayMatch.team2]}</div>
+              <div className="text-xl font-bold text-green-400 mt-2">{todayMatch.p2}%</div>
+            </div>
+          </div>
+          
+          <div className="text-center text-sm text-white/60">
+            <span className="text-yellow-300 font-semibold">Astrological Prediction:</span> {todayMatch.planet}
+          </div>
+        </div>
+      )}
+
       {/* Today's Match Highlight */}
       {todayMatch && (
         <div className="mb-8 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-2xl border border-pink-500/30 p-6">
