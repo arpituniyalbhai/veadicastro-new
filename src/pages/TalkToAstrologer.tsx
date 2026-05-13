@@ -62,13 +62,13 @@ const TalkToAstrologer = () => {
   return (
     <>
       <Helmet>
-        <title>Talk to Astrologer Online | Vedic Consultation ₹599 | Veadicastro</title>
-        <meta name="description" content="Get instant Vedic astrology consultation online. Talk to expert astrologers for career, love, marriage & kundali matching. Starting ₹40/min. Available 24/7." />
+        <title>Best Astrologer in Uttarakhand – Pandit Aman Uniyal | Online Vedic Consultation</title>
+        <meta name="description" content="Talk to Pandit Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
         <link rel="canonical" href="https://veadicastro.in/talk-to-astrologer" />
         
         {/* Open Graph / Social Media */}
-        <meta property="og:title" content="Talk to Astrologer Online | Vedic Consultation ₹599 | Veadicastro" />
-        <meta property="og:description" content="Get instant Vedic astrology consultation online. Talk to expert astrologers for career, love, marriage & kundali matching. Starting ₹40/min. Available 24/7." />
+        <meta property="og:title" content="Best Astrologer in Uttarakhand – Pandit Aman Uniyal | Online Vedic Consultation" />
+        <meta property="og:description" content="Talk to Pandit Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
         <meta property="og:image" content="https://veadicastro.in/optimized/reviews.webp" />
         <meta property="og:url" content="https://veadicastro.in/talk-to-astrologer" />
         <meta property="og:type" content="website" />
@@ -104,16 +104,33 @@ const TalkToAstrologer = () => {
                 "sameAs": `https://veadicastro.in/talk-to-astrologer`
               })),
               {
+                "@type": "LocalBusiness",
+                "name": "Veadicastro – Vedic Astrology Consultation",
+                "url": "https://veadicastro.in/talk-to-astrologer",
+                "image": "https://veadicastro.in/amanuniyalastrologe.webp",
+                "description": "Best Vedic astrologer in Uttarakhand. Pandit Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressRegion": "Uttarakhand",
+                  "addressCountry": "IN"
+                },
+                "areaServed": [
+                  "Dehradun", "Haridwar", "Rishikesh", "Pauri Garhwal",
+                  "Nainital", "Roorkee", "Uttarakhand", "India"
+                ],
+                "priceRange": "₹599 - ₹799"
+              },
+              {
                 "@type": "Service",
                 "name": "Vedic Astrology Consultation",
-                "description": "Get instant Vedic astrology consultation online. Talk to expert astrologers for career, love, marriage & kundali matching. Starting ₹40/min. Available 24/7.",
+                "description": "Best Vedic astrologer in Uttarakhand. Pandit Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
                 "provider": {
                   "@type": "Organization",
                   "name": "Veadicastro",
                   "url": "https://veadicastro.in"
                 },
                 "serviceType": "Professional Service",
-                "areaServed": "India",
+                "areaServed": ["Dehradun", "Haridwar", "Rishikesh", "Pauri Garhwal", "Nainital", "Roorkee", "Uttarakhand", "India"],
                 "hasOfferCatalog": {
                   "@type": "OfferCatalog",
                   "name": "Astrology Consultation Services",
@@ -291,12 +308,23 @@ const TalkToAstrologer = () => {
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 relative">
               <span className="relative z-10 bg-gradient-to-r from-white via-accent to-white bg-clip-text text-transparent drop-shadow-2xl">
-                Talk to Astrologer Online – Live Vedic Consultation
+                Talk to Best Astrologer in Uttarakhand – Live Vedic Consultation Online
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Connect with India's top Vedic astrologers for personalized guidance on career, marriage, love, and life decisions. Our verified experts provide real-time astrology consultation via call or chat — in Hindi and English — starting at just ₹40/min. <a href="/" className="text-accent hover:text-accent/80 underline">Try India's best astrologer</a> or explore our <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" className="text-accent hover:text-accent/80 underline">free AI astrology chat</a> for quick guidance.
+              Connect with <strong>Pandit Aman Uniyal</strong> — a Vedic astrologer from{" "}
+              <strong>Pauri Garhwal, Uttarakhand</strong>, trusted by clients across{" "}
+              <strong>Dehradun, Haridwar, Rishikesh, Nainital, Roorkee</strong> and beyond.
+              Get personalized guidance on career, marriage, love, and life decisions via
+              call or chat — in Hindi and English — starting at just ₹40/min.{" "}
+              <a href="/" className="text-accent hover:text-accent/80 underline">
+                Try India's best astrologer
+              </a>{" "}
+              or explore our{" "}
+              <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">
+                AI astrology platform
+              </a>.
             </p>
           </div>
 
@@ -343,7 +371,7 @@ const TalkToAstrologer = () => {
 
               {/* Basic Info */}
               <div className="text-center mb-4">
-                <h2 className="text-xl font-bold text-white mb-1">Talk to Aman Uniyal – Vedic Astrologer</h2>
+                <h2 className="text-xl font-bold text-white mb-1">Pandit Aman Uniyal – Best Vedic Astrologer in Uttarakhand</h2>
                 <p className="text-accent text-sm mb-2">Expert in Vedic Astrology</p>
                 <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-2">
                   <span>10+ years of experience</span>
@@ -358,7 +386,10 @@ const TalkToAstrologer = () => {
 
               {/* Description */}
               <p className="text-sm text-muted-foreground text-center mb-4">
-                Aman Uniyal is a renowned Vedic astrologer with over 10 years of experience in providing personalized guidance on career, marriage, love, and life decisions. He is an expert in Vedic astrology and has helped numerous clients achieve their goals and overcome challenges.
+                Originally from <strong>Pauri Garhwal, Uttarakhand</strong>, Pandit Aman 
+                Uniyal brings over 10 years of traditional Vedic astrology experience. 
+                He has guided thousands of clients from Dehradun, Haridwar, Rishikesh, 
+                and across India on career, marriage, and life decisions.
               </p>
 
               {/* Specialties */}
@@ -825,6 +856,108 @@ const TalkToAstrologer = () => {
               <p className="text-muted-foreground">Yes. We have clients in the US, UK, Canada, UAE, and other countries. Sessions are conducted via phone or online and can be scheduled across time zones. Payment can be made through standard online methods.</p>
             </div>
           </div>
+        </section>
+
+        {/* Local SEO Section */}
+        <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            Best Astrologer Serving All of Uttarakhand – Online & Offline
+          </h2>
+          <p className="text-muted-foreground text-center max-w-3xl mx-auto mb-10">
+            Pandit Aman Uniyal is originally from <strong>Pauri Garhwal</strong> and has
+            built a trusted reputation as one of the best astrologers in Uttarakhand. 
+            While he now offers consultations online to clients across India and abroad, 
+            his roots in the Garhwal region give him deep cultural and spiritual context 
+            that clients from Uttarakhand particularly value.
+          </p>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Dehradun
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Looking for a trusted astrologer in Dehradun? Pandit Aman Uniyal 
+                offers online Vedic consultations to clients in Dehradun — from 
+                Rajpur Road to Clement Town — covering career, marriage, kundali 
+                matching, and Vastu. No need to travel; consult from home via call 
+                or chat at ₹599 onwards.
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Haridwar
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Haridwar is India's spiritual capital — and clients from Haridwar 
+                seeking an experienced Vedic astrologer trust Pandit Aman Uniyal 
+                for his traditional Garhwali Brahmin background and authentic 
+                Jyotisha knowledge. Book a same-day consultation online.
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Rishikesh
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Clients from Rishikesh consult Pandit Aman Uniyal for deep 
+                spiritual and practical guidance — from Dasha analysis to Muhurat 
+                selection for new ventures. His Uttarakhand background resonates 
+                strongly with clients who want authentic Vedic guidance, not 
+                scripted responses.
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Pauri Garhwal
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Pandit Aman Uniyal is originally from Pauri Garhwal, making him 
+                the most authentic local astrologer available online for clients 
+                from the Pauri region. His deep-rooted knowledge of Garhwali 
+                traditions and Vedic practices makes him a trusted name for 
+                families in Pauri, Lansdowne, and surrounding areas.
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Nainital & Kumaon
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Serving clients from Nainital, Haldwani, Ramnagar and the broader 
+                Kumaon region. Whether you are looking for kundali matching, career 
+                guidance, or Vastu advice, Pandit Aman Uniyal is available for 
+                online consultations without any travel needed.
+              </p>
+            </div>
+
+            <div className="bg-card/30 p-5 rounded-xl border border-border/40">
+              <h3 className="text-lg font-semibold text-accent mb-2">
+                Best Astrologer in Roorkee & Hardwar District
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Clients from Roorkee, Manglaur, and Haridwar district regularly 
+                consult Pandit Aman Uniyal for marriage compatibility readings 
+                and career timing guidance. His unlimited call format means you 
+                can revisit questions without worrying about per-minute charges.
+              </p>
+            </div>
+
+          </div>
+
+          <p className="text-center text-sm text-muted-foreground mt-8">
+            Not from Uttarakhand? No problem — Pandit Aman Uniyal consults clients 
+            across India and internationally. 
+            <a href="/free-ai-astrologer-chat" className="text-accent hover:text-accent/80 underline ml-1">
+              Try our free AI astrology chat
+            </a>{" "}
+            for instant answers, or book a live consultation above.
+          </p>
         </section>
       </div>
 

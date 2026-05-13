@@ -72,7 +72,7 @@ const FreeKundliGenerator = () => {
     setIsSearchingLocation(true);
     try {
       // Use OpenCage API like Onboarding (no CORS issues)
-      const key = "e6856ce2163d420dbae7d5adb0a104ec"; // OpenCage API key
+      const key = "764ba629707b4648af1b0a7f4da18981"; // OpenCage API key
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${key}&limit=5&no_annotations=1`;
       const res = await fetch(url);
       const data = await res.json();
