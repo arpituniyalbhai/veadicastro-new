@@ -253,11 +253,6 @@ const Top10VedicAstrologyPlatform = () => {
           <div className="flex justify-center my-8">
             <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
-          
-          {/* Additional Ad - After Comparison Table */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-          </div>
 
           {/* Platform Rankings */}
           <div id="platform-rankings" className="space-y-8 mb-12">

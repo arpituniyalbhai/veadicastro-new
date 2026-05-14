@@ -326,7 +326,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>free ai astrologer - No signup | Veadicastro</title>
+        <title>Free AI Astrologer - No signup | Veadicastro</title>
         <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta name="keywords" content="astrology ai, ai astrology free chat, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology" />
         <link rel="canonical" href="https://veadicastro.in/vedika-ai-astrology-chat" />
@@ -787,11 +787,6 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
           <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
         </div>
         
-        {/* Ad 3 - After AI Chatbox */}
-        <div className="flex justify-center my-2">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-        </div>
-
         {/* ══════════════════════════════════════════════════════════════════
             BOTTOM CONTENT SECTION — How it works + AI tech details
         ══════════════════════════════════════════════════════════════════ */}

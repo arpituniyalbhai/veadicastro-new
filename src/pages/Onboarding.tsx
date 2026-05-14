@@ -145,7 +145,7 @@ useEffect(() => {
     setPlaceLoading(true);
     const id = setTimeout(async () => {
       try {
-        const key = "764ba629707b4648af1b0a7f4da18981"; // OpenCage API key
+        const key = "91ab8792290d414b92590c9d4cc0793c"; // OpenCage API key
         const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(q)}&key=${key}&limit=6&no_annotations=0`;
         const res = await fetch(url, { signal: controller.signal });
         const data = await res.json();

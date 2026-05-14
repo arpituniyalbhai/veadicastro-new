@@ -89,6 +89,11 @@ const allMatches = [
   { date: "May 10", team1: "CSK",  team2: "LSG", p1: 55, p2: 45, planet: "Jupiter strongly backs CSK" },
   { date: "May 10", team1: "RCB",  team2: "MI",   p1: 49, p2: 51, planet: "Saturn edges MI" },
   { date: "May 12", team1: "GT",   team2: "SRH", p1: 52, p2: 48, planet: "Saturn favors GT" },
+  { date: "May 14", team1: "PBKS", team2: "MI",   p1: 48, p2: 52, planet: "Saturn discipline edges MI over Moon's fluctuation" },
+  { date: "May 15", team1: "LSG",  team2: "CSK",  p1: 47, p2: 53, planet: "Jupiter's wisdom overpowers Mercury's speed" },
+  { date: "May 16", team1: "KKR",  team2: "GT",   p1: 54, p2: 46, planet: "Rahu's mystery dominates Saturn-Rahu grind" },
+  { date: "May 17", team1: "PBKS", team2: "RCB",  p1: 49, p2: 51, planet: "Mars fire burns brighter than Moon's phases" },
+  { date: "May 17", team1: "DC",   team2: "RR",   p1: 52, p2: 48, planet: "Jupiter's strategy outsmarts Venus's elegance" },
 ];
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
@@ -310,6 +315,11 @@ const MatchPredictionsSection = () => {
           </div>
         </div>
       )}
+
+      {/* Ad - After Today's Match Teams Highlight */}
+      <div className="flex justify-center my-8">
+        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+      </div>
 
       {/* Today's Match Highlight */}
       {todayMatch && (
@@ -544,11 +554,6 @@ const WhichTeamWinIPL2026 = () => {
                 <span className="text-pink-400">Today IPL Match Winner</span> Prediction 2026: Who Will Win Today's Match?
               </h1>
               
-              {/* AdSense Ad - After Title */}
-              <div className="flex justify-center my-8">
-                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-              </div>
-              
               <p className="text-xl text-white/70 mb-4 leading-relaxed max-w-3xl mx-auto">
                 🏏 <strong>Today IPL match kaun jitega?</strong> Get accurate astrology predictions for today's IPL 2026 match. 
                 Vedic astrology analysis with win probabilities, toss predictions, and planetary insights.
@@ -623,12 +628,6 @@ const WhichTeamWinIPL2026 = () => {
           </div>
 
           {/* ── Daily Match Predictions ── */}
-          
-          {/* Ad 2 - Before Today Match Prediction Box */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
-          </div>
-          
           <MatchPredictionsSection />
           
           {/* AdSense Ad - After Daily Match Predictions */}
@@ -787,6 +786,11 @@ const WhichTeamWinIPL2026 = () => {
               <li className="list-disc">Spin Control: Jupiter favors their slow bowlers during the middle overs</li>
               <li className="list-disc">Strategic Growth: Strong learning curve throughout the tournament</li>
             </ul>
+          </div>
+
+          {/* Ad - After Delhi Capitals Section */}
+          <div className="flex justify-center my-8">
+            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
           </div>
 
           {/* Section 8: GT */}
