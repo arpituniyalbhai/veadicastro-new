@@ -71,6 +71,18 @@ const AuthModal = () => {
     }
   };
 
+  const sendWelcomeEmail = async (userEmail: string, userName: string) => {
+    try {
+      await fetch("/api/welcome", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: userEmail, username: userName }),
+      });
+    } catch (err) {
+      console.error("Welcome email failed:", err);
+    }
+  };
+
   // Timer for OTP expiry
   React.useEffect(() => {
     if (step === "otp" && timeLeft > 0) {
@@ -119,6 +131,7 @@ const AuthModal = () => {
         
         // Create user document immediately after authentication
         await createUserDocument(userEmail, userName, result.user.uid);
+        await sendWelcomeEmail(userEmail, userName);
         
         // Update auth context with basic user info
         const userData = {
@@ -358,6 +371,10 @@ const AuthModal = () => {
             email.toLowerCase(), 
             auth.currentUser?.displayName || name || "User", 
             auth.currentUser.uid
+          );
+          await sendWelcomeEmail(
+            email.toLowerCase(),
+            auth.currentUser?.displayName || name || "User"
           );
         }
         
