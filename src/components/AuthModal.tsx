@@ -71,6 +71,7 @@ const AuthModal = () => {
     }
   };
 
+  // Send welcome email to new users
   const sendWelcomeEmail = async (userEmail: string, userName: string) => {
     try {
       await fetch("/api/welcome", {
