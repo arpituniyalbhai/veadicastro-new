@@ -92,303 +92,328 @@ export async function POST(req: any) {
     const mailOptions = {
       from: `"Veadicastro" <${process.env.WELCOME_EMAIL_USER || 'no-reply@veadicastro.in'}>`,
       to: email,
-      subject: `Welcome to Veadicastro, ${username}! Your cosmic journey begins 🌟`,
+      subject: `Welcome to Veadicastro, ${username}`,
       html: `
         <!DOCTYPE html>
         <html lang="en">
         <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Welcome to Veadicastro</title>
-          <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            
-            body {
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-              background-color: #0d0d1a;
-              color: #ffffff;
-              padding: 30px 15px;
-              line-height: 1.6;
-            }
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Welcome to Veadicastro</title>
 
-            .wrapper {
-              max-width: 580px;
-              margin: 0 auto;
-            }
+        <style>
+        body{
+          margin:0;
+          padding:0;
+          background:#050505;
+          font-family:Arial,sans-serif;
+          color:#ffffff;
+        }
 
-            .header {
-              background: linear-gradient(135deg, #6b2060 0%, #3d1040 100%);
-              border-radius: 16px 16px 0 0;
-              padding: 40px 30px 35px;
-              text-align: center;
-            }
+        .wrapper{
+          width:100%;
+          padding:40px 15px;
+          background:#050505;
+        }
 
-            .logo-text {
-              font-size: 11px;
-              letter-spacing: 4px;
-              color: #d4a0c8;
-              text-transform: uppercase;
-              margin-bottom: 12px;
-            }
+        .container{
+          max-width:600px;
+          margin:auto;
+          background:#000000;
+          border:1px solid #151515;
+          border-radius:18px;
+          overflow:hidden;
+        }
 
-            .header h1 {
-              font-size: 30px;
-              font-weight: 700;
-              color: #ffffff;
-              letter-spacing: 1px;
-              margin-bottom: 8px;
-            }
+        .header{
+          text-align:center;
+          padding:40px 30px 25px;
+          border-bottom:1px solid #111;
+        }
 
-            .header-sub {
-              font-size: 13px;
-              color: #c9a0bc;
-              letter-spacing: 0.5px;
-            }
+        .logo{
+          width:170px;
+          margin-bottom:18px;
+        }
 
-            .divider-stars {
-              color: #883377;
-              font-size: 18px;
-              letter-spacing: 6px;
-              margin-top: 18px;
-            }
+        .tagline{
+          color:#6f7fa8;
+          font-size:11px;
+          letter-spacing:3px;
+          text-transform:uppercase;
+        }
 
-            .body-card {
-              background: #12102a;
-              padding: 38px 32px;
-              border-left: 1px solid rgba(136, 51, 119, 0.3);
-              border-right: 1px solid rgba(136, 51, 119, 0.3);
-            }
+        .content{
+          padding:38px 32px;
+        }
 
-            .greeting {
-              font-size: 20px;
-              font-weight: 600;
-              color: #e8b4d8;
-              margin-bottom: 16px;
-            }
+        .title{
+          font-size:28px;
+          font-weight:700;
+          margin-bottom:18px;
+          color:#ffffff;
+        }
 
-            .intro {
-              font-size: 15px;
-              color: #c8c8e0;
-              margin-bottom: 28px;
-            }
+        .text{
+          font-size:15px;
+          line-height:1.8;
+          color:#b8b8c7;
+          margin-bottom:28px;
+        }
 
-            .intro strong {
-              color: #e8b4d8;
-            }
+        .highlight{
+          color:#4da3ff;
+          font-weight:600;
+        }
 
-            .features-box {
-              background: rgba(136, 51, 119, 0.1);
-              border: 1px solid rgba(136, 51, 119, 0.35);
-              border-radius: 12px;
-              padding: 24px;
-              margin-bottom: 28px;
-            }
+        .credits-box{
+          background:#07111f;
+          border:1px solid #123055;
+          border-radius:14px;
+          padding:22px;
+          margin-bottom:30px;
+        }
 
-            .features-title {
-              font-size: 13px;
-              font-weight: 600;
-              letter-spacing: 2px;
-              text-transform: uppercase;
-              color: #c080b0;
-              margin-bottom: 18px;
-            }
+        .credit-number{
+          font-size:32px;
+          font-weight:700;
+          color:#4da3ff;
+        }
 
-            .feature-row {
-              display: flex;
-              align-items: flex-start;
-              margin-bottom: 14px;
-            }
+        .credit-title{
+          font-size:16px;
+          font-weight:600;
+          margin-top:6px;
+          color:#ffffff;
+        }
 
-            .feature-row:last-child { margin-bottom: 0; }
+        .credit-sub{
+          font-size:13px;
+          color:#9ba3b5;
+          margin-top:5px;
+        }
 
-            .feat-icon {
-              font-size: 20px;
-              margin-right: 14px;
-              flex-shrink: 0;
-              margin-top: 1px;
-            }
+        .section-title{
+          font-size:11px;
+          color:#5d6b87;
+          letter-spacing:3px;
+          margin-bottom:18px;
+          text-transform:uppercase;
+        }
 
-            .feat-text strong {
-              display: block;
-              font-size: 14px;
-              color: #e0c8d8;
-              margin-bottom: 2px;
-            }
+        .grid{
+          display:grid;
+          grid-template-columns:1fr 1fr;
+          gap:12px;
+          margin-bottom:30px;
+        }
 
-            .feat-text span {
-              font-size: 13px;
-              color: #a090b0;
-            }
+        .card{
+          border:1px solid #161616;
+          background:#090909;
+          border-radius:12px;
+          padding:16px;
+        }
 
-            .quote-block {
-              border-left: 3px solid #883377;
-              padding: 14px 18px;
-              margin-bottom: 30px;
-              background: rgba(136, 51, 119, 0.07);
-              border-radius: 0 8px 8px 0;
-            }
+        .card-title{
+          color:#ffffff;
+          font-size:14px;
+          font-weight:600;
+          margin-bottom:6px;
+        }
 
-            .quote-block p {
-              font-size: 14px;
-              font-style: italic;
-              color: #b090a8;
-            }
+        .card-text{
+          color:#7f8798;
+          font-size:12px;
+          line-height:1.6;
+        }
 
-            .cta-wrapper {
-              text-align: center;
-              margin-bottom: 28px;
-            }
+        .quote{
+          border-left:2px solid #4da3ff;
+          padding-left:16px;
+          color:#7d8597;
+          font-style:italic;
+          font-size:14px;
+          margin-bottom:30px;
+        }
 
-            .cta-btn {
-              display: inline-block;
-              padding: 16px 44px;
-              background: linear-gradient(135deg, #883377 0%, #5c1f45 100%);
-              color: #ffffff;
-              text-decoration: none;
-              border-radius: 50px;
-              font-size: 15px;
-              font-weight: 600;
-              letter-spacing: 0.5px;
-            }
+        .cta-wrap{
+          text-align:center;
+        }
 
-            .cta-sub {
-              margin-top: 10px;
-              font-size: 12px;
-              color: #7a6888;
-            }
+        .cta{
+          display:inline-block;
+          background:#4da3ff;
+          color:#ffffff !important;
+          text-decoration:none;
+          padding:15px 34px;
+          border-radius:999px;
+          font-size:15px;
+          font-weight:600;
+        }
 
-            .credits-note {
-              background: rgba(255,255,255,0.03);
-              border: 1px solid rgba(255,255,255,0.07);
-              border-radius: 10px;
-              padding: 16px 20px;
-              font-size: 13px;
-              color: #9090b0;
-              text-align: center;
-              margin-bottom: 10px;
-            }
+        .cta-sub{
+          margin-top:12px;
+          font-size:12px;
+          color:#6d7385;
+        }
 
-            .credits-note span {
-              color: #c080b0;
-              font-weight: 600;
-            }
+        .footer{
+          border-top:1px solid #111;
+          padding:26px;
+          text-align:center;
+        }
 
-            .footer {
-              background: #0a0814;
-              border: 1px solid rgba(136, 51, 119, 0.2);
-              border-top: none;
-              border-radius: 0 0 16px 16px;
-              padding: 24px 30px;
-              text-align: center;
-            }
+        .footer-site{
+          color:#4da3ff;
+          font-size:13px;
+          font-weight:600;
+          margin-bottom:10px;
+        }
 
-            .footer-site {
-              color: #883377;
-              font-size: 13px;
-              font-weight: 600;
-              letter-spacing: 1px;
-              margin-bottom: 8px;
-            }
-
-            .footer-copy {
-              font-size: 11px;
-              color: #504860;
-              margin-bottom: 6px;
-            }
-
-            .footer-unsub {
-              font-size: 11px;
-              color: #3a3050;
-            }
-          </style>
+        .footer-copy{
+          color:#555;
+          font-size:11px;
+        }
+        </style>
         </head>
+
         <body>
-          <div class="wrapper">
 
-            <div class="header">
-              <div class="logo-text">AI-Powered Vedic Astrology</div>
-              <h1>⭐ Veadicastro</h1>
-              <div class="header-sub">The World's Most Accurate AI Astrology Platform</div>
-              <div class="divider-stars">✦ ✦ ✦</div>
-            </div>
+        <div class="wrapper">
 
-            <div class="body-card">
+        <div class="container">
 
-              <div class="greeting">Welcome aboard, ${username}! 🙏</div>
+        <div class="header">
 
-              <div class="intro">
-                Your account is now active. You've just joined thousands of people 
-                discovering the power of <strong>ancient Vedic wisdom</strong> combined 
-                with <strong>modern AI</strong>. Our AI astrologer <strong>Vedika AI</strong> 
-                is ready to guide you — anytime, instantly.
-              </div>
+        <img 
+        class="logo"
+        src="https://veadicastro.in/optimized/logo.webp"
+        alt="Veadicastro"
+        />
 
-              <div class="features-box">
-                <div class="features-title">What you can explore</div>
+        <div class="tagline">
+        ANCIENT WISDOM · MODERN AI
+        </div>
 
-                <div class="feature-row">
-                  <div class="feat-icon">🔮</div>
-                  <div class="feat-text">
-                    <strong>Kundali & Birth Chart Analysis</strong>
-                    <span>Deep insights into your planetary positions and their life impact</span>
-                  </div>
-                </div>
+        </div>
 
-                <div class="feature-row">
-                  <div class="feat-icon">📅</div>
-                  <div class="feat-text">
-                    <strong>Monthly & Daily Predictions</strong>
-                    <span>Career, love, health, and finance forecasts personalized for you</span>
-                  </div>
-                </div>
+        <div class="content">
 
-                <div class="feature-row">
-                  <div class="feat-icon">💑</div>
-                  <div class="feat-text">
-                    <strong>Kundali Matching</strong>
-                    <span>Vedic compatibility analysis for relationships and marriage</span>
-                  </div>
-                </div>
+        <div class="title">
+        Namaste, ${username}
+        </div>
 
-                <div class="feature-row">
-                  <div class="feat-icon">👨‍🏫</div>
-                  <div class="feat-text">
-                    <strong>Human Astrologer Consultation</strong>
-                    <span>Talk directly with our expert Vedic astrologer for in-depth guidance</span>
-                  </div>
-                </div>
+        <div class="text">
+        Your account is now live.
 
-              </div>
+        You are now part of a platform built on 
+        <span class="highlight">5000 years of Vedic knowledge</span> 
+        powered by AI that understands your chart, your dashas, and your life path.
 
-              <div class="quote-block">
-                <p>"The stars don't control your destiny — but understanding them gives you 
-                the clarity to shape it." 🌙</p>
-              </div>
+        This is not generic app-based astrology.
+        </div>
 
-              <div class="cta-wrapper">
-                <a href="https://veadicastro.in/chat" class="cta-btn">
-                  Start Your Reading →
-                </a>
-                <div class="cta-sub">Free credits included with your account</div>
-              </div>
+        <div class="credits-box">
 
-              <div class="credits-note">
-                💡 Pro tip: Start by asking Vedika AI about your 
-                <span>Rashi, current Dasha period,</span> or 
-                <span>this month's planetary transits</span> for you.
-              </div>
+        <div class="credit-number">
+        2
+        </div>
 
-            </div>
+        <div class="credit-title">
+        Free chat credits ready to use
+        </div>
 
-            <div class="footer">
-              <div class="footer-site">veadicastro.in</div>
-              <div class="footer-copy">© 2026 Veadicastro. All rights reserved.</div>
-              <div class="footer-unsub">
-                You received this because you created an account at Veadicastro.
-              </div>
-            </div>
+        <div class="credit-sub">
+        Ask Vedika AI anything — no payment needed to start
+        </div>
 
-          </div>
+        </div>
+
+        <div class="section-title">
+        Everything inside your account
+        </div>
+
+        <div class="grid">
+
+        <div class="card">
+        <div class="card-title">Kundali Report</div>
+        <div class="card-text">
+        Full birth chart, planetary positions & life predictions
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-title">Chat with Astrologer</div>
+        <div class="card-text">
+        AI advice expert for personal, career and relationship guidance
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-title">Today & Tomorrow</div>
+        <div class="card-text">
+        Daily forecasts for your energy and emotions
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-title">Weekly & Monthly</div>
+        <div class="card-text">
+        Major life sections with Vedic planetary guidance
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-title">Kundali Matching</div>
+        <div class="card-text">
+        Compatibility analysis for relationships & marriage
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-title">Competitor Analytics</div>
+        <div class="card-text">
+        Vedic-based business & mind intelligence insights
+        </div>
+        </div>
+
+        </div>
+
+        <div class="quote">
+        "The planets don't dictate your life — but knowing their movement gives you the power to move with intention."
+        </div>
+
+        <div class="cta-wrap">
+
+        <a href="https://veadicastro.in/chat" class="cta">
+        Use Your Free Credits
+        </a>
+
+        <div class="cta-sub">
+        No card required · Start your first reading now
+        </div>
+
+        </div>
+
+        </div>
+
+        <div class="footer">
+
+        <div class="footer-site">
+        veadicastro.in
+        </div>
+
+        <div class="footer-copy">
+        2026 Veadicastro. You received this because you created an account.
+        </div>
+
+        </div>
+
+        </div>
+
+        </div>
+
         </body>
         </html>
       `,
