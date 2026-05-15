@@ -1,131 +1,94 @@
 import React from 'react';
-import { CheckCircle, Brain, TrendingUp, Sparkles, ShieldCheck, Zap } from 'lucide-react';
+import { Sparkles, Award } from 'lucide-react';
 
-const VedikaDifferenceSection = () => {
-  return (
-    <section className="py-20 px-4 bg-gradient-to-b from-background via-primary/5 to-background border-y border-border/40">
-      <div className="container mx-auto max-w-6xl">
-        
-        {/* Header - More Impactful */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/30 bg-accent/5 text-accent text-xs font-bold uppercase tracking-widest mb-6">
-            <Sparkles className="w-3 h-3" /> The Science of Destiny
-          </div>
-          <h2 className="text-3xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white via-accent to-white bg-clip-text text-transparent">
-            Precision Beyond Prediction
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Most AI tools guess based on text patterns. <span className="text-white font-semibold">Vedika AI</span> calculates based on real-time planetary mathematics.
-          </p>
-        </div>
+const rows = [
+  { feature: 'Real-time AI Chat',       sub: 'Ask anything, anytime',      vedika: 'yes', melloha: 'yes',     astro: 'no'      },
+  { feature: 'Lahiri Ayanamsa',         sub: 'Govt. of India standard',     vedika: 'yes', melloha: 'Partial', astro: 'Partial' },
+  { feature: 'Personalised Predictions',sub: 'Your exact birth chart',      vedika: 'yes', melloha: 'yes',     astro: 'no'      },
+  { feature: 'Hindi + English',         sub: 'Switch anytime',              vedika: 'yes', melloha: 'no',      astro: 'Hindi only'},
+  { feature: 'Instant AI Kundli',       sub: 'Under 60 seconds',            vedika: 'yes', melloha: 'Basic',   astro: 'Basic'   },
+  { feature: 'Mahadasha + AI Insights', sub: 'Full dasha roadmap',          vedika: '✓ + AI', melloha: 'Basic', astro: 'yes'   },
+  { feature: 'Human Astrologer',        sub: 'Book a real pandit',          vedika: 'yes', melloha: 'yes',     astro: 'yes'     },
+  { feature: 'Ad-free Experience',      sub: 'Zero distractions',           vedika: 'yes', melloha: 'no',      astro: 'no'      },
+  { feature: 'Starting Price',          sub: 'Lowest paid plan',            vedika: '₹149/mo', melloha: '₹799+/mo', astro: '₹500+/mo' },
+];
 
-        <div className="grid md:grid-cols-2 gap-8 items-center">
-          
-          {/* Left Side: Technical Edge */}
-          <div className="space-y-6">
-            <div className="p-6 rounded-2xl bg-card/40 border border-border/60 backdrop-blur-sm hover:border-accent/50 transition-all">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                  <Brain className="w-6 h-6 text-accent" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">The Lahiri Precision</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    We use the <strong>Lahiri Ayanamsa System</strong>, the same standard used by the Govt. of India for official Panchangs. Every planet's position is calculated to the exact arc-second.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-card/40 border border-border/60 backdrop-blur-sm hover:border-secondary/50 transition-all">
-              <div className="flex gap-4">
-                <div className="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                  <TrendingUp className="w-6 h-6 text-secondary" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold mb-2">The Probability Engine</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
-                    Our AI generates <strong>Probability Scores</strong> for career, health, and marriage, giving you a data-backed roadmap rather than vague generic advice.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-{/* Right Side: Visual Proof (The "Clarity" Part) */}
-<div className="relative p-6 md:p-8 rounded-3xl bg-gradient-to-br from-accent/10 to-transparent border border-accent/20 overflow-hidden shadow-2xl">
-  <div className="relative z-10 space-y-5">
-    <h4 className="text-xs font-bold uppercase text-accent tracking-widest mb-4 flex items-center gap-2">
-      <Sparkles className="w-4 h-4" /> Live AI Analysis Preview
-    </h4>
-    
-    {/* Card 1: Marriage (The most asked question) */}
-    <div className="bg-background/60 backdrop-blur-md p-4 rounded-xl border border-border/40 hover:border-pink-500/50 transition-all group">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium group-hover:text-pink-400 transition-colors">Marriage & Relationship Timing</span>
-        <span className="text-pink-500 font-bold text-sm">88% Accuracy</span>
-      </div>
-      <div className="w-full bg-border/20 h-2 rounded-full overflow-hidden">
-        <div className="bg-gradient-to-r from-pink-500 to-rose-400 h-full w-[88%]" />
-      </div>
-      <p className="text-[10px] text-muted-foreground mt-2 italic">"Strong Venus-Jupiter alignment detected for late 2026."</p>
-    </div>
-
-    {/* Card 2: Startup / Business (Entrepreneurial focus) */}
-    <div className="bg-background/60 backdrop-blur-md p-4 rounded-xl border border-border/40 hover:border-blue-500/50 transition-all group">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium group-hover:text-blue-400 transition-colors">Startup Success & Funding</span>
-        <span className="text-blue-500 font-bold text-sm">74% Probability</span>
-      </div>
-      <div className="w-full bg-border/20 h-2 rounded-full overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-full w-[74%]" />
-      </div>
-      <p className="text-[10px] text-muted-foreground mt-2 italic">"10th House Lord strength suggests success in Tech ventures."</p>
-    </div>
-
-    {/* Card 3: Government Job (High volume search in India) */}
-    <div className="bg-background/60 backdrop-blur-md p-4 rounded-xl border border-border/40 hover:border-yellow-500/50 transition-all group">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium group-hover:text-yellow-400 transition-colors">Government Job (Sarkari Naukri)</span>
-        <span className="text-yellow-500 font-bold text-sm">62% Match</span>
-      </div>
-      <div className="w-full bg-border/20 h-2 rounded-full overflow-hidden">
-        <div className="bg-gradient-to-r from-yellow-600 to-orange-400 h-full w-[62%]" />
-      </div>
-      <p className="text-[10px] text-muted-foreground mt-2 italic">"Sun (Surya) position indicates high authority but requires Rahu remedies."</p>
-    </div>
-
-    {/* Card 4: Foreign Settlement (Modern aspiration) */}
-    <div className="bg-background/60 backdrop-blur-md p-4 rounded-xl border border-border/40 hover:border-green-500/50 transition-all group">
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-sm font-medium group-hover:text-green-400 transition-colors">Foreign Travel & Settlement</span>
-        <span className="text-green-500 font-bold text-sm">91% Probability</span>
-      </div>
-      <div className="w-full bg-border/20 h-2 rounded-full overflow-hidden">
-        <div className="bg-gradient-to-r from-green-500 to-emerald-400 h-full w-[91%]" />
-      </div>
-      <p className="text-[10px] text-muted-foreground mt-2 italic">"9th and 12th House connection is extremely favorable in 2026."</p>
-    </div>
-
-    <div className="pt-2 flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
-      <ShieldCheck className="w-4 h-4 text-accent" /> 
-      <span>Data-backed roadmap updated for 2026 transits.</span>
-    </div>
-  </div>
-  
-  {/* Decorative Glow */}
-  <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-accent/20 blur-[80px] rounded-full" />
-</div>
-
-        {/* Bottom Trust Banner */}
-        <div className="mt-12 flex flex-wrap justify-center gap-6 md:gap-12 opacity-70 grayscale hover:grayscale-0 transition-all">
-          <div className="flex items-center gap-2 font-medium text-sm"> <Zap className="w-4 h-4 text-yellow-500" /> Real-time Ephemeris </div>
-          <div className="flex items-center gap-2 font-medium text-sm"> <CheckCircle className="w-4 h-4 text-green-500" /> Lahiri Ayanamsa </div>
-          <div className="flex items-center gap-2 font-medium text-sm"> <ShieldCheck className="w-4 h-4 text-blue-500" /> Verified Logic </div>
-        </div>
-      </div>
-    </div>
-    </section>
-  );
+const Cell = ({ val, isVedika = false }: { val: string; isVedika?: boolean }) => {
+  if (val === 'yes') return <span className={isVedika ? 'text-green-400' : 'text-green-500'}>✓</span>;
+  if (val === 'no')  return <span className="text-red-500">✕</span>;
+  if (val === 'Partial' || val === 'Basic' || val === 'Hindi only')
+    return <span className="text-yellow-500 text-[10px] font-semibold">{val}</span>;
+  if (isVedika && val.startsWith('₹'))
+    return <span className="font-bold text-xs" style={{color:'#d9277a'}}>{val}</span>;
+  if (val.startsWith('₹'))
+    return <span className="text-xs text-muted-foreground">{val}</span>;
+  if (isVedika)
+    return <span className="text-[10px] font-semibold" style={{color:'#d9277a'}}>{val}</span>;
+  return <span className="text-xs text-muted-foreground">{val}</span>;
 };
+
+const VedikaDifferenceSection = () => (
+  <section className="py-16 px-4 bg-gradient-to-b from-background via-primary/5 to-background border-y border-border/40">
+    <div className="container mx-auto max-w-5xl">
+
+      {/* Header */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/30 bg-accent/5 text-accent text-[11px] font-bold uppercase tracking-widest mb-4">
+          <Sparkles className="w-3 h-3" /> Side-by-Side Comparison
+        </div>
+        <h2 className="text-2xl sm:text-4xl font-semibold mb-3 bg-gradient-to-r from-white via-accent to-white bg-clip-text text-transparent">
+          Why <span style={{color:'#d9277a'}}>Vedika AI</span> stands apart
+        </h2>
+        <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+          Compare us vs premium & popular astrology platforms
+        </p>
+      </div>
+
+      {/* Scroll hint */}
+      <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+        <span>←</span> Scroll to compare all columns <span>→</span>
+      </p>
+
+      {/* Table */}
+      <div className="w-full overflow-x-auto rounded-2xl border border-border/60" style={{WebkitOverflowScrolling:'touch'}}>
+        <table className="border-collapse" style={{minWidth:'400px', width:'100%'}}>
+          <thead>
+            <tr>
+              <th className="text-left px-3 py-3 text-[11px] font-semibold text-muted-foreground bg-card/80 sticky left-0 z-10 border-r border-border/40" style={{minWidth:'130px'}}>Feature</th>
+              <th className="text-center px-3 py-3 text-[11px] font-bold border-l-2 border-r border-secondary/60" style={{background:'#d9277a18', color:'#d9277a', minWidth:'110px'}}>✦ Vedika AI</th>
+              <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground bg-card/80" style={{minWidth:'100px'}}>Melloha</th>
+              <th className="text-center px-3 py-3 text-[11px] font-semibold text-muted-foreground bg-card/80" style={{minWidth:'100px'}}>AstroSage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <tr key={i} className="border-t border-border/40">
+                <td className="px-3 py-3 sticky left-0 z-10 bg-background border-r border-border/40">
+                  <span className="text-xs font-semibold text-foreground block">{row.feature}</span>
+                  <span className="text-[10px] text-muted-foreground">{row.sub}</span>
+                </td>
+                <td className="text-center px-3 py-3 border-l-2 border-r border-secondary/40 text-base" style={{background:'#d9277a08'}}>
+                  <Cell val={row.vedika} isVedika />
+                </td>
+                <td className="text-center px-3 py-3 text-base"><Cell val={row.melloha} /></td>
+                <td className="text-center px-3 py-3 text-base"><Cell val={row.astro} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Winner bar */}
+      <div className="mt-5 flex items-start gap-3 px-4 py-4 rounded-2xl border border-secondary/40 bg-secondary/10">
+        <Award className="w-5 h-5 flex-shrink-0 mt-0.5" style={{color:'#d9277a'}} />
+        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          <span className="font-semibold" style={{color:'#d9277a'}}>Vedika AI</span> beats premium platforms on AI chat, Vedic accuracy & bilingual support — at{' '}
+          <span className="font-semibold" style={{color:'#d9277a'}}>5× lower price</span> than Melloha. No ads. Built for India.
+        </p>
+      </div>
+
+    </div>
+  </section>
+);
 
 export default VedikaDifferenceSection;

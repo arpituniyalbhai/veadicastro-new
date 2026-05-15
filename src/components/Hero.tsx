@@ -54,18 +54,22 @@ const Hero = () => {
           {/* Centered Content */}
           <div className="text-center space-y-6 md:space-y-10 max-w-6xl">
             {/* Badge */}
+
             <div className="inline-flex items-center gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-secondary/40 bg-secondary/10 backdrop-blur-md shadow-lg shadow-secondary/20">
               <Sparkles className="w-3 sm:w-4 h-3 sm:h-4 text-secondary animate-pulse flex-shrink-0" />
               <span className="text-xs sm:text-sm font-medium text-secondary">Powered by Advanced AI & Vedic Knowledge</span>
             </div>
 
             <h1 className="font-sans text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-tight tracking-normal relative">
-              <span className="block text-white" style={{color:'#f2f2f2'}}>AI Powered Vedic Astrology —</span>
+              <span className="block" style={{color:'#f2f2f2'}}>
+                AI Powered{" "}
+                <span style={{color:'#d9277a', fontWeight:'600', WebkitTextFillColor:'#d9277a'}}>Vedic Astrology</span>{" "}—
+              </span>
               <div className="relative inline-block h-[1.2em]">
                 <div className="hero-headline-wrapper relative">
                   {/* Visible static glow behind the cycling text */}
                   <div className="absolute inset-0 -left-3 -right-3 -top-2 -bottom-2 bg-gradient-to-r from-[#8B0050]/50 via-[#6B0040]/40 to-[#8B0050]/50 blur-xl opacity-70 -z-10"></div>
-                  <span style={{color:'#d9277a'}} className={`relative z-10 block text-accent font-bold transition-all duration-500 ease-in-out ${
+                  <span className={`text-[#d9277a] relative z-10 block font-bold transition-all duration-500 ease-in-out ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
                   }`}>
                     {cyclingTexts[currentTextIndex]}
@@ -74,9 +78,12 @@ const Hero = () => {
               </div>
             </h1>
             
-            <p style={{color:'#d1d5db'}} className="text-base sm:text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed px-2">
-            Get your personalized prediction in 60 seconds<br />
-            Knows whats coming next in your love, career and money
+            <p style={{color:'#c4c4d4'}} className="text-base sm:text-lg md:text-xl max-w-3xl mx-auto leading-relaxed px-2">
+              Get your personalized predictions,<br />
+              Knows what's coming next in your{" "}
+              <span style={{color:'#d9277a', fontWeight:'600'}}>love</span>,{" "}
+              <span style={{color:'#d9277a', fontWeight:'600'}}>career</span> and{" "}
+              <span style={{color:'#d9277a', fontWeight:'600'}}>money</span>
             </p>
 
             {/* Primary CTA */}

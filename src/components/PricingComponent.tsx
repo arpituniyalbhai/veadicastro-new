@@ -39,7 +39,7 @@ const plans = [
   },
   {
     name: "The Power Pack",
-    price: 649,
+    price: 699,
     period: "one-time",
     questions: 30,
     description: "Save 50% vs Quick Ask - Maximum value",

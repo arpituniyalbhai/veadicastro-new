@@ -54,10 +54,10 @@ const Index = () => {
           }, 16);
         };
 
-        animateCounter('accurate-answers', 20000, 10000);
-        animateCounter('user-base', 10000, 10000);
-        animateCounter('daily-predictions', 30000, 10000);
-        animateCounter('report-created', 22000, 10000);
+        animateCounter('accurate-answers', 20000, 4000);
+        animateCounter('user-base', 10000, 4000);
+        animateCounter('daily-predictions', 30000, 4000);
+        animateCounter('report-created', 22000, 4000);
       }
     };
 
