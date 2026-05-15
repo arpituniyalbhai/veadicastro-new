@@ -275,6 +275,7 @@ const Pricing = () => {
         order_id: orderId,
         name: "Veadicastro",
         description: `${planName} Plan`,
+        image: "https://veadicastro.in/optimized/logo.webp",
         prefill: {
           email: user.email,
           contact: "",

@@ -132,6 +132,8 @@ const AuthModal = () => {
         
         // Create user document immediately after authentication
         await createUserDocument(userEmail, userName, result.user.uid);
+        
+        // Send welcome email
         await sendWelcomeEmail(userEmail, userName);
         
         // Update auth context with basic user info
