@@ -94,6 +94,13 @@ const allMatches = [
   { date: "May 16", team1: "KKR",  team2: "GT",   p1: 54, p2: 46, planet: "Rahu's mystery dominates Saturn-Rahu grind" },
   { date: "May 17", team1: "PBKS", team2: "RCB",  p1: 49, p2: 51, planet: "Mars fire burns brighter than Moon's phases" },
   { date: "May 17", team1: "DC",   team2: "RR",   p1: 52, p2: 48, planet: "Jupiter's strategy outsmarts Venus's elegance" },
+  { date: "May 19", team1: "RR",   team2: "LSG",  p1: 53, p2: 47, planet: "Venus elegance favors RR at home" },
+  { date: "May 20", team1: "KKR",  team2: "MI",   p1: 51, p2: 49, planet: "Rahu's mystery edges KKR at Eden" },
+  { date: "May 21", team1: "GT",   team2: "CSK",  p1: 48, p2: 52, planet: "Jupiter's wisdom guides CSK to victory" },
+  { date: "May 22", team1: "SRH",  team2: "RCB",  p1: 52, p2: 48, planet: "Mars fire energizes SRH at home" },
+  { date: "May 23", team1: "LSG",  team2: "PBKS", p1: 54, p2: 46, planet: "Mercury's speed favors LSG" },
+  { date: "May 24", team1: "MI",   team2: "RR",   p1: 51, p2: 49, planet: "Saturn discipline tips MI in morning clash" },
+  { date: "May 24", team1: "KKR",  team2: "DC",   p1: 53, p2: 47, planet: "Rahu's influence strengthens KKR at Eden" },
 ];
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
@@ -452,7 +459,7 @@ const WhichTeamWinIPL2026 = () => {
             }
           },
           "datePublished": "2026-03-13",
-          "dateModified": "2026-03-31",
+          "dateModified": "2026-05-19",
           "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology"
@@ -517,7 +524,7 @@ const WhichTeamWinIPL2026 = () => {
           "@type": "SportsEvent",
           "name": "IPL 2026",
           "startDate": "2026-03-28",
-          "endDate": "2026-05-25",
+          "endDate": "2026-05-24",
           "sport": "Cricket",
           "location": {
             "@type": "Country",
