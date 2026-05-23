@@ -495,31 +495,26 @@ export default function Chat() {
       return;
     }
     
-    // Deduct credit first - if successful, proceed with chat
-    const creditDeducted = await deductCredit();
-    if (!creditDeducted) {
-      // Remove the empty assistant placeholder
-      setMessages((m) => m.slice(0, -1));
-      
-      // Show limit warning
-      setShowLimitWarning(true);
-      setSending(false);
-      setIsTyping(false);
-      return;
-    }
-    
-    console.log("Credit deducted successfully, proceeding with chat");
     try {
       let idx = -1;
       setMessages((m) => { idx = m.length; return m; });
       let deltaCount = 0;
+      let aiAnswerCompleted = false;
+      let streamedAnswer = "";
       // Ensure Hindi output when UI is set to Hindi
       const userText = userTurn.content;
       // Gather onboarding details for AstrologyAPI
       const details = (() => { try { return JSON.parse(localStorage.getItem('onboarding_details') || 'null'); } catch { return null; } })();
       if (!details?.dob || !details?.time || details?.lat == null || details?.lng == null) {
         console.debug('[Chat] Missing birth details, aborting send.', { details });
-        setMessages((m) => [...m, { role: "assistant", content: "Please complete onboarding (DOB, time, and place) to get precise chart-based guidance." }]);
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            copy[lastIndex] = { role: "assistant", content: "Please complete onboarding (DOB, time, and place) to get precise chart-based guidance." };
+          }
+          return copy;
+        });
         setSending(false);
         setIsTyping(false);
         return;
@@ -589,6 +584,10 @@ export default function Chat() {
 
       let firstChunkReceived = false;
       await generateGeminiStream(promptText, messages, (delta) => {
+        streamedAnswer += delta;
+        if (sanitize(streamedAnswer).trim()) {
+          aiAnswerCompleted = true;
+        }
         // Hide thinking indicator on first chunk
         if (!firstChunkReceived) {
           firstChunkReceived = true;
@@ -610,15 +609,36 @@ export default function Chat() {
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
         const final = await generateGemini(promptText, messages, systemExtra, lang, displayName);
+        const sanitizedFinal = sanitize(final || "");
+        aiAnswerCompleted = !!sanitizedFinal.trim();
           setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-              copy[lastIndex] = { role: "assistant", content: sanitize(final || "") };
+              copy[lastIndex] = { role: "assistant", content: sanitizedFinal };
           }
           return copy;
         });
       }
+      if (!aiAnswerCompleted) {
+        throw new Error("AI response was empty");
+      }
+
+      const creditDeducted = await deductCredit();
+      if (!creditDeducted) {
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            copy[lastIndex] = { role: "assistant", content: "Your credits are over. Please upgrade to keep asking Vedika AI." };
+          }
+          return copy;
+        });
+        setShowLimitWarning(true);
+        return;
+      }
+
+      console.log("AI answer completed, credit deducted successfully");
     } catch (e) {
       setMessages((m) => {
         const copy = [...m];

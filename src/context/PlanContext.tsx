@@ -284,6 +284,11 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       const data = await response.json();
       console.log("💳 Credit deduction response:", data);
       
+      if (data.reason === 'unlimited') {
+        console.log("✅ Day Pass active - no credit deducted");
+        return true;
+      }
+
       if (data.deducted) {
         console.log("✅ Credit successfully deducted, updating UI optimistically");
         console.log("💳 Before optimistic update - UI credits:", currentCredits);
