@@ -282,9 +282,9 @@ export default async function handler(req: Request) {
       prompt = prompt.substring(0, MAX_PROMPT_CHARS) + "...";
     }
 
-    const keyEnv = process.env.MISTRAL_API_KEY;
+    const keyEnv = process.env.MISTRAL_API_KEY_2;
     if (!keyEnv) return new Response(
-      JSON.stringify({ error: 'Server missing MISTRAL_API_KEY' }),
+      JSON.stringify({ error: 'Server missing MISTRAL_API_KEY_2' }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
     const key: string = keyEnv;
