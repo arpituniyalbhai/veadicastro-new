@@ -1030,7 +1030,7 @@ export default function Chat() {
               id="vp-cta"
               onClick={() => {
                 const sel = (window as any)._vp_selected || '399';
-                const map: any = {'149':{plan:'Quick Ask',amount:149,type:'pack'},'399':{plan:'Deep Dive',amount:399,type:'pack'},'699':{plan:'Full Reading',amount:699,type:'pack'}};
+                const map: any = {'149':{plan:'Quick Ask',amount:149,type:'pack'},'399':{plan:'Deep Dive',amount:399,type:'pack'},'699':{plan:'The Power Pack',amount:699,type:'pack'}};
                 const p = map[sel];
                 navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
                 setShowLimitWarning(false);
