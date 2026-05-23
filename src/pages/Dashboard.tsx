@@ -102,8 +102,16 @@ export default function Dashboard() {
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
   const [monthlyLoadingTimer, setMonthlyLoadingTimer] = useState<NodeJS.Timeout | null>(null);
-  const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 48, minutes: 0, seconds: 0 });
-  const [countdownStartTime, setCountdownStartTime] = useState<number | null>(null);
+  const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
+  const [timeRemaining, setTimeRemaining] = useState(() => {
+    const diff = Math.max(0, OFFER_END_DATE - Date.now());
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((diff % (1000 * 60)) / 1000),
+    };
+  });
 
   const displayName = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || user?.email?.split("@")[0] || "User"; } catch { return user?.displayName || user?.email?.split("@")[0] || "User"; } })();
   const userInitial = displayName.charAt(0).toUpperCase();
@@ -531,71 +539,19 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
     }
   }, [lang, user?.uid]);
 
-  // Initialize countdown on component mount
   useEffect(() => {
-    const COUNTDOWN_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const STORAGE_KEY = 'shared_countdown_start';
-    
-    // Only initialize if countdownStartTime is not already set
-    if (countdownStartTime === null) {
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        let startTime: number;
-        
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          // Check if the stored countdown is still valid (less than 10 minutes old)
-          if (Date.now() - parsed.startTime < COUNTDOWN_DURATION) {
-            startTime = parsed.startTime;
-          } else {
-            // Reset if 10 minutes have passed
-            startTime = Date.now();
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({ startTime }));
-          }
-        } else {
-          // First time visiting - start now
-          startTime = Date.now();
-          localStorage.setItem(STORAGE_KEY, JSON.stringify({ startTime }));
-        }
-        
-        setCountdownStartTime(startTime);
-      } catch (error) {
-        // Fallback if localStorage fails
-        const fallbackStartTime = Date.now();
-        setCountdownStartTime(fallbackStartTime);
-      }
-    }
-  }, []); // Remove countdownStartTime dependency to prevent infinite loop
-
-  // Timer effect for 10-minute countdown
-  useEffect(() => {
-    if (!countdownStartTime) return;
-    
-    const COUNTDOWN_DURATION = 10 * 60 * 1000; // 10 minutes in milliseconds
-    const STORAGE_KEY = 'shared_countdown_start';
-    
+    const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
     const timer = setInterval(() => {
-      const elapsed = Date.now() - countdownStartTime;
-      const remaining = Math.max(0, COUNTDOWN_DURATION - elapsed);
-      
-      if (remaining === 0) {
-        // Reset countdown
-        const newStartTime = Date.now();
-        setCountdownStartTime(newStartTime);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({ startTime: newStartTime }));
-        setTimeRemaining({ hours: 0, minutes: 10, seconds: 0 });
-      } else {
-        const totalSeconds = Math.floor(remaining / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        
-        setTimeRemaining({ hours, minutes, seconds });
-      }
+      const diff = Math.max(0, OFFER_END_DATE - Date.now());
+      setTimeRemaining({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((diff % (1000 * 60)) / 1000),
+      });
     }, 1000);
-
     return () => clearInterval(timer);
-  }, [countdownStartTime]);
+  }, []);
 
   // Scroll detection for bottom of page
   useEffect(() => {
@@ -1095,9 +1051,11 @@ useEffect(() => {
             <div className="flex-1">
               <div className="rounded-sm bg-secondary/15 border border-border/60 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 lg:py-1.5 text-xs sm:text-xs lg:text-sm text-muted-foreground text-center">
                 <span className="text-xs sm:text-xs lg:text-sm">{t('specialOfferExpires')} <span className="inline-flex items-center space-x-0.5 sm:space-x-1">
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 sm:py-0.5 lg:py-0.5 rounded">{String(timeRemaining.hours).padStart(2, '0')}</span>
+                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String((timeRemaining as any).days ?? 0).padStart(2, '0')}d</span>
+                    <span className="text-muted-foreground font-mono font-bold leading-none"> </span>
+                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String(timeRemaining.hours).padStart(2, '0')}</span>
                     <span className="text-muted-foreground font-mono !text-3xl sm:!text-xs lg:!text-sm font-bold leading-none">:</span>
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 sm:py-0.5 lg:py-0.5 rounded">{String(timeRemaining.minutes).padStart(2, '0')}</span>
+                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String(timeRemaining.minutes).padStart(2, '0')}</span>
                     <span className="text-muted-foreground font-mono !text-3xl sm:!text-xs lg:!text-sm font-bold leading-none">:</span>
                     <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 sm:py-0.5 lg:py-0.5 rounded">{String(timeRemaining.seconds).padStart(2, '0')}</span>
                   </span> {t('getQuestionsFor')}</span>
@@ -1233,7 +1191,7 @@ useEffect(() => {
             </div>
           </Card>
 
-          {/* Offer Popup - Limited Time Deal */}
+           {/* Offer Popup - Limited Time Deal */}
           <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30 rounded-2xl mt-3 animate-pulse">
             <div className="absolute inset-0 opacity-30" style={{background:
               'radial-gradient(circle at 15% 20%, rgba(251,146,60,0.3) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(239,68,68,0.3) 0%, transparent 45%)'}} />
@@ -1243,14 +1201,15 @@ useEffect(() => {
                   <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full font-bold animate-blink">LIMITED TIME</span>
                   <span className="text-xs text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
-                <h3 className="font-bold text-lg text-orange-600 dark:text-orange-400 mb-1">Get 15 Questions for just Rs.399!</h3>
+                <h3 className="font-bold text-lg text-orange-600 dark:text-orange-400 mb-1">Get 30 Questions for just Rs.699!</h3>
                 <p className="text-sm text-muted-foreground">Deep Dive with Vedika: Get precise answers on love, career, and wealth.</p>
               </div>
-              <Button variant="cosmic" className="rounded-xl bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack")}>
+              <Button variant="cosmic" className="rounded-xl bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate("/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack")}>
                 Grab Now
               </Button>
             </div>
           </Card>
+
 
           {/* Predictions with Tabs - Only show if daily predictions are enabled */}
           {showDailyTabs && (

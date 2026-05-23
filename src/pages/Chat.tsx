@@ -969,6 +969,127 @@ export default function Chat() {
       </main>
       {/* Limit Warning Alert */}
       {showLimitWarning && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.88)',backdropFilter:'blur(6px)'}}>
+          <div id="vp-paywall" className="[&::-webkit-scrollbar]:hidden" style={{background:'#000',border:'1px solid #1c1c1c',borderRadius:20,width:'100%',maxWidth:380,padding:'24px 20px 20px',maxHeight:'95vh',overflowY:'auto',scrollbarWidth:'none'}}>
+            
+            <div style={{textAlign:'center',marginBottom:18}}>
+              <span style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(217,39,122,0.1)',border:'1px solid rgba(217,39,122,0.2)',borderRadius:100,padding:'4px 14px',fontSize:11,color:'#d9277a',fontWeight:500}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#d9277a',display:'inline-block'}}/>
+                687 people upgraded today
+              </span>
+            </div>
+
+            <div style={{textAlign:'center',marginBottom:16}}>
+              <img src="/optimized/vedika.webp" alt="Vedika" style={{width:62,height:62,borderRadius:'50%',border:'2px solid #d9277a',margin:'0 auto 14px',display:'block',objectFit:'cover'}}/>
+              <div style={{fontSize:17,fontWeight:600,color:'#fff',marginBottom:6,lineHeight:1.4,fontFamily:'Georgia,serif'}}>
+                Vedika has more to reveal...
+              </div>
+              <div style={{fontSize:12,color:'#666',lineHeight:1.6}}>
+                Your free reading is over. But your kundali holds a secret Vedika hasn't told you yet.
+              </div>
+            </div>
+
+            {[
+              {id:'149',price:149,name:'Starter',qs:5,features:[]},
+              {id:'399',price:399,name:'Popular',qs:15,popular:true,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
+              {id:'699',price:699,name:'Full Reading',qs:30,features:[]},
+            ].map((plan) => {
+              const sel = (window as any)._vp_selected === plan.id || (!((window as any)._vp_selected) && plan.id === '399');
+              return (
+                <div key={plan.id}
+                  onClick={() => { (window as any)._vp_selected = plan.id; document.getElementById('vp-cta')!.textContent = `Unlock ${plan.qs} Questions — ₹${plan.price}`; }}
+                  style={{border: sel ? '2px solid #d9277a' : '1px solid #1e1e1e',borderRadius:12,padding:'11px 14px',cursor:'pointer',background: sel ? 'rgba(217,39,122,0.06)' : '#0a0a0a',position:'relative',marginBottom:8,transition:'all 0.15s'}}
+                >
+                  {plan.popular && <span style={{position:'absolute',top:-9,left:12,background:'#d9277a',color:'#fff',fontSize:10,fontWeight:500,padding:'2px 10px',borderRadius:100}}>Most popular</span>}
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                    <div style={{display:'flex',alignItems:'center',gap:10}}>
+                      <div style={{width:15,height:15,borderRadius:'50%',border:`2px solid ${sel?'#d9277a':'#333'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                        {sel && <div style={{width:7,height:7,borderRadius:'50%',background:'#d9277a'}}/>}
+                      </div>
+                      <div>
+                        <div style={{fontSize:13,fontWeight:500,color:'#fff'}}>{plan.name}</div>
+                        <div style={{fontSize:11,color:'#555'}}>{plan.qs} questions</div>
+                      </div>
+                    </div>
+                    <div style={{fontSize:15,fontWeight:600,color:'#fff'}}>₹{plan.price}</div>
+                  </div>
+                  {sel && plan.features.length > 0 && (
+                    <div style={{borderTop:'1px solid #2a0018',marginTop:10,paddingTop:10,display:'flex',flexDirection:'column',gap:5}}>
+                      {plan.features.map(f => (
+                        <div key={f} style={{display:'flex',alignItems:'center',gap:7,fontSize:11,color:'#999'}}>
+                          <span style={{color:'#d9277a'}}>✓</span> {f}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            <button
+              id="vp-cta"
+              onClick={() => {
+                const sel = (window as any)._vp_selected || '399';
+                const map: any = {'149':{plan:'Quick Ask',amount:149,type:'pack'},'399':{plan:'Deep Dive',amount:399,type:'pack'},'699':{plan:'Full Reading',amount:699,type:'pack'}};
+                const p = map[sel];
+                navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
+                setShowLimitWarning(false);
+              }}
+              style={{width:'100%',background:'#d9277a',border:'none',borderRadius:12,padding:14,fontSize:14,fontWeight:600,color:'#fff',cursor:'pointer',marginBottom:10,fontFamily:'Georgia,serif'}}
+            >
+              Unlock 15 Questions — ₹399
+            </button>
+
+            <button
+              onClick={() => {
+                setShowLimitWarning(false);
+                const streamAssistantMessage = (text: string) => {
+                  const words = text.split(' ');
+                  const messageIndexRef = { current: -1 };
+                  setMessages(m => {
+                    messageIndexRef.current = m.length;
+                    return [...m, { role: 'assistant', content: '' }];
+                  });
+
+                  let wordIndex = 0;
+                  const interval = window.setInterval(() => {
+                    setMessages(m => {
+                      const copy = [...m];
+                      const messageIndex = messageIndexRef.current;
+                      if (messageIndex >= 0 && copy[messageIndex]?.role === 'assistant') {
+                        const nextWord = words[wordIndex];
+                        copy[messageIndex] = {
+                          role: 'assistant',
+                          content: `${copy[messageIndex].content}${copy[messageIndex].content ? ' ' : ''}${nextWord}`
+                        };
+                      }
+                      return copy;
+                    });
+                    wordIndex += 1;
+                    if (wordIndex >= words.length) {
+                      window.clearInterval(interval);
+                    }
+                  }, 75);
+                };
+
+                setTimeout(() => {
+                  const name = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || ''; } catch { return ''; } })();
+                  const greeting = name ? `${name}, before` : 'Before';
+                  streamAssistantMessage(`${greeting} you go — I noticed something unusual in your chart. Something that doesn't show up often. It's connected to a decision you've been avoiding. I won't bring it up again unless you ask.`);
+                  setTimeout(() => {
+                    streamAssistantMessage("The window I saw... it's tied to the next 90 days. After that, the planetary shift changes everything. Just so you know.");
+                  }, 2200);
+                }, 400);
+              }}
+              style={{display:'block',width:'100%',textAlign:'center',fontSize:12,color:'#444',background:'transparent',border:'none',cursor:'pointer',padding:'4px'}}
+            >
+              Maybe later
+            </button>
+
+          </div>
+        </div>
+      )}
+      {false && showLimitWarning && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.85)' }}>
           <div className="rounded-2xl p-6 md:p-8 max-w-sm w-full text-center" style={{ background: '#0d0d0d', border: '0.5px solid #222' }}>
             {/* Social proof badge */}
