@@ -239,7 +239,8 @@ KEY INSIGHTS:
           systemExtra: JSON.stringify(astroData),
           userName: birthDetails.name,
           stream: false,  // report ke liye streaming nahi chahiye
-          lang: "en"
+          lang: "en",
+          apiKeySlot: "secondary"
         })
       });
 

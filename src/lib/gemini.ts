@@ -40,20 +40,21 @@ FINAL CHECK:
 If any fails → rewrite now.
 `;
 export type ChatTurn = { role: "user" | "assistant"; content: string };
+type ApiKeySlot = "primary" | "secondary";
 
 /**
  * Sends a prompt and chat history to the Gemini API using a standard HTTP request
  * (no streaming) and returns the full response text. Includes fallback logic.
  * Current date/time is automatically included by the backend.
  */
-export async function generateGemini(prompt: string, history: ChatTurn[] = [], systemExtra?: string, lang: string = "en", userName?: string): Promise<string> {
+export async function generateGemini(prompt: string, history: ChatTurn[] = [], systemExtra?: string, lang: string = "en", userName?: string, apiKeySlot: ApiKeySlot = "primary"): Promise<string> {
   // Proxy through serverless function to avoid exposing keys
   // Backend automatically includes current date/time in IST
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || '';
   const res = await fetch(`${API_BASE}/api/mistral`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, history, systemExtra, lang, userName }),
+    body: JSON.stringify({ prompt, history, systemExtra, lang, userName, apiKeySlot }),
   });
   if (!res.ok) throw new Error(await res.text());
   const data = await res.json();
@@ -69,7 +70,8 @@ export async function generateGeminiStream(
   onDelta?: (text: string) => void,
   systemExtra?: string,
   lang: string = "en",
-  userName?: string
+  userName?: string,
+  apiKeySlot: ApiKeySlot = "primary"
 ): Promise<string> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || '';
   
@@ -77,7 +79,7 @@ export async function generateGeminiStream(
     const response = await fetch(`${API_BASE}/api/mistral`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, history, systemExtra, stream: true, lang, userName }),
+      body: JSON.stringify({ prompt, history, systemExtra, stream: true, lang, userName, apiKeySlot }),
     });
 
     if (!response.ok) {
@@ -128,6 +130,6 @@ export async function generateGeminiStream(
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Fallback to non-streaming (only once)
-    return await generateGemini(prompt, history, systemExtra, lang, userName);
+    return await generateGemini(prompt, history, systemExtra, lang, userName, apiKeySlot);
   }
 }

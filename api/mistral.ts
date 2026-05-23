@@ -268,7 +268,7 @@ export default async function handler(req: Request) {
       );
     }
     
-    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en" } = body || {};
+    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary" } = body || {};
     if (!prompt || typeof prompt !== 'string') return new Response(
       JSON.stringify({ error: 'Missing or invalid prompt' }),
       { status: 422, headers: { 'Content-Type': 'application/json' } }
@@ -282,9 +282,10 @@ export default async function handler(req: Request) {
       prompt = prompt.substring(0, MAX_PROMPT_CHARS) + "...";
     }
 
-    const keyEnv = process.env.MISTRAL_API_KEY_2;
+    const keyName = apiKeySlot === "secondary" ? "MISTRAL_API_KEY_2" : "MISTRAL_API_KEY";
+    const keyEnv = keyName === "MISTRAL_API_KEY_2" ? process.env.MISTRAL_API_KEY_2 : process.env.MISTRAL_API_KEY;
     if (!keyEnv) return new Response(
-      JSON.stringify({ error: 'Server missing MISTRAL_API_KEY_2' }),
+      JSON.stringify({ error: `Server missing ${keyName}` }),
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
     const key: string = keyEnv;

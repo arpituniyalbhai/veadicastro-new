@@ -212,7 +212,7 @@ export default function FreeAiAstrologyChat() {
           if (last?.role === "assistant") return [...p.slice(0, -1), { role: "assistant" as const, content: last.content + delta }];
           return [...p, { role: "assistant" as const, content: delta }];
         });
-      }, sys);
+      }, sys, language, undefined, "secondary");
       clearInterval(iv); setThinkingMessage("");
     } catch {
       clearInterval(iv); setThinkingMessage("");
