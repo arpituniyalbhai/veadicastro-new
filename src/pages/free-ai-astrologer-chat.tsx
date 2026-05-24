@@ -465,7 +465,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               "name": "Is the AI astrology chat really free?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Veadicastro offers a free AI astrology chat — no signup required for your first question. Create a free account to get 2 free chats every day."
+                "text": "Yes. Veadicastro offers a free AI astrology chat — no signup required for your first question. Create a free account to get 1 free chat."
               }
             },
             {
@@ -1098,10 +1098,10 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 <img src="/optimized/vedika.webp" alt="Vedika — AI Vedic astrologer by Veadicastro" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-2xl font-bold mb-3 text-white">
-                Sign up to Get 2 Chat Free <span className="text-pink-400">Per Day</span>
+                Sign up to Get 1 Chat Free
               </h3>
               <p className="text-white/60 text-sm mb-6">
-                You've used your free question! Sign up to get 2 free chats every day and unlock unlimited astrology insights.
+                You've used your free question! Sign up to get 1 free chat and unlock deeper astrology insights.
               </p>
               <div className="space-y-3">
                 <button

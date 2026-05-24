@@ -50,10 +50,10 @@ const sanitizeAIResponse = (text: string): string => {
     .replace(/\s+/g, " ")
     .trim();
   
-  // Truncate to under 400 words
+  // Truncate to under 1000 words
   const words = cleaned.split(/\s+/);
-  if (words.length > 400) {
-    cleaned = words.slice(0, 400).join(" ") + "...";
+  if (words.length > 1000) {
+    cleaned = words.slice(0, 1000).join(" ") + "...";
   }
   
   return cleaned;
@@ -183,14 +183,14 @@ Planetary Data: ${personPlanets || 'Not available'}
 
 Relationship Type: ${relationshipContext[type]}
 
-Provide a compatibility score out of 10, followed by a concise analysis in under 400 words total. Include:
+Provide a compatibility score out of 10, followed by a detailed analysis between 600-1000 words. Include:
 1. Compatibility Score: X.X/10
 2. Overall Analysis (brief, under 300 words)
 3. 2-3 key strengths
 4. 2-3 challenges
 5. 2-3 recommendations
 
-Keep it practical and insightful. Use plain text only - no markdown, bold, or formatting. Total response must be under 400 words.`.trim();
+Give deep, detailed insights for each section. Use plain text only - no markdown, bold, or formatting. Total response must be between 600-1000 words.`.trim();
 
       const promptText = lang === "hi" 
         ? `मेरे और ${person.name} के बीच ${relationshipContext[type]} का विस्तृत विश्लेषण प्रदान करें।`
@@ -235,9 +235,10 @@ Keep it practical and insightful. Use plain text only - no markdown, bold, or fo
         if (analysisMatch2) {
           analysis = analysisMatch2[1].trim();
         } else {
-          // Pattern 3: Use first paragraph
+          // Pattern 3: Use everything before first named section, or full response
           const paragraphs = response.split('\n\n').filter(p => p.trim());
-          analysis = paragraphs[0] || response.substring(0, 200);
+          // Join multiple paragraphs for full analysis
+          analysis = paragraphs.slice(0, 3).join('\n\n') || response.substring(0, 600);
         }
       }
       

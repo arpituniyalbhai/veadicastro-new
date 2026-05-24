@@ -54,7 +54,7 @@ const dict: Dict = {
   monthlyPredictions: { en: "Monthly Predictions", hi: "मासिक भविष्यवाणी" },
   available: { en: "available", hi: "उपलब्ध" },
   yourReportReady: { en: "A Big Change is Coming in the Next 30 Days...", hi: "अगले 30 दिनों में आपके जीवन में एक बड़ा बदलाव आने वाला है..." },
-  promoParagraph: { en: "This is not a normal report - it shows a specific change coming in your life that could be life-altering.", hi: "यह एक सामान्य रिपोर्ट नहीं है - यह आपके जीवन में आने वाले एक विशिष्ट परिवर्तन को दर्शाता है जो जीवन बदलने वाला हो सकता है।" },
+  promoParagraph: { en: "This is not a normal Personal Growth report - it shows a specific change coming in your life that could be life-altering.", hi: "यह एक सामान्य रिपोर्ट नहीं है - यह आपके जीवन में आने वाले एक विशिष्ट परिवर्तन को दर्शाता है जो जीवन बदलने वाला हो सकता है।" },
   reportWarning: { en: "If this is ignored, it could affect your decisions", hi: "अगर इसे नजरअंदाज किया जाए, तो यह आपके फैसलों को प्रभावित कर सकता है" },
   upgradeTitle: { en: "Want to see more? ✨", hi: "और देखना चाहते हैं? ✨" },
   upgradeDesc: { en: "Unlock Vedika 2.0, just upgrade to any plan and ask what you want!", hi: "वेदिका 2.0 अनलॉक करें, बस कोई भी प्लान अपग्रेड करें और पूछो जो आप चाहते हैं!" },

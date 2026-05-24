@@ -1623,7 +1623,7 @@ Respond in English only.`;
                 Your question: <span style={{ color:"#ec4899", fontWeight:500 }}>"{question}"</span>
               </p>
               <p style={{ color:"rgba(255,255,255,0.5)", fontSize:"13px", marginBottom:"20px" }}>
-                You've used your free question! Sign up to get 5 free chats every day and unlock unlimited astrology insights.
+                You've used your free question! Sign up to get 1 free chat and unlock deeper astrology insights.
               </p>
             </div>
             <div style={{ display:"flex", flexDirection:"column", gap:"12px" }}>
@@ -1670,7 +1670,7 @@ Respond in English only.`;
               </button>
             </div>
             <p style={{ color:"rgba(255,255,255,0.3)", fontSize:"12px", textAlign:"center", marginTop:"16px" }}>
-              You have to sign up for free questions. You get up to 5 questions per day.
+              You have to sign up for your free question. You get 1 free chat.
             </p>
           </div>
         </div>

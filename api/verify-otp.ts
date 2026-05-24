@@ -115,6 +115,7 @@ export async function POST(req: any, res: any) {
         email: emailLower,
         planName: 'Free',
         isPremium: false,
+        credits: 1,
         questionsUsed: 0,
         reportsUsed: 0,
         createdAt: new Date(),

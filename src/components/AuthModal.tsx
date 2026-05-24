@@ -50,13 +50,13 @@ const AuthModal = () => {
         return;
       }
       
-      // First time only — create fresh doc with 2 free credits
+      // First time only — create fresh doc with 1 free credit
       await setDoc(userDocRef, {
         uid,
         email: normalizedEmail,
         displayName: userName,
         planName: "Free",
-        credits: 2,
+        credits: 1,
         reportCredits: 0,
         compatibilitycredits: 0,
         purchasedReports: [],

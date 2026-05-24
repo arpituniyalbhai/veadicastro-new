@@ -63,7 +63,7 @@ type PlanContextType = {
 const PlanContext = createContext<PlanContextType | undefined>(undefined);
 
 const PLAN_CREDITS: Record<PlanName, number> = {
-  Free: 2,
+  Free: 1,
   Standard: 10,
   Premium: 15,
   "Quick Ask": 5,
@@ -124,7 +124,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
   const [planName, setPlanName] = useState<PlanName>("Free");
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
   const [unlimitedExpiry, setUnlimitedExpiry] = useState<Date | null>(null);
-  const [credits, setCredits] = useState<number>(3);
+  const [credits, setCredits] = useState<number>(1);
   const creditsRef = useRef(credits);
   creditsRef.current = credits; // Keep ref updated
   
@@ -162,7 +162,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
-          const newCredits = data.credits ?? 3;
+          const newCredits = data.credits ?? 1;
           const newReportCredits = data.reportCredits ?? 0;
           const newCompatibilityCredits = data.compatibilitycredits ?? 0;
           const newPlanName = data.planName ?? "Free";
@@ -231,7 +231,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       const userDocRef = doc(db, "users", user.email);
       await setDoc(userDocRef, {
         planName: "Free",
-        credits: 2,
+        credits: 1,
         reportCredits: 0,
         compatibilitycredits: 0,
         purchasedReports: [],
@@ -565,7 +565,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
   const applyPlanLocally = useCallback((plan: PlanName, expires?: Date | null) => {
     setPlanName(plan);
     setExpiresAt(expires || null);
-    setCredits(PLAN_CREDITS[plan] ?? 2);
+    setCredits(PLAN_CREDITS[plan] ?? 1);
     
     if (plan === "Day Pass") {
       // Set expiry to 11:59:59 PM IST (Indian Standard Time)
@@ -597,7 +597,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     requireFeature,
     refreshPlan,
     applyPlanLocally,
-    allowedQuestions: PLAN_CREDITS[planName] ?? 2,
+    allowedQuestions: PLAN_CREDITS[planName] ?? 1,
     usedQuestions: 0,
     canAskMoreQuestions,
     registerQuestionUsage,

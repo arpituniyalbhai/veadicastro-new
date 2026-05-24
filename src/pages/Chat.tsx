@@ -228,6 +228,8 @@ export default function Chat() {
   const LIFETIME_KEY = "chat_free_used"; // legacy key, kept for backward compatibility
   const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedPlan, setSelectedPlan] = useState<string>('399');
+  const selectedPlanMap: any = {'149':{plan:'Quick Ask',amount:149,type:'pack',qs:5},'399':{plan:'Deep Dive',amount:399,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
 
   const displayName = (() => { 
     try { 
@@ -969,7 +971,7 @@ export default function Chat() {
       </main>
       {/* Limit Warning Alert */}
       {showLimitWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.88)',backdropFilter:'blur(6px)'}}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.92)'}}>
           <div id="vp-paywall" className="[&::-webkit-scrollbar]:hidden" style={{background:'#000',border:'1px solid #1c1c1c',borderRadius:20,width:'100%',maxWidth:380,padding:'24px 20px 20px',maxHeight:'95vh',overflowY:'auto',scrollbarWidth:'none'}}>
             
             <div style={{textAlign:'center',marginBottom:18}}>
@@ -994,11 +996,11 @@ export default function Chat() {
               {id:'399',price:399,name:'Popular',qs:15,popular:true,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
               {id:'699',price:699,name:'Full Reading',qs:30,features:[]},
             ].map((plan) => {
-              const sel = (window as any)._vp_selected === plan.id || (!((window as any)._vp_selected) && plan.id === '399');
+              const sel = selectedPlan === plan.id;
               return (
                 <div key={plan.id}
-                  onClick={() => { (window as any)._vp_selected = plan.id; document.getElementById('vp-cta')!.textContent = `Unlock ${plan.qs} Questions — ₹${plan.price}`; }}
-                  style={{border: sel ? '2px solid #d9277a' : '1px solid #1e1e1e',borderRadius:12,padding:'11px 14px',cursor:'pointer',background: sel ? 'rgba(217,39,122,0.06)' : '#0a0a0a',position:'relative',marginBottom:8,transition:'all 0.15s'}}
+                  onClick={() => setSelectedPlan(plan.id)}
+                  style={{border: sel ? '2px solid #d9277a' : '1px solid #1e1e1e',borderRadius:12,padding:'11px 14px',cursor:'pointer',background: sel ? 'rgba(217,39,122,0.06)' : '#0a0a0a',position:'relative',marginBottom:8,transition:'border 0.1s,background 0.1s',willChange:'border,background'}}
                 >
                   {plan.popular && <span style={{position:'absolute',top:-9,left:12,background:'#d9277a',color:'#fff',fontSize:10,fontWeight:500,padding:'2px 10px',borderRadius:100}}>Most popular</span>}
                   <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
@@ -1029,15 +1031,13 @@ export default function Chat() {
             <button
               id="vp-cta"
               onClick={() => {
-                const sel = (window as any)._vp_selected || '399';
-                const map: any = {'149':{plan:'Quick Ask',amount:149,type:'pack'},'399':{plan:'Deep Dive',amount:399,type:'pack'},'699':{plan:'The Power Pack',amount:699,type:'pack'}};
-                const p = map[sel];
+                const p = selectedPlanMap[selectedPlan];
                 navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
                 setShowLimitWarning(false);
               }}
               style={{width:'100%',background:'#d9277a',border:'none',borderRadius:12,padding:14,fontSize:14,fontWeight:600,color:'#fff',cursor:'pointer',marginBottom:10,fontFamily:'Georgia,serif'}}
             >
-              Unlock 15 Questions — ₹399
+              Unlock {selectedPlanMap[selectedPlan]?.qs} Questions — ₹{selectedPlanMap[selectedPlan]?.amount}
             </button>
 
             <button
