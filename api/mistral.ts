@@ -411,7 +411,8 @@ Wrong format = rewrite before sending.`;
       prompt.includes('"luckyColor"') ||
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
-    const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : isMonthly ? 600 : 350;
+    const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
+    const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : isMonthly ? 600 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
     const model = isMonthly ? 'ministral-8b-latest' : 'mistral-small-latest';

@@ -14,7 +14,7 @@ async function generateGemini(prompt: string, history: any[] = [], systemExtra?:
   const res = await fetch(`${API_BASE}/api/mistral`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, history, systemExtra }),
+    body: JSON.stringify({ prompt, history, systemExtra, apiKeySlot: "secondary" }),
   });
   if (!res.ok) throw new Error(await res.text());
   const data = await res.json();
@@ -165,7 +165,7 @@ const CompatibilityResult = () => {
         ? "CRITICAL: You MUST respond ONLY in pure Hindi (Devanagari script). Do NOT use any English words, Hinglish, or mixed language. Write everything in complete Hindi sentences using Devanagari script. Never use English words - always use Hindi equivalents. If you use any English words, the response is incorrect. Respond entirely in Hindi Devanagari script only."
         : "Respond in English.";
 
-      const systemBlock = `You are an expert Vedic astrologer specializing in compatibility analysis. Analyze the compatibility between two people based on their birth charts and planetary positions.
+      const systemBlock = `You are an expert Vedic astrologer specializing in Vedic compatibility analysis using Ashta Koot Milan system.
 
 ${langInstruction}
 
@@ -183,14 +183,29 @@ Planetary Data: ${personPlanets || 'Not available'}
 
 Relationship Type: ${relationshipContext[type]}
 
-Provide a compatibility score out of 10, followed by a detailed analysis between 600-1000 words. Include:
-1. Compatibility Score: X.X/10
-2. Overall Analysis (brief, under 300 words)
-3. 2-3 key strengths
-4. 2-3 challenges
-5. 2-3 recommendations
+Write a detailed Vedic compatibility reading of minimum 600 words. Structure your response EXACTLY like this with these exact headings:
 
-Give deep, detailed insights for each section. Use plain text only - no markdown, bold, or formatting. Total response must be between 600-1000 words.`.trim();
+Compatibility Score: [X.X]/10
+
+Overall Analysis:
+[Write 3-4 detailed paragraphs covering overall energy between these two people, their planetary interactions, moon sign compatibility, sun sign dynamics, and what this relationship fundamentally means astrologically. Be specific with planet names, houses, and nakshatras from the provided data. Minimum 250 words here.]
+
+Strengths:
+- [Specific strength with planetary reason, minimum 30 words]
+- [Specific strength with planetary reason, minimum 30 words]
+- [Specific strength with planetary reason, minimum 30 words]
+
+Challenges:
+- [Specific challenge with planetary reason, minimum 30 words]
+- [Specific challenge with planetary reason, minimum 30 words]
+- [Specific challenge with planetary reason, minimum 30 words]
+
+Recommendations:
+- [Specific actionable advice based on chart, minimum 30 words]
+- [Specific actionable advice based on chart, minimum 30 words]
+- [Specific actionable advice based on chart, minimum 30 words]
+
+Use plain text only. No markdown, no bold, no asterisks. Be specific, detailed, and insightful. Total minimum 600 words.`.trim();
 
       const promptText = lang === "hi" 
         ? `मेरे और ${person.name} के बीच ${relationshipContext[type]} का विस्तृत विश्लेषण प्रदान करें।`
@@ -213,75 +228,79 @@ Give deep, detailed insights for each section. Use plain text only - no markdown
   };
 
   const parseCompatibilityResponse = (response: string): CompatibilityData => {
-    console.log('Raw AI Response:', response); // Debug log
-    
+    console.log('Raw AI Response:', response);
     try {
-      // Extract score - more flexible pattern
-      const scoreMatch = response.match(/(?:Compatibility Score:?\s*|Score:?\s*)?(\d+(?:\.\d+)?)(?:\s*\/\s*10)?/i);
+      // Extract score
+      const scoreMatch = response.match(/(\d+(?:\.\d+)?)\s*\/\s*10/i);
       const score = scoreMatch ? parseFloat(scoreMatch[1]) : 7.5;
-      
-      console.log('Extracted score:', score); // Debug log
 
-      // Try to extract analysis - more flexible patterns
+      // Extract Overall Analysis section
       let analysis = "";
-      
-      // Pattern 1: Look for "Overall Analysis"
-      const analysisMatch1 = response.match(/(?:Overall Analysis:?|Analysis:?)(.*?)(?=\n*(?:Strengths?|Challenges?|Recommendations?|$))/si);
-      if (analysisMatch1) {
-        analysis = analysisMatch1[1].trim();
+      const analysisMatch = response.match(/Overall Analysis:?([\s\S]*?)(?=\n(?:Strengths?|Key Strengths?):)/i);
+      if (analysisMatch) {
+        analysis = analysisMatch[1].trim();
       } else {
-        // Pattern 2: Look for any text before the first section
-        const analysisMatch2 = response.match(/^(.*?)(?=\n*(?:Strengths?|Challenges?|Recommendations?|\d+\.))/si);
-        if (analysisMatch2) {
-          analysis = analysisMatch2[1].trim();
-        } else {
-          // Pattern 3: Use everything before first named section, or full response
-          const paragraphs = response.split('\n\n').filter(p => p.trim());
-          // Join multiple paragraphs for full analysis
-          analysis = paragraphs.slice(0, 3).join('\n\n') || response.substring(0, 600);
-        }
+        // Fallback: take everything between score line and first section
+        const afterScore = response.replace(/Compatibility Score.*?\n/i, '').trim();
+        const beforeStrengths = afterScore.split(/\n(?:Strengths?|Key Strengths?):/i)[0];
+        analysis = beforeStrengths.trim();
       }
-      
-      console.log('Extracted analysis:', analysis); // Debug log
+      // If still empty, use first 500 chars
+      if (!analysis || analysis.length < 50) {
+        analysis = response.substring(0, 500);
+      }
 
-      // Extract strengths - more flexible
-      const strengthsMatch = response.match(/(?:Strengths:?|Key Strengths:?|Positive Points:?)(.*?)(?=\n*(?:Challenges?|Recommendations?|\d+\.|$))/si);
-      const strengthsText = strengthsMatch ? strengthsMatch[1].trim() : "";
-      const strengths = strengthsText.split('\n').filter(s => s.trim()).map(s => s.replace(/^[-•*\d+\.]\s*/, '').trim()).filter(s => s.length > 0);
+      // Extract strengths
+      const strengthsMatch = response.match(/(?:Strengths?|Key Strengths?):?([\s\S]*?)(?=\n(?:Challenges?|Areas to Work|Weaknesses?):)/i);
+      const strengths = strengthsMatch
+        ? strengthsMatch[1].split('\n')
+            .map(s => s.replace(/^[\-\*\�\d\.]+\s*/, '').trim())
+            .filter(s => s.length > 15)
+            .slice(0, 3)
+        : ["Strong Venus-Moon connection supports emotional bonding and mutual affection between partners.",
+           "Compatible Mercury placements enhance communication and intellectual understanding.",
+           "Favorable Jupiter aspect brings growth, optimism and shared life philosophy."];
 
-      // Extract challenges - more flexible  
-      const challengesMatch = response.match(/(?:Challenges:?|Areas to Work On:?|Weaknesses:?)(.*?)(?=\n*(?:Recommendations?|\d+\.|$))/si);
-      const challengesText = challengesMatch ? challengesMatch[1].trim() : "";
-      const challenges = challengesText.split('\n').filter(s => s.trim()).map(s => s.replace(/^[-•*\d+\.]\s*/, '').trim()).filter(s => s.length > 0);
+      // Extract challenges
+      const challengesMatch = response.match(/(?:Challenges?|Areas to Work On|Weaknesses?):?([\s\S]*?)(?=\n(?:Recommendations?|Advice|Suggestions?):)/i);
+      const challenges = challengesMatch
+        ? challengesMatch[1].split('\n')
+            .map(s => s.replace(/^[\-\*\�\d\.]+\s*/, '').trim())
+            .filter(s => s.length > 15)
+            .slice(0, 3)
+        : ["Saturn influence may bring occasional delays and tests that require patience from both sides.",
+           "Mars square positions can create friction during high-stress periods needing conscious effort.",
+           "Different Rahu-Ketu axis suggests karmic lessons that need mutual understanding to navigate."];
 
-      // Extract recommendations - more flexible
-      const recommendationsMatch = response.match(/(?:Recommendations:?|Advice:?|Suggestions:?)(.*?)(?=$)/si);
-      const recommendationsText = recommendationsMatch ? recommendationsMatch[1].trim() : "";
-      const recommendations = recommendationsText.split('\n').filter(s => s.trim()).map(s => s.replace(/^[-•*\d+\.]\s*/, '').trim()).filter(s => s.length > 0);
+      // Extract recommendations
+      const recommendationsMatch = response.match(/(?:Recommendations?|Advice|Suggestions?):?([\s\S]*?)$/i);
+      const recommendations = recommendationsMatch
+        ? recommendationsMatch[1].split('\n')
+            .map(s => s.replace(/^[\-\*\�\d\.]+\s*/, '').trim())
+            .filter(s => s.length > 15)
+            .slice(0, 3)
+        : ["Practice open and honest communication especially during Mercury retrograde periods.",
+           "Honor each other's Moon sign needs - emotional security is the foundation of this bond.",
+           "Perform Venus-related remedies together such as Friday prayers or wearing white to strengthen love."];
 
-      const result = {
-        score: Math.min(10, Math.max(0, score)),
-        analysis: analysis || response.substring(0, 300) || "Compatibility analysis generated successfully.",
-        strengths: strengths.length > 0 ? strengths.slice(0, 3) : ["Good planetary alignment", "Compatible moon signs"],
-        challenges: challenges.length > 0 ? challenges.slice(0, 3) : ["Minor timing considerations"],
-        recommendations: recommendations.length > 0 ? recommendations.slice(0, 3) : ["Focus on communication", "Build trust gradually"]
+      return {
+        score: Math.min(10, Math.max(1, score)),
+        analysis,
+        strengths,
+        challenges,
+        recommendations
       };
-      
-      console.log('Parsed result:', result); // Debug log
-      return result;
     } catch (error) {
-      console.error("Error parsing response:", error);
-      console.log('Falling back to default data due to parsing error');
+      console.error("Parsing error:", error);
       return {
         score: 7.5,
-        analysis: response || "Unable to generate detailed analysis at this moment.",
-        strengths: ["Good planetary alignment", "Compatible moon signs"],
-        challenges: ["Minor timing considerations"],
-        recommendations: ["Focus on communication", "Build trust gradually"]
+        analysis: response.length > 50 ? response.substring(0, 800) : "This is a meaningful connection with strong astrological foundations. The planetary positions indicate complementary energies that can create a harmonious and fulfilling relationship when both individuals understand each other's cosmic blueprint.",
+        strengths: ["Strong Venus-Moon connection supports emotional bonding.", "Compatible Mercury placements enhance communication.", "Favorable Jupiter aspect brings shared growth."],
+        challenges: ["Saturn influence may bring occasional tests requiring patience.", "Mars positions need conscious effort during stress.", "Different Rahu-Ketu axis brings karmic lessons."],
+        recommendations: ["Practice open communication especially during retrograde periods.", "Honor each other's Moon sign emotional needs.", "Perform Venus remedies together to strengthen the bond."]
       };
     }
   };
-
   const getScoreColor = (score: number) => {
     if (score >= 8) return "text-green-400";
     if (score >= 6) return "text-yellow-400";
@@ -422,3 +441,4 @@ Give deep, detailed insights for each section. Use plain text only - no markdown
 };
 
 export default CompatibilityResult;
+

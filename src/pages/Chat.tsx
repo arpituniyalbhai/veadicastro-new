@@ -899,7 +899,7 @@ export default function Chat() {
                             return (
                               <>
                                 <span style={{ whiteSpace: 'pre-wrap' }}>{mainText}</span>
-                                <div className="mt-3 pt-3 border-t border-border/30 text-muted-foreground/80 italic text-xs">
+                                <div className="mt-3">
                                   {lastSentence}
                                 </div>
                               </>
