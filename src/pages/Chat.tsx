@@ -885,16 +885,22 @@ export default function Chat() {
                       {m.role === "assistant" ? (
                         (() => {
                           const content = m.content || "";
-                          const lines = content.split('\n');
-                          const lastLine = lines[lines.length - 1]?.trim();
-                          const isFollowUp = lastLine?.endsWith('?') && lines.length > 1;
+                          // Split by sentence - newline ya period+space pe
+                          const sentences = content
+                            .replace(/([.!])\s+/g, '$1\n')
+                            .split('\n')
+                            .map(s => s.trim())
+                            .filter(Boolean);
+
+                          const lastSentence = sentences[sentences.length - 1] || '';
+                          const isFollowUp = lastSentence.endsWith('?') && sentences.length > 1;
                           if (isFollowUp) {
-                            const mainText = lines.slice(0, -1).join('\n').trim();
+                            const mainText = sentences.slice(0, -1).join(' ').trim();
                             return (
                               <>
                                 <span style={{ whiteSpace: 'pre-wrap' }}>{mainText}</span>
                                 <div className="mt-3 pt-3 border-t border-border/30 text-muted-foreground/80 italic text-xs">
-                                  {lastLine}
+                                  {lastSentence}
                                 </div>
                               </>
                             );
