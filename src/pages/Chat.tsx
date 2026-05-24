@@ -581,6 +581,8 @@ export default function Chat() {
         out = normalizeDigits(out);
         // Add spacing between digits and letters
         out = out.replace(/([a-zA-Z\u0900-\u097F])(\d)/g, '$1 $2').replace(/(\d)([a-zA-Z\u0900-\u097F])/g, '$1 $2');
+        // Fix "7 th" -> "7th", "2 nd" -> "2nd"
+        out = out.replace(/(\d)\s+(st|nd|rd|th)\b/gi, '$1$2');
         return out;
       };
 
@@ -879,7 +881,30 @@ export default function Chat() {
                     </div>
                   )}
                   <Card className={`${m.role === "user" ? "bg-secondary/15" : "bg-card/40"} max-w-[80%] px-4 py-3 rounded-2xl border border-border/60 whitespace-pre-wrap ${m.role === "user" ? "" : "ml-1 sm:ml-3"}`}>
-                    <div className="text-sm">{m.content}</div>
+                    <div className="text-sm">
+                      {m.role === "assistant" ? (
+                        (() => {
+                          const content = m.content || "";
+                          const lines = content.split('\n');
+                          const lastLine = lines[lines.length - 1]?.trim();
+                          const isFollowUp = lastLine?.endsWith('?') && lines.length > 1;
+                          if (isFollowUp) {
+                            const mainText = lines.slice(0, -1).join('\n').trim();
+                            return (
+                              <>
+                                <span style={{ whiteSpace: 'pre-wrap' }}>{mainText}</span>
+                                <div className="mt-3 pt-3 border-t border-border/30 text-muted-foreground/80 italic text-xs">
+                                  {lastLine}
+                                </div>
+                              </>
+                            );
+                          }
+                          return <span style={{ whiteSpace: 'pre-wrap' }}>{content}</span>;
+                        })()
+                      ) : (
+                        m.content
+                      )}
+                    </div>
                   </Card>
                 </div>
               )
