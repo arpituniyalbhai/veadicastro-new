@@ -462,8 +462,8 @@ Respond in English only.`;
   return (
     <>
       <Helmet>
-        <title>Free Kundli Generator by dob | Janam Kundli Online — Veadicastro</title>
-        <meta name="description" content="Generate your free Vedic astrology chart and birth chart with Veadicastro's AI-powered Vedic astrology calculator. Get instant kundali, dosha analysis & personalized remedies. Kundali online available 24/7. No sign-up needed." />
+        <title>Free Kundli by Date of Birth | Janam Kundli Online — Instant & Accurate</title>
+        <meta name="description" content="Generate your free Janam Kundli by date of birth, time & place. Get instant Vedic birth chart, dosha analysis, dasha timeline & AI predictions. No sign-up needed." />
         <meta name="keywords" content="astrology chart, vedic astrology chart, vedic astrology birth chart, vedic astrology calculator, kundali, janam kundli by date of birth, birth chart calculator, janam kundli online, kundali online, free horoscope by date of birth, dosha analysis" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://veadicastro.in/free-kundli-generator" />
@@ -474,7 +474,7 @@ Respond in English only.`;
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Free Kundli by Date of Birth | Janam Kundli Online — Veadicastro" />
+        <meta property="og:title" content="Free Kundli by Date of Birth | Janam Kundli Online — Instant & Accurate" />
         <meta property="og:description" content="Generate kundali by date of birth, time & place. Get instant Vedic astrology predictions, dosha analysis, dasha timeline & remedies. Kundali online available 24/7." />
         <meta property="og:url" content="https://veadicastro.in/free-kundli-generator" />
         <meta property="og:type" content="website" />

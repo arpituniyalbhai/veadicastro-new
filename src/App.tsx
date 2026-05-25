@@ -76,6 +76,7 @@ const FreeAiAstrologyChat = lazy(() => import("../blogs/ai-astrology/free-ai-ast
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
 const FreeKundliGenerator = lazy(() => import("@/pages/FreeKundliGenerator"));
 const FreeKundliMatching = lazy(() => import("@/pages/free-kundali-matching"));
+const TodayHoroscope = lazy(() => import("@/pages/today-horoscope"));
 const KundaliMatching = lazy(() => import("@/pages/KundaliMatching"));
 const Chart = lazy(() => import("@/pages/Chart"));
 const AngelNumberCalculator = lazy(() => import("@/pages/AngelNumberCalculator"));
@@ -128,6 +129,7 @@ const RouterShell = () => {
         <Route path="/free-5-minutes-astrology-ai" element={<Suspense fallback={<PageLoading />}><Free5MinutesAstrologyAI /></Suspense>} />
         <Route path="/free-kundli-generator" element={<Suspense fallback={<PageLoading />}><FreeKundliGenerator /></Suspense>} />
         <Route path="/free-kundali-matching" element={<Suspense fallback={<PageLoading />}><FreeKundliMatching /></Suspense>} />
+        <Route path="/today-horoscope" element={<Suspense fallback={<PageLoading />}><TodayHoroscope /></Suspense>} />
         <Route path="/angel-number-calculator" element={<Suspense fallback={<PageLoading />}><AngelNumberCalculator /></Suspense>} />
         <Route path="/lucky-colour-for-today" element={<Suspense fallback={<PageLoading />}><LuckyColourForToday /></Suspense>} />
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />

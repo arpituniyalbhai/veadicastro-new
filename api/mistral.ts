@@ -361,7 +361,6 @@ STYLE:
 FORMAT:
 
 * 5-8 lines max
-* 1 short "Vedic reason" line at end (simple, not heavy jargon)
 
 END:
 
@@ -484,7 +483,7 @@ Wrong format = rewrite before sending.`;
           body: JSON.stringify({
             model,
             messages: messagesWithReminder,
-            temperature: 0.4,
+            temperature: 0.7,
             max_tokens: maxTokens,
             stream: true,
           }),

@@ -55,6 +55,9 @@ const Footer = () => {
             <Link to="/free-kundli-generator" className="text-white/80 hover:text-white transition-colors">
               Free Kundali Generator
             </Link>
+            <Link to="/today-horoscope" className="text-white/80 hover:text-white transition-colors">
+              Today Horoscope
+            </Link>
             <Link to="/ai-astrology" className="text-white/80 hover:text-white transition-colors">
               AI Astrology Guide
             </Link>
