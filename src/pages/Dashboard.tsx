@@ -368,7 +368,7 @@ export default function Dashboard() {
 
       const systemPrompt = `You are an expert Vedic astrologer. Today is ${todayFormatted}. Respond with valid JSON only:
 {"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
-English only. No asterisks, no bold, no section labels.`;
+English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.`;
 
       const prompt = `Generate personalized prediction for TODAY (${todayFormatted}) based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
@@ -377,7 +377,7 @@ ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.p
 One flowing paragraph covering love, career, health and wealth for today.`;
 
       const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang),
+        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
         new Promise<string>((_, reject) =>
           setTimeout(() => reject(new Error("Timed out")), 25000)
         ),
@@ -470,7 +470,7 @@ One flowing paragraph covering love, career, health and wealth for today.`;
 
       const systemPrompt = `You are an expert Vedic astrologer. Tomorrow's date is ${tomorrowFormatted}. Respond with valid JSON only:
 {"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
-English only. No asterisks, no bold, no section labels.`;
+English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.`;
 
       const prompt = `Generate personalized prediction for TOMORROW (${tomorrowFormatted}) based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
@@ -479,7 +479,7 @@ ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.p
 One flowing paragraph covering love, career, health and wealth for tomorrow.`;
 
       const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang),
+        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
         new Promise<string>((_, reject) =>
           setTimeout(() => reject(new Error("Timed out")), 25000)
         ),
@@ -626,7 +626,7 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
       
       const systemPrompt = `You are a Vedic astrology expert. Respond with valid JSON only:
 {"text": "monthly prediction here (150-200 words, plain text, no markdown)"}
-Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold.`;
+Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold. Do not ask follow-up questions.`;
 
       const prompt = `Generate monthly predictions for ${monthName} ${currentYear} based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'Basic chart'}
@@ -642,7 +642,7 @@ Provide comprehensive monthly guidance covering all life areas for ${monthName} 
       
       try {
         response = await Promise.race([
-          generateGemini(prompt, [], systemPrompt, lang),
+          generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
           new Promise<string>((_, reject) =>
             setTimeout(
               () => reject(new Error("Monthly prediction request timed out")),
@@ -1581,15 +1581,24 @@ useEffect(() => {
                 </div>
               </div>
             ) : !monthlyGenerationFailed ? (
-              <div className="text-center py-10">
-                <Sparkles className="w-8 h-8 text-secondary mx-auto mb-3 opacity-60" />
-                <p className="text-sm text-muted-foreground mb-4">
-                  Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction will appear here
-                </p>
+              <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                <div className="text-center py-8">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction is ready
+                  </p>
+                  <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction}>
+                    Generate Monthly Prediction
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="text-center py-8">
-                <p className="text-sm text-muted-foreground mb-4">Unable to generate monthly predictions. Please try again.</p>
+              <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                <div className="text-center py-8">
+                  <p className="text-sm text-muted-foreground mb-4">Unable to generate monthly predictions. Please try again.</p>
+                  <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction}>
+                    Generate Monthly Prediction
+                  </Button>
+                </div>
               </div>
             )}
           </Card>
