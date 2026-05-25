@@ -35,8 +35,18 @@ const fullTeamName: Record<string, string> = {
   PBKS: "Punjab Kings",
 };
 
+type IPLMatch = {
+  date: string;
+  team1: string;
+  team2: string;
+  p1: number;
+  p2: number;
+  planet: string;
+  reason?: string;
+};
+
 // ─── All Matches ───────────────────────────────────────────────────────────────
-const allMatches = [
+const allMatches: IPLMatch[] = [
   { date: "Mar 31", team1: "PBKS", team2: "GT",   p1: 78, p2: 22, planet: "Sun strongly favors PBKS" },
   { date: "Apr 01", team1: "LSG",  team2: "DC",   p1: 52, p2: 48, planet: "Mercury slightly tips LSG" },
   { date: "Apr 02", team1: "KKR",  team2: "SRH",  p1: 51, p2: 49, planet: "Saturn edges KKR" },
@@ -101,16 +111,23 @@ const allMatches = [
   { date: "May 23", team1: "LSG",  team2: "PBKS", p1: 54, p2: 46, planet: "Mercury's speed favors LSG" },
   { date: "May 24", team1: "MI",   team2: "RR",   p1: 51, p2: 49, planet: "Saturn discipline tips MI in morning clash" },
   { date: "May 24", team1: "KKR",  team2: "DC",   p1: 53, p2: 47, planet: "Rahu's influence strengthens KKR at Eden" },
+  { date: "May 26", team1: "RCB",  team2: "GT",   p1: 70, p2: 30, planet: "Mars and Jupiter favor RCB's momentum", reason: "RCB's batting core looks sharper under pressure, while the planetary pattern gives them stronger timing in the powerplay and chase control." },
+  { date: "May 27", team1: "SRH",  team2: "RR",   p1: 40, p2: 60, planet: "Venus and Moon support RR's balance", reason: "RR look calmer and more settled in a playoff-style game, with a smoother temperament in the middle overs and stronger closing stability." },
 ];
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
-const getTodayDateString = () => {
+const getDateStringWithOffset = (offsetDays: number) => {
   const today = new Date();
+  today.setDate(today.getDate() + offsetDays);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const dateStr = `${months[today.getMonth()]} ${String(today.getDate()).padStart(2, '0')}`;
-  console.log('Today date string:', dateStr); // Debug log
+  console.log('Date string:', dateStr); // Debug log
   return dateStr;
 };
+
+const getTodayDateString = () => getDateStringWithOffset(0);
+const getTomorrowDateString = () => getDateStringWithOffset(1);
+const getDayAfterTomorrowDateString = () => getDateStringWithOffset(2);
 
 const getTodayMatch = () => {
   const todayStr = getTodayDateString();
@@ -121,14 +138,16 @@ const getTodayMatch = () => {
 };
 
 // ─── Match Card Component ──────────────────────────────────────────────────────
-const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: boolean }) => {
+const MatchCard = ({ match, isToday, featured = false }: { match: IPLMatch; isToday: boolean; featured?: boolean }) => {
   const winner = match.p1 > match.p2 ? match.team1 : match.p1 < match.p2 ? match.team2 : null;
   const t1Color = teamColors[match.team1] || "bg-white/10 text-white border-white/20";
   const t2Color = teamColors[match.team2] || "bg-white/10 text-white border-white/20";
 
   return (
     <div className={`rounded-xl border p-4 transition-all ${
-      isToday
+      featured
+        ? "bg-gradient-to-r from-orange-500/18 to-pink-500/18 border-orange-400/40 shadow-lg shadow-orange-500/10"
+        : isToday
         ? "bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-500/40 shadow-lg"
         : "bg-white/5 border-white/10 hover:bg-white/10 hover:shadow-md"
     }`}>
@@ -143,8 +162,18 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
           </span>
         </div>
       )}
+      {featured && !isToday && (
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-orange-300 animate-pulse" />
+            <span className="text-xs font-semibold text-orange-200 uppercase tracking-wider">Upcoming Playoff</span>
+          </div>
+          <span className="text-xs text-orange-200 bg-orange-500/20 px-2 py-1 rounded-full">
+            {match.date}
+          </span>
+        </div>
+      )}
 
-      {/* Date + Planet */}
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs text-white/60 font-medium">{match.date}</span>
         <span className="text-xs text-purple-300/80 bg-purple-500/10 px-2 py-0.5 rounded-full border border-purple-500/20">
@@ -152,13 +181,11 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
         </span>
       </div>
 
-      {/* Teams Section */}
       <div className="flex items-center gap-3 mb-3">
-        {/* Team 1 */}
         <div className="flex-1 text-center">
           <div className={`p-3 rounded-lg border transition-all ${
-            winner === match.team1 
-              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30" 
+            winner === match.team1
+              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30"
               : t1Color + " hover:scale-105"
           }`}>
             <div className={`font-bold text-lg mb-1 ${winner === match.team1 ? "text-green-600" : ""}`}>
@@ -168,8 +195,8 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
               {fullTeamName[match.team1]}
             </div>
             <div className={`text-2xl font-bold ${
-              winner === match.team1 
-                ? "text-green-400" 
+              winner === match.team1
+                ? "text-green-400"
                 : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
             }`}>
               {match.p1}%
@@ -182,14 +209,12 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
           </div>
         </div>
 
-        {/* VS */}
         <div className="text-lg font-bold text-gray-400 mx-2">VS</div>
 
-        {/* Team 2 */}
         <div className="flex-1 text-center">
           <div className={`p-3 rounded-lg border transition-all ${
-            winner === match.team2 
-              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30" 
+            winner === match.team2
+              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30"
               : t2Color + " hover:scale-105"
           }`}>
             <div className={`font-bold text-lg mb-1 ${winner === match.team2 ? "text-green-600" : ""}`}>
@@ -199,8 +224,8 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
               {fullTeamName[match.team2]}
             </div>
             <div className={`text-2xl font-bold ${
-              winner === match.team2 
-                ? "text-green-400" 
+              winner === match.team2
+                ? "text-green-400"
                 : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
             }`}>
               {match.p2}%
@@ -214,14 +239,13 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
         </div>
       </div>
 
-      {/* Progress Bar */}
       <div className="mt-3">
         <div className="h-2 rounded-full bg-gray-700/30 overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${
-              winner === match.team1 
-                ? "bg-gradient-to-r from-green-500 to-green-600 shadow-lg" 
-                : winner === match.team2 
+              winner === match.team1
+                ? "bg-gradient-to-r from-green-500 to-green-600 shadow-lg"
+                : winner === match.team2
                 ? "bg-gradient-to-r from-red-500 to-red-600 shadow-lg"
                 : "bg-gradient-to-r from-blue-500 to-purple-500"
             }`}
@@ -234,7 +258,6 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
         </div>
       </div>
 
-      {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-white/10">
         <div className="text-xs text-white/40">
           <span className="font-medium">Astrology:</span> {match.planet}
@@ -245,6 +268,13 @@ const MatchCard = ({ match, isToday }: { match: typeof allMatches[0]; isToday: b
           </div>
         )}
       </div>
+
+      {match.reason && (
+        <div className="mt-3 rounded-lg border border-white/10 bg-black/20 p-3">
+          <div className="text-[11px] uppercase tracking-[0.2em] text-white/45 mb-1">Why this pick</div>
+          <p className="text-xs text-white/70 leading-relaxed">{match.reason}</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -254,13 +284,19 @@ const MatchPredictionsSection = () => {
   const [showAll, setShowAll] = useState(false);
   const [todayStr, setTodayStr] = useState(getTodayDateString());
   const [todayMatch, setTodayMatch] = useState(getTodayMatch());
+  const [tomorrowStr, setTomorrowStr] = useState(getTomorrowDateString());
+  const [dayAfterTomorrowStr, setDayAfterTomorrowStr] = useState(getDayAfterTomorrowDateString());
   const [lastUpdate, setLastUpdate] = useState(new Date());
   
   // Auto-update at 1 AM
   useEffect(() => {
     const updateDailyData = () => {
       const newTodayStr = getTodayDateString();
+      const newTomorrowStr = getTomorrowDateString();
+      const newDayAfterTomorrowStr = getDayAfterTomorrowDateString();
       setTodayStr(newTodayStr);
+      setTomorrowStr(newTomorrowStr);
+      setDayAfterTomorrowStr(newDayAfterTomorrowStr);
       setTodayMatch(getTodayMatch());
       setLastUpdate(new Date());
     };
@@ -286,6 +322,9 @@ const MatchPredictionsSection = () => {
   }, []);
   
   const visibleMatches = showAll ? allMatches : allMatches.slice(0, 6);
+  const highlightedUpcoming = allMatches.filter(
+    (match) => match.date === tomorrowStr || match.date === dayAfterTomorrowStr
+  );
 
   return (
     <div className="mb-12">
@@ -323,7 +362,26 @@ const MatchPredictionsSection = () => {
         </div>
       )}
 
-      {/* Ad - After Today's Match Teams Highlight */}
+      {highlightedUpcoming.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-2xl font-bold text-white">Upcoming Playoff Matches</h3>
+              <p className="text-sm text-white/60 mt-1">Tomorrow's and next day's highlighted predictions</p>
+            </div>
+            <div className="px-3 py-1 rounded-full bg-orange-500/15 text-orange-200 border border-orange-400/30 text-xs font-semibold">
+              Highlighted
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {highlightedUpcoming.map((match) => (
+              <MatchCard key={`${match.date}-${match.team1}-${match.team2}`} match={match} isToday={false} featured />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Ad - After Highlighted Playoff Matches */}
       <div className="flex justify-center my-8">
         <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
       </div>

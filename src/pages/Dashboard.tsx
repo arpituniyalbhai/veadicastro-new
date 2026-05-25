@@ -367,8 +367,9 @@ export default function Dashboard() {
       });
 
       const systemPrompt = `You are an expert Vedic astrologer. Today is ${todayFormatted}. Respond with valid JSON only:
-{"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
-English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.`;
+{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
+STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
 
       const prompt = `Generate personalized prediction for TODAY (${todayFormatted}) based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
@@ -469,8 +470,9 @@ One flowing paragraph covering love, career, health and wealth for today.`;
       });
 
       const systemPrompt = `You are an expert Vedic astrologer. Tomorrow's date is ${tomorrowFormatted}. Respond with valid JSON only:
-{"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
-English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.`;
+{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
+STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
 
       const prompt = `Generate personalized prediction for TOMORROW (${tomorrowFormatted}) based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
@@ -625,8 +627,9 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
       const languageDirective = `Respond in English only. ${numeralRule}`;
       
       const systemPrompt = `You are a Vedic astrology expert. Respond with valid JSON only:
-{"text": "monthly prediction here (150-200 words, plain text, no markdown)"}
-Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold. Do not ask follow-up questions.`;
+{"text": "monthly prediction here (100-150 words, plain text, no markdown)"}
+Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold. Do not ask follow-up questions.
+STRICT: Never assume profession, business type, or life stage. Only use planetary data provided.`;
 
       const prompt = `Generate monthly predictions for ${monthName} ${currentYear} based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'Basic chart'}
