@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap } from "lucide-react";
+import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap, Calendar } from "lucide-react";
 import { Card } from "../../src/components/ui/card";
 import AdBanner from "../../src/components/AdBanner";
 
@@ -177,6 +177,13 @@ export default function AiAstrology() {
                   desc: "Find your lucky colour based on planetary positions and birth chart analysis",
                   icon: <Shield className="w-6 h-6" />,
                   link: "/lucky-colour-for-today",
+                  free: true
+                },
+                {
+                  title: "Today's Horoscope",
+                  desc: "Get your daily horoscope based on today's planetary transits",
+                  icon: <Calendar className="w-6 h-6" />,
+                  link: "/today-horoscope",
                   free: true
                 },
                 {

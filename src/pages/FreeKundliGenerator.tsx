@@ -629,6 +629,9 @@ Respond in English only.`;
               <button onClick={() => navigate("/free-ai-astrologer-chat")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
                 ← Free AI Chat
               </button>
+              <button onClick={() => navigate("/today-horoscope")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
+                Today's Horoscope
+              </button>
               <button onClick={() => navigate("/free-kundali-matching")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
                 Kundli Matching
               </button>

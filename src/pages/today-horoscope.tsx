@@ -107,7 +107,7 @@ Give a Vedic astrology-based daily horoscope answer for this ${rashi.english} na
 
 Rules:
 - Write 250 to 400 words only. No more, no less.
-- Write in flowing Hinglish paragraphs (Hindi-English mix). Natural, warm, like a close friend.
+- Write in clear, warm English only. No Hindi words, no Devanagari script, no Hinglish.
 - Do NOT use bullet points, dashes, asterisks, bold markers, or any markdown.
 - Do NOT use "--" or "**" anywhere.
 - Start directly with the prediction. No intro like "Sure!" or "Great question!".
