@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
@@ -89,12 +89,10 @@ export default function Dashboard() {
     place: "Not set",
   });
   const [assistantOpen, setAssistantOpen] = useState(false);
-  const [todayPrediction, setTodayPrediction] = useState<{ love: string; self: string; wealth: string; luckyNumber: number; luckyColor: string; date: string } | null>(null);
-  const [tomorrowPrediction, setTomorrowPrediction] = useState<{ love: string; self: string; wealth: string; luckyNumber: number; luckyColor: string; date: string } | null>(null);
+  const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
+  const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
   const [weeklyPrediction, setWeeklyPrediction] = useState<{ text: string; date: string; weekStart: string; weekEnd: string } | null>(null);
   const [monthlyPrediction, setMonthlyPrediction] = useState<{ text: string; month: number; year: number } | null>(null);
-  const [todayVerdict, setTodayVerdict] = useState<string>("");
-  const [todayActions, setTodayActions] = useState<{ do: string[]; avoid: string[] } | null>(null);
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
   const [weeklyLoading, setWeeklyLoading] = useState(false);
@@ -102,6 +100,7 @@ export default function Dashboard() {
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
   const [monthlyLoadingTimer, setMonthlyLoadingTimer] = useState<NodeJS.Timeout | null>(null);
+  const midnightTimerRef = useRef<number | null>(null);
   const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
   const [timeRemaining, setTimeRemaining] = useState(() => {
     const diff = Math.max(0, OFFER_END_DATE - Date.now());
@@ -325,35 +324,189 @@ export default function Dashboard() {
     return `ai_monthly_${user?.uid || 'guest'}_${year}_${month}`;
   };
 
+  const getLocalDateKey = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  const formatDailyDate = (date: Date) =>
+    date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+  const todayDisplayDate = formatDailyDate(new Date());
+  const tomorrowDate = new Date();
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrowDisplayDate = formatDailyDate(tomorrowDate);
+
   const fetchTodayPrediction = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    
+    if (todayLoading || typeof window === "undefined") return;
+
+    const now = new Date();
+    const todayKey = getLocalDateKey(now);
+    const cacheKey = `ai_daily_today_${user?.uid || 'guest'}_${todayKey}`;
+
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (cached?.text && cached?.date === todayKey) {
+        setTodayPrediction(cached);
+        return;
+      }
+    } catch {}
+
+    let details: any = null;
+    let planets: any = null;
+    try {
+      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
+      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
+    } catch {}
+
     setTodayLoading(true);
     try {
-      const prediction = predictionService.getTodayPrediction();
-      setTodayPrediction(prediction);
-      setTodayVerdict(cleanText(prediction.verdict));
-      setTodayActions(prediction.actions);
+      const todayFormatted = now.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+
+      const systemPrompt = `You are an expert Vedic astrologer. Today is ${todayFormatted}. Respond with valid JSON only:
+{"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+English only. No asterisks, no bold, no section labels.`;
+
+      const prompt = `Generate personalized prediction for TODAY (${todayFormatted}) based on:
+${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
+${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
+
+One flowing paragraph covering love, career, health and wealth for today.`;
+
+      const response = await Promise.race([
+        generateGemini(prompt, [], systemPrompt, lang),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("Timed out")), 25000)
+        ),
+      ]);
+
+      const jsonText = extractJsonBlock(response);
+      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
+      if (!parsed?.text?.trim()) parsed = { text: response };
+
+      const result = {
+        text: cleanText(String(parsed.text)),
+        date: todayKey,
+        love: "",
+        self: "",
+        wealth: "",
+        luckyNumber: 0,
+        luckyColor: "",
+      };
+
+      setTodayPrediction(result as any);
+      localStorage.setItem(cacheKey, JSON.stringify(result));
     } catch (error: any) {
       console.error('Error fetching today prediction:', error);
     } finally {
       setTodayLoading(false);
     }
-  }, []);
+  }, [lang, user?.uid, todayLoading]);
+
+  const hydrateDailyPredictionsFromCache = useCallback(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const todayKey = getLocalDateKey(new Date());
+      const tomorrowDate = new Date();
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      const tomorrowKey = getLocalDateKey(tomorrowDate);
+
+      const todayCacheKey = `ai_daily_today_${user?.uid || 'guest'}_${todayKey}`;
+      const tomorrowCacheKey = `ai_daily_tomorrow_${user?.uid || 'guest'}_${tomorrowKey}`;
+
+      try {
+        const cachedToday = JSON.parse(localStorage.getItem(todayCacheKey) || "null");
+        setTodayPrediction(cachedToday?.text && cachedToday?.date === todayKey ? cachedToday : null);
+      } catch {
+        setTodayPrediction(null);
+      }
+
+      try {
+        const cachedTomorrow = JSON.parse(localStorage.getItem(tomorrowCacheKey) || "null");
+        setTomorrowPrediction(cachedTomorrow?.text && cachedTomorrow?.date === tomorrowKey ? cachedTomorrow : null);
+      } catch {
+        setTomorrowPrediction(null);
+      }
+    } catch (error) {
+      console.warn('Failed to hydrate daily predictions from cache:', error);
+    }
+  }, [user?.uid]);
 
   const fetchTomorrowPrediction = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    
+    if (tomorrowLoading || typeof window === "undefined") return;
+
+    const tomorrowDate = new Date();
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+    const tomorrowKey = getLocalDateKey(tomorrowDate);
+    const cacheKey = `ai_daily_tomorrow_${user?.uid || 'guest'}_${tomorrowKey}`;
+
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (cached?.text && cached?.date === tomorrowKey) {
+        setTomorrowPrediction(cached);
+        return;
+      }
+    } catch {}
+
+    let details: any = null;
+    let planets: any = null;
+    try {
+      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
+      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
+    } catch {}
+
     setTomorrowLoading(true);
     try {
-      const prediction = predictionService.getTomorrowPrediction();
-      setTomorrowPrediction(prediction);
+      const tomorrowFormatted = tomorrowDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+
+      const systemPrompt = `You are an expert Vedic astrologer. Tomorrow's date is ${tomorrowFormatted}. Respond with valid JSON only:
+{"text":"prediction here (120-150 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+English only. No asterisks, no bold, no section labels.`;
+
+      const prompt = `Generate personalized prediction for TOMORROW (${tomorrowFormatted}) based on:
+${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
+${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
+
+One flowing paragraph covering love, career, health and wealth for tomorrow.`;
+
+      const response = await Promise.race([
+        generateGemini(prompt, [], systemPrompt, lang),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("Timed out")), 25000)
+        ),
+      ]);
+
+      const jsonText = extractJsonBlock(response);
+      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
+      if (!parsed?.text?.trim()) parsed = { text: response };
+
+      const result = {
+        text: cleanText(String(parsed.text)),
+        date: tomorrowKey,
+        love: "",
+        self: "",
+        wealth: "",
+        luckyNumber: 0,
+        luckyColor: "",
+      };
+
+      setTomorrowPrediction(result as any);
+      localStorage.setItem(cacheKey, JSON.stringify(result));
     } catch (error: any) {
       console.error('Error fetching tomorrow prediction:', error);
     } finally {
       setTomorrowLoading(false);
     }
-  }, []);
+  }, [lang, user?.uid, tomorrowLoading]);
 
   const fetchWeeklyPrediction = useCallback(async () => {
     if (typeof window === "undefined") return;
@@ -370,38 +523,39 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (showDailyPredictions) {
-      fetchTodayPrediction();
-    }
-  }, [showDailyPredictions, fetchTodayPrediction]);
-
-  useEffect(() => {
-    if (showDailyPredictions && tomorrowUnlocked) {
-      fetchTomorrowPrediction();
-    }
-  }, [showDailyPredictions, tomorrowUnlocked, fetchTomorrowPrediction]);
-
-  // Weekly prediction is now handled in component mount with resetAllPredictions
-
-  // Setup predictions on component mount with proper reset
-  useEffect(() => {
     if (typeof window !== "undefined") {
-      // Reset all predictions for user visit (ensures fresh content)
-      predictionService.resetAllPredictions();
-      predictionService.setupDailyUpdate();
-      
-      // Fetch fresh predictions after reset
-      fetchTodayPrediction();
-      if (tomorrowUnlocked) {
-        fetchTomorrowPrediction();
-      }
       fetchWeeklyPrediction();
+      hydrateDailyPredictionsFromCache();
     }
-  }, []);
+  }, [fetchWeeklyPrediction, hydrateDailyPredictionsFromCache]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const scheduleMidnightRefresh = () => {
+      const nextMidnight = new Date();
+      nextMidnight.setHours(24, 0, 0, 0);
+      const delay = Math.max(1000, nextMidnight.getTime() - Date.now() + 1000);
+
+      return window.setTimeout(() => {
+        hydrateDailyPredictionsFromCache();
+        const nextTimer = scheduleMidnightRefresh();
+        midnightTimerRef.current = nextTimer;
+      }, delay);
+    };
+
+    const initialTimer = scheduleMidnightRefresh();
+    midnightTimerRef.current = initialTimer;
+
+    return () => {
+      if (midnightTimerRef.current) {
+        window.clearTimeout(midnightTimerRef.current);
+      }
+    };
+  }, [hydrateDailyPredictionsFromCache]);
 
   // Manual refresh function for testing
   const refreshPredictions = () => {
-    predictionService.refreshPredictions();
     fetchTodayPrediction();
     if (tomorrowUnlocked) {
       fetchTomorrowPrediction();
@@ -658,17 +812,9 @@ useEffect(() => {
     return colorMap[key] || "bg-purple-500";
   };
 
-  const todayText = {
-    love: todayPrediction?.love || "",
-    self: todayPrediction?.self || "",
-    wealth: todayPrediction?.wealth || "",
-  };
+  const todayMergedText = todayPrediction?.text || "";
 
-  const tomorrowText = {
-    love: tomorrowPrediction?.love || "",
-    self: tomorrowPrediction?.self || "",
-    wealth: tomorrowPrediction?.wealth || "",
-  };
+  const tomorrowMergedText = tomorrowPrediction?.text || "";
 
   const showDailyTabs = showDailyPredictions;
   const normalizedTab = useMemo(() => {
@@ -1216,268 +1362,105 @@ useEffect(() => {
           <Tabs value={normalizedTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2 h-12 bg-card/40 p-1 rounded-2xl">
               <TabsTrigger value="today" className="rounded-xl data-[state=active]:bg-secondary/20">
-                {t("today")}
+                {t("today")} ({todayDisplayDate})
               </TabsTrigger>
               <TabsTrigger value="tomorrow" className="rounded-xl data-[state=active]:bg-secondary/20 flex items-center justify-center gap-2">
-                {t("tomorrow")}
+                {t("tomorrow")} ({tomorrowDisplayDate})
                 {!tomorrowUnlocked && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="today" className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
-              {/* Show skeleton ONLY when actively fetching */}
+            <TabsContent value="today" className="mt-4 sm:mt-6 space-y-4">
               {todayLoading ? (
-                <div className="space-y-4">
-                  {/* Skeleton for verdict */}
-                  <div className="p-3 bg-card/30 backdrop-blur-sm border-border/40 rounded-xl">
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 bg-gray-600 rounded animate-pulse"></div>
-                      <div className="h-4 bg-gray-600 rounded w-3/4 animate-pulse"></div>
+                <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
+                      <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
+                      <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
+                      <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
+                      <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
                     </div>
                   </div>
-
-                  {/* Skeleton for lucky elements */}
-                  <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                    <div className="p-3 sm:p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-lg sm:rounded-2xl text-center">
-                      <div className="h-3 bg-gray-600 rounded w-16 mx-auto mb-2 animate-pulse"></div>
-                      <div className="h-6 bg-gray-600 rounded w-20 mx-auto animate-pulse"></div>
-                    </div>
-                    <div className="p-3 sm:p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-lg sm:rounded-2xl text-center">
-                      <div className="h-3 bg-gray-600 rounded w-16 mx-auto mb-2 animate-pulse"></div>
-                      <div className="h-6 bg-gray-600 rounded w-12 mx-auto animate-pulse"></div>
-                    </div>
-                  </div>
-
-                  {/* Skeleton for predictions */}
-                  <div className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl space-y-5">
-                    {/* Love section skeleton */}
-                    <div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                        <div className="h-4 bg-gray-600 rounded w-12 animate-pulse"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                        <div className="h-3 bg-gray-600 rounded w-4/5 animate-pulse"></div>
-                      </div>
-                    </div>
-
-                    {/* Self section skeleton */}
-                    <div className="border-t border-border/40 pt-5">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                        <div className="h-4 bg-gray-600 rounded w-8 animate-pulse"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                        <div className="h-3 bg-gray-600 rounded w-3/4 animate-pulse"></div>
-                      </div>
-                    </div>
-
-                    {/* Wealth section skeleton */}
-                    <div className="border-t border-border/40 pt-5">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                        <div className="h-4 bg-gray-600 rounded w-10 animate-pulse"></div>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                        <div className="h-3 bg-gray-600 rounded w-5/6 animate-pulse"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : todayPrediction ? (
-                /* Show content ONLY when data is available */
-                <>
-                  {/* Aaj ka One-Line Verdict */}
-                  {todayVerdict && (
-                    <Card className="p-3 bg-card/30 backdrop-blur-sm border-border/40 rounded-xl">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm">⚡</span>
-                        <p className="text-sm text-muted-foreground">{todayVerdict}</p>
-                      </div>
-                    </Card>
-                  )}
-
-                  {/* Lucky Elements - Free for everyone */}
-                  {(colorToday || luckyToday) && (
-                    <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                      {colorToday && (
-                        <Card className="p-3 sm:p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-lg sm:rounded-2xl text-center">
-                          <p className="text-xs text-muted-foreground mb-2">{t("luckyColour")}</p>
-                          <p className="text-lg font-semibold">{colorLabel(colorToday)}</p>
-                        </Card>
-                      )}
-                      {luckyToday && (
-                        <Card className="p-3 sm:p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-lg sm:rounded-2xl text-center">
-                          <p className="text-xs text-muted-foreground mb-2">{t("luckyNumber")}</p>
-                          <p className="text-xl sm:text-2xl font-bold text-secondary">{luckyToday}</p>
-                        </Card>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Predictions - Vertical Layout */}
-                  {(todayText.love || todayText.self || todayText.wealth) && (
-                    <Card className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl space-y-5">
-                      {todayText.love && (
-                        <div>
-                          <div className="flex items-center gap-2 mb-3">
-                            <Heart className="w-5 h-5 text-secondary" />
-                            <h3 className="font-semibold">{t("love")}</h3>
-                          </div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{todayText.love}</p>
-                        </div>
-                      )}
-
-                      {todayText.self && (
-                        <div className="border-t border-border/40 pt-5">
-                          <div className="flex items-center gap-2 mb-3">
-                            <TrendingUp className="w-5 h-5 text-secondary" />
-                            <h3 className="font-semibold">{t("self")}</h3>
-                          </div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{todayText.self}</p>
-                        </div>
-                      )}
-
-                      {todayText.wealth && (
-                        <div className="border-t border-border/40 pt-5">
-                          <div className="flex items-center gap-2 mb-3">
-                            <Wallet className="w-5 h-5 text-secondary" />
-                            <h3 className="font-semibold">{t("wealth")}</h3>
-                          </div>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{todayText.wealth}</p>
-                        </div>
-                      )}
-                    </Card>
-                  )}
-                </>
+                </Card>
               ) : (
-                /* Show empty state only when not loading and no data */
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>No predictions available</p>
-                </div>
+                <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+                  <div className="flex items-center justify-between gap-3 mb-4">
+                    <div>
+                      <h2 className="font-semibold text-lg">{t("today")}</h2>
+                      <p className="text-sm text-muted-foreground mt-1">{todayDisplayDate}</p>
+                    </div>
+                  </div>
+                  {todayPrediction ? (
+                    <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                        {todayMergedText}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                      <div className="text-center py-8">
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Your {todayDisplayDate} prediction is ready
+                        </p>
+                        <Button variant="cosmic" size="sm" onClick={fetchTodayPrediction}>
+                          Generate Today's Prediction
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </Card>
               )}
             </TabsContent>
 
             <TabsContent value="tomorrow" className="mt-6 space-y-4">
               {tomorrowUnlocked ? (
                 <>
-                  {/* Show skeleton ONLY when actively fetching */}
                   {tomorrowLoading ? (
-                    <div className="space-y-4">
-                      {/* Skeleton for lucky elements */}
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl text-center">
-                          <div className="h-3 bg-gray-600 rounded w-16 mx-auto mb-2 animate-pulse"></div>
-                          <div className="h-6 bg-gray-600 rounded w-20 mx-auto animate-pulse"></div>
+                    <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
+                          <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
                         </div>
-                        <div className="p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl text-center">
-                          <div className="h-3 bg-gray-600 rounded w-16 mx-auto mb-2 animate-pulse"></div>
-                          <div className="h-6 bg-gray-600 rounded w-12 mx-auto animate-pulse"></div>
-                        </div>
-                      </div>
-
-                      {/* Skeleton for predictions */}
-                      <div className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl space-y-5">
-                        {/* Love section skeleton */}
-                        <div>
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                            <div className="h-4 bg-gray-600 rounded w-12 animate-pulse"></div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                            <div className="h-3 bg-gray-600 rounded w-4/5 animate-pulse"></div>
-                          </div>
-                        </div>
-
-                        {/* Self section skeleton */}
-                        <div className="border-t border-border/40 pt-5">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                            <div className="h-4 bg-gray-600 rounded w-8 animate-pulse"></div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                            <div className="h-3 bg-gray-600 rounded w-3/4 animate-pulse"></div>
-                          </div>
-                        </div>
-
-                        {/* Wealth section skeleton */}
-                        <div className="border-t border-border/40 pt-5">
-                          <div className="flex items-center gap-2 mb-3">
-                            <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                            <div className="h-4 bg-gray-600 rounded w-10 animate-pulse"></div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                            <div className="h-3 bg-gray-600 rounded w-5/6 animate-pulse"></div>
-                          </div>
+                        <div className="space-y-3">
+                          <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
+                          <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
+                          <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
+                          <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
                         </div>
                       </div>
-                    </div>
-                  ) : tomorrowPrediction ? (
-                    /* Show content ONLY when data is available */
-                    <>
-                      {(colorTomorrow || luckyTomorrow) && (
-                        <div className="grid grid-cols-2 gap-4">
-                          {colorTomorrow && (
-                            <Card className="p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl text-center">
-                              <p className="text-xs text-muted-foreground mb-2">{t("luckyColour")}</p>
-                              <p className="text-lg font-semibold">{colorLabel(colorTomorrow)}</p>
-                            </Card>
-                          )}
-                          {luckyTomorrow && (
-                            <Card className="p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl text-center">
-                              <p className="text-xs text-muted-foreground mb-2">{t("luckyNumber")}</p>
-                              <p className="text-2xl font-bold text-secondary">{luckyTomorrow}</p>
-                            </Card>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Predictions - Vertical Layout */}
-                      {(tomorrowText.love || tomorrowText.self || tomorrowText.wealth) && (
-                        <Card className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl space-y-5">
-                          {tomorrowText.love && (
-                            <div>
-                              <div className="flex items-center gap-2 mb-3">
-                                <Heart className="w-5 h-5 text-secondary" />
-                                <h3 className="font-semibold">{t("love")}</h3>
-                              </div>
-                              <p className="text-sm text-muted-foreground leading-relaxed">{tomorrowText.love}</p>
-                            </div>
-                          )}
-
-                          {tomorrowText.self && (
-                            <div className="border-t border-border/40 pt-5">
-                              <div className="flex items-center gap-2 mb-3">
-                                <TrendingUp className="w-5 h-5 text-secondary" />
-                                <h3 className="font-semibold">{t("self")}</h3>
-                              </div>
-                              <p className="text-sm text-muted-foreground leading-relaxed">{tomorrowText.self}</p>
-                            </div>
-                          )}
-
-                          {tomorrowText.wealth && (
-                            <div className="border-t border-border/40 pt-5">
-                              <div className="flex items-center gap-2 mb-3">
-                                <Wallet className="w-5 h-5 text-secondary" />
-                                <h3 className="font-semibold">{t("wealth")}</h3>
-                              </div>
-                              <p className="text-sm text-muted-foreground leading-relaxed">{tomorrowText.wealth}</p>
-                            </div>
-                          )}
-                        </Card>
-                      )}
-                    </>
+                    </Card>
                   ) : (
-                    /* Show empty state only when not loading and no data */
-                    <div className="text-center py-8 text-muted-foreground">
-                      <p>No predictions available</p>
-                    </div>
+                    <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+                      <div className="flex items-center justify-between gap-3 mb-4">
+                        <div>
+                          <h2 className="font-semibold text-lg">{t("tomorrow")}</h2>
+                          <p className="text-sm text-muted-foreground mt-1">{tomorrowDisplayDate}</p>
+                        </div>
+                      </div>
+                      {tomorrowPrediction ? (
+                        <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+                            {tomorrowMergedText}
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="p-4 rounded-xl bg-background/50 border border-border/60">
+                          <div className="text-center py-8">
+                            <p className="text-sm text-muted-foreground mb-4">
+                              Your {tomorrowDisplayDate} prediction is ready
+                            </p>
+                            <Button variant="cosmic" size="sm" onClick={fetchTomorrowPrediction}>
+                              Generate Tomorrow's Prediction
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </Card>
                   )}
                 </>
               ) : (
@@ -1541,23 +1524,6 @@ useEffect(() => {
           <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-lg">{t("monthlyPredictions")}</h2>
-              {!monthlyPrediction && !monthlyLoading && (
-                <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction} className="gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  Generate
-                </Button>
-              )}
-              {monthlyPrediction && !monthlyLoading && (
-                planName === 'Free' ? (
-                  <Button variant="outline" size="sm" onClick={() => navigate("/pricing?referral=monthly-regenerate")}>
-                    Upgrade to Regenerate
-                  </Button>
-                ) : (
-                  <Button variant="outline" size="sm" onClick={fetchMonthlyPrediction}>
-                    Regenerate
-                  </Button>
-                )
-              )}
             </div>
             {/* Show skeleton loading while fetching */}
             {monthlyLoading ? (
@@ -1618,24 +1584,12 @@ useEffect(() => {
               <div className="text-center py-10">
                 <Sparkles className="w-8 h-8 text-secondary mx-auto mb-3 opacity-60" />
                 <p className="text-sm text-muted-foreground mb-4">
-                  Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction is ready to generate
+                  Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction will appear here
                 </p>
-                <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction} className="gap-2">
-                  <Sparkles className="w-4 h-4" />
-                  Generate My Monthly Prediction
-                </Button>
               </div>
             ) : (
               <div className="text-center py-8">
                 <p className="text-sm text-muted-foreground mb-4">Unable to generate monthly predictions. Please try again.</p>
-                <Button 
-                  variant="cosmic" 
-                  size="sm" 
-                  onClick={fetchMonthlyPrediction}
-                  className="gap-2"
-                >
-                  Try Again
-                </Button>
               </div>
             )}
           </Card>
