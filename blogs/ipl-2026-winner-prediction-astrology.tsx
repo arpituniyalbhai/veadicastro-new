@@ -459,68 +459,68 @@ const WhichTeamWinIPL2026 = () => {
   return (
     <>
       <Helmet>
-        <title>IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?</title>
+        <title>IPL Astrology Winner 2026 Prediction: Which Team Will Win Today?</title>
         <meta
           name="description"
-          content="Vedic astrology predictions for IPL 2026 winner. Which team's stars are aligned? Free AI analysis of all team charts."
+          content="IPL astrology winner 2026 predictions with Vedic analysis. See which team is favored today, tomorrow, and across the season with daily updated match insights."
         />
         <meta
           name="keywords"
           content="today IPL match winner, today IPL match kaun jitega, aaj ka IPL match kaun jitega, today IPL match prediction, IPL 2026 today match winner, today IPL match prediction astrology, aaj ka IPL match prediction, today IPL match toss prediction, today IPL winner prediction, IPL today match kaun jitega, today IPL match astrology, today IPL match winner astrology, IPL 2026 today match prediction, today match IPL prediction, today IPL match result prediction, IPL today match winner prediction, aaj ka IPL winner, today IPL match bhavishyawani, IPL today match prediction astrology, today IPL match prediction accurate, today IPL match prediction today, IPL today match kaun jitega astrology, today IPL match prediction Vedic astrology, today IPL match winner prediction today, IPL today match prediction today, today IPL match prediction by astrology, aaj ka IPL match kaun jitega today, today IPL match astrology prediction, IPL today match astrology prediction, today IPL match prediction analysis, IPL 2026 today match astrology analysis, today IPL match astrological prediction, aaj ka IPL match winner astrology, today IPL match prediction 2026, IPL today match kaun jitega 2026, today IPL match astrology prediction 2026, today IPL match winner prediction 2026, IPL today match winner prediction 2026, today IPL match prediction by astrology 2026, aaj ka IPL match prediction by astrology 2026, today IPL match astrology 2026, IPL today match astrology 2026, today IPL match winner astrology 2026, IPL today match winner astrology 2026, today IPL match prediction analysis 2026, IPL 2026 today match prediction analysis 2026, today IPL match astrological prediction 2026, aaj ka IPL match astrological prediction 2026, today IPL match prediction expert, IPL today match prediction expert, today IPL match prediction expert 2026, IPL today match prediction expert 2026, today IPL match prediction system, IPL today match prediction system, today IPL match prediction system 2026, IPL today match prediction system 2026, today IPL match prediction algorithm, IPL today match prediction algorithm, today IPL match prediction algorithm 2026, IPL today match prediction algorithm 2026, today IPL match prediction accurate, IPL today match prediction accurate, today IPL match prediction accurate 2026, IPL today match prediction accurate 2026, today IPL match prediction best, IPL today match prediction best, today IPL match prediction best 2026, IPL today match prediction best 2026, today IPL match prediction site, IPL today match prediction site, today IPL match prediction site 2026, IPL today match prediction site 2026, today IPL match prediction website, IPL today match prediction website, today IPL match prediction website 2026, IPL today match prediction website 2026, today IPL match prediction online, IPL today match prediction online, today IPL match prediction online 2026, IPL today match prediction online 2026, today IPL match prediction free, IPL today match prediction free, today IPL match prediction free 2026, IPL today match prediction free 2026"
         />
-        <link rel="canonical" href="https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology" />
+        <link rel="canonical" href="https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
         <meta name="theme-color" content="#0a0a0f" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?" />
-        <meta property="og:description" content="Today IPL match winner prediction - Who will win today's IPL match? Get accurate aaj ka IPL match kaun jitega astrology predictions with 95% accuracy. Daily updated predictions." />
-        <meta property="og:url" content="https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology" />
+        <meta property="og:title" content="IPL Astrology Winner 2026: Which Team Will Win Today?" />
+        <meta property="og:description" content="IPL astrology winner 2026 predictions with daily updated Vedic analysis, highlighted playoff picks, and today IPL match winner insights." />
+        <meta property="og:url" content="https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology" />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content="https://vedicaastro.in/optimized/ipl-2026.webp" />
+        <meta property="og:image" content="https://veadicastro.in/optimized/ipl-2026.webp" />
         <meta property="og:image:alt" content="Today IPL Match Winner Prediction Astrology" />
         <meta property="og:locale" content="en_IN" />
-        <meta property="og:site_name" content="Vedicaastro" />
+        <meta property="og:site_name" content="Veadicastro" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="IPL 2026 Winner Prediction: Which Team Will Win According to Astrology?" />
-        <meta name="twitter:description" content="Today IPL match winner prediction - Who will win today's IPL match? Get accurate aaj ka IPL match kaun jitega astrology predictions." />
-        <meta name="twitter:image" content="https://vedicaastro.in/optimized/ipl-2026.webp" />
-        <meta name="twitter:site" content="@vedicaastro" />
-        <meta name="twitter:creator" content="@vedicaastro" />
+        <meta name="twitter:title" content="IPL Astrology Winner 2026: Which Team Will Win Today?" />
+        <meta name="twitter:description" content="IPL astrology winner 2026 predictions with daily updated Vedic analysis and today IPL match winner insights." />
+        <meta name="twitter:image" content="https://veadicastro.in/optimized/ipl-2026.webp" />
+        <meta name="twitter:site" content="@veadicastro" />
+        <meta name="twitter:creator" content="@veadicastro" />
 
         {/* BlogPosting Schema */}
         <script type="application/ld+json">{`
         {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
-          "headline": "IPL 2026 Winner Astrology Prediction: Who Will Win Today's Match?",
-          "description": "Who will win IPL 2026 astrology prediction? Get aaj ka IPL match kaun jitega astrology insights with Mumbai Indians vs RCB astrology prediction 2026. Today IPL match toss prediction astrology & Vedic analysis for all teams.",
+          "headline": "IPL Astrology Winner 2026: Which Team Will Win Today?",
+          "description": "IPL astrology winner 2026 predictions with Vedic analysis, today IPL match winner insights, and highlighted playoff match forecasts.",
           "image": {
             "@type": "ImageObject",
-            "url": "https://vedicaastro.in/optimized/ipl-2026.webp",
+            "url": "https://veadicastro.in/optimized/ipl-2026.webp",
             "width": 1200,
             "height": 630
           },
           "author": {
             "@type": "Organization",
-            "name": "Vedicaastro",
-            "url": "https://vedicaastro.in"
+            "name": "Veadicastro",
+            "url": "https://veadicastro.in"
           },
           "publisher": {
             "@type": "Organization",
-            "name": "Vedicaastro",
+            "name": "Veadicastro",
             "logo": {
               "@type": "ImageObject",
-              "url": "https://vedicaastro.in/logo.jpg"
+              "url": "https://veadicatro.in/logo.jpg"
             }
           },
           "datePublished": "2026-03-13",
           "dateModified": "2026-05-19",
           "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology"
+            "@id": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology"
           },
           "keywords": ["IPL 2026 winner astrology prediction", "aaj ka IPL match kaun jitega astrology", "Mumbai Indians vs RCB astrology prediction 2026", "IPL 2026 winner prediction Vedic astrology", "today IPL match toss prediction astrology", "Hardik Pandya horoscope 2026", "Ruturaj Gaikwad career astrology", "Virat Kohli retirement astrology", "Jupiter transit 2026", "Shani Mahadasha IPL", "Mars in 10th house", "which team is lucky for IPL 2026", "IPL 2026 final winner prediction astrology", "astrology signs of IPL winners", "Rohit Sharma IPL 2026 horoscope", "IPL 2026 Dream11 astrology", "cricket bhavishyawani 2026", "Sanju Samson astrology 2026", "PBKS vs GT prediction today", "astrological prediction for cricket 2026", "IPL 2026 fantasy astrology tips"],
           "inLanguage": "en",
@@ -534,9 +534,9 @@ const WhichTeamWinIPL2026 = () => {
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://vedicaastro.in" },
-            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://vedicaastro.in/blog" },
-            { "@type": "ListItem", "position": 3, "name": "IPL 2026 Prediction", "item": "https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology" }
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://veadicastro.in" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://vedaicastro.in/blog" },
+            { "@type": "ListItem", "position": 3, "name": "IPL 2026 Prediction", "item": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology" }
           ]
         }
         `}</script>
@@ -588,8 +588,8 @@ const WhichTeamWinIPL2026 = () => {
             "@type": "Country",
             "name": "India"
           },
-          "image": "https://vedicaastro.in/optimized/ipl-2026.webp",
-          "url": "https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology"
+          "image": "https://veadicastro.in/optimized/ipl-2026.webp",
+          "url": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology"
         }
         `}</script>
 
@@ -599,7 +599,7 @@ const WhichTeamWinIPL2026 = () => {
           "@context": "https://schema.org",
           "@type": "WebPage",
           "speakable": { "@type": "SpeakableSpecification", "cssSelector": ["h1", "h2"] },
-          "url": "https://vedicaastro.in/blog/ipl-2026-winner-prediction-astrology"
+          "url": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology"
         }
         `}</script>
 
@@ -1056,7 +1056,7 @@ const WhichTeamWinIPL2026 = () => {
           <div className="border-t border-white/10 pt-8 mb-8 flex items-start gap-4">
             <div className="w-12 h-12 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-400 font-bold text-lg flex-shrink-0">V</div>
             <div>
-              <p className="font-semibold text-white">Vedicaastro Astrology Team</p>
+              <p className="font-semibold text-white">Veadicastro Astrology Team</p>
               <p className="text-white/60 text-sm mt-1">
                 Vedic astrology analysts specializing in sports predictions, kundli reading, and planetary transit analysis for over 10 years.
               </p>
