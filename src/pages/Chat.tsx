@@ -241,6 +241,10 @@ export default function Chat() {
     } 
   })();
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
+  const isProPlan = useMemo(() => {
+    const paidPlanKeywords = ["quick ask", "deep dive", "power pack"];
+    return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
+  }, [planName]);
 
   const historyKey = useMemo(() => `chat_history_${user?.email || "guest"}`, [user?.email]);
   const historyMetaKey = useMemo(() => `${historyKey}_meta`, [historyKey]);
@@ -817,7 +821,12 @@ export default function Chat() {
             <img src="/optimized/reviews.webp" alt="Veadicastro Vedic astrology AI platform logo" className="w-9 h-9 rounded-full" loading="eager" />
             {(sidebarOpen || sidebarExpanded) && (
               <div className="min-w-0">
-                <div className="text-xs font-medium truncate">{displayName}</div>
+                <div className="text-xs font-medium truncate inline-flex items-center gap-2">
+                  <span className="truncate">{displayName}</span>
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full border ${isProPlan ? "border-amber-400/40 text-amber-300 bg-amber-500/10" : "border-border/70 text-muted-foreground bg-card/50"}`}>
+                    {isProPlan ? "Pro" : "Free"}
+                  </span>
+                </div>
                 <div className="text-[10px] text-muted-foreground">Online</div>
               </div>
             )}
@@ -845,9 +854,27 @@ export default function Chat() {
           <div className="flex items-center gap-2 sm:gap-2 md:gap-2.5 min-w-0 flex-1">
             <img src="/optimized/reviews.webp" alt="profile" className="w-12 h-12 sm:w-9 sm:h-9 rounded-full object-cover flex-shrink-0 border-2 border-border/40 shadow-md" />
             <div className="min-w-0">
-              <div className="text-base sm:text-sm font-semibold leading-tight truncate">{displayName}</div>
-              <div className="text-xs sm:text-xs text-muted-foreground hidden sm:block">Asking for yourself</div>
-              <div className="text-xs text-muted-foreground sm:hidden">Asking for yourself</div>
+              <div className="text-base sm:text-sm font-semibold leading-tight truncate inline-flex items-center gap-2">
+                <span className="truncate">{displayName}</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${isProPlan ? "border-amber-400/40 text-amber-300 bg-amber-500/10" : "border-border/70 text-muted-foreground bg-card/50"}`}>
+                  {isProPlan ? "Pro" : "Free"}
+                </span>
+              </div>
+              {isProPlan ? (
+                <>
+                  <div className="text-xs sm:text-xs text-amber-300 hidden sm:block">
+                    Vedika AI 2.0 Unlocked for you
+                  </div>
+                  <div className="text-xs text-amber-300 sm:hidden block">
+                    Vedika AI 2.0 Unlocked for you
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="text-xs sm:text-xs text-muted-foreground hidden sm:block">Ask your questions to Vedika AI</div>
+                  <div className="text-xs text-muted-foreground sm:hidden">Ask your questions to Vedika AI</div>
+                </>
+              )}
             </div>
           </div>
           <div className="hidden md:block flex-shrink-0 ml-2">

@@ -12,6 +12,41 @@ import { auth } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 
+type TabId = "profile" | "kundali" | "security" | "preferences";
+
+type DetailItem = {
+  label: string;
+  value: string;
+};
+
+type PlanetInfo = {
+  name?: string;
+  planet?: string;
+  sign?: string;
+  rasi?: string;
+  nakshatra?: string | {
+    name?: string;
+    index?: number;
+    pada?: number;
+    lord?: string;
+  };
+  dasha?: string;
+  mahadasha?: string;
+  panchanga?: Record<string, unknown>;
+};
+
+type OnboardingDetails = {
+  name?: string;
+  dob?: string;
+  time?: string;
+  place?: string;
+  birthPlace?: string;
+};
+
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error ? error.message : fallback;
+}
+
 const Profile = () => {
   const { user, logout, loading } = useAuth();
   const { planName, expiresAt } = usePlan();
@@ -46,7 +81,7 @@ const Profile = () => {
   const [themeStatus, setThemeStatus] = useState<string | null>(null);
   const [lastLogin, setLastLogin] = useState<string | null>(null);
   const [resetLoading, setResetLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'preferences'>('profile');
+  const [activeTab, setActiveTab] = useState<TabId>('profile');
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [profileImageError, setProfileImageError] = useState(false);
 
@@ -91,8 +126,9 @@ const Profile = () => {
     try {
       const flag = localStorage.getItem("use_logo_theme") === "true";
       if (flag) applyLogoTheme();
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } catch {
+      setThemeStatus(null);
+    }
   }, []);
 
   function applyLogoTheme() {
@@ -111,8 +147,7 @@ const Profile = () => {
     window.location.reload();
   }
 
-  async function handleSave(e: React.FormEvent) {
-    e.preventDefault();
+  async function saveProfile() {
     setSaving(true);
     setStatus(null);
     try {
@@ -138,11 +173,16 @@ const Profile = () => {
       setUploadPreview(null);
       setStatus("Profile updated successfully.");
       toast({ title: "Profile updated!", description: "Your changes have been saved." });
-    } catch (e: any) {
-      setStatus(e?.message || "Failed to update profile.");
+    } catch (error: unknown) {
+      setStatus(getErrorMessage(error, "Failed to update profile."));
     } finally {
       setSaving(false);
     }
+  }
+
+  function handleSave(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    void saveProfile();
   }
 
   function handleFileSelected(file: File | null) {
@@ -170,10 +210,12 @@ const Profile = () => {
       setNewPassword("");
       setConfirmPassword("");
       setStatus("Password updated.");
-    } catch (e: any) {
-      setStatus(e?.message || "Failed to save password.");
+    } catch (error: unknown) {
+      setStatus(getErrorMessage(error, "Failed to save password."));
     }
   }
+
+  const kundaliData = getKundaliProfile();
 
   return (
     <div className="min-h-screen bg-background">
@@ -238,9 +280,17 @@ const Profile = () => {
                   <Star className="w-4 h-4 text-secondary" />
                   <span className="text-foreground">{computeCompletion()}% Complete</span>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
-                  <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                  <span className="text-purple-300 font-medium">{getCurrentPlan(planName)}</span>
+                <div className={`flex items-center gap-2 px-3 py-1 rounded-full border font-medium text-sm ${
+                  isPaidPlan(planName)
+                    ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/40 text-yellow-300'
+                    : 'bg-card/40 border-border/60 text-muted-foreground'
+                }`}>
+                  {isPaidPlan(planName) ? (
+                    <Shield className="w-4 h-4 text-yellow-400" />
+                  ) : (
+                    <div className="w-2 h-2 rounded-full bg-gray-400" />
+                  )}
+                  <span>{isPaidPlan(planName) ? 'PRO' : 'Free'} - {getCurrentPlan(planName)}</span>
                 </div>
               </div>
             </div>
@@ -252,12 +302,13 @@ const Profile = () => {
           <div className="flex flex-wrap gap-2 p-1 bg-card/40 rounded-xl border border-border/60">
             {[
               { id: 'profile', label: 'Profile', icon: User },
+              { id: 'kundali', label: 'My Kundali', icon: Calendar },
               { id: 'security', label: 'Security', icon: Shield },
               { id: 'preferences', label: 'Preferences', icon: Settings }
-            ].map(({ id, label, icon: Icon }) => (
+            ].map(({ id, label, icon: Icon }: { id: TabId; label: string; icon: typeof User }) => (
               <button
                 key={id}
-                onClick={() => setActiveTab(id as any)}
+                onClick={() => setActiveTab(id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
                   activeTab === id
                     ? 'bg-secondary text-secondary-foreground shadow-sm'
@@ -401,6 +452,56 @@ const Profile = () => {
           </div>
         )}
 
+        {activeTab === 'kundali' && (
+          <div className="space-y-6">
+            <Card className="p-6 bg-card/40 backdrop-blur-md border-border/60 rounded-2xl">
+              <div className="flex items-center gap-2 mb-6">
+                <Calendar className="w-5 h-5 text-secondary" />
+                <h3 className="font-semibold text-lg">My Kundali</h3>
+              </div>
+
+              {kundaliData.hasData ? (
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {kundaliData.basics.map((item) => (
+                      <div key={item.label} className="p-4 rounded-lg bg-background/50 border border-border/60">
+                        <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+                        <div className="font-medium">{item.value}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Separator />
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {kundaliData.details.map((item) => (
+                      <div key={item.label} className="flex items-center justify-between gap-4 p-3 rounded-lg bg-background/50 border border-border/60">
+                        <span className="text-sm text-muted-foreground">{item.label}</span>
+                        <span className="text-sm font-medium text-right">{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {kundaliData.lucky.map((item) => (
+                      <div key={item.label} className="p-4 rounded-lg bg-secondary/10 border border-secondary/30">
+                        <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+                        <div className="font-semibold text-secondary">{item.value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-4 rounded-lg bg-background/50 border border-border/60">
+                  <p className="text-sm text-muted-foreground">
+                    Kundali data is not available yet. Complete onboarding or generate your chart to view Moon sign, nakshatra, dasha, panchanga, and lucky details here.
+                  </p>
+                </div>
+              )}
+            </Card>
+          </div>
+        )}
+
         {activeTab === 'security' && (
           <div className="space-y-6">
             {/* Security Settings */}
@@ -455,8 +556,8 @@ const Profile = () => {
                           try { 
                             await sendPasswordResetEmail(auth, user.email); 
                             toast({ title: "Reset link sent", description: `Email sent to ${user.email}` }); 
-                          } catch(e:any){ 
-                            setStatus(e?.message||"Failed to send reset link"); 
+                          } catch(error: unknown){ 
+                            setStatus(getErrorMessage(error, "Failed to send reset link")); 
                           } finally {
                             setResetLoading(false);
                           }
@@ -561,7 +662,7 @@ const Profile = () => {
                 </div>
 
                 <div className="flex items-center gap-4 pt-4">
-                  <Button variant="cosmic" onClick={handleSave} disabled={saving} className="gap-2 h-11 px-6">
+                  <Button variant="cosmic" onClick={() => void saveProfile()} disabled={saving} className="gap-2 h-11 px-6">
                     {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                     {saving ? "Saving..." : "Save Preferences"}
                   </Button>
@@ -633,11 +734,208 @@ function computeCompletion(): number {
   }
 }
 
-function getCurrentPlan(currentPlanName?: string): string {
-  const plans: Record<string, string> = {
-    'Free': 'Free Plan',
-    'Standard': 'Standard Plan',
-    'Premium': 'Premium Plan',
+const NAKSHATRA_LORDS = [
+  "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
+  "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
+  "Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury",
+];
+
+const YONI_TYPES = [
+  "Horse", "Elephant", "Sheep", "Serpent", "Serpent", "Dog", "Cat", "Goat", "Cat",
+  "Rat", "Rat", "Cow", "Buffalo", "Tiger", "Buffalo", "Tiger", "Deer", "Deer",
+  "Dog", "Lion", "Cow", "Monkey", "Lion", "Horse", "Lion", "Elephant", "Horse",
+];
+
+const LUCKY_STONES: Record<string, string> = {
+  Aries: "Red Coral",
+  Taurus: "Diamond",
+  Gemini: "Emerald",
+  Cancer: "Pearl",
+  Leo: "Ruby",
+  Virgo: "Emerald",
+  Libra: "Diamond",
+  Scorpio: "Red Coral",
+  Sagittarius: "Yellow Sapphire",
+  Capricorn: "Blue Sapphire",
+  Aquarius: "Blue Sapphire",
+  Pisces: "Yellow Sapphire",
+};
+
+const LUCKY_COLORS: Record<string, string> = {
+  Aries: "Red, Maroon",
+  Taurus: "White, Pink",
+  Gemini: "Green, Light Blue",
+  Cancer: "White, Cream",
+  Leo: "Gold, Orange",
+  Virgo: "Green, Light Blue",
+  Libra: "White, Pink",
+  Scorpio: "Red, Maroon",
+  Sagittarius: "Yellow, Orange",
+  Capricorn: "Black, Blue",
+  Aquarius: "Black, Blue",
+  Pisces: "Yellow, Orange",
+};
+
+const LUCKY_DAYS: Record<string, string> = {
+  Aries: "Tuesday, Sunday",
+  Taurus: "Friday, Monday",
+  Gemini: "Wednesday, Friday",
+  Cancer: "Monday, Thursday",
+  Leo: "Sunday, Tuesday",
+  Virgo: "Wednesday, Friday",
+  Libra: "Friday, Monday",
+  Scorpio: "Tuesday, Thursday",
+  Sagittarius: "Thursday, Sunday",
+  Capricorn: "Saturday, Friday",
+  Aquarius: "Saturday, Wednesday",
+  Pisces: "Thursday, Monday",
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
+function readStoredJson(key: string): unknown {
+  if (typeof window === "undefined") return null;
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  } catch {
+    return null;
+  }
+}
+
+function toText(value: unknown): string | null {
+  if (typeof value === "string" && value.trim()) return value;
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  return null;
+}
+
+function readPlanets(): PlanetInfo[] {
+  const stored = readStoredJson("astrology_planets");
+  const candidate = Array.isArray(stored)
+    ? stored
+    : isRecord(stored) && Array.isArray(stored.planets)
+      ? stored.planets
+      : [];
+
+  return candidate.filter(isRecord).map((planet) => ({
+    name: toText(planet.name) || undefined,
+    planet: toText(planet.planet) || undefined,
+    sign: toText(planet.sign) || undefined,
+    rasi: toText(planet.rasi) || undefined,
+    nakshatra: isRecord(planet.nakshatra)
+      ? {
+          name: toText(planet.nakshatra.name) || undefined,
+          index: typeof planet.nakshatra.index === "number" ? planet.nakshatra.index : undefined,
+          pada: typeof planet.nakshatra.pada === "number" ? planet.nakshatra.pada : undefined,
+          lord: toText(planet.nakshatra.lord) || undefined,
+        }
+      : toText(planet.nakshatra) || undefined,
+    dasha: toText(planet.dasha) || undefined,
+    mahadasha: toText(planet.mahadasha) || undefined,
+    panchanga: isRecord(planet.panchanga) ? planet.panchanga : undefined,
+  }));
+}
+
+function readOnboardingDetails(): OnboardingDetails | null {
+  const stored = readStoredJson("onboarding_details");
+  if (!isRecord(stored)) return null;
+  return {
+    name: toText(stored.name) || undefined,
+    dob: toText(stored.dob) || undefined,
+    time: toText(stored.time) || undefined,
+    place: toText(stored.place) || undefined,
+    birthPlace: toText(stored.birthPlace) || undefined,
   };
-  return plans[currentPlanName || 'Free'] || 'Free Plan';
+}
+
+function findPlanet(planets: PlanetInfo[], planetName: string) {
+  return planets.find((planet) => (planet.name || planet.planet || "").toLowerCase() === planetName.toLowerCase());
+}
+
+function getPlanetSign(planet?: PlanetInfo) {
+  return planet?.sign || planet?.rasi || "Not set";
+}
+
+function getNakshatraName(planet?: PlanetInfo) {
+  if (!planet?.nakshatra) return "Not set";
+  return typeof planet.nakshatra === "string" ? planet.nakshatra : planet.nakshatra.name || "Not set";
+}
+
+function getNakshatraIndex(planet?: PlanetInfo) {
+  return isRecord(planet?.nakshatra) && typeof planet.nakshatra.index === "number"
+    ? planet.nakshatra.index
+    : null;
+}
+
+function getNakshatraLord(planet?: PlanetInfo) {
+  if (isRecord(planet?.nakshatra) && planet.nakshatra.lord) return planet.nakshatra.lord;
+  const index = getNakshatraIndex(planet);
+  return index === null ? "Not set" : NAKSHATRA_LORDS[index] || "Unknown";
+}
+
+function getYoni(planet?: PlanetInfo) {
+  const index = getNakshatraIndex(planet);
+  return index === null ? "Not set" : YONI_TYPES[index] || "Unknown";
+}
+
+function getPanchangaSummary(moon?: PlanetInfo) {
+  if (!moon?.panchanga) return "Not set";
+  const entries = Object.entries(moon.panchanga)
+    .map(([key, value]) => {
+      const text = toText(value);
+      return text ? `${key}: ${text}` : null;
+    })
+    .filter((entry): entry is string => Boolean(entry));
+
+  return entries.length ? entries.slice(0, 3).join(", ") : "Not set";
+}
+
+function getKundaliProfile(): { basics: DetailItem[]; details: DetailItem[]; lucky: DetailItem[]; hasData: boolean } {
+  const planets = readPlanets();
+  const onboarding = readOnboardingDetails();
+  const ascendant = typeof window === "undefined" ? "" : localStorage.getItem("ascendant") || "";
+  const moon = findPlanet(planets, "Moon");
+  const sun = findPlanet(planets, "Sun");
+  const luckySign = getPlanetSign(sun) !== "Not set" ? getPlanetSign(sun) : getPlanetSign(moon);
+
+  const basics = [
+    { label: "Birth Date", value: onboarding?.dob || "Not set" },
+    { label: "Birth Time", value: onboarding?.time || "Not set" },
+    { label: "Birth Place", value: onboarding?.place || onboarding?.birthPlace || "Not set" },
+  ];
+
+  const details = [
+    { label: "Ascendant", value: ascendant || "Not set" },
+    { label: "Moon Sign", value: getPlanetSign(moon) },
+    { label: "Sun Sign", value: getPlanetSign(sun) },
+    { label: "Nakshatra", value: getNakshatraName(moon) },
+    { label: "Nakshatra Lord", value: getNakshatraLord(moon) },
+    { label: "Yoni", value: getYoni(moon) },
+    { label: "Dasha", value: moon?.dasha || moon?.mahadasha || getNakshatraLord(moon) },
+    { label: "Panchanga", value: getPanchangaSummary(moon) },
+  ];
+
+  const lucky = [
+    { label: "Lucky Day", value: LUCKY_DAYS[luckySign] || "Not set" },
+    { label: "Lucky Color", value: LUCKY_COLORS[luckySign] || "Not set" },
+    { label: "Lucky Gem", value: LUCKY_STONES[luckySign] || "Not set" },
+  ];
+
+  return {
+    basics,
+    details,
+    lucky,
+    hasData: planets.length > 0 || Boolean(ascendant || onboarding?.dob || onboarding?.time || onboarding?.place),
+  };
+}
+
+function getCurrentPlan(currentPlanName?: string): string {
+  if (!currentPlanName || currentPlanName === 'Free') return 'Free Plan';
+  return currentPlanName.endsWith('Plan') ? currentPlanName : currentPlanName;
+}
+
+function isPaidPlan(planName?: string): boolean {
+  return Boolean(planName && planName !== 'Free');
 }

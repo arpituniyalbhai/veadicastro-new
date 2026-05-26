@@ -16,6 +16,7 @@ import { generateGeminiStream, type ChatTurn } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { cn } from "@/lib/utils";
 import AdBanner from "@/components/AdBanner";
+import { useAuth } from "@/context/AuthContext";
 
 type Gender = "male" | "female";
 type Lang = "en" | "hi";
@@ -65,6 +66,7 @@ const StarField = () => (
 
 export default function FreeAiAstrologyChat() {
   const navigate = useNavigate();
+  const { setAuthOpen } = useAuth();
 
   const [birthDetails, setBirthDetails] = useState<BirthDetails>({
     name: "", gender: "male", day: 1, month: 1, year: 2000,
@@ -1107,10 +1109,13 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               </p>
               <div className="space-y-3">
                 <button
-                  onClick={() => navigate("/")}
+                  onClick={() => {
+                    setShowSignupModal(false);
+                    setAuthOpen(true);
+                  }}
                   className="w-full btn-pink text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity"
                 >
-                  Go to Home
+                  Sign Up
                 </button>
               </div>
             </div>

@@ -22,6 +22,7 @@ const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Instruction = lazy(() => import("@/pages/Instruction"));
 const Reports = lazy(() => import("@/pages/Reports"));
+const DeepReports = lazy(() => import("@/pages/DeepReports"));
 const ReportPage = lazy(() => import("@/pages/ReportDetail"));
 const LanguageSettings = lazy(() => import("@/pages/LanguageSettings"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
@@ -102,6 +103,7 @@ const RouterShell = () => {
     "/dashboard",
     "/dynamic",
     "/reports",
+    "/deep-reports",
     "/pricing",
     "/settings/language",
     "/profile",
@@ -174,6 +176,7 @@ const RouterShell = () => {
         <Route path="/onboarding" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Onboarding /></Suspense></ProtectedRoute>} />
         <Route path="/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Dashboard /></Suspense></ProtectedRoute>} />
         <Route path="/reports" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Reports /></Suspense></ProtectedRoute>} />
+        <Route path="/deep-reports" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><DeepReports /></Suspense></ProtectedRoute>} />
         <Route path="/pricing" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Pricing /></Suspense></ProtectedRoute>} />
         <Route path="/pricing/onboarding" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><PricingOnboarding /></Suspense></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Chat /></Suspense></ProtectedRoute>} />

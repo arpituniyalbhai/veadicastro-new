@@ -137,6 +137,7 @@ export default function Dashboard() {
     { id: "astrologer", label: "Talk to Astrologer", icon: MessageCircle },
     { id: "compatibility", label: "Compatibility", icon: Heart },
     { id: "report", label: "Report", icon: FileText },
+    { id: "deepReports", label: "Deep Reports", icon: FileText },
     { id: "Pricing", label: "Pricing", icon: Receipt },
   ];
 
@@ -281,6 +282,9 @@ export default function Dashboard() {
         break;
       case "report":
         navigate(`/reports?referral=dashboard`);
+        break;
+      case "deepReports":
+        navigate(`/deep-reports?referral=dashboard`);
         break;
       case "Pricing":
         window.open("/pricing?referral=dashboard", "_blank");
@@ -1008,16 +1012,31 @@ useEffect(() => {
             <div className="flex items-center justify-between mb-4">
               <h2 className={cn("font-semibold", sidebarCollapsed && "hidden")}>{t("you")}</h2>
             </div>
-            {!sidebarCollapsed && (
-              <div onClick={() => navigate('/profile?referral=dashboard')} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 hover:bg-accent/10 cursor-pointer transition-colors">
-                <img src={profilePhoto} alt="profile" className="w-10 h-10 rounded-full object-cover" />
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-sm truncate">{displayName}</h3>
-                  <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
-              </div>
-            )}
+            {!sidebarCollapsed && (() => {
+                const paidPlanKeywords = ["deep dive", "quick ask", "quick start", "power", "basic", "premium", "elite"];
+                const isPro = paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
+                return (
+                  <div onClick={() => navigate('/profile?referral=dashboard')} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 hover:bg-accent/10 cursor-pointer transition-colors">
+                    <img src={profilePhoto} alt="profile" className="w-10 h-10 rounded-full object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="font-semibold text-sm truncate">{displayName}</h3>
+                        {isPro ? (
+                          <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-secondary/25 text-secondary border border-secondary/40 uppercase tracking-wide">
+                            Pro ✦
+                          </span>
+                        ) : (
+                          <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-border/40 uppercase tracking-wide">
+                            Free
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  </div>
+                );
+              })()}
           </div>
 
           {/* Navigation */}
@@ -1334,7 +1353,7 @@ useEffect(() => {
                 <p className="text-xs text-orange-600 dark:text-orange-400 mt-1 font-medium">{t("reportWarning")}</p>
               </div>
               {/* Promo graphic removed as requested */}
-              <Button variant="cosmic" className="rounded-xl" onClick={() => handleNav("report")}>
+              <Button variant="cosmic" className="rounded-xl" onClick={() => handleNav("deepReports")}>
                 {t("promoCheckNow")}
               </Button>
             </div>
