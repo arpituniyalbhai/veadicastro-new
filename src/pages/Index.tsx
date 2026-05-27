@@ -44,10 +44,16 @@ const featuredBadges = [
     className: "h-[54px] w-auto",
   },
   {
-    href: "https://fazier.com/launches/veadicastro.in",
+    href: "https://fazier.com/launches/veadicatro.in",
     src: "https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark",
     alt: "Fazier badge",
     className: "h-[54px] w-auto",
+  },
+  {
+    href: "https://showmebest.ai",
+    src: "https://showmebest.ai/badge/feature-badge-dark.webp",
+    alt: "Featured on ShowMeBestAI",
+    className: "h-[60px] w-auto",
   },
   {
     href: "https://neeed.directory/products/veadicastro?utm_source=veadicastro",
@@ -78,6 +84,12 @@ const featuredBadges = [
     src: "https://img.turbo0.com/badge-listed-dark.svg",
     alt: "Listed on Turbo0",
     className: "h-[54px] w-auto",
+  },
+  {
+    href: "https://launchigniter.com/product/veadicastro?ref=badge-veadicastro",
+    src: "https://launchigniter.com/api/badge/veadicastro?theme=dark",
+    alt: "Featured on LaunchIgniter",
+    className: "h-[55px] w-auto",
   },
 ];
 
