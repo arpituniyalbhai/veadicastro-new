@@ -37,7 +37,7 @@ const plans = [
     questions: 15,
     description: "Most popular — serious guidance for life's big decisions",
     buyers: 1243,
-    recentBuyers: 786,
+    recentBuyers: 901,
     benefits: [
       "15 Personalized Questions",
       "Ideal for career, marriage & life planning",
@@ -61,7 +61,7 @@ const plans = [
        "Never expire — yours forever",
       "Most accurate & detailed readings",
       "Priority response generation",
-      "A human astrologer charges ₹500+ per question",
+      "Go Beyond Basic Predictions with in-depth insights",
       "Save 55% vs Quick Ask"
     ]
   }
@@ -653,14 +653,19 @@ const Pricing = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 max-w-5xl mx-auto mb-12">
+        <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
           {plans.map((plan) => {
             const isDeepDive = plan.name === 'Deep Dive';
+            const visibleBenefits = expandedBenefits[plan.name] ? plan.benefits.slice(1) : plan.benefits.slice(1, 6);
             
             return (
               <Card
                 key={plan.name}
-                className={`p-6 rounded-2xl border ${isDeepDive ? 'border-accent/60 bg-accent/10' : 'border-border/60 bg-card/40'} transition-all duration-300 hover:shadow-lg hover:scale-105 cursor-pointer relative min-h-[500px] max-w-sm mx-auto w-full`}
+                className={`group relative flex min-h-[670px] w-full cursor-pointer flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 ${
+                  isDeepDive
+                    ? 'border border-pink-500/60 bg-pink-950/20 shadow-[0_0_40px_rgba(236,72,153,0.12)]'
+                    : 'border border-border/60 bg-card/40'
+                }`}
                 onClick={(e) => {
                   // Prevent navigation if clicking on benefits toggle
                   if ((e.target as HTMLElement).closest('button')) {
@@ -670,75 +675,80 @@ const Pricing = () => {
                 }}
               >
                 {isDeepDive && (
-                  <div className="absolute -top-3 -left-3">
-                    <span className="bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-3 py-1 rounded-full font-bold">
+                  <div className="absolute -top-3 left-6 z-10">
+                    <span className="rounded-full border border-pink-500/40 bg-pink-500 px-4 py-1 text-xs font-bold text-white shadow-lg shadow-pink-500/20">
                       🔥687 people bought in 24 hour - best seller
                     </span>
                   </div>
                 )}
                 {plan.name === "Quick Ask" && (
-                  <div className="absolute -top-3 -left-3">
-                    <span className="bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-3 py-1 rounded-full font-bold">
+                  <div className="absolute -top-3 left-6 z-10">
+                    <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
                       🔥 {plan.recentBuyers} bought in 24h
                     </span>
                   </div>
                 )}
                 {plan.name === "The Power Pack" && (
-                  <div className="absolute -top-3 -left-3">
-                    <span className="bg-green-500/20 border border-green-500/50 text-green-300 text-xs px-3 py-1 rounded-full font-bold">
+                  <div className="absolute -top-3 left-6 z-10">
+                    <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
                       🔥 213 people bought in 24h
                     </span>
                   </div>
                 )}
                 
                 {/* Header */}
-                <div className="text-center mb-6">
-                  <h2 className={`text-2xl font-bold mb-3 ${isDeepDive ? 'text-accent' : 'text-white'}`}>{plan.name}</h2>
-                  <p className="text-white text-sm mb-3">{plan.description}</p>
-                </div>
-
-                {/* Pricing */}
-                <div className="text-center mb-6">
-                  <div className="text-3xl font-bold text-white mb-2">
-                    {plan.questions} Questions
-                  </div>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className={`text-4xl font-bold ${isDeepDive ? 'text-accent' : 'text-pink-500'}`}>
+                <div className="mb-5 pt-3">
+                  <h2 className="mb-5 text-xl font-bold leading-tight text-white">{plan.name}</h2>
+                  <div className="mb-3 flex items-baseline gap-2">
+                    <span className="text-4xl font-extrabold leading-none text-pink-500">
                       ₹{plan.price}
                     </span>
-                    <span className="text-sm text-white">/ {plan.period}</span>
+                    <span className="text-sm text-muted-foreground">/ {plan.period}</span>
+                  </div>
+                  <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
+                    <span>{plan.questions} Questions</span>
+                    <span>·</span>
+                    <span>{plan.period}</span>
+                  </div>
+                  <p className="min-h-[52px] text-sm leading-6 text-muted-foreground">{plan.description}</p>
+                </div>
+
+                <div className="mb-4 rounded-lg border border-green-500/25 bg-green-500/10 px-4 py-3">
+                  <div className="flex items-start gap-2 text-xs font-medium leading-5 text-green-400">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>{plan.benefits[0]}</span>
                   </div>
                 </div>
 
                 {/* Benefits */}
-                <div className="mb-8">
-                  <h3 className="text-white font-semibold mb-4 text-center">What you get:</h3>
+                <div className="mb-5 flex-1 rounded-xl border border-border/60 bg-background/40 p-4">
+                  <h3 className="mb-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">What you get:</h3>
                   <ul className="space-y-3">
-                    {(expandedBenefits[plan.name] ? plan.benefits : plan.benefits.slice(0, 2)).map((benefit, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-green-400 text-sm mt-1">✓</span>
-                        <span className="text-white text-sm">{benefit}</span>
+                    {visibleBenefits.map((benefit, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm leading-5 text-foreground">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                        <span>{benefit}</span>
                       </li>
                     ))}
                   </ul>
-                  {plan.benefits.length > 2 && (
+                  {plan.benefits.length > 6 && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setExpandedBenefits(prev => ({ ...prev, [plan.name]: !prev[plan.name] }));
                       }}
-                      className="text-xs text-foreground/70 hover:text-foreground mt-2 text-center w-full transition-colors"
+                      className="mt-4 w-full text-center text-xs font-medium text-foreground/70 transition-colors hover:text-foreground"
                     >
-                      {expandedBenefits[plan.name] ? 'Show less' : `Show ${plan.benefits.length - 2} more benefits`}
+                      {expandedBenefits[plan.name] ? 'Show less' : `Show ${plan.benefits.length - 6} more benefits`}
                     </button>
                   )}
                 </div>
 
                 {/* CTA Button */}
-                <div className="mt-auto">
+                <div className="mt-auto pt-1">
                   <Button
-                    variant={isDeepDive ? "default" : "cosmic"}
-                    className={`w-full h-12 rounded-lg font-semibold text-base ${isDeepDive ? 'bg-accent hover:bg-accent/90 text-accent-foreground' : ''}`}
+                    variant="default"
+                    className="h-12 w-full rounded-lg border border-pink-500/60 bg-pink-500 text-base font-bold text-white shadow-sm shadow-pink-500/20 hover:bg-pink-600 hover:text-white"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
@@ -802,6 +812,70 @@ const Pricing = () => {
               </Card>
             ))}
           </div>
+        </div>
+
+        {/* Premium Report Promotion */}
+        <div className="mb-12 max-w-5xl mx-auto">
+          <Card className="overflow-hidden rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 via-card/70 to-card/40">
+            <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="p-6 md:p-8">
+                <Badge className="mb-4 border-pink-500/40 bg-pink-500/15 text-pink-300 hover:bg-pink-500/15">
+                  Most Chosen Detailed Report
+                </Badge>
+                <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
+                  Deep Life Analysis Report
+                </h2>
+                <p className="text-muted-foreground leading-7 mb-5">
+                  A complete 25-35 page life blueprint prepared for your birth chart, covering career, marriage, money timing, strengths, challenges, and remedies.
+                </p>
+                <div className="flex flex-wrap items-center gap-3 mb-6">
+                  <span className="text-4xl font-bold text-pink-500">₹1999</span>
+                  <span className="rounded-full border border-green-500/30 bg-green-500/10 px-3 py-1 text-sm font-medium text-green-400">
+                    24-48 hr delivery
+                  </span>
+                  <span className="rounded-full border border-border/60 bg-background/50 px-3 py-1 text-sm text-muted-foreground">
+                    25-35 pages
+                  </span>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2 mb-6">
+                  {[
+                    "Complete Life Blueprint",
+                    "Marriage & Relationship Timing",
+                    "Career & Business Roadmap",
+                    "Wealth & Money Periods",
+                    "Dasha Analysis",
+                    "Personalized Remedies",
+                  ].map((item) => (
+                    <div key={item} className="flex items-start gap-2 text-sm text-foreground">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mb-6 rounded-xl border border-pink-500/20 bg-background/50 p-4 text-sm leading-6 text-muted-foreground">
+                  This is not an AI-generated astrology PDF. Every page is manually prepared specifically for your birth chart.
+                </p>
+                <Button
+                  variant="cosmic"
+                  className="h-12 rounded-lg px-6 text-base font-semibold"
+                  onClick={() => {
+                    navigate(`/pricing/onboarding?plan=${encodeURIComponent("Deep Life Analysis")}&amount=1999&type=report`);
+                  }}
+                >
+                  Book ₹1999 Report
+                  <ArrowLeft className="h-4 w-4 rotate-180" />
+                </Button>
+              </div>
+              <div className="relative flex min-h-[280px] items-center justify-center overflow-hidden border-t border-pink-500/20 bg-black/30 p-6 lg:border-l lg:border-t-0">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(236,72,153,0.22),transparent_62%)]" />
+                <img
+                  src="/deep-reports-image/karma-chakra-horoscope.png"
+                  alt="Deep Life Analysis horoscope report"
+                  className="relative max-h-[360px] w-full object-contain"
+                />
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Compatibility Credits Section */}

@@ -21,7 +21,7 @@ const MICRO_PRICES: Record<string, number> = {
   'Basic Personalized Report': 99900, // ₹999 in paise
   'Deep Life Analysis': 199900, // ₹1999 in paise
   'Premium Expert Guidance': 399900, // ₹3999 in paise
-  'कर्म चक्र:गहरा कर्म विश्लेषण': 999900, // ₹9999 in paise
+  'कर्म चक्र: गहरा कर्म विश्लेषण': 999900, // ₹9999 in paise
   'कर्म चक्र: Karmo Ka Fal': 999900, // ₹9999 in paise
   'कर्म चक्र: आपकी जीवन रिपोर्ट': 999900, // ₹9999 in paise
   'कर्म चक्र': 999900, // ₹9999 in paise
@@ -33,6 +33,22 @@ const COMPATIBILITY_PRICES: Record<string, number> = {
   '1 Compatibility Credit': 2900,   // ₹29 in paise
   '2 Compatibility Credits': 4900,  // ₹49 in paise
   '5 Compatibility Credits': 9900,  // ₹99 in paise
+};
+
+const getSpecialReportPrice = (planName: string): number | undefined => {
+  const normalized = planName.trim().toLowerCase();
+
+  if (
+    normalized.includes('karma chakra') ||
+    normalized.includes('karmo ka fal') ||
+    normalized.includes('कर्म चक्र') ||
+    normalized.includes('कर्मों का फल') ||
+    normalized.includes('कर्मो का फल')
+  ) {
+    return 999900;
+  }
+
+  return undefined;
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -49,7 +65,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { currency, planName, customAmount, promoCode } = req.body;
+    const { currency, customAmount, promoCode } = req.body;
+    const planName = typeof req.body.planName === 'string' ? req.body.planName.trim() : req.body.planName;
 
     if (!currency || !planName) {
       return res.status(400).json({ error: 'Missing required fields: currency, planName' });
@@ -66,6 +83,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // For custom amounts (like single reports), use the provided amount
       originalAmount = customAmount;
       console.log('[Create Order] Using custom amount:', { planName, customAmount });
+    } else if (getSpecialReportPrice(planName)) {
+      originalAmount = getSpecialReportPrice(planName)!;
+      console.log('[Create Order] Using special report price:', { planName, originalAmount });
     } else if (MICRO_PRICES[planName]) {
       // For micro-transactions
       originalAmount = MICRO_PRICES[planName];
