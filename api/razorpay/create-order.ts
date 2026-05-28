@@ -21,6 +21,11 @@ const MICRO_PRICES: Record<string, number> = {
   'Basic Personalized Report': 99900, // ₹999 in paise
   'Deep Life Analysis': 199900, // ₹1999 in paise
   'Premium Expert Guidance': 399900, // ₹3999 in paise
+  'कर्म चक्र:गहरा कर्म विश्लेषण': 999900, // ₹9999 in paise
+  'कर्म चक्र: Karmo Ka Fal': 999900, // ₹9999 in paise
+  'कर्म चक्र: आपकी जीवन रिपोर्ट': 999900, // ₹9999 in paise
+  'कर्म चक्र': 999900, // ₹9999 in paise
+  'Karma Chakra': 999900, // ₹9999 in paise
 };
 
 // Compatibility credit pricing
