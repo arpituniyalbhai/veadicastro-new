@@ -113,6 +113,7 @@ const allMatches: IPLMatch[] = [
   { date: "May 24", team1: "KKR",  team2: "DC",   p1: 53, p2: 47, planet: "Rahu's influence strengthens KKR at Eden" },
   { date: "May 26", team1: "RCB",  team2: "GT",   p1: 70, p2: 30, planet: "Mars and Jupiter favor RCB's momentum", reason: "RCB's batting core looks sharper under pressure, while the planetary pattern gives them stronger timing in the powerplay and chase control." },
   { date: "May 27", team1: "SRH",  team2: "RR",   p1: 40, p2: 60, planet: "Venus and Moon support RR's balance", reason: "RR look calmer and more settled in a playoff-style game, with a smoother temperament in the middle overs and stronger closing stability." },
+  { date: "May 29", team1: "GT",   team2: "RR",   p1: 30, p2: 70, planet: "Venus, Moon and Jupiter strongly favor RR", reason: "Rajasthan Royals get the stronger astrological push today because Venus supports their natural balance, the Moon gives better emotional control in pressure overs, and Jupiter improves decision-making around bowling changes and chase tempo. GT still carry Saturn's discipline, but Rahu's restless influence can create mistimed risks, so the cosmic ratio leans clearly toward RR at 70:30." },
 ];
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
@@ -517,7 +518,7 @@ const WhichTeamWinIPL2026 = () => {
             }
           },
           "datePublished": "2026-03-13",
-          "dateModified": "2026-05-19",
+          "dateModified": "2026-05-29",
           "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology"
@@ -582,7 +583,7 @@ const WhichTeamWinIPL2026 = () => {
           "@type": "SportsEvent",
           "name": "IPL 2026",
           "startDate": "2026-03-28",
-          "endDate": "2026-05-24",
+          "endDate": "2026-05-29",
           "sport": "Cricket",
           "location": {
             "@type": "Country",
