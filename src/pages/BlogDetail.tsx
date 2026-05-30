@@ -35,8 +35,8 @@ const blogMetadata: Record<string, { title: string; excerpt: string }> = {
     excerpt: 'Explore AI Jyotish and how artificial intelligence is revolutionizing Vedic astrology predictions and consultations.'
   },
   'ipl-2026-winner-prediction-astrology': {
-    title: 'IPL 2026 Winner Prediction: Astrology Analysis',
-    excerpt: 'IPL 2026 winner prediction based on Vedic astrology. Analysis of team charts, planetary positions, and match timings.'
+    title: 'IPL 2026 Final Prediction: Who Will Win RCB vs GT?',
+    excerpt: 'RCB vs GT IPL 2026 Final prediction based on Vedic astrology, winner probability, final-day planetary positions, and match timing.'
   },
   'vedic-astrology-ai-kese-kaam-karta-ha': {
     title: 'Vedic Astrology AI Kaise Kaam Karta Hai? Complete Guide',

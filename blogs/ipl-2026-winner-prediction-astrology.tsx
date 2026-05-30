@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import { Calendar, Clock, Star, ChevronRight, UserPlus, ChevronDown, ChevronUp, TrendingUp, Zap } from "lucide-react";
+import { Calendar, Clock, Star, ChevronRight, UserPlus, ChevronDown, ChevronUp, TrendingUp, Zap, Trophy } from "lucide-react";
 import { useAuth } from "../src/context/AuthContext";
 import { ButtonLite } from "../src/components/ui/button-lite";
 import AdBanner from "../src/components/AdBanner";
@@ -114,7 +114,12 @@ const allMatches: IPLMatch[] = [
   { date: "May 26", team1: "RCB",  team2: "GT",   p1: 70, p2: 30, planet: "Mars and Jupiter favor RCB's momentum", reason: "RCB's batting core looks sharper under pressure, while the planetary pattern gives them stronger timing in the powerplay and chase control." },
   { date: "May 27", team1: "SRH",  team2: "RR",   p1: 40, p2: 60, planet: "Venus and Moon support RR's balance", reason: "RR look calmer and more settled in a playoff-style game, with a smoother temperament in the middle overs and stronger closing stability." },
   { date: "May 29", team1: "GT",   team2: "RR",   p1: 30, p2: 70, planet: "Venus, Moon and Jupiter strongly favor RR", reason: "Rajasthan Royals get the stronger astrological push today because Venus supports their natural balance, the Moon gives better emotional control in pressure overs, and Jupiter improves decision-making around bowling changes and chase tempo. GT still carry Saturn's discipline, but Rahu's restless influence can create mistimed risks, so the cosmic ratio leans clearly toward RR at 70:30." },
+  { date: "May 31", team1: "RCB",  team2: "GT",   p1: 64, p2: 36, planet: "Mars and Jupiter give RCB the final-day edge", reason: "RCB carry the stronger final-day astrological pattern: Mars boosts aggression, Jupiter improves calm decision-making, and the pressure timing favors their batting rhythm. GT remain dangerous through Saturn discipline and Rahu surprise, but the RCB vs GT final prediction leans RCB at 64:36." },
 ];
+
+const finalMatch = allMatches.find(
+  (match) => match.date === "May 31" && match.team1 === "RCB" && match.team2 === "GT"
+);
 
 // ─── Dynamic Date Functions ───────────────────────────────────────────────────
 const getDateStringWithOffset = (offsetDays: number) => {
@@ -138,15 +143,56 @@ const getTodayMatch = () => {
   return match;
 };
 
+const getFinalCountdown = () => {
+  const finalStart = new Date("2026-05-31T19:30:00+05:30").getTime();
+  const diff = Math.max(0, finalStart - Date.now());
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  return { days, hours, minutes, seconds };
+};
+
+const FinalAnnouncementBar = () => {
+  const [countdown, setCountdown] = useState(getFinalCountdown());
+
+  useEffect(() => {
+    const timer = setInterval(() => setCountdown(getFinalCountdown()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="sticky top-0 z-50 border-b border-yellow-300/40 bg-black/95 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 py-3 text-center sm:flex-row sm:gap-4">
+        <div className="flex items-center gap-2 text-sm font-black uppercase tracking-wider text-yellow-200 sm:text-base">
+          <Trophy className="h-5 w-5 text-yellow-300" />
+          IPL 2026 FINAL TOMORROW - RCB vs GT
+        </div>
+        <div className="flex items-center gap-2 rounded-full border border-yellow-300/40 bg-yellow-300/15 px-3 py-1 text-xs font-bold text-white sm:text-sm">
+          Countdown:
+          <span className="text-yellow-200">{countdown.days}d</span>
+          <span className="text-yellow-200">{countdown.hours}h</span>
+          <span className="text-yellow-200">{countdown.minutes}m</span>
+          <span className="text-yellow-200">{countdown.seconds}s</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Match Card Component ──────────────────────────────────────────────────────
 const MatchCard = ({ match, isToday, featured = false }: { match: IPLMatch; isToday: boolean; featured?: boolean }) => {
   const winner = match.p1 > match.p2 ? match.team1 : match.p1 < match.p2 ? match.team2 : null;
   const t1Color = teamColors[match.team1] || "bg-white/10 text-white border-white/20";
   const t2Color = teamColors[match.team2] || "bg-white/10 text-white border-white/20";
+  const isFinal = match.date === "May 31" && match.team1 === "RCB" && match.team2 === "GT";
 
   return (
     <div className={`rounded-xl border p-4 transition-all ${
-      featured
+      isFinal
+        ? "bg-gradient-to-br from-yellow-400/18 via-red-500/18 to-sky-500/18 border-yellow-300/60 shadow-2xl shadow-yellow-400/15"
+        : featured
         ? "bg-gradient-to-r from-orange-500/18 to-pink-500/18 border-orange-400/40 shadow-lg shadow-orange-500/10"
         : isToday
         ? "bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-500/40 shadow-lg"
@@ -182,29 +228,41 @@ const MatchCard = ({ match, isToday, featured = false }: { match: IPLMatch; isTo
         </span>
       </div>
 
+      {isFinal && (
+        <div className="mb-4 flex items-center justify-center gap-2 rounded-full border border-yellow-300/40 bg-yellow-300/15 px-4 py-2 text-sm font-bold text-yellow-100">
+          <Trophy className="h-4 w-4" />
+          IPL 2026 Final Prediction: RCB vs GT
+        </div>
+      )}
+
       <div className="flex items-center gap-3 mb-3">
         <div className="flex-1 text-center">
-          <div className={`p-3 rounded-lg border transition-all ${
+          <div className={`relative min-h-[154px] p-3 rounded-lg border transition-all ${
             winner === match.team1
-              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30"
-              : t1Color + " hover:scale-105"
+              ? "bg-gradient-to-br from-emerald-400/35 via-green-500/25 to-yellow-400/20 border-emerald-300/80 shadow-2xl shadow-emerald-400/25 ring-2 ring-emerald-300/50 scale-[1.03]"
+              : `${t1Color} ${winner ? "opacity-55 grayscale-[35%]" : "hover:scale-105"}`
           }`}>
-            <div className={`font-bold text-lg mb-1 ${winner === match.team1 ? "text-green-600" : ""}`}>
+            {winner === match.team1 && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-black shadow-lg">
+                <Trophy className="mr-1 inline h-3.5 w-3.5" /> Predicted Winner
+              </div>
+            )}
+            <div className={`font-black mb-1 ${winner === match.team1 ? "text-3xl text-white" : "text-lg"}`}>
               {match.team1}
             </div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+            <div className={`text-xs uppercase tracking-wider mb-2 ${winner === match.team1 ? "text-white/85" : "text-gray-500"}`}>
               {fullTeamName[match.team1]}
             </div>
-            <div className={`text-2xl font-bold ${
+            <div className={`font-black leading-none ${
               winner === match.team1
-                ? "text-green-400"
-                : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
+                ? "text-5xl text-yellow-200 drop-shadow"
+                : match.p1 === match.p2 ? "text-2xl text-yellow-400" : "text-2xl text-gray-400"
             }`}>
               {match.p1}%
             </div>
             {winner === match.team1 && (
-              <div className="mt-2 text-xs font-bold text-green-600">
-                🏆 WINNER
+              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-yellow-200">
+                <Trophy className="h-4 w-4" /> WINNER
               </div>
             )}
           </div>
@@ -213,27 +271,32 @@ const MatchCard = ({ match, isToday, featured = false }: { match: IPLMatch; isTo
         <div className="text-lg font-bold text-gray-400 mx-2">VS</div>
 
         <div className="flex-1 text-center">
-          <div className={`p-3 rounded-lg border transition-all ${
+          <div className={`relative min-h-[154px] p-3 rounded-lg border transition-all ${
             winner === match.team2
-              ? "bg-gradient-to-r from-green-500/30 to-green-600/20 border-green-400/50 shadow-lg ring-2 ring-green-400/30"
-              : t2Color + " hover:scale-105"
+              ? "bg-gradient-to-br from-emerald-400/35 via-green-500/25 to-yellow-400/20 border-emerald-300/80 shadow-2xl shadow-emerald-400/25 ring-2 ring-emerald-300/50 scale-[1.03]"
+              : `${t2Color} ${winner ? "opacity-55 grayscale-[35%]" : "hover:scale-105"}`
           }`}>
-            <div className={`font-bold text-lg mb-1 ${winner === match.team2 ? "text-green-600" : ""}`}>
+            {winner === match.team2 && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-yellow-300 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-black shadow-lg">
+                <Trophy className="mr-1 inline h-3.5 w-3.5" /> Predicted Winner
+              </div>
+            )}
+            <div className={`font-black mb-1 ${winner === match.team2 ? "text-3xl text-white" : "text-lg"}`}>
               {match.team2}
             </div>
-            <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
+            <div className={`text-xs uppercase tracking-wider mb-2 ${winner === match.team2 ? "text-white/85" : "text-gray-500"}`}>
               {fullTeamName[match.team2]}
             </div>
-            <div className={`text-2xl font-bold ${
+            <div className={`font-black leading-none ${
               winner === match.team2
-                ? "text-green-400"
-                : match.p1 === match.p2 ? "text-yellow-400" : "text-gray-400"
+                ? "text-5xl text-yellow-200 drop-shadow"
+                : match.p1 === match.p2 ? "text-2xl text-yellow-400" : "text-2xl text-gray-400"
             }`}>
               {match.p2}%
             </div>
             {winner === match.team2 && (
-              <div className="mt-2 text-xs font-bold text-green-600">
-                🏆 WINNER
+              <div className="mt-3 inline-flex items-center gap-1 rounded-full bg-black/30 px-3 py-1 text-sm font-black text-yellow-200">
+                <Trophy className="h-4 w-4" /> WINNER
               </div>
             )}
           </div>
@@ -456,37 +519,38 @@ const WhichTeamWinIPL2026 = () => {
   const { setAuthOpen } = useAuth();
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const finalWinner = finalMatch?.p1 && finalMatch.p1 > finalMatch.p2 ? finalMatch.team1 : finalMatch?.team2;
 
   return (
     <>
       <Helmet>
-        <title>IPL Astrology Winner 2026 Prediction: Which Team Will Win Today?</title>
+        <title>IPL 2026 Final Prediction: Who Will Win RCB vs GT?</title>
         <meta
           name="description"
-          content="IPL astrology winner 2026 predictions with Vedic analysis. See which team is favored today, tomorrow, and across the season with daily updated match insights."
+          content="IPL 2026 Final prediction for RCB vs GT tomorrow, May 31. Vedic astrology match analysis, win probability, winner pick, countdown, and final-day cricket bhavishyawani."
         />
         <meta
           name="keywords"
-          content="today IPL match winner, today IPL match kaun jitega, aaj ka IPL match kaun jitega, today IPL match prediction, IPL 2026 today match winner, today IPL match prediction astrology, aaj ka IPL match prediction, today IPL match toss prediction, today IPL winner prediction, IPL today match kaun jitega, today IPL match astrology, today IPL match winner astrology, IPL 2026 today match prediction, today match IPL prediction, today IPL match result prediction, IPL today match winner prediction, aaj ka IPL winner, today IPL match bhavishyawani, IPL today match prediction astrology, today IPL match prediction accurate, today IPL match prediction today, IPL today match kaun jitega astrology, today IPL match prediction Vedic astrology, today IPL match winner prediction today, IPL today match prediction today, today IPL match prediction by astrology, aaj ka IPL match kaun jitega today, today IPL match astrology prediction, IPL today match astrology prediction, today IPL match prediction analysis, IPL 2026 today match astrology analysis, today IPL match astrological prediction, aaj ka IPL match winner astrology, today IPL match prediction 2026, IPL today match kaun jitega 2026, today IPL match astrology prediction 2026, today IPL match winner prediction 2026, IPL today match winner prediction 2026, today IPL match prediction by astrology 2026, aaj ka IPL match prediction by astrology 2026, today IPL match astrology 2026, IPL today match astrology 2026, today IPL match winner astrology 2026, IPL today match winner astrology 2026, today IPL match prediction analysis 2026, IPL 2026 today match prediction analysis 2026, today IPL match astrological prediction 2026, aaj ka IPL match astrological prediction 2026, today IPL match prediction expert, IPL today match prediction expert, today IPL match prediction expert 2026, IPL today match prediction expert 2026, today IPL match prediction system, IPL today match prediction system, today IPL match prediction system 2026, IPL today match prediction system 2026, today IPL match prediction algorithm, IPL today match prediction algorithm, today IPL match prediction algorithm 2026, IPL today match prediction algorithm 2026, today IPL match prediction accurate, IPL today match prediction accurate, today IPL match prediction accurate 2026, IPL today match prediction accurate 2026, today IPL match prediction best, IPL today match prediction best, today IPL match prediction best 2026, IPL today match prediction best 2026, today IPL match prediction site, IPL today match prediction site, today IPL match prediction site 2026, IPL today match prediction site 2026, today IPL match prediction website, IPL today match prediction website, today IPL match prediction website 2026, IPL today match prediction website 2026, today IPL match prediction online, IPL today match prediction online, today IPL match prediction online 2026, IPL today match prediction online 2026, today IPL match prediction free, IPL today match prediction free, today IPL match prediction free 2026, IPL today match prediction free 2026"
+          content="IPL 2026 final prediction, RCB vs GT prediction, RCB vs GT winner prediction, who will win RCB vs GT, IPL final 2026 winner prediction, aaj ka IPL final kaun jitega, IPL 2026 final winner prediction astrology, today IPL match winner, today IPL match kaun jitega, aaj ka IPL match kaun jitega, today IPL match prediction astrology, cricket bhavishyawani 2026"
         />
         <link rel="canonical" href="https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
         <meta name="theme-color" content="#0a0a0f" />
 
         {/* Open Graph */}
-        <meta property="og:title" content="IPL Astrology Winner 2026: Which Team Will Win Today?" />
-        <meta property="og:description" content="IPL astrology winner 2026 predictions with daily updated Vedic analysis, highlighted playoff picks, and today IPL match winner insights." />
+        <meta property="og:title" content="IPL 2026 Final Prediction: Who Will Win RCB vs GT?" />
+        <meta property="og:description" content="RCB vs GT IPL 2026 Final prediction for May 31 with Vedic astrology winner pick, countdown, and win probability." />
         <meta property="og:url" content="https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology" />
         <meta property="og:type" content="article" />
         <meta property="og:image" content="https://veadicastro.in/optimized/ipl-2026.webp" />
-        <meta property="og:image:alt" content="Today IPL Match Winner Prediction Astrology" />
+        <meta property="og:image:alt" content="IPL 2026 Final Prediction RCB vs GT Astrology" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="Veadicastro" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="IPL Astrology Winner 2026: Which Team Will Win Today?" />
-        <meta name="twitter:description" content="IPL astrology winner 2026 predictions with daily updated Vedic analysis and today IPL match winner insights." />
+        <meta name="twitter:title" content="IPL 2026 Final Prediction: Who Will Win RCB vs GT?" />
+        <meta name="twitter:description" content="RCB vs GT IPL 2026 Final prediction for May 31 with astrology winner pick and win probability." />
         <meta name="twitter:image" content="https://veadicastro.in/optimized/ipl-2026.webp" />
         <meta name="twitter:site" content="@veadicastro" />
         <meta name="twitter:creator" content="@veadicastro" />
@@ -496,8 +560,8 @@ const WhichTeamWinIPL2026 = () => {
         {
           "@context": "https://schema.org",
           "@type": "BlogPosting",
-          "headline": "IPL Astrology Winner 2026: Which Team Will Win Today?",
-          "description": "IPL astrology winner 2026 predictions with Vedic analysis, today IPL match winner insights, and highlighted playoff match forecasts.",
+          "headline": "IPL 2026 Final Prediction: Who Will Win RCB vs GT?",
+          "description": "IPL 2026 Final prediction for RCB vs GT on May 31 with Vedic astrology winner pick, win probability, and final-day match analysis.",
           "image": {
             "@type": "ImageObject",
             "url": "https://veadicastro.in/optimized/ipl-2026.webp",
@@ -518,12 +582,12 @@ const WhichTeamWinIPL2026 = () => {
             }
           },
           "datePublished": "2026-03-13",
-          "dateModified": "2026-05-29",
+          "dateModified": "2026-05-30",
           "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https://veadicastro.in/blog/ipl-2026-winner-prediction-astrology"
           },
-          "keywords": ["IPL 2026 winner astrology prediction", "aaj ka IPL match kaun jitega astrology", "Mumbai Indians vs RCB astrology prediction 2026", "IPL 2026 winner prediction Vedic astrology", "today IPL match toss prediction astrology", "Hardik Pandya horoscope 2026", "Ruturaj Gaikwad career astrology", "Virat Kohli retirement astrology", "Jupiter transit 2026", "Shani Mahadasha IPL", "Mars in 10th house", "which team is lucky for IPL 2026", "IPL 2026 final winner prediction astrology", "astrology signs of IPL winners", "Rohit Sharma IPL 2026 horoscope", "IPL 2026 Dream11 astrology", "cricket bhavishyawani 2026", "Sanju Samson astrology 2026", "PBKS vs GT prediction today", "astrological prediction for cricket 2026", "IPL 2026 fantasy astrology tips"],
+          "keywords": ["IPL 2026 final prediction", "RCB vs GT prediction", "RCB vs GT winner prediction", "IPL 2026 final winner prediction astrology", "who will win RCB vs GT", "aaj ka IPL final kaun jitega", "today IPL match winner astrology", "cricket bhavishyawani 2026"],
           "inLanguage": "en",
           "articleSection": "Sports Astrology"
         }
@@ -550,18 +614,18 @@ const WhichTeamWinIPL2026 = () => {
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Who will win IPL 2026 according to astrology?",
+              "name": "Who will win IPL 2026 Final RCB vs GT according to astrology?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "According to Vedic astrology analysis, Mumbai Indians have the strongest planetary alignment with 35% probability, followed by CSK at 25%. Saturn's powerful position in 2026 favors MI's disciplined approach."
+                "text": "According to our Vedic astrology analysis for the IPL 2026 Final on May 31, RCB have the stronger edge over GT with a 64% win probability."
               }
             },
             {
               "@type": "Question",
-              "name": "What is today's IPL 2026 match astrology prediction?",
+              "name": "What is tomorrow's IPL 2026 Final astrology prediction?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Today's IPL 2026 match prediction is available in our daily predictions section above with Vedic astrology win probabilities for both teams based on current planetary transits."
+                "text": "Tomorrow's IPL 2026 Final prediction is RCB vs GT, with RCB favored at 64% and GT at 36% based on final-day planetary transits."
               }
             },
             {
@@ -569,7 +633,7 @@ const WhichTeamWinIPL2026 = () => {
               "name": "Which team is favored by planets in IPL 2026?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Mumbai Indians (Saturn), CSK (Jupiter), and RCB (Mars) are the three teams with the strongest planetary backing in IPL 2026 according to Vedic astrology."
+                "text": "For the final, RCB receive the stronger Mars and Jupiter support, while GT carry Saturn discipline and Rahu surprise potential."
               }
             }
           ]
@@ -581,9 +645,9 @@ const WhichTeamWinIPL2026 = () => {
         {
           "@context": "https://schema.org",
           "@type": "SportsEvent",
-          "name": "IPL 2026",
+          "name": "IPL 2026 Final - RCB vs GT",
           "startDate": "2026-03-28",
-          "endDate": "2026-05-29",
+          "endDate": "2026-05-31",
           "sport": "Cricket",
           "location": {
             "@type": "Country",
@@ -607,6 +671,26 @@ const WhichTeamWinIPL2026 = () => {
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#1a1020] to-[#0a0a0f] text-white">
+        <FinalAnnouncementBar />
+
+        {finalMatch && (
+          <section className="border-b border-yellow-300/20 bg-gradient-to-r from-red-950/70 via-black to-sky-950/70 px-4 py-5">
+            <div className="mx-auto max-w-4xl">
+              <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-center">
+                <span className="rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-black">
+                  Final Prediction
+                </span>
+                <h2 className="text-2xl font-black text-white md:text-3xl">
+                  RCB vs GT Match Prediction - {finalWinner} to Win
+                </h2>
+              </div>
+              <MatchCard match={finalMatch} isToday={false} featured />
+              <p className="mt-3 text-center text-sm leading-relaxed text-white/70">
+                Tomorrow, May 31, 2026, is the IPL 2026 Final. This RCB vs GT astrology prediction gives RCB the stronger winning edge with a 64% probability.
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* ── Hero ────────────────────────────────────────────────────── */}
         <div className="relative overflow-hidden">
@@ -617,7 +701,7 @@ const WhichTeamWinIPL2026 = () => {
           <div className="relative max-w-4xl mx-auto px-4 py-12">
             <div className="text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                <span className="text-pink-400">Today IPL Match Winner</span> Prediction 2026: Who Will Win Today's Match?
+                <span className="text-pink-400">IPL 2026 Final Prediction:</span> Who Will Win RCB vs GT?
               </h1>
               
               <p className="text-xl text-white/70 mb-4 leading-relaxed max-w-3xl mx-auto">
@@ -937,11 +1021,8 @@ const WhichTeamWinIPL2026 = () => {
                 </thead>
                 <tbody>
                   {[
-                    { team: "Punjab Kings", color: "text-rose-400", edge: "Strong Moon (Momentum)", prob: "30%", probColor: "text-green-400" },
-                    { team: "RCB", color: "text-red-400", edge: "High Mars Energy (Passion)", prob: "25%", probColor: "text-green-400" },
-                    { team: "SRH", color: "text-orange-400", edge: "Balanced Transits (Consistency)", prob: "20%", probColor: "text-yellow-400" },
-                    { team: "Mumbai Indians", color: "text-blue-400", edge: "Strong Saturn (Discipline)", prob: "15%", probColor: "text-yellow-400" },
-                    { team: "Others", color: "text-white/50", edge: "Average Transits", prob: "10%", probColor: "text-red-400" },
+                    { team: "RCB", color: "text-red-400", edge: "Mars + Jupiter final-day support", prob: "64%", probColor: "text-green-400" },
+                    { team: "Gujarat Titans", color: "text-sky-400", edge: "Saturn discipline + Rahu surprise", prob: "36%", probColor: "text-yellow-400" },
                   ].map((row, i) => (
                     <tr key={i} className="border-b border-white/5 last:border-0">
                       <td className={`px-6 py-4 font-semibold ${row.color}`}>{row.team}</td>
@@ -963,9 +1044,9 @@ const WhichTeamWinIPL2026 = () => {
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-6 text-center">Conclusion</h2>
             <p className="text-lg leading-relaxed text-white/80 mb-6">
-              While MI and CSK remain the cosmic favorites, 2026 is the year of the Captain. The team whose leader
-              manages the Rahu-Ketu fluctuations in the final over will lift the trophy. The planetary positions
-              suggest dramatic finishes and unexpected heroes throughout this IPL season.
+              For the IPL 2026 Final, RCB hold the stronger cosmic edge over GT. The team whose leader
+              manages the Rahu-Ketu fluctuations in the final overs will lift the trophy, but the planetary positions
+              currently give RCB the sharper timing and higher win probability.
             </p>
             <p className="text-lg leading-relaxed text-white/80 mb-6">
               Remember, astrology provides insights and probabilities — not certainties. The beauty of cricket
@@ -987,8 +1068,8 @@ const WhichTeamWinIPL2026 = () => {
             <div className="space-y-6">
               {[
                 {
-                  q: "Who will win IPL 2026 according to astrology?",
-                  a: "According to Vedic astrology analysis, Punjab Kings have the strongest planetary alignment with 30% probability, followed by RCB at 25%. Moon's powerful position in 2026 favors PBKS's momentum, while Mars' influence supports RCB's aggressive approach.",
+                  q: "Who will win IPL 2026 Final RCB vs GT according to astrology?",
+                  a: "According to our Vedic astrology analysis for May 31, RCB have the stronger final-day alignment and a 64% win probability against Gujarat Titans.",
                 },
                 {
                   q: "Which team is favored by planets in IPL 2026?",
@@ -1008,7 +1089,7 @@ const WhichTeamWinIPL2026 = () => {
                 },
                 {
                   q: "IPL 2026 final winner prediction astrology?",
-                  a: "Our final winner prediction points to Mumbai Indians due to Saturn's powerful position during the finals week. However, CSK's Jupiter influence and RCB's Mars energy could create upsets. The final winner will likely be determined by the captain's ability to handle Rahu-Ketu transitions.",
+                  a: "Our IPL 2026 Final winner prediction points to RCB over GT. Mars gives RCB aggression, Jupiter supports calmer decision-making, and the probability split is RCB 64% vs GT 36%.",
                 },
                 {
                   q: "Astrology signs of IPL winners?",
@@ -1030,15 +1111,15 @@ const WhichTeamWinIPL2026 = () => {
               {[
                 {
                   q: "Who will win the IPL 2026 final?",
-                  a: "According to our astrological analysis, Mumbai Indians have the highest chance of winning the IPL 2026 final, followed closely by CSK and RCB.",
+                  a: "According to our astrological analysis, RCB have the highest chance of winning the IPL 2026 Final against GT.",
                 },
                 {
-                  q: "What are the chances of MI winning the IPL 2026 final?",
-                  a: "Mumbai Indians have a 35% chance of winning the IPL 2026 final, making them the strongest contender for the title.",
+                  q: "What are the chances of RCB winning the IPL 2026 final?",
+                  a: "RCB have a 64% chance of winning the IPL 2026 Final against GT in this astrology-based prediction.",
                 },
                 {
-                  q: "Can CSK win the IPL 2026 final?",
-                  a: "Yes, CSK has a 25% chance of winning the IPL 2026 final, making them a strong contender for the title. Their Jupiter influence and strategic brilliance make them a force to be reckoned with.",
+                  q: "Can GT win the IPL 2026 final?",
+                  a: "Yes, GT can still win. Their Saturn discipline and Rahu surprise factor keep them dangerous, but their astrology probability is lower at 36%.",
                 },
                 {
                   q: "What role will Rahu-Ketu play in the IPL 2026 final?",

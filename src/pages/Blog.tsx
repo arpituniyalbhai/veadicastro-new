@@ -67,8 +67,8 @@ const blogPosts: BlogPost[] = [
   },
   {
     id: "5",
-    title: "Which Team Will Win IPL 2026? — Astrological Prediction",
-    excerpt: "IPL 2026 winner prediction through Vedic astrology. Mars-Jupiter alignment reveals cosmic favorites. Detailed analysis of Mumbai Indians, CSK, RCB, KKR, GT, LSG with winning probabilities.",
+    title: "IPL 2026 Final Prediction: Who Will Win RCB vs GT?",
+    excerpt: "RCB vs GT IPL 2026 Final prediction through Vedic astrology. See tomorrow's winner pick, countdown, final-day planetary analysis, and win probabilities.",
     author: "Veadicastro Team",
     date: "2026-03-13",
     readTime: "12 min read",
