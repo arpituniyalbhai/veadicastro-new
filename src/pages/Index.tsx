@@ -21,7 +21,10 @@ const PricingComponent = lazy(() => import("@/components/PricingComponent"));
 const ReviewsSection = lazy(() => import("@/components/ReviewsSection"));
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 const BlogSection = lazy(() => import("@/components/BlogSection"));
-const AstrologyFeatures = lazy(() => import("@/components/AstrologyFeatures"));
+const AstrologyEngineSection = lazy(() => import("@/components/AstrologyEngineSection"));
+const FounderTrustSection = lazy(() => import("@/components/FounderTrustSection"));
+const WhoIsThisForSection = lazy(() => import("@/components/WhoIsThisForSection"));
+const InternalLinksSection = lazy(() => import("@/components/InternalLinksSection"));
 const VedikaDifferenceSection = lazy(() => import("@/components/VedikaDifferenceSection"));
 
 const featuredBadges = [
@@ -222,74 +225,16 @@ const Index = () => {
         twitterTitle="AI Astrology | Daily Horoscope AI | Vedic Astrology AI — Veadicastro"
         twitterDescription="AI Astrology Chat — daily predictions, Kundli, lucky numbers and detailed Vedic reports. Sign up now and start now!"
         keywords={[
-          "ai astrology",
-          "vedic astrology", 
-          "ai astrology india",
-          "vedic astrology ai",
-          "ai horoscope",
-          "vedic astrology",
-          "astrology ai",
-          "best ai astrology",
-          "ai astrology website",
-          "ai astrology app",
-          "ai astrology predictions",
-          "vedic astrology online",
-          "astrology ai free",
-          "ai powered astrology",
-          "ai kundli",
-          "online vedic astrology",
-          "vedic astrology predictions",
-          "ai birth chart",
-          "kundali prediction ai",
-          "nakshatra ai",
-          "lagna ai",
-          "jyotish ai",
-          "ai astrologer india",
-          "vedic jyotish ai",
-          "daily horoscope ai",
-          "daily astrology prediction",
-          "ai daily horoscope",
-          "lucky numbers astrology",
-          "lucky color today astrology",
-          "wealth prediction astrology",
-          "family kundli ai",
-          "ai astrology report",
-          "dasha prediction ai",
-          "planetary transit prediction",
-          "daily horoscope hindi",
-          "kundli report",
-          "astrology",
-          "kundali gpt",
-          "today's horoscope",
+          "Veadicastro",
+          "AI Vedic astrology",
+          "Vedika AI astrologer",
+          "AI Kundli",
+          "Kundli matching",
           "daily horoscope",
-          "rashifal today",
-          "horoscope predictions",
-          "daily rashifal",
-          "aries horoscope today",
-          "taurus horoscope today",
-          "gemini horoscope today",
-          "cancer horoscope today",
-          "leo horoscope today",
-          "virgo horoscope today",
-          "libra horoscope today",
-          "scorpio horoscope today",
-          "sagittarius horoscope today",
-          "capricorn horoscope today",
-          "aquarius horoscope today",
-          "pisces horoscope today",
-          "mesh rashi aaj ka rashifal",
-          "vrishabh rashi aaj",
-          "kark rashi aaj",
-          "simha rashi aaj",
-          "kanya rashi aaj",
-          "tula rashi aaj",
-          "birth chart analysis",
-          "daily predictions",
-          "astrology reports",
-          "kundali analysis",
-          "vedic astrology online",
-          "astrology app",
-          "personalized astrology"
+          "Mahadasha",
+          "Nakshatra",
+          "Lahiri Ayanamsa",
+          "Swiss Ephemeris astrology"
         ]}
         url="https://veadicastro.in"
         schema={schemas}
@@ -476,10 +421,34 @@ const Index = () => {
 
         <Suspense fallback={
           <div className="py-16 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+          </div>
+        }>
+          <AstrologyEngineSection />
+        </Suspense>
+
+        <Suspense fallback={
+          <div className="py-16 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
           </div>
         }>
           <VedikaDifferenceSection />
+        </Suspense>
+
+        <Suspense fallback={
+          <div className="py-16 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+          </div>
+        }>
+          <FounderTrustSection />
+        </Suspense>
+
+        <Suspense fallback={
+          <div className="py-16 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+          </div>
+        }>
+          <WhoIsThisForSection />
         </Suspense>
       
         <Suspense fallback={
@@ -877,7 +846,7 @@ const Index = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
           </div>
         }>
-          <AstrologyFeatures />
+          <InternalLinksSection />
         </Suspense>
       </main>
     </div>
