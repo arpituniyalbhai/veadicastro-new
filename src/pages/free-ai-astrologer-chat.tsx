@@ -1004,6 +1004,63 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
           </div>
         </section>
 
+        <section className="max-w-5xl mx-auto px-4 mb-20">
+          <div className="card-glass rounded-3xl overflow-hidden border border-pink-500/20">
+            <div className="grid md:grid-cols-[0.95fr_1.35fr]">
+              <div className="min-h-[260px] bg-black/20">
+                <img
+                  src="/store/dhan-yog-male-hand.png"
+                  alt="Dhan Yog Bracelet worn on hand for wealth intention"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-6 md:p-8 flex flex-col justify-center">
+                <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 mb-4">
+                  <Sparkles className="w-4 h-4" /> Spiritual Store Pick
+                </p>
+                <h2 className="font-bold text-3xl sm:text-4xl font-black leading-tight mb-4">
+                  Pair Your AI Astrology Guidance with the <span className="text-pink-400">Dhan Yog Bracelet</span>
+                </h2>
+                <p className="text-white/60 text-sm leading-relaxed mb-6">
+                  Vedika AI helps you understand your birth chart, timing, and money
+                  patterns. Our Dhan Yog Bracelet is a daily spiritual support made with
+                  real stones, quality checked, puja energized, and shipped across India.
+                  It is designed for wealth intention, focus, confidence, and prosperity
+                  energy in everyday life.
+                </p>
+                <div className="grid sm:grid-cols-3 gap-3 mb-6 text-xs text-white/60">
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                    <Shield className="w-4 h-4 text-green-400 mb-2" />
+                    Lab tested crystal quality
+                  </div>
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                    <Award className="w-4 h-4 text-yellow-400 mb-2" />
+                    Proper puja before dispatch
+                  </div>
+                  <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                    <CheckCircle2 className="w-4 h-4 text-pink-400 mb-2" />
+                    Free delivery all India
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a
+                    href="/dhan-yog-bracelet"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl btn-pink text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                  >
+                    Buy Dhan Yog Bracelet <ChevronRight className="w-4 h-4" />
+                  </a>
+                  <a
+                    href="/astrology-store"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/15 text-white font-semibold text-sm hover:border-pink-500/40 hover:text-pink-300 transition-colors"
+                  >
+                    Visit Astrology Store
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Additional Links Before Blog */}
         <div className="max-w-5xl mx-auto px-4 mb-8">
           <div className="flex flex-wrap justify-center gap-4">

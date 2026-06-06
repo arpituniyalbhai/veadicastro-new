@@ -41,6 +41,7 @@ import {
   Home,
   Settings,
   CheckCircle,
+  ShoppingBag,
 } from "lucide-react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -297,6 +298,9 @@ export default function Dashboard() {
         break;
       case "contact":
         window.open("/contact?referral=dashboard", "_blank");
+        break;
+      case "store":
+        navigate(`/astrology-store?referral=dashboard`);
         break;
       case "rate":
         setRateOpen(true);
@@ -1113,6 +1117,24 @@ useEffect(() => {
               {!sidebarCollapsed && <h3 className="text-xs font-semibold text-muted-foreground mb-3 px-2">Tool</h3>}
               <div className="space-y-1">
                 <button
+                  onClick={() => handleNav("store")}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
+                    "text-muted-foreground hover:bg-accent/10 hover:text-foreground",
+                    sidebarCollapsed && "justify-center px-0 py-3"
+                  )}
+                >
+                  {sidebarCollapsed ? (
+                    <ShoppingBag className="w-5 h-5" />
+                  ) : (
+                    <>
+                      <ShoppingBag className="w-5 h-5" />
+                      <span className="flex-1 text-left text-sm font-medium">Veadicastro Store</span>
+                      <ChevronRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
+                <button
                   onClick={() => {
                     // Generate random session ID and navigate to chart
                     const sessionId = Math.random().toString(36).substr(2, 9);
@@ -1218,15 +1240,25 @@ useEffect(() => {
             </button>
             <div className="flex-1">
               <div className="rounded-sm bg-secondary/15 border border-border/60 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 lg:py-1.5 text-xs sm:text-xs lg:text-sm text-muted-foreground text-center">
-                <span className="text-xs sm:text-xs lg:text-sm">{t('specialOfferExpires')} <span className="inline-flex items-center space-x-0.5 sm:space-x-1">
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String((timeRemaining as any).days ?? 0).padStart(2, '0')}d</span>
-                    <span className="text-muted-foreground font-mono font-bold leading-none"> </span>
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String(timeRemaining.hours).padStart(2, '0')}</span>
-                    <span className="text-muted-foreground font-mono !text-3xl sm:!text-xs lg:!text-sm font-bold leading-none">:</span>
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 rounded">{String(timeRemaining.minutes).padStart(2, '0')}</span>
-                    <span className="text-muted-foreground font-mono !text-3xl sm:!text-xs lg:!text-sm font-bold leading-none">:</span>
-                    <span className="inline-block font-mono font-bold text-base sm:text-xs lg:text-sm text-foreground bg-card/50 px-1 sm:px-1 lg:px-1.5 py-0.5 sm:py-0.5 lg:py-0.5 rounded">{String(timeRemaining.seconds).padStart(2, '0')}</span>
-                  </span> {t('getQuestionsFor')}</span>
+                <button
+                  onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-header")}
+                  className="inline-flex max-w-full items-center justify-center gap-1.5 text-foreground hover:text-secondary transition-colors"
+                >
+                  <ShoppingBag className="h-3.5 w-3.5 shrink-0" />
+                  <span className="flex min-w-0 flex-col items-center justify-center leading-tight sm:flex-row sm:gap-1.5 sm:leading-normal">
+                    <span className="text-[11px] font-semibold sm:text-xs lg:text-sm">
+                      Dhan Yog Bracelet authentic launch offer
+                    </span>
+                    <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
+                      only{" "}
+                      <span className="text-sm font-extrabold text-secondary sm:text-base lg:text-lg">
+                        Rs. 999
+                      </span>{" "}
+                      for limited time - only 50 pieces left
+                    </span>
+                  </span>
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+                </button>
               </div>
             </div>
           </div>
@@ -1340,6 +1372,63 @@ useEffect(() => {
               })()}
             </div>
             <div className="mt-3 text-xs text-muted-foreground">{t("insightsUpdated")}</div>
+          </Card>
+
+          <Card className="overflow-hidden bg-card/45 backdrop-blur-sm border-border/60 rounded-2xl">
+            <div className="grid md:grid-cols-[220px_1fr]">
+              <button
+                type="button"
+                onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-card")}
+                className="min-h-[220px] bg-background/60 text-left"
+                aria-label="Open Dhan Yog Bracelet product page"
+              >
+                <img
+                  src="/store/dhan-yog-second-image.png"
+                  alt="Dhan Yog Bracelet authentic wealth bracelet from Veadicastro Store"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </button>
+              <div className="p-5 sm:p-6 flex flex-col justify-center">
+                <div className="mb-3 flex flex-wrap items-center gap-2">
+                  <Badge className="bg-secondary/15 text-secondary border-secondary/20 hover:bg-secondary/15">
+                    Authentic Launch
+                  </Badge>
+                  <Badge variant="outline" className="border-border/70">
+                    Rs. 999
+                  </Badge>
+                  <Badge variant="outline" className="border-border/70">
+                    Free India Delivery
+                  </Badge>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
+                  Dhan Yog Bracelet for Money, Focus and Prosperity Intention
+                </h2>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                  A Veadicastro Store product made with Tiger Eye, Pyrite, Citrine, and
+                  Aventurine inspired stones. Every bracelet is quality checked, prepared
+                  with proper puja intention, and supported by our team after payment for
+                  delivery details and wearing guidance.
+                </p>
+                <div className="mt-5 flex flex-col sm:flex-row gap-3">
+                  <Button
+                    variant="cosmic"
+                    className="rounded-xl"
+                    onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-card")}
+                  >
+                    Buy Dhan Yog Bracelet
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-xl"
+                    onClick={() => navigate("/astrology-store?referral=dashboard-card")}
+                  >
+                    Visit Astrology Store
+                  </Button>
+                </div>
+              </div>
+            </div>
           </Card>
 
           {/* Promo Banner */}

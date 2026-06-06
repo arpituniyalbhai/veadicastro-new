@@ -957,6 +957,66 @@ export default function AiAstrology() {
           </div>
         </section>
         
+        {/* Veadicastro Store Section */}
+        <section className="py-16 px-4">
+          <div className="max-w-5xl mx-auto">
+            <div className="card-glass rounded-3xl overflow-hidden border border-pink-500/20">
+              <div className="grid md:grid-cols-[0.95fr_1.35fr]">
+                <div className="min-h-[260px] bg-black/20">
+                  <img
+                    src="/store/dhan-yog-second-image.png"
+                    alt="Dhan Yog money bracelet from Veadicastro Store"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6 md:p-8 flex flex-col justify-center">
+                  <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 mb-4">
+                    <Star className="w-4 h-4" /> Astrology Remedies Store
+                  </p>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                    Explore the Dhan Yog Bracelet with Your AI Astrology Reading
+                  </h2>
+                  <p className="text-white/70 leading-relaxed mb-6">
+                    AI astrology gives clarity about your chart, dasha, career, money,
+                    and timing. For people who also want a daily spiritual remedy,
+                    Veadicastro Store offers the Dhan Yog Bracelet made with Tiger Eye,
+                    Pyrite, Citrine, and Aventurine. Each piece is quality checked,
+                    prepared with proper puja intention, and delivered across India.
+                  </p>
+                  <div className="grid sm:grid-cols-3 gap-3 mb-6 text-sm text-white/70">
+                    <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                      <Shield className="w-4 h-4 text-green-400 mb-2" />
+                      Authentic stone quality
+                    </div>
+                    <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                      <CheckCircle2 className="w-4 h-4 text-pink-400 mb-2" />
+                      Puja energized product
+                    </div>
+                    <div className="rounded-xl bg-white/5 border border-white/10 p-3">
+                      <TrendingUp className="w-4 h-4 text-yellow-400 mb-2" />
+                      Daily prosperity intention
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      to="/dhan-yog-bracelet"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all"
+                    >
+                      Buy Dhan Yog Bracelet <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      to="/astrology-store"
+                      className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-white/15 text-white font-semibold rounded-xl hover:border-pink-500/40 hover:text-pink-300 transition-colors"
+                    >
+                      Visit Astrology Store
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Bottom CTA */}
         <section className="py-16 px-4">
           <div className="max-w-4xl mx-auto text-center">

@@ -35,6 +35,12 @@ const COMPATIBILITY_PRICES: Record<string, number> = {
   '5 Compatibility Credits': 9900,  // ₹99 in paise
 };
 
+const STORE_PRODUCT_PRICES: Record<string, number> = {
+  'Money Magnet Dhan Yog Bracelet - Pack of 1': 99900,
+  'Money Magnet Dhan Yog Bracelet - Pack of 2': 179900,
+  'Money Magnet Dhan Yog Bracelet - Pack of 3': 249900,
+};
+
 const getSpecialReportPrice = (planName: string): number | undefined => {
   const normalized = planName.trim().toLowerCase();
 
@@ -79,7 +85,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Get original price from server-side mapping
     let originalAmount: number;
-    if (customAmount && typeof customAmount === 'number' && customAmount > 0) {
+    if (STORE_PRODUCT_PRICES[planName]) {
+      originalAmount = STORE_PRODUCT_PRICES[planName];
+      console.log('[Create Order] Using store product price:', { planName, originalAmount });
+    } else if (customAmount && typeof customAmount === 'number' && customAmount > 0) {
       // For custom amounts (like single reports), use the provided amount
       originalAmount = customAmount;
       console.log('[Create Order] Using custom amount:', { planName, customAmount });
@@ -118,6 +127,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         finalAmount: finalAmount / 100, // Convert to rupees for logging
         discount: (originalAmount - finalAmount) / 100 // Discount in rupees
       });
+    } else if (promoCode && STORE_PRODUCT_PRICES[planName]) {
+      const normalizedPromo = promoCode.toUpperCase();
+      if (normalizedPromo === "DHAN10") {
+        finalAmount = Math.round(originalAmount * 0.9);
+        discountApplied = true;
+      } else if (normalizedPromo === "VEDIC100") {
+        finalAmount = Math.max(100, originalAmount - 10000);
+        discountApplied = true;
+      }
     }
 
     // Free plan doesn't need payment

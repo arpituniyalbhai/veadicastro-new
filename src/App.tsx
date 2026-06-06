@@ -82,6 +82,8 @@ const KundaliMatching = lazy(() => import("@/pages/KundaliMatching"));
 const Chart = lazy(() => import("@/pages/Chart"));
 const AngelNumberCalculator = lazy(() => import("@/pages/AngelNumberCalculator"));
 const LuckyColourForToday = lazy(() => import("@/pages/lucky-colour-for-today"));
+const AstrologyStore = lazy(() => import("@/pages/AstrologyStore"));
+const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -134,6 +136,10 @@ const RouterShell = () => {
         <Route path="/today-horoscope" element={<Suspense fallback={<PageLoading />}><TodayHoroscope /></Suspense>} />
         <Route path="/angel-number-calculator" element={<Suspense fallback={<PageLoading />}><AngelNumberCalculator /></Suspense>} />
         <Route path="/lucky-colour-for-today" element={<Suspense fallback={<PageLoading />}><LuckyColourForToday /></Suspense>} />
+        <Route path="/astrology-store" element={<Suspense fallback={<PageLoading />}><AstrologyStore /></Suspense>} />
+        <Route path="/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
+        <Route path="/dhan-yoga-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
+        <Route path="/astrology-store/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />

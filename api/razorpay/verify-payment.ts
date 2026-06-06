@@ -108,6 +108,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       email,
       displayName,
       type,
+      deliveryDetails,
     } = req.body;
 
     // Use email as primary identifier for user documents
@@ -120,7 +121,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (!razorpay_signature) missingFields.push('razorpay_signature');
     if (!planName) missingFields.push('planName');
     if (!amount) missingFields.push('amount');
-    if (!email) missingFields.push('email');
+    if (!email && type !== 'store') missingFields.push('email');
 
     if (missingFields.length > 0) {
       console.error('[Verify Payment] Missing required fields:', missingFields);
@@ -216,7 +217,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       
       // FALLBACK: If payment was captured (we have payment_id), still activate premium
       // This handles cases where payment succeeded but signature verification had issues
-      if (razorpay_payment_id && email) {
+      if (razorpay_payment_id && email && type !== 'store') {
         console.warn('[Verify Payment] Payment captured but signature invalid. Activating premium as fallback.');
         try {
           const firestore = initializeFirebaseAdmin();
@@ -372,7 +373,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         
         try {
           const firestore = initializeFirebaseAdmin();
-          const userDocRef = firestore.collection('users').doc(email);
+          const primaryDocId = email || userId || razorpay_payment_id;
+          const userDocRef = firestore.collection('users').doc(primaryDocId);
           
           // Get current user data
           const userDoc = await userDocRef.get();
@@ -385,8 +387,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           
           // Check if this is a compatibility credit purchase
           const isCompatibilityPurchase = type === 'compatibility' || planName.includes('Compatibility Credit');
+          const isStorePurchase = type === 'store' || planName.includes('Dhan Yog Bracelet');
           
-          if (isReportPurchase) {
+          if (isStorePurchase) {
+            const storeDeliveryDetails = deliveryDetails && typeof deliveryDetails === 'object'
+              ? deliveryDetails
+              : {};
+
+            await firestore.collection('store_orders').doc(razorpay_payment_id).set(
+              {
+                uid: primaryDocId,
+                email: email || null,
+                displayName: displayName || null,
+                Name: storeDeliveryDetails.name || displayName || null,
+                'Phone Number': storeDeliveryDetails.phone || null,
+                'Exact Location': storeDeliveryDetails.location || null,
+                Pincode: storeDeliveryDetails.pincode || null,
+                deliveryDetails: storeDeliveryDetails,
+                planName,
+                amount,
+                paymentId: razorpay_payment_id,
+                orderId: razorpay_order_id,
+                verificationStatus: 'verified',
+                status: 'Paid - support follow-up pending',
+                orderNotes,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+                updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+              },
+              { merge: true }
+            );
+
+            console.log('[Verify Payment] Store purchase completed', {
+              userId,
+              planName,
+              paymentId: razorpay_payment_id,
+            });
+          } else if (isReportPurchase) {
             // Handle report purchase - add 1 report credit
             await userDocRef.set({
               uid: email,
@@ -540,7 +576,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               amount,
               paymentId: razorpay_payment_id,
               orderId: razorpay_order_id,
-              type: isReportPurchase ? 'report' : 'plan',
+              type: isStorePurchase ? 'store' : isReportPurchase ? 'report' : 'plan',
               reportsAdded: isReportPurchase ? 1 : 0,
               verificationStatus: 'verified',
               timestamp: admin.firestore.FieldValue.serverTimestamp(),

@@ -42,6 +42,9 @@ const Footer = () => {
             <Link to="/lucky-colour-for-today" className="text-white/80 hover:text-white transition-colors">
               Lucky Colour
             </Link>
+            <Link to="/astrology-store" className="text-white/80 hover:text-white transition-colors">
+              Astrology Store
+            </Link>
           </div>
 
           <div className="flex flex-col items-start gap-3">

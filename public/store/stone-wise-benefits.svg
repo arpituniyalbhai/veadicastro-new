@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1900">
+  <rect width="1500" height="1900" fill="#fff"/>
+  <text x="750" y="105" text-anchor="middle" font-family="Georgia, serif" font-size="72" fill="#111">Stone Wise Benefits For Money Magnet Bracelet</text>
+  <line x1="60" x2="1440" y1="140" y2="140" stroke="#777" stroke-width="3"/>
+  <g font-family="Georgia, serif" fill="#111" font-size="46">
+    <text x="450" y="370">Tiger Eye helps boost confidence and sharpen focus,</text>
+    <text x="450" y="430">supporting better financial decisions.</text>
+    <text x="450" y="760">Pyrite is associated with wealth opportunities,</text>
+    <text x="450" y="820">success and stronger money intention.</text>
+    <text x="450" y="1150">Citrine is known as a prosperity and merchant stone,</text>
+    <text x="450" y="1210">linked with abundance and positive action.</text>
+    <text x="450" y="1540">Green Aventurine supports luck, growth and a</text>
+    <text x="450" y="1600">mindset of prosperity.</text>
+  </g>
+  <circle cx="190" cy="390" r="78" fill="#8a5a2c"/>
+  <path d="M138 390 C180 325 230 330 258 390 C225 455 175 450 138 390Z" fill="#d99b35" opacity=".85"/>
+  <path d="M130 820 L160 690 L270 670 L340 760 L295 880 Z" fill="#b8a04a"/>
+  <path d="M150 1230 L205 1065 L335 1110 L300 1265 L190 1290 Z" fill="#efa81f"/>
+  <path d="M130 1630 L170 1465 L315 1448 L350 1588 L240 1690 Z" fill="#40b881"/>
+</svg>

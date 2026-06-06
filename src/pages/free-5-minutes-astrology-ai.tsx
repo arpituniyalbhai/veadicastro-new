@@ -1054,6 +1054,58 @@ KEY INSIGHTS:
               </p>
             </div>
 
+            <div className="mt-12 rounded-3xl border border-pink-500/20 bg-white/[0.04] overflow-hidden">
+              <div className="grid md:grid-cols-[0.95fr_1.35fr] gap-0">
+                <div className="min-h-[260px] bg-black/20">
+                  <img
+                    src="/store/dhan-yog-second-image.png"
+                    alt="Dhan Yog Bracelet for money and prosperity intention"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6 md:p-8 flex flex-col justify-center">
+                  <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 mb-4">
+                    <Sparkles className="w-4 h-4" /> Veadicastro Store
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                    Dhan Yog Bracelet for Daily Wealth Intention
+                  </h2>
+                  <p className="text-white/70 leading-relaxed mb-5">
+                    After your free 5 minute astrology reading, you can also explore our
+                    Dhan Yog Bracelet made with Tiger Eye, Pyrite, Citrine, and
+                    Aventurine. Every bracelet is prepared with proper puja intention,
+                    checked for quality, and delivered across India for people who want
+                    a simple daily prosperity reminder.
+                  </p>
+                  <div className="grid sm:grid-cols-3 gap-3 mb-6 text-sm">
+                    <div className="flex items-center gap-2 text-white/70">
+                      <Shield className="w-4 h-4 text-green-400" /> Lab tested stones
+                    </div>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <Award className="w-4 h-4 text-yellow-400" /> Puja energized
+                    </div>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <CheckCircle2 className="w-4 h-4 text-pink-400" /> Free India delivery
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a
+                      href="/dhan-yog-bracelet"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl btn-pink text-white font-semibold text-sm"
+                    >
+                      Buy Dhan Yog Bracelet <ChevronRight className="w-4 h-4" />
+                    </a>
+                    <a
+                      href="/astrology-store"
+                      className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-white/15 text-white font-semibold text-sm hover:border-pink-500/40 hover:text-pink-300 transition-colors"
+                    >
+                      Visit Astrology Store
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Internal Links */}
             <div className="mt-12 pt-8 border-t border-white/10">
               <div className="flex flex-wrap gap-4">
