@@ -629,6 +629,9 @@ Respond in English only.`;
               <button onClick={() => navigate("/free-ai-astrologer-chat")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
                 ← Free AI Chat
               </button>
+              <button onClick={() => navigate("/chatgpt-astrology")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
+                ChatGPT Astrology
+              </button>
               <button onClick={() => navigate("/today-horoscope")} style={{ background:"none", border:"none", color:"rgba(255,255,255,0.5)", cursor:"pointer", fontSize:"13px" }}>
                 Today's Horoscope
               </button>
@@ -653,7 +656,7 @@ Respond in English only.`;
             </div>
             
             <p style={{ color:"rgba(255,255,255,0.45)", fontSize:"16px", maxWidth:"540px", margin:"0 auto" }}>
-              Generate your kundali online instantly. Our Vedic astrology calculator provides accurate planetary positions, dosha analysis, and personalized remedies. <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>See Your Future in Just 30 Second</a> or explore our <a href="/ai-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" style={{color:"#ec4899", textDecoration:"underline"}}>free AI astrology chat</a> for quick guidance. Explore our <a href="/blog" style={{color:"#ec4899", textDecoration:"underline"}}>astrology blogs</a> for more knowledge. Try our <a href="/free-kundali-matching" style={{color:"#ec4899", textDecoration:"underline"}}>Free Kundli Matching Calculator</a> for accurate marriage compatibility analysis, or explore our <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>Home page</a> for more Vedic astrology tools and resources.
+              Generate your kundali online instantly. Our Vedic astrology calculator provides accurate planetary positions, dosha analysis, and personalized remedies. <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>See Your Future in Just 30 Second</a> or explore our <a href="/ai-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>AI astrology platform</a> for instant insights. You can also try our <a href="/free-ai-astrologer-chat" style={{color:"#ec4899", textDecoration:"underline"}}>free AI astrology chat</a> or <a href="/chatgpt-astrology" style={{color:"#ec4899", textDecoration:"underline"}}>ChatGPT Astrology</a> for quick guidance. Explore our <a href="/blog" style={{color:"#ec4899", textDecoration:"underline"}}>astrology blogs</a> for more knowledge. Try our <a href="/free-kundali-matching" style={{color:"#ec4899", textDecoration:"underline"}}>Free Kundli Matching Calculator</a> for accurate marriage compatibility analysis, or explore our <a href="/" style={{color:"#ec4899", textDecoration:"underline"}}>Home page</a> for more Vedic astrology tools and resources.
             </p>
           </section>
 

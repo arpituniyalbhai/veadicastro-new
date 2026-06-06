@@ -4,12 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, type ReactNode } from "react";
 import { AuthProvider } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 import { I18nProvider } from "@/context/I18nContext";
-import { PlanProvider } from "@/context/PlanContext";
-import AuthModal from "@/components/AuthModal";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import Footer from "@/components/Footer";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
@@ -84,6 +82,9 @@ const AngelNumberCalculator = lazy(() => import("@/pages/AngelNumberCalculator")
 const LuckyColourForToday = lazy(() => import("@/pages/lucky-colour-for-today"));
 const AstrologyStore = lazy(() => import("@/pages/AstrologyStore"));
 const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
+const ChatGPTAstrology = lazy(() => import("@/pages/ChatGPTAstrology"));
+const AuthModal = lazy(() => import("@/components/AuthModal"));
+const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -100,6 +101,7 @@ const queryClient = new QueryClient({
 
 const RouterShell = () => {
   const location = useLocation();
+  const { authOpen } = useAuth();
   const p = location.pathname;
   const dashboardPaths = [
     "/dashboard",
@@ -119,13 +121,25 @@ const RouterShell = () => {
     p.startsWith("/report/") ||
     p === "/welcome" ||
     p === "/onboarding" ||
+    p === "/chatgpt-astrology" ||
     p === "/about" ||
     p === "/how-it-works" ||
     p === "/blog" ||
     p.startsWith("/blog/");
+
+  const protectedPage = (page: ReactNode) => (
+    <Suspense fallback={<PageLoading />}>
+      <ProtectedPlanRoute>{page}</ProtectedPlanRoute>
+    </Suspense>
+  );
+
   return (
     <>
-      <AuthModal />
+      {authOpen && (
+        <Suspense fallback={null}>
+          <AuthModal />
+        </Suspense>
+      )}
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Index />} />
@@ -140,6 +154,7 @@ const RouterShell = () => {
         <Route path="/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/dhan-yoga-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/astrology-store/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
+        <Route path="/chatgpt-astrology" element={<Suspense fallback={<PageLoading />}><ChatGPTAstrology /></Suspense>} />
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />
@@ -178,22 +193,22 @@ const RouterShell = () => {
         <Route path="/refund" element={<Suspense fallback={<PageLoading />}><Refund /></Suspense>} />
         
         {/* Protected Routes - Require Authentication */}
-        <Route path="/welcome" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Welcome /></Suspense></ProtectedRoute>} />
-        <Route path="/onboarding" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Onboarding /></Suspense></ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Dashboard /></Suspense></ProtectedRoute>} />
-        <Route path="/reports" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Reports /></Suspense></ProtectedRoute>} />
-        <Route path="/deep-reports" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><DeepReports /></Suspense></ProtectedRoute>} />
-        <Route path="/pricing" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Pricing /></Suspense></ProtectedRoute>} />
-        <Route path="/pricing/onboarding" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><PricingOnboarding /></Suspense></ProtectedRoute>} />
-        <Route path="/chat" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Chat /></Suspense></ProtectedRoute>} />
-        <Route path="/chart/:sessionId" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Chart /></Suspense></ProtectedRoute>} />
-        <Route path="/dynamic/:id" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><DynamicPage /></Suspense></ProtectedRoute>} />
-        <Route path="/settings/language" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><LanguageSettings /></Suspense></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Profile /></Suspense></ProtectedRoute>} />
-        <Route path="/compatibility" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><Compatibility /></Suspense></ProtectedRoute>} />
-        <Route path="/compatibility/result" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><CompatibilityResult /></Suspense></ProtectedRoute>} />
+        <Route path="/welcome" element={protectedPage(<Welcome />)} />
+        <Route path="/onboarding" element={protectedPage(<Onboarding />)} />
+        <Route path="/dashboard" element={protectedPage(<Dashboard />)} />
+        <Route path="/reports" element={protectedPage(<Reports />)} />
+        <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
+        <Route path="/pricing" element={protectedPage(<Pricing />)} />
+        <Route path="/pricing/onboarding" element={protectedPage(<PricingOnboarding />)} />
+        <Route path="/chat" element={protectedPage(<Chat />)} />
+        <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
+        <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
+        <Route path="/settings/language" element={protectedPage(<LanguageSettings />)} />
+        <Route path="/profile" element={protectedPage(<Profile />)} />
+        <Route path="/compatibility" element={protectedPage(<Compatibility />)} />
+        <Route path="/compatibility/result" element={protectedPage(<CompatibilityResult />)} />
         <Route path="/talk-to-astrologer" element={<Suspense fallback={<PageLoading />}><TalkToAstrologer /></Suspense>} />
-        <Route path="/report/:reportId" element={<ProtectedRoute><Suspense fallback={<PageLoading />}><ReportPage /></Suspense></ProtectedRoute>} />
+        <Route path="/report/:reportId" element={protectedPage(<ReportPage />)} />
         
         {/* 301 Redirects */}
         <Route path="/ipl-2026-winner-prediction-astrology" element={<RedirectComponent to="/blog/ipl-2026-winner-prediction-astrology" />} />
@@ -203,7 +218,6 @@ const RouterShell = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!hideFooter && <Footer />}
-      {console.log('App.tsx - hideFooter:', hideFooter, 'pathname:', location.pathname)}
     </>
   );
 };
@@ -217,9 +231,7 @@ const App = () => (
         <AuthProvider>
           <I18nProvider>
             <BrowserRouter>
-              <PlanProvider>
-                <RouterShell />
-              </PlanProvider>
+              <RouterShell />
             </BrowserRouter>
           </I18nProvider>
         </AuthProvider>

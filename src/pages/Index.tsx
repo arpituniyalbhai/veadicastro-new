@@ -280,29 +280,6 @@ const Index = () => {
             </div>
         </section>
 
-        <section className="pb-12">
-          <div className="relative w-full overflow-hidden py-2">
-            <div className="marquee-track flex w-max items-center gap-10 px-2">
-                {[...featuredBadges, ...featuredBadges].map((badge, idx) => (
-                  <a key={`${badge.href}-${idx}`} href={badge.href} target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-95 hover:opacity-100 transition-opacity">
-                    <img src={badge.src} alt={badge.alt} className={badge.className} loading="lazy" />
-                  </a>
-                ))}
-            </div>
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
-          </div>
-        </section>
-        <style>{`
-          @keyframes featured-badges-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .marquee-track {
-            animation: featured-badges-marquee 56s linear infinite;
-          }
-        `}</style>
-        
         {/* Meet Vedika AI Section */}
         <section className="py-16 px-4 bg-gradient-to-br from-secondary/5 via-background to-primary/5">
           <div className="container mx-auto max-w-6xl">
@@ -450,6 +427,29 @@ const Index = () => {
         }>
           <WhoIsThisForSection />
         </Suspense>
+
+        <section className="pb-12">
+          <div className="relative w-full overflow-hidden py-2">
+            <div className="marquee-track flex w-max items-center gap-10 px-2">
+                {[...featuredBadges, ...featuredBadges].map((badge, idx) => (
+                  <a key={`${badge.href}-${idx}`} href={badge.href} target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-95 hover:opacity-100 transition-opacity">
+                    <img src={badge.src} alt={badge.alt} className={badge.className} loading="lazy" />
+                  </a>
+                ))}
+            </div>
+            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
+          </div>
+        </section>
+        <style>{`
+          @keyframes featured-badges-marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-track {
+            animation: featured-badges-marquee 56s linear infinite;
+          }
+        `}</style>
       
         <Suspense fallback={
         <div className="py-16 flex items-center justify-center">
@@ -807,6 +807,10 @@ const Index = () => {
               <p className="text-muted-foreground mb-4">
                 All tools are completely free but with limited feature  — no credit card, signup required 
               </p>
+              <a href="/chatgpt-astrology" className="mb-4 inline-flex items-center gap-2 text-accent hover:text-secondary transition-colors">
+                Try ChatGPT Astrology
+                <ArrowRight className="w-4 h-4" />
+              </a>
               <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
                 <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-secondary/10 text-secondary">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>

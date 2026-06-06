@@ -9,7 +9,7 @@ export default function AiAstrology() {
   return (
     <>
       <Helmet>
-        <title>AI Astrology — Free Vedic AI Astrologer India | Veadicastro</title>
+        <title>AI Astrology Tools & Free Vedic AI Astrologer – Veadicastro</title>
         <meta name="description" content="AI Astrology by Veadicastro — India's most accurate free Vedic AI astrologer. Get personalized predictions, kundali analysis, and instant answers from authentic Vedic Jyotish combined with AI precision." />
         <meta name="keywords" content="free ai astrology, accurate ai astrology, vedic astrology ai, kundli generator free, ask ai astrologer free, vedika ai, jyotish ai, birth chart analysis, planetary predictions, dasha analysis, nakshatra predictions" />
         <link rel="canonical" href="https://veadicastro.in/ai-astrology" />
@@ -72,6 +72,10 @@ export default function AiAstrology() {
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
               Try India's most trusted free AI astrologer - get instant kundali analysis, personalized predictions, and answers to your questions. No signup required for your first consultation.
             </p>
+            <Link to="/chatgpt-astrology" className="inline-flex items-center gap-2 text-pink-400 hover:text-pink-300 underline mb-8">
+              Try ChatGPT Astrology
+              <ArrowRight className="w-4 h-4" />
+            </Link>
             
             {/* Social Proof Section */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
@@ -786,6 +790,12 @@ export default function AiAstrology() {
                   desc: "Understand why general AI models struggle with Vedic astrology and what makes specialized AI better.",
                   icon: <Shield className="w-6 h-6" />,
                   link: "/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt"
+                },
+                {
+                  title: "ChatGPT Astrology",
+                  desc: "Ask Vedika in a ChatGPT-style astrology interface powered by your Vedic birth chart.",
+                  icon: <MessageSquare className="w-6 h-6" />,
+                  link: "/chatgpt-astrology"
                 },
                 {
                   title: "AI Astrology Predictions for 2026",

@@ -30,6 +30,9 @@ const Footer = () => {
             <Link to="/free-ai-astrologer-chat" className="text-white/80 hover:text-white transition-colors">
               Chat with Vedika AI
             </Link>
+            <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
+              ChatGPT Astrology
+            </Link>
             <Link to="/free-kundli-generator" className="text-white/80 hover:text-white transition-colors">
               Kundli Generator
             </Link>
