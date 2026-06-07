@@ -12,7 +12,7 @@ const AdBanner = ({ adSlot, adFormat = 'auto', className = '' }: AdBannerProps) 
   useEffect(() => {
     const pushAd = () => {
       try {
-        if (window.adsbygoogle && adRef.current) {
+        if (adRef.current) {
           (window.adsbygoogle = window.adsbygoogle || []).push({});
         }
       } catch (err) {
@@ -20,10 +20,20 @@ const AdBanner = ({ adSlot, adFormat = 'auto', className = '' }: AdBannerProps) 
       }
     };
 
-    // Delay ad push to ensure container is ready
-    const timer = setTimeout(pushAd, 100);
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src*="adsbygoogle.js"]');
 
-    return () => clearTimeout(timer);
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8272452438501804';
+      script.async = true;
+      script.crossOrigin = 'anonymous';
+      script.onload = pushAd;
+      document.head.appendChild(script);
+      return;
+    }
+
+    const timer = window.setTimeout(pushAd, 100);
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (
@@ -46,6 +56,6 @@ export default AdBanner;
 // Add TypeScript declarations for Google AdSense
 declare global {
   interface Window {
-    adsbygoogle: any[];
+    adsbygoogle: Array<Record<string, unknown>>;
   }
 }
