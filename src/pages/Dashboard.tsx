@@ -1383,7 +1383,7 @@ useEffect(() => {
                 aria-label="Open Dhan Yog Bracelet product page"
               >
                 <img
-                  src="/store/dhan-yog-second-image.png"
+                  src="/store/dhan-yog-second-image.webp"
                   alt="Dhan Yog Bracelet authentic wealth bracelet from Veadicastro Store"
                   className="h-full w-full object-cover"
                   loading="lazy"

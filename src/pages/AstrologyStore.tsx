@@ -10,15 +10,15 @@ const product = {
   price: 999,
   mrp: 1999,
   reviews: 1612,
-  image: "/store/dhan-yog-second-image.png",
+  image: "/store/dhan-yog-second-image.webp",
   pagePath: "/dhan-yog-bracelet",
 };
 
 const productSlides = [
-  { src: "/store/dhan-yog-second-image.png", alt: "Dhan Yog Bracelet product image with prosperity stones" },
-  { src: "/store/dhan-yog-real-closeup.png", alt: "Dhan Yog Bracelet closeup beads with Tiger Eye and Pyrite" },
-  { src: "/store/dhan-yog-male-hand.png", alt: "Money bracelet on male hand for daily wear" },
-  { src: "/store/dhan-yog-female-hand.png", alt: "Female hand wearing Dhan Yog Bracelet" },
+  { src: "/store/dhan-yog-second-image.webp", alt: "Dhan Yog Bracelet product image with prosperity stones" },
+  { src: "/store/dhan-yog-real-closeup.webp", alt: "Dhan Yog Bracelet closeup beads with Tiger Eye and Pyrite" },
+  { src: "/store/dhan-yog-male-hand.webp", alt: "Money bracelet on male hand for daily wear" },
+  { src: "/store/dhan-yog-female-hand.webp", alt: "Female hand wearing Dhan Yog Bracelet" },
 ];
 
 const productSchema = {
@@ -182,7 +182,7 @@ const AstrologyStore = () => {
 
         <section className="mt-10 overflow-hidden rounded-2xl bg-white shadow-sm">
           <img
-            src="/store/spiritual-crystal-charging-banner.png"
+            src="/store/spiritual-crystal-charging-banner.webp"
             alt="Spiritual crystal charging altar with gemstones and diya"
             className="h-[260px] w-full object-cover sm:h-[320px] lg:h-[380px]"
           />
@@ -203,7 +203,7 @@ const AstrologyStore = () => {
             We focus on authenticity because spiritual products should not be sold carelessly. Every Dhan Yog Bracelet goes through a quality check before dispatch. We check the finishing, bead arrangement, comfort, and overall look of the bracelet. We also do proper puja and spiritual energizing of every product before sending it to the customer. This is important because many buyers are not only buying a fashion accessory. They are buying a product connected with belief, intention, and spiritual discipline. Our goal is to send a bracelet that feels clean, positive, and ready for daily use.
           </p>
           <img
-            src="/store/dhan-yog-real-closeup.png"
+            src="/store/dhan-yog-real-closeup.webp"
             alt="Closeup of Dhan Yog Bracelet real gemstone beads"
             className="my-8 w-full rounded-lg object-cover"
           />
@@ -220,7 +220,7 @@ const AstrologyStore = () => {
             We also guide customers on care. You can wear the bracelet during work, business meetings, study, or daily activity. Remove it before bathing, swimming, washing clothes, or using harsh chemicals. Keep it in a clean and dry place when you are not wearing it. Friday morning or Thursday morning after bathing is considered a good time to start wearing a prosperity bracelet, but you can also wear it when your mind is calm and your intention is clear.
           </p>
           <img
-            src="/store/dhan-yog-male-hand.png"
+            src="/store/dhan-yog-male-hand.webp"
             alt="Dhan Yog money bracelet worn on hand for daily prosperity intention"
             className="my-8 w-full rounded-lg object-cover"
           />
@@ -306,8 +306,8 @@ const AstrologyStore = () => {
               </Button>
             </div>
             <div className="grid grid-cols-2">
-              <img src="/store/dhan-yog-male-hand.png" alt="Male hand wearing Money Magnet Dhan Yog Bracelet" className="h-full min-h-[260px] w-full object-cover" />
-              <img src="/store/dhan-yog-female-hand.png" alt="Female hand wearing Money Magnet Dhan Yog Bracelet" className="h-full min-h-[260px] w-full object-cover" />
+              <img src="/store/dhan-yog-male-hand.webp" alt="Male hand wearing Money Magnet Dhan Yog Bracelet" className="h-full min-h-[260px] w-full object-cover" />
+              <img src="/store/dhan-yog-female-hand.webp" alt="Female hand wearing Money Magnet Dhan Yog Bracelet" className="h-full min-h-[260px] w-full object-cover" />
             </div>
           </div>
         </section>

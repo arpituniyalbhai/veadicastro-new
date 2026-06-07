@@ -8,14 +8,14 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/compone
 import SEO, { generateFAQSchema } from "@/components/SEO";
 
 const gallery = [
-  "/store/dhan-yog-second-image.png",
-  "/store/dhan-yog-bracelet-main.png",
-  "/store/dhan-yog-male-hand.png",
-  "/store/dhan-yog-female-hand.png",
-  "/store/dhan-yog-real-closeup.png",
-  "/store/dhan-yog-third-image.png",
-  "/store/dhan-yog-forth-image.png",
-  "/store/benefit.png",
+  "/store/dhan-yog-second-image.webp",
+  "/store/dhan-yog-bracelet-main.webp",
+  "/store/dhan-yog-male-hand.webp",
+  "/store/dhan-yog-female-hand.webp",
+  "/store/dhan-yog-real-closeup.webp",
+  "/store/dhan-yog-third-image.webp",
+  "/store/dhan-yog-forth-image.webp",
+  "/store/benefit.webp",
   "/store/digital-proof-card.svg",
 ];
 
@@ -53,14 +53,14 @@ const reviews = [
 ];
 
 const imageAltText: Record<string, string> = {
-  "/store/dhan-yog-second-image.png": "Dhan Yog Bracelet main view with money magnet beads",
-  "/store/dhan-yog-bracelet-main.png": "Money Magnet Dhan Yog Bracelet product display",
-  "/store/dhan-yog-male-hand.png": "Male hand wearing Dhan Yog Bracelet for daily use",
-  "/store/dhan-yog-female-hand.png": "Female hand wearing Dhan Yog Bracelet",
-  "/store/dhan-yog-real-closeup.png": "Tiger Eye and Pyrite bead close-up on Dhan Yog Bracelet",
-  "/store/dhan-yog-third-image.png": "Dhan Yog Bracelet angled product photo",
-  "/store/dhan-yog-forth-image.png": "Gold spacer bead detail on Dhan Yog Bracelet",
-  "/store/benefit.png": "Dhan Yog Bracelet benefits card",
+  "/store/dhan-yog-second-image.webp": "Dhan Yog Bracelet main view with money magnet beads",
+  "/store/dhan-yog-bracelet-main.webp": "Money Magnet Dhan Yog Bracelet product display",
+  "/store/dhan-yog-male-hand.webp": "Male hand wearing Dhan Yog Bracelet for daily use",
+  "/store/dhan-yog-female-hand.webp": "Female hand wearing Dhan Yog Bracelet",
+  "/store/dhan-yog-real-closeup.webp": "Tiger Eye and Pyrite bead close-up on Dhan Yog Bracelet",
+  "/store/dhan-yog-third-image.webp": "Dhan Yog Bracelet angled product photo",
+  "/store/dhan-yog-forth-image.webp": "Gold spacer bead detail on Dhan Yog Bracelet",
+  "/store/benefit.webp": "Dhan Yog Bracelet benefits card",
   "/store/digital-proof-card.svg": "Digital proof card included with Dhan Yog Bracelet",
 };
 

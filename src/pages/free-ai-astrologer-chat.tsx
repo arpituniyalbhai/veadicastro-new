@@ -1010,7 +1010,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <div className="grid md:grid-cols-[0.95fr_1.35fr]">
               <div className="min-h-[260px] bg-black/20">
                 <img
-                  src="/store/dhan-yog-male-hand.png"
+                  src="/store/dhan-yog-male-hand.webp"
                   alt="Dhan Yog Bracelet worn on hand for wealth intention"
                   className="w-full h-full object-cover"
                 />

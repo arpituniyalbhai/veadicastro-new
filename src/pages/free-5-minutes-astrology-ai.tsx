@@ -1059,7 +1059,7 @@ KEY INSIGHTS:
               <div className="grid md:grid-cols-[0.95fr_1.35fr] gap-0">
                 <div className="min-h-[260px] bg-black/20">
                   <img
-                    src="/store/dhan-yog-second-image.png"
+                    src="/store/dhan-yog-second-image.webp"
                     alt="Dhan Yog Bracelet for money and prosperity intention"
                     className="w-full h-full object-cover"
                   />

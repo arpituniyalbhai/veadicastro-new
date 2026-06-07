@@ -974,7 +974,7 @@ export default function AiAstrology() {
               <div className="grid md:grid-cols-[0.95fr_1.35fr]">
                 <div className="min-h-[260px] bg-black/20">
                   <img
-                    src="/store/dhan-yog-second-image.png"
+                    src="/store/dhan-yog-second-image.webp"
                     alt="Dhan Yog money bracelet from Veadicastro Store"
                     className="w-full h-full object-cover"
                   />

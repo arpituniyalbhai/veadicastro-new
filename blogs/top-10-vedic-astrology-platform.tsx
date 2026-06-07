@@ -11,7 +11,7 @@ const Top10VedicAstrologyPlatform = () => {
         <title>Top 10 AI Powered Astrology Platforms (2026) — Complete Guide | Veadicastro</title>
         <meta name="description" content="Top 10 AI Powered Astrology Platforms 2026: Discover the best free AI Kundali tools, accurate AI astrology chat, and Vedic AI astrology for career and marriage. Affordable online Jyotish AI with AI-driven birth chart analysis. No signup required." />
         <meta name="keywords" content="Top 10 AI Powered Astrology Platforms, best free AI Kundali 2026, accurate AI astrology chat, Vedic AI astrology for career & marriage, affordable online Jyotish AI, AI-driven birth chart analysis, Melooha, KundliGPT, Veadicastro, Jyotir AI, AstroSure, AI astrology comparison" />
-        <link rel="canonical" href="https://veadicastro.in/blogs/top-10-vedic-astrology-platform" />
+        <link rel="canonical" href="https://veadicastro.in/blog/top-10-vedic-astrology-platform" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
         <meta name="theme-color" content="#0a0a0f" />
         
@@ -54,7 +54,7 @@ const Top10VedicAstrologyPlatform = () => {
           "dateModified": "2026-05-22",
           "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://veadicastro.in/blogs/top-10-vedic-astrology-platform"
+            "@id": "https://veadicastro.in/blog/top-10-vedic-astrology-platform"
           },
           "keywords": ["Top 10 AI Powered Astrology Platforms", "best free AI Kundali 2026", "accurate AI astrology chat", "Vedic AI astrology for career & marriage", "affordable online Jyotish AI", "AI-driven birth chart analysis", "Melooha", "KundliGPT", "Veadicastro"],
           "inLanguage": ["en"],
