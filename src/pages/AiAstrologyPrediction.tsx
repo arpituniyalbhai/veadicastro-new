@@ -67,9 +67,12 @@ const selectClass =
 const labelClass = "space-y-2 text-sm font-medium text-white/75";
 
 const loadingMessages = [
-  "Calculating your birth chart...",
+  "Preparing your birth details...",
+  "Loading Swiss Ephemeris data...",
+  "Calculating your Vedic birth chart...",
   "Reading your planetary positions...",
-  "Generating your predictions...",
+  "Checking your Moon sign, Lagna, and Nakshatra...",
+  "Generating your 10 personal predictions...",
 ];
 
 const internalLinks = [
@@ -108,8 +111,28 @@ const parsePredictionJson = (text: string): PredictionItem[] => {
   const start = cleaned.indexOf("{");
   const end = cleaned.lastIndexOf("}");
   const jsonText = start >= 0 && end >= 0 ? cleaned.slice(start, end + 1) : cleaned;
-  const parsed = JSON.parse(jsonText) as { predictions?: PredictionItem[] };
-  return Array.isArray(parsed.predictions) ? parsed.predictions.slice(0, 10) : [];
+  try {
+    const parsed = JSON.parse(jsonText) as { predictions?: PredictionItem[] };
+    return Array.isArray(parsed.predictions) ? parsed.predictions.slice(0, 10) : [];
+  } catch {
+    const repaired = jsonText
+      .replace(/,\s*([}\]])/g, "$1")
+      .replace(/}\s*{/g, "},{")
+      .replace(/]\s*{/g, "],{");
+
+    try {
+      const parsed = JSON.parse(repaired) as { predictions?: PredictionItem[] };
+      return Array.isArray(parsed.predictions) ? parsed.predictions.slice(0, 10) : [];
+    } catch {
+      const matches = Array.from(
+        cleaned.matchAll(/"topic"\s*:\s*"([^"]+)"[\s\S]*?"prediction"\s*:\s*"([^"]+)"/g)
+      );
+      return matches.slice(0, 10).map((match) => ({
+        topic: match[1],
+        prediction: match[2],
+      }));
+    }
+  }
 };
 
 const buildPrompt = (birthDetails: BirthDetails, astroData: AstroPayload, language: Lang) => {
@@ -180,7 +203,7 @@ export default function AiAstrologyPrediction() {
     let index = 0;
     const interval = window.setInterval(() => {
       index += 1;
-      setLoadingMessage(loadingMessages[index % loadingMessages.length]);
+      setLoadingMessage(loadingMessages[Math.min(index, loadingMessages.length - 1)]);
     }, 1800);
     return () => window.clearInterval(interval);
   }, [step]);
@@ -238,7 +261,11 @@ export default function AiAstrologyPrediction() {
 
     setError("");
     setPredictions([]);
+    setLoadingMessage(loadingMessages[0]);
     setStep("loading");
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
     try {
       const payload = await getPlanetaryData({
@@ -269,7 +296,7 @@ export default function AiAstrologyPrediction() {
       if (!response.ok) throw new Error(await response.text());
       const data = await response.json();
       const parsed = parsePredictionJson(String(data?.text || ""));
-      if (parsed.length !== 10) throw new Error("Prediction response did not contain exactly 10 items.");
+      if (parsed.length === 0) throw new Error("Unable to read the AI prediction response. Please try again.");
 
       setPredictions(parsed);
       setStep("results");
@@ -518,10 +545,50 @@ export default function AiAstrologyPrediction() {
           )}
 
           {step === "loading" && (
-            <div className="mx-auto flex max-w-md flex-col items-center text-center">
-              <Loader2 className="h-10 w-10 animate-spin text-[#d9277a]" />
-              <h1 className="mt-5 text-2xl font-semibold">Reading your chart</h1>
-              <p className="mt-3 text-sm text-white/55">{loadingMessage}</p>
+            <div className="mx-auto w-full max-w-xl text-center">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full border border-[#d9277a]/30 bg-[#111111] shadow-2xl shadow-black/40">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-black">
+                  <Loader2 className="h-7 w-7 animate-spin text-[#d9277a]" />
+                </div>
+              </div>
+              <p className="text-sm font-medium text-[#d9277a]">Please stay on this page</p>
+              <h1 className="mt-3 text-3xl font-semibold">Creating your predictions</h1>
+              <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-white/55">
+                This can take 30 to 60 seconds because we calculate your chart first, then ask Vedika to write your predictions.
+              </p>
+
+              <div className="mt-7 overflow-hidden rounded-lg border border-white/10 bg-[#111111] text-left">
+                <div className="h-1 w-full overflow-hidden bg-white/10">
+                  <div className="h-full w-1/2 animate-[pulse_1.4s_ease-in-out_infinite] bg-[#d9277a]" />
+                </div>
+                <div className="space-y-4 p-5">
+                  {loadingMessages.map((message) => {
+                    const currentIndex = loadingMessages.indexOf(loadingMessage);
+                    const messageIndex = loadingMessages.indexOf(message);
+                    const isDone = messageIndex < currentIndex;
+                    const isActive = message === loadingMessage;
+
+                    return (
+                      <div key={message} className="flex items-center gap-3">
+                        <div
+                          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[11px] ${
+                            isActive
+                              ? "border-[#d9277a] bg-[#d9277a] text-white"
+                              : isDone
+                                ? "border-[#d9277a]/60 bg-[#d9277a]/20 text-[#d9277a]"
+                                : "border-white/15 bg-black text-white/35"
+                          }`}
+                        >
+                          {isDone ? "OK" : messageIndex + 1}
+                        </div>
+                        <p className={`text-sm ${isActive ? "text-white" : isDone ? "text-white/65" : "text-white/35"}`}>
+                          {message}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
 
