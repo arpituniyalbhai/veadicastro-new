@@ -1,18 +1,16 @@
 User-agent: *
 Allow: /
+
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /settings
 Disallow: /profile
 Disallow: /members
 Disallow: /onboarding
-Disallow: /chat
+Disallow: /chat/
 Disallow: /reports
 Disallow: /pricing
 Disallow: /future
 Disallow: /instruction
 
 Sitemap: https://veadicastro.in/sitemap.xml
-
-User-agent: *
-Allow: /
