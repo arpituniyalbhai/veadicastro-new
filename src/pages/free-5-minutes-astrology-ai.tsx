@@ -388,6 +388,7 @@ KEY INSIGHTS:
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <a href="/free-ai-astrologer-chat" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Chat with AI Astrologer</a>
             <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
+            <a href="/ai-astrology-prediction" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Prediction</a>
             <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
             <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
             <a href="/free-kundali-matching" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Kundli Matching</a>
@@ -1112,6 +1113,7 @@ KEY INSIGHTS:
               <div className="flex flex-wrap gap-4">
                 <a href="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 transition-colors">Want to go deeper? Chat with Vedika AI</a>
                 <a href="/chatgpt-astrology" className="text-pink-400 hover:text-pink-300 transition-colors">Try ChatGPT Astrology</a>
+                <a href="/ai-astrology-prediction" className="text-pink-400 hover:text-pink-300 transition-colors">Generate 10 AI astrology predictions</a>
                 <a href="/today-horoscope" className="text-pink-400 hover:text-pink-300 transition-colors">See today's horoscope</a>
                 <a href="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 transition-colors">See your full Vedic birth chart</a>
                 <a href="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 transition-colors">Check kundali compatibility for marriage</a>

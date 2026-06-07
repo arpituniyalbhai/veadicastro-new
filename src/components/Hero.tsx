@@ -120,7 +120,7 @@ const Hero = () => {
                   </div>
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground">
-                  <span style={{color:'#f2f2f2'}} className="font-semibold text-foreground">Chosen by 14500+ Users Worldwide</span>
+                  <span style={{color:'#f2f2f2'}} className="font-semibold text-foreground">Chosen by 21500+ Users Worldwide</span>
                 </p>
               </div>
             </div>

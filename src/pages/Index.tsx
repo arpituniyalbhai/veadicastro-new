@@ -57,8 +57,8 @@ const Index = () => {
           }, 16);
         };
 
-        animateCounter('accurate-answers', 20000, 4000);
-        animateCounter('user-base', 10000, 4000);
+        animateCounter('accurate-answers', 50000, 4000);
+        animateCounter('user-base', 21000, 4000);
         animateCounter('daily-predictions', 30000, 4000);
         animateCounter('report-created', 22000, 4000);
       }
@@ -596,7 +596,7 @@ const Index = () => {
             </div>
 
             {/* Tools Cards - Second Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Free 5-Minutes Astrology Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
                    itemScope itemType="https://schema.org/SoftwareApplication"
@@ -654,6 +654,59 @@ const Index = () => {
 
                 {/* Hover Effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-secondary/20 via-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+
+              {/* AI Astrology Prediction Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/ai-astrology-prediction');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/ai-astrology-prediction" />
+                <meta itemProp="name" content="AI Astrology Prediction - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Get 10 free AI astrology predictions based on your Vedic birth chart. Personalized guidance for career, marriage, money, health, love, and timing.</span>
+                
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-secondary to-accent flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Brain className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    AI Astrology Prediction
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Generate 10 personalized Vedic predictions from your birth chart for career, marriage, money, health, love life, and lucky timing.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      10 prediction categories
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Birth chart based
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      English & Hindi support
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Generate Predictions</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
 
               {/* Today Horoscope Tool */}

@@ -472,6 +472,9 @@ const AiAstrologyPredictionFor2026 = () => {
             <section className="mt-12">
               <h3 className="text-2xl font-bold text-gray-300 mb-6">Related Articles</h3>
               <div className="space-y-4">
+                <Link to="/ai-astrology-prediction" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  AI Astrology Prediction - Generate Your Personal Vedic Predictions
+                </Link>
                 <Link to="/" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Best AI Astrology Platform India — VeadicAstro.in
                 </Link>

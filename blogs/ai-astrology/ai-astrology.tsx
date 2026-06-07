@@ -149,6 +149,13 @@ export default function AiAstrology() {
                   free: true
                 },
                 {
+                  title: "AI Astrology Prediction",
+                  desc: "Generate 10 personal predictions from your Vedic birth chart",
+                  icon: <TrendingUp className="w-6 h-6" />,
+                  link: "/ai-astrology-prediction",
+                  free: true
+                },
+                {
                   title: "Ask Vedika AI",
                   desc: "Get personalized answers to your astrology questions",
                   icon: <MessageSquare className="w-6 h-6" />,

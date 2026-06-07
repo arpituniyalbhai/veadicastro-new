@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="border-t border-white/10 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60" data-footer="global-footer">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-5 mb-8">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:grid-cols-6 mb-8">
           <div className="flex flex-col items-start gap-4">
             <div className="flex items-center gap-2">
               <img src="/favicon.ico" alt="Veadicastro Logo" className="w-10 h-10" />
@@ -27,11 +27,14 @@ const Footer = () => {
 
           <div className="flex flex-col items-start gap-3">
             <span className="text-sm font-medium text-white/60 uppercase tracking-wider">Tools</span>
-            <Link to="/free-ai-astrologer-chat" className="text-white/80 hover:text-white transition-colors">
-              Chat with Vedika AI
+            <Link to="/free-5-minutes-astrology-ai" className="text-white/80 hover:text-white transition-colors">
+              Free 5-Minute Astrology
             </Link>
-            <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
-              ChatGPT Astrology
+            <Link to="/free-ai-astrologer-chat" className="text-white/80 hover:text-white transition-colors">
+              Free AI Astrologer Chat
+            </Link>
+            <Link to="/ai-astrology-prediction" className="text-white/80 hover:text-white transition-colors">
+              AI Astrology Prediction
             </Link>
             <Link to="/free-kundli-generator" className="text-white/80 hover:text-white transition-colors">
               Kundli Generator
@@ -42,8 +45,36 @@ const Footer = () => {
             <Link to="/today-horoscope" className="text-white/80 hover:text-white transition-colors">
               Today Horoscope
             </Link>
+            <Link to="/angel-number-calculator" className="text-white/80 hover:text-white transition-colors">
+              Angel Number Calculator
+            </Link>
             <Link to="/lucky-colour-for-today" className="text-white/80 hover:text-white transition-colors">
-              Lucky Colour
+              Lucky Colour Today
+            </Link>
+            <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
+              ChatGPT Astrology
+            </Link>
+          </div>
+
+          <div className="flex flex-col items-start gap-3">
+            <span className="text-sm font-medium text-white/60 uppercase tracking-wider">Quick Links</span>
+            <Link to="/" className="text-white/80 hover:text-white transition-colors">
+              Home
+            </Link>
+            <Link to="/blog" className="text-white/80 hover:text-white transition-colors">
+              Blog
+            </Link>
+            <Link to="/about" className="text-white/80 hover:text-white transition-colors">
+              About Us
+            </Link>
+            <Link to="/mission" className="text-white/80 hover:text-white transition-colors">
+              Our Mission
+            </Link>
+            <Link to="/how-it-works" className="text-white/80 hover:text-white transition-colors">
+              How It Works
+            </Link>
+            <Link to="/talk-to-astrologer" className="text-white/80 hover:text-white transition-colors">
+              Human Astrologer
             </Link>
             <Link to="/astrology-store" className="text-white/80 hover:text-white transition-colors">
               Astrology Store
@@ -58,8 +89,20 @@ const Footer = () => {
             <Link to="/blog/vedic-vs-western-astrology" className="text-white/80 hover:text-white transition-colors text-sm">
               Vedic vs Western Astrology
             </Link>
+            <Link to="/blog/is-ai-astrology-accurate" className="text-white/80 hover:text-white transition-colors text-sm">
+              AI Astrology Accuracy
+            </Link>
+            <Link to="/blog/ai-astrologer-vs-human-astrologer" className="text-white/80 hover:text-white transition-colors text-sm">
+              AI vs Human Astrologer
+            </Link>
+            <Link to="/blog/ai-jyotish-vedic-astrology" className="text-white/80 hover:text-white transition-colors text-sm">
+              AI Jyotish Guide
+            </Link>
             <Link to="/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" className="text-white/80 hover:text-white transition-colors text-sm">
               Rahu Ketu Transit
+            </Link>
+            <Link to="/blog/yearly-horoscope-2026-complete-zodiac-predictions-for-all-12-rashis" className="text-white/80 hover:text-white transition-colors text-sm">
+              Yearly Horoscope 2026
             </Link>
             <Link to="/blog/manglik-dosha-myths-vs-reality" className="text-white/80 hover:text-white transition-colors text-sm">
               Manglik Dosha

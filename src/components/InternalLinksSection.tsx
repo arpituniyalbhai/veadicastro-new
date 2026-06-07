@@ -6,23 +6,34 @@ const linkGroups = [
     links: [
       { name: "AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
       { name: "AI Kundli", path: "/free-kundli-generator" },
+      { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
       { name: "AI Predictions", path: "/free-5-minutes-astrology-ai" },
     ],
   },
   {
     title: "Vedic Tools",
     links: [
+      { name: "Free 5-Minute Astrology", path: "/free-5-minutes-astrology-ai" },
+      { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
+      { name: "Free AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
       { name: "Kundli Generator", path: "/free-kundli-generator" },
       { name: "Kundli Matching", path: "/free-kundali-matching" },
       { name: "Today Horoscope", path: "/today-horoscope" },
+      { name: "Angel Number Calculator", path: "/angel-number-calculator" },
+      { name: "Lucky Colour Today", path: "/lucky-colour-for-today" },
     ],
   },
   {
     title: "Learn Astrology",
     links: [
-      { name: "Mahadasha Guide", path: "/blog/vedic-astrology-ai-kese-kaam-karta-ha" },
-      { name: "Nakshatra Basics", path: "/blog/ai-jyotish-vedic-astrology" },
+      { name: "AI and Vedic Astrology", path: "/blog/how-ai-is-transforming-vedic-astrology" },
+      { name: "Vedic vs Western Astrology", path: "/blog/vedic-vs-western-astrology" },
+      { name: "AI Astrology Accuracy", path: "/blog/is-ai-astrology-accurate" },
+      { name: "AI Astrologer vs Human Astrologer", path: "/blog/ai-astrologer-vs-human-astrologer" },
+      { name: "AI Jyotish Guide", path: "/blog/ai-jyotish-vedic-astrology" },
       { name: "Rahu Ketu Transit", path: "/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" },
+      { name: "Yearly Horoscope 2026", path: "/blog/yearly-horoscope-2026-complete-zodiac-predictions-for-all-12-rashis" },
+      { name: "Manglik Dosha Guide", path: "/blog/manglik-dosha-myths-vs-reality" },
     ],
   },
 ];

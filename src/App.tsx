@@ -83,6 +83,7 @@ const LuckyColourForToday = lazy(() => import("@/pages/lucky-colour-for-today"))
 const AstrologyStore = lazy(() => import("@/pages/AstrologyStore"));
 const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
 const ChatGPTAstrology = lazy(() => import("@/pages/ChatGPTAstrology"));
+const AiAstrologyPrediction = lazy(() => import("@/pages/AiAstrologyPrediction"));
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
 
@@ -122,6 +123,7 @@ const RouterShell = () => {
     p === "/welcome" ||
     p === "/onboarding" ||
     p === "/chatgpt-astrology" ||
+    p === "/ai-astrology-prediction" ||
     p === "/about" ||
     p === "/how-it-works" ||
     p === "/blog" ||
@@ -155,6 +157,7 @@ const RouterShell = () => {
         <Route path="/dhan-yoga-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/astrology-store/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/chatgpt-astrology" element={<Suspense fallback={<PageLoading />}><ChatGPTAstrology /></Suspense>} />
+        <Route path="/ai-astrology-prediction" element={<Suspense fallback={<PageLoading />}><AiAstrologyPrediction /></Suspense>} />
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />
