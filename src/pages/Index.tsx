@@ -27,75 +27,6 @@ const WhoIsThisForSection = lazy(() => import("@/components/WhoIsThisForSection"
 const InternalLinksSection = lazy(() => import("@/components/InternalLinksSection"));
 const VedikaDifferenceSection = lazy(() => import("@/components/VedikaDifferenceSection"));
 
-const featuredBadges = [
-  {
-    href: "https://www.rankmyai.com/tools/5c09cbcc-7912-4398-856b-078909a86328/veadicastro",
-    src: "https://www.rankmyai.com/images/logos/logo_horizontal_dark.svg",
-    alt: "Rank My AI Logo",
-    className: "h-[60px] w-auto",
-  },
-  {
-    href: "https://www.producthunt.com/products/vedicastro/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-vedicastro",
-    src: "https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1130177&theme=light",
-    alt: "Vedicastro Product Hunt Review",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://toolfame.com/item/veadicastro",
-    src: "https://toolfame.com/badge-dark.svg",
-    alt: "Featured on toolfame.com",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://fazier.com/launches/veadicatro.in",
-    src: "https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=launched&theme=dark",
-    alt: "Fazier badge",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://showmebest.ai",
-    src: "https://showmebest.ai/badge/feature-badge-dark.webp",
-    alt: "Featured on ShowMeBestAI",
-    className: "h-[60px] w-auto",
-  },
-  {
-    href: "https://neeed.directory/products/veadicastro?utm_source=veadicastro",
-    src: "https://neeed.directory/badges/neeed-badge-dark.svg",
-    alt: "Featured on neeed.directory",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://saasfame.com/item/veadicastro",
-    src: "https://saasfame.com/badge-dark.svg",
-    alt: "Featured on saasfame.com",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://twelve.tools",
-    src: "https://twelve.tools/badge3-dark.svg",
-    alt: "Featured on Twelve Tools",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://wired.business",
-    src: "https://wired.business/badge3-dark.svg",
-    alt: "Featured on Wired Business",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://turbo0.com/item/veadicastro",
-    src: "https://img.turbo0.com/badge-listed-dark.svg",
-    alt: "Listed on Turbo0",
-    className: "h-[54px] w-auto",
-  },
-  {
-    href: "https://launchigniter.com/product/veadicastro?ref=badge-veadicastro",
-    src: "https://launchigniter.com/api/badge/veadicastro?theme=dark",
-    alt: "Featured on LaunchIgniter",
-    className: "h-[55px] w-auto",
-  },
-];
-
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -428,29 +359,6 @@ const Index = () => {
           <WhoIsThisForSection />
         </Suspense>
 
-        <section className="pb-12">
-          <div className="relative w-full overflow-hidden py-2">
-            <div className="marquee-track flex w-max items-center gap-10 px-2">
-                {[...featuredBadges, ...featuredBadges].map((badge, idx) => (
-                  <a key={`${badge.href}-${idx}`} href={badge.href} target="_blank" rel="noopener noreferrer" className="shrink-0 opacity-95 hover:opacity-100 transition-opacity">
-                    <img src={badge.src} alt={badge.alt} className={badge.className} loading="lazy" />
-                  </a>
-                ))}
-            </div>
-            <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 bg-gradient-to-l from-background via-background/80 to-transparent" />
-          </div>
-        </section>
-        <style>{`
-          @keyframes featured-badges-marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .marquee-track {
-            animation: featured-badges-marquee 56s linear infinite;
-          }
-        `}</style>
-      
         <Suspense fallback={
         <div className="py-16 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
