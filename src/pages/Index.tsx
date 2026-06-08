@@ -68,6 +68,16 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Firebase + AuthModal ko 2 second baad background mein preload karo
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      import("@/components/AuthModal");
+      import("firebase/auth");
+      import("firebase/firestore");
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Redirect logged-in users to dashboard
   useEffect(() => {
     if (!loading && user) {

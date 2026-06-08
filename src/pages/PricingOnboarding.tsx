@@ -9,7 +9,6 @@ import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { auth, savePremiumUserToFirestore } from "@/lib/firebase";
-import { generateInvoice } from "@/lib/invoice";
 import { usePlan, type PlanName } from "@/context/PlanContext";
 
 const PricingOnboarding = () => {
@@ -238,6 +237,7 @@ const PricingOnboarding = () => {
 
             // Generate invoice
             try {
+              const { generateInvoice } = await import("@/lib/invoice");
               const invoice = await generateInvoice({
                 fullName,
                 email: email || "noreply@veadicastro.in",

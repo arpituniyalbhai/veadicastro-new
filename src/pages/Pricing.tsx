@@ -8,7 +8,6 @@ import { auth, savePremiumUserToFirestore } from "@/lib/firebase";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
-import { generateInvoice } from "@/lib/invoice";
 import { usePlan, type PlanName } from "@/context/PlanContext";
 import SEO from "@/components/SEO";
 
@@ -423,6 +422,7 @@ const Pricing = () => {
               const fullName =
                 billingDetails?.fullName || user?.email?.split('@')[0] || "Veadicastro Member";
               const buyerEmail = billingDetails?.email || user?.email || "";
+              const { generateInvoice } = await import("@/lib/invoice");
               const invoice = await generateInvoice({
                 fullName,
                 email: buyerEmail || "noreply@veadicastro.in",
