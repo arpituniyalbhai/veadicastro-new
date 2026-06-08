@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/context/AuthContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const Navbar = () => {
-  const { user, setAuthOpen } = useAuth();
+type NavbarProps = {
+  user?: { email?: string } | null;
+  onAuthOpen?: () => void;
+};
+
+const Navbar = ({ user = null, onAuthOpen }: NavbarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
@@ -101,7 +104,7 @@ const Navbar = () => {
               className={`transition-all duration-600 ${scrolled ? 'px-3 py-1 text-[15px]' : 'px-4 py-2 text-sm'}`}
               onClick={() => {
                 if (!user) {
-                  setAuthOpen(true);
+                  onAuthOpen?.();
                 } else {
                   localStorage.setItem("redirect_intent", "dashboard");
                   navigate(`/dashboard?referral=${currentPage}`);
@@ -160,7 +163,7 @@ const Navbar = () => {
                   className="w-full"
                   onClick={() => {
                     if (!user) {
-                      setAuthOpen(true);
+                      onAuthOpen?.();
                     } else {
                       localStorage.setItem("redirect_intent", "dashboard");
                       navigate(`/dashboard?referral=${currentPage}`);

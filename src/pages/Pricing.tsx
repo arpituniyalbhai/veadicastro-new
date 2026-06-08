@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, Star, Sparkles, Crown, Zap, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth, savePremiumUserToFirestore } from "@/lib/firebase";
+import { getAuthInstance, savePremiumUserToFirestore } from "@/lib/firebase";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
@@ -291,6 +291,7 @@ const Pricing = () => {
             });
 
             // Get current user info
+            const auth = await getAuthInstance();
             const current = auth.currentUser;
             if (!current?.uid) {
               throw new Error('User not authenticated. Please log in and try again.');

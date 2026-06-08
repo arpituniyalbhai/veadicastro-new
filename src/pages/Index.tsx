@@ -2,9 +2,9 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import QuestionsFab from "@/components/QuestionsFab";
 import SEO, { generateFAQSchema } from "@/components/SEO";
-import { useEffect, Suspense, lazy } from "react";
+import { useEffect, Suspense, lazy, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { ButtonLite } from "@/components/ui/button-lite";
 import { Plus, MessageCircle, Sparkles, Brain, Send, ArrowRight, Heart, Calendar } from "lucide-react";
 
@@ -26,9 +26,10 @@ const FounderTrustSection = lazy(() => import("@/components/FounderTrustSection"
 const WhoIsThisForSection = lazy(() => import("@/components/WhoIsThisForSection"));
 const InternalLinksSection = lazy(() => import("@/components/InternalLinksSection"));
 const VedikaDifferenceSection = lazy(() => import("@/components/VedikaDifferenceSection"));
+const AuthModal = lazy(() => import("@/components/AuthModal"));
 
 const Index = () => {
-  const { user, loading } = useAuth();
+  const [authRequested, setAuthRequested] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -73,20 +74,10 @@ const Index = () => {
     const timer = setTimeout(() => {
       import("@/components/AuthModal");
       import("firebase/auth");
-      import("firebase/firestore");
+      import("@/lib/firebase").then((m) => m.getAuthInstance?.());
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-  // Redirect logged-in users to dashboard
-  useEffect(() => {
-    if (!loading && user) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, loading, navigate]);
-
-  // ✅ Agar user instantly mila (sessionStorage se) — seedha null return
-  if (user) return null;
 
   // ✅ loading ho ya na ho — landing page hamesha render karo (SEO ke liye)
   // Baad mein useEffect handle karega redirect
@@ -158,6 +149,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden">
+      {authRequested && (
+        <AuthProvider initialAuthOpen>
+          <Suspense fallback={<OpeningSignup />}>
+            <AuthModal />
+          </Suspense>
+        </AuthProvider>
+      )}
       <SEO
         title="AI Astrology — Free AI Chat | Daily Horoscope & Detailed Report — Veadicastro"
         description="India's most accurate AI Astrologer — Get daily health, wealth & self predictions, Kundli, family member charts, lucky numbers, and personalized Vedic AI chat. Sign up now. Hindi & English."
@@ -181,9 +179,9 @@ const Index = () => {
         schema={schemas}
       />
       {location.pathname === "/" && <QuestionsFab key="index-page-fab" />}
-      <Navbar />
+      <Navbar onAuthOpen={() => setAuthRequested(true)} />
       <main className="overflow-x-hidden">
-        <Hero />
+        <Hero onAuthOpen={() => setAuthRequested(true)} />
         
         {/* Static Statistics Section */}
         <section className="py-16 px-4">
@@ -827,5 +825,14 @@ const Index = () => {
     </div>
   );
 };
+
+const OpeningSignup = () => (
+  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
+    <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0a0a0f] p-6 text-center shadow-2xl shadow-black/40">
+      <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-[#d9277a]/30 border-t-[#d9277a]" />
+      <p className="text-sm font-semibold text-white">Opening signup...</p>
+    </div>
+  </div>
+);
 
 export default Index;

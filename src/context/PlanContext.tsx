@@ -19,8 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { doc, onSnapshot, updateDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
-import { db, primaryDb } from "@/lib/firebase";
+import { getDataDbInstance } from "@/lib/firebase";
 
 export type PlanName =
   | "Free"
@@ -144,16 +143,22 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!user?.email || authLoading) return;
 
-    const timeout = setTimeout(() => {
+    let unsubscribe: (() => void) | undefined;
+
+    const timeout = setTimeout(async () => {
       console.log("Setting up Firestore listener for:", {
         email: user.email,
         uid: user.uid,
         dbProject: "vedicastro-data",
         delay: "500ms applied"
       });
+      const [{ doc, onSnapshot }, db] = await Promise.all([
+        import("firebase/firestore"),
+        getDataDbInstance(),
+      ]);
       const userDocRef = doc(db, "users", user.email);
       
-      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         console.log("🔥 Firestore snapshot received:", {
           exists: docSnapshot.exists,
           metadata: docSnapshot.metadata,
@@ -212,13 +217,13 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         setPlanLoading(false);
       });
 
-      return () => {
         console.log("🔥 Cleaning up Firestore listener");
-        unsubscribe();
-      };
     }, 500); // wait 500ms for auth token to fully load
 
-    return () => clearTimeout(timeout);
+    return () => {
+      clearTimeout(timeout);
+      unsubscribe?.();
+    };
   }, [user?.email, authLoading]);
 
   // ── Initialize New User ───────────────────────────────────────────────────────
@@ -228,6 +233,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     
     try {
       console.log("Initializing new user in vedicastro-data project");
+      const [{ doc, setDoc, serverTimestamp }, db] = await Promise.all([
+        import("firebase/firestore"),
+        getDataDbInstance(),
+      ]);
       const userDocRef = doc(db, "users", user.email);
       await setDoc(userDocRef, {
         planName: "Free",

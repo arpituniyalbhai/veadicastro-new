@@ -8,7 +8,7 @@ import { ArrowLeft, Tag, User, Mail, Building2, FileText, ChevronDown, ChevronUp
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { auth, savePremiumUserToFirestore } from "@/lib/firebase";
+import { getAuthInstance, savePremiumUserToFirestore } from "@/lib/firebase";
 import { usePlan, type PlanName } from "@/context/PlanContext";
 
 const PricingOnboarding = () => {
@@ -170,6 +170,7 @@ const PricingOnboarding = () => {
           try {
             console.log('[Payment] Razorpay response:', response);
 
+            const auth = await getAuthInstance();
             const current = auth.currentUser;
             if (!current?.uid) {
               throw new Error('User not authenticated. Please log in and try again.');

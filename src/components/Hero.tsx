@@ -1,8 +1,11 @@
-import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-const Hero = () => {
-  const { setAuthOpen, user } = useAuth();
+type HeroProps = {
+  user?: { email?: string } | null;
+  onAuthOpen?: () => void;
+};
+
+const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
   const navigate = useNavigate();
 
   return (
@@ -72,7 +75,7 @@ const Hero = () => {
                 if (user) {
                   navigate('/dashboard?referral=hero');
                 } else {
-                  setAuthOpen(true);
+                  onAuthOpen?.();
                 }
               }}
               style={{

@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
 import { ArrowLeft, LogOut, Lock, Loader2, User, Shield, Camera, Settings, Info, Mail, Calendar, MapPin, Star, CheckCircle, AlertCircle } from "lucide-react";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getAuthInstance } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 
@@ -554,6 +554,7 @@ const Profile = () => {
                           if (!user?.email) { setStatus("No email found for reset."); return; }
                           setResetLoading(true);
                           try { 
+                            const auth = await getAuthInstance();
                             await sendPasswordResetEmail(auth, user.email); 
                             toast({ title: "Reset link sent", description: `Email sent to ${user.email}` }); 
                           } catch(error: unknown){ 

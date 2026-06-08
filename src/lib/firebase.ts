@@ -1,7 +1,4 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics, isSupported } from "firebase/analytics";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
-import { getFirestore, serverTimestamp, doc, setDoc, Timestamp } from "firebase/firestore";
 
 // SECURITY: Firebase config loaded from environment variables
 // These are public keys (apiKey is safe to expose), but sensitive operations are restricted by Firestore rules
@@ -32,32 +29,50 @@ export const app = initializeApp(authAppConfig, "authApp");
 export const dataApp = initializeApp(dataAppConfig, "dataApp");
 
 // Lazy initialize Firebase Auth to improve performance
-let authInstance: ReturnType<typeof getAuth> | null = null;
+let authInstance: import("firebase/auth").Auth | null = null;
+let primaryDbInstance: import("firebase/firestore").Firestore | null = null;
+let dataDbInstance: import("firebase/firestore").Firestore | null = null;
+let analyticsStarted = false;
 
-export const getAuthInstance = () => {
+export const getAuthInstance = async () => {
   if (!authInstance) {
+    const { getAuth, setPersistence, browserLocalPersistence } = await import("firebase/auth");
     authInstance = getAuth(app);
-    // Enable browser persistence for faster auth loading
-    setPersistence(authInstance, browserLocalPersistence);
+    void setPersistence(authInstance, browserLocalPersistence);
   }
   return authInstance;
 };
 
-// For backward compatibility
-export const auth = getAuthInstance();
+export const getPrimaryDbInstance = async () => {
+  if (!primaryDbInstance) {
+    const { getFirestore } = await import("firebase/firestore");
+    primaryDbInstance = getFirestore(app);
+  }
+  return primaryDbInstance;
+};
 
-// Firestore instances
-export const primaryDb = getFirestore(app);  // Primary project (vedicastro111)
-export const db = getFirestore(dataApp);    // Secondary project (vedicastro-data) - for user plans
+export const getDataDbInstance = async () => {
+  if (!dataDbInstance) {
+    const { getFirestore } = await import("firebase/firestore");
+    dataDbInstance = getFirestore(dataApp);
+  }
+  return dataDbInstance;
+};
 
-// Configure cross-project authentication
-// The auth token from vedicastro111 should work with vedicastro-data if projects are linked
+export const getDbInstance = getDataDbInstance;
 
-isSupported().then((ok) => {
+export const startAnalytics = async () => {
+  if (analyticsStarted) return;
+  analyticsStarted = true;
+  const { getAnalytics, isSupported } = await import("firebase/analytics");
+  const ok = await isSupported();
   if (ok) {
     getAnalytics(app);
   }
-});
+};
+
+// Configure cross-project authentication
+// The auth token from vedicastro111 should work with vedicastro-data if projects are linked
 
 /**
  * Save premium user document in vedicastro-data Firestore.
@@ -75,6 +90,7 @@ export async function savePremiumUserToFirestore(params: {
   now?: Date;
 }) {
   const { uid, email, displayName, planName, now } = params;
+  const { serverTimestamp, doc, setDoc, Timestamp } = await import("firebase/firestore");
   const startedAt = now ? Timestamp.fromDate(now) : serverTimestamp();
 
   // If we have a concrete Date, compute expires locally; otherwise, leave for a cloud function or client update
@@ -82,23 +98,18 @@ export async function savePremiumUserToFirestore(params: {
   const expiresAtDate = new Date(baseDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   // Get current user from primary auth
+  const auth = await getAuthInstance();
   const currentUser = auth.currentUser;
   if (!currentUser) {
     throw new Error("User not authenticated in primary Firebase project");
   }
 
-  // Get ID token from primary auth
-  const idToken = await currentUser.getIdToken();
-  
-  // Sign in to secondary project with the same token
-  const { signInWithCustomToken } = await import("firebase/auth");
-  const dataAuthInstance = getAuth(dataApp);
-  
   // Create custom token for secondary project
   // Note: This requires a backend service to create custom tokens
   // For now, we'll use the ID token directly for demonstration
   // In production, you should use Firebase Admin SDK to create custom tokens
 
+  const db = await getDataDbInstance();
   const ref = doc(db, "users", uid);
   await setDoc(
     ref,
@@ -129,6 +140,8 @@ export async function saveInvoiceRecord(record: {
   purchaseDate: string;
   pdfDataUrl: string;
 }) {
+  const { serverTimestamp, doc, setDoc } = await import("firebase/firestore");
+  const db = await getDataDbInstance();
   const ref = doc(db, "invoices", record.invoiceNumber);
   await setDoc(
     ref,

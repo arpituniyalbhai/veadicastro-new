@@ -102,7 +102,6 @@ const queryClient = new QueryClient({
 
 const RouterShell = () => {
   const location = useLocation();
-  const { authOpen } = useAuth();
   const p = location.pathname;
   const dashboardPaths = [
     "/dashboard",
@@ -134,6 +133,33 @@ const RouterShell = () => {
       <ProtectedPlanRoute>{page}</ProtectedPlanRoute>
     </Suspense>
   );
+
+  if (p === "/") {
+    return (
+      <>
+        <Routes>
+          <Route path="/" element={<Index />} />
+        </Routes>
+        <Footer />
+      </>
+    );
+  }
+
+  return (
+    <AuthProvider>
+      <AuthenticatedRoutes hideFooter={hideFooter} protectedPage={protectedPage} />
+    </AuthProvider>
+  );
+};
+
+const AuthenticatedRoutes = ({
+  hideFooter,
+  protectedPage,
+}: {
+  hideFooter: boolean;
+  protectedPage: (page: ReactNode) => ReactNode;
+}) => {
+  const { authOpen } = useAuth();
 
   return (
     <>
@@ -231,13 +257,11 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <AuthProvider>
-          <I18nProvider>
-            <BrowserRouter>
-              <RouterShell />
-            </BrowserRouter>
-          </I18nProvider>
-        </AuthProvider>
+        <I18nProvider>
+          <BrowserRouter>
+            <RouterShell />
+          </BrowserRouter>
+        </I18nProvider>
       </TooltipProvider>
     </QueryClientProvider>
   </HelmetProvider>

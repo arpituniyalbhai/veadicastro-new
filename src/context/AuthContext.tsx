@@ -1,6 +1,4 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useRef } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 
 interface User {
   uid: string;
@@ -40,15 +38,34 @@ const getInitialUser = (): User | null => {
   }
 };
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider = ({
+  children,
+  initialAuthOpen = false,
+}: {
+  children: ReactNode;
+  initialAuthOpen?: boolean;
+}) => {
   const initialUser = getInitialUser();
   const [user, setUser] = useState<User | null>(initialUser);
   const [loading, setLoading] = useState(!initialUser); 
-  const [authOpen, setAuthOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(initialAuthOpen);
   const skipNextAuthEvent = useRef(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
+
+    const initAuth = async () => {
+      const [{ onAuthStateChanged }, { getAuthInstance }] = await Promise.all([
+        import("firebase/auth"),
+        import("@/lib/firebase"),
+      ]);
+      if (cancelled) return;
+
+      const auth = await getAuthInstance();
+      if (cancelled) return;
+
+      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (skipNextAuthEvent.current) {
         skipNextAuthEvent.current = false;
         setLoading(false);
@@ -72,13 +89,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(null);
       }
       setLoading(false);
-    });
+      });
+    };
 
-    return () => unsubscribe();
+    void initAuth();
+
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   const logout = async () => {
     try {
+      const { getAuthInstance } = await import("@/lib/firebase");
+      const auth = await getAuthInstance();
       await auth.signOut();
       sessionStorage.removeItem("isLoggedIn");
       localStorage.removeItem("user");

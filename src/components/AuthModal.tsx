@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { X, Sparkles, Mail, Lock, User, Shield, CheckCircle, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { auth } from "@/lib/firebase";
+import { getAuthInstance, getDataDbInstance } from "@/lib/firebase";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -15,8 +15,6 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-import { db, primaryDb } from "@/lib/firebase";
 
 const AuthModal = () => {
   const { authOpen, setAuthOpen, setUser, skipNextAuthEvent } = useAuth();
@@ -37,6 +35,9 @@ const AuthModal = () => {
   // Create user document in Firestore immediately after authentication
   const createUserDocument = async (userEmail: string, userName: string, uid: string) => {
     try {
+      const auth = await getAuthInstance();
+      const db = await getDataDbInstance();
+      const { doc, setDoc, getDoc, serverTimestamp } = await import("firebase/firestore");
       const normalizedEmail = (auth.currentUser?.email || userEmail).toLowerCase().trim();
       const userDocRef = doc(db, "users", normalizedEmail);
       
@@ -123,6 +124,7 @@ const AuthModal = () => {
       setLoading(true);
       setError(null);
 
+      const auth = await getAuthInstance();
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
 
@@ -186,7 +188,8 @@ const AuthModal = () => {
       if (mode === "signup") {
         // For signup: create account and send OTP
         skipNextAuthEvent.current = true; // Skip next auth state change
-        
+
+        const auth = await getAuthInstance();
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         if (name) await updateProfile(cred.user, { displayName: name });
         
@@ -253,6 +256,7 @@ const AuthModal = () => {
     setSuccess(null);
 
     try {
+      const auth = await getAuthInstance();
       if (mode === "signup") {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         if (name) await updateProfile(cred.user, { displayName: name });
@@ -364,7 +368,8 @@ const AuthModal = () => {
 
       if (response.ok) {
         setSuccess("OTP verified! Signing you in...");
-        
+
+        const auth = await getAuthInstance();
         // Sign back in after OTP verification
         await signInWithEmailAndPassword(auth, email, password);
         
