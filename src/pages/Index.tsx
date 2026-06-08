@@ -28,10 +28,25 @@ const InternalLinksSection = lazy(() => import("@/components/InternalLinksSectio
 const VedikaDifferenceSection = lazy(() => import("@/components/VedikaDifferenceSection"));
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 
+const hasStoredAuthSession = () => {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return false;
+
+    JSON.parse(storedUser);
+    return sessionStorage.getItem("isLoggedIn") === "true" || Boolean(storedUser);
+  } catch {
+    return false;
+  }
+};
+
 const Index = () => {
   const [authRequested, setAuthRequested] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const shouldRedirectToDashboard = hasStoredAuthSession();
 
   // Scroll-triggered counter animation
   useEffect(() => {
@@ -78,6 +93,14 @@ const Index = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (shouldRedirectToDashboard) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [shouldRedirectToDashboard, navigate]);
+
+  if (shouldRedirectToDashboard) return null;
 
   // ✅ loading ho ya na ho — landing page hamesha render karo (SEO ke liye)
   // Baad mein useEffect handle karega redirect
