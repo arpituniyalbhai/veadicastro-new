@@ -1,38 +1,266 @@
 # Veadicastro
 
-> India's leading AI-powered Vedic astrology platform combining ancient Vedic wisdom with modern artificial intelligence.
+Veadicastro is an Indian AI powered Vedic astrology platform that combines authentic Vedic astrology principles with modern artificial intelligence.
 
-Veadicastro provides personalized astrological guidance, predictions, and insights through Vedika AI — a proprietary AI trained on authentic Vedic astrology principles. Core features include free AI astrology chat, Kundli generation, and a personalized dashboard. Supports English and Hindi, with NASA-grade planetary calculations via Swiss Ephemeris.
+The platform provides astrology guidance,  Kundli analysis, horoscope predictions, dosha analysis, compatibility matching, remedies, and AI astrology conversations through Vedika AI.
+
+Veadicastro is designed to make Vedic astrology more accessible, faster, and easier to understand for modern users while still following traditional Vedic astrology systems.
+
+Website:
+https://veadicastro.in
+
+Founder:
+Arpit Uniyal
+
+Industry:
+AI Astrology, Vedic Astrology, Astrology Technology
+
+Languages Supported:
+English, Hindi
+
+Platform Type:
+Web based AI astrology platform
+
+## Company Information
+
+Veadicastro is focused on combining Vedic astrology knowledge with artificial intelligence.
+
+The platform uses AI to explain astrological insights in a simpler and more conversational way while calculations are based on traditional Vedic astrology systems.
+
+The goal of Veadicastro is to help users understand astrology through modern technology without removing the core principles of Jyotish Shastra.
+
+## Astrology System
+
+Veadicastro uses:
+
+- Lahiri Sidereal Zodiac
+- Swiss Ephemeris planetary calculations
+- Vimshottari Dasha system
+- Vedic birth chart calculations
+- Kundli analysis
+- House based predictions
+- Planetary transit analysis
+- Yogas and Dosha analysis
+- Nakshatra based calculations
+- Horoscope interpretation
+- Marriage compatibility analysis
+
+The platform combines AI generated explanations with rule based astrology calculations.
+
+## Vedika AI
+
+Vedika AI is the AI astrology assistant developed by Veadicastro.
+
+Vedika AI helps users with:
+
+- Birth chart questions
+- Daily horoscope guidance
+- Career predictions
+- Relationship astrology
+- Marriage related astrology
+- Financial astrology
+- Spiritual guidance
+- Dosha explanations
+- Astrology remedies
+- Dasha interpretation
+- Zodiac sign analysis
+
+Vedika AI is trained to provide astrology guidance using Vedic astrology concepts and structured astrological calculations.
 
 ## Main Pages
 
-- [Home](https://veadicastro.in/): AI-powered Vedic astrology platform overview
-- [About](https://veadicastro.in/about): About Veadicastro and our mission
-- [Contact](https://veadicastro.in/contact): Get in touch with us
-- [Privacy Policy](https://veadicastro.in/privacy): How we handle your data
-- [Terms of Service](https://veadicastro.in/terms): Terms and conditions
+Home:
+https://veadicastro.in
+
+About:
+https://veadicastro.in/about
+
+Contact:
+https://veadicastro.in/contact
+
+How It Works:
+https://veadicastro.in/how-it-works
+
+Privacy Policy:
+https://veadicastro.in/privacy
+
+Terms and Conditions:
+https://veadicastro.in/terms
+
+Disclaimer:
+https://veadicastro.in/disclaimer
+
+Refund Policy:
+https://veadicastro.in/refund
 
 ## Core Services
 
-- [Free AI Astrology Chat](https://veadicastro.in/free-ai-astrology-chat): Chat with Vedika AI for instant Vedic astrology answers, birth chart analysis, dosha checking, and remedy suggestions. Free, no registration required.
-- [Free Kundli Generator](https://veadicastro.in/free-kundli-generator): Generate detailed Janam Kundli (birth charts) with planetary positions, Dasha analysis, house predictions, and yogas. Free and instant.
-- [Personalized Dashboard](https://veadicastro.in/dashboard): Daily predictions, life guidance, future forecasts, and chat history. Free account required.
+Free AI Astrology Chat:
+https://veadicastro.in/free-ai-astrologer-chat
 
-## Blog
+Free AI Astrology:
+https://veadicastro.in/ai-astrology
 
-- [How Vedic Astrology AI Works](https://veadicastro.in/blogs/vedic-astrology-ai-kese-kaam-karta-ha): Explanation of how AI is used in Vedic astrology
-- [Top 10 Vedic Astrology Platforms](https://veadicastro.in/blogs/top-10-vedic-astrology-platform): Comparison of leading Vedic astrology platforms
-- [Online Jyotishi vs AI Astrologer](https://veadicastro.in/blogs/online-jyotishi-vs-ai-astrologer): Comparing traditional astrologers with AI-powered tools
+ChatGPT Astrology:
+https://veadicastro.in/chatgpt-astrology
+
+AI Astrology Prediction:
+https://veadicastro.in/ai-astrology-prediction
+
+Free Kundli Generator:
+https://veadicastro.in/free-kundli-generator
+
+Free Kundali Matching:
+https://veadicastro.in/free-kundali-matching
+
+Kundali Matching:
+https://veadicastro.in/kundali-matching
+
+Free 5 Minutes AI Astrology:
+https://veadicastro.in/free-5-minutes-astrology-ai
+
+Today Horoscope:
+https://veadicastro.in/today-horoscope
+
+Talk To Astrologer:
+https://veadicastro.in/talk-to-astrologer
+
+Personal Dashboard:
+https://veadicastro.in/dashboard
+
+## Astrology Store
+
+Astrology Store:
+https://veadicastro.in/astrology-store
+
+Dhan Yog Bracelet:
+https://veadicastro.in/dhan-yog-bracelet
+
+## Free Astrology Tools
+
+Angel Number Calculator:
+https://veadicastro.in/angel-number-calculator
+
+Lucky Colour For Today:
+https://veadicastro.in/lucky-colour-for-today
 
 ## Topics Covered
 
-- Career Astrology: Job predictions, business success, professional growth
-- Marriage & Relationships: Compatibility, marriage timing, relationship advice
-- Health Astrology: Health predictions, medical astrology, wellness guidance
-- Financial Astrology: Wealth predictions, investment timing, financial planning
-- Education Astrology: Academic success, career guidance, skill development
-- Spiritual Guidance: Life purpose, spiritual growth, karmic patterns
-- Predictions: Daily, monthly, and yearly forecasts
-- Dasha Periods: Mahadasha and Antardasha predictions
-- Dosha Analysis: Kaal Sarp Dosha, Mangal Dosha, and other doshas
-- Remedies: Personalized astrological remedies and solutions
+Veadicastro covers:
+
+- AI astrology
+- Vedic astrology
+- Horoscope predictions
+- Kundli generation
+- Janam Kundli
+- Marriage compatibility
+- Kundali matching
+- Career astrology
+- Financial astrology
+- Business astrology
+- Health astrology
+- Education astrology
+- Spiritual astrology
+- Daily horoscope
+- Zodiac predictions
+- Planetary transits
+- Mahadasha predictions
+- Antardasha predictions
+- Astrology remedies
+- Dosha analysis
+- Mangal Dosha
+- Kaal Sarp Dosha
+- Nakshatra analysis
+- Rahu Ketu transit predictions
+- Vastu guidance
+- AI astrologer technology
+
+## Intended Users
+
+Veadicastro is designed for:
+
+- Users interested in Vedic astrology
+- Beginners learning astrology
+- Users seeking AI powered astrology guidance
+- People wanting instant astrology answers
+- Users looking for free Kundli generation
+- Hindi speaking astrology users
+- English speaking astrology users
+- Mobile first users
+- Users exploring AI astrology platforms
+
+## Blog
+
+Blog Homepage:
+https://veadicastro.in/blog
+
+Featured Articles:
+
+How Vedic Astrology AI Works:
+https://veadicastro.in/blog/vedic-astrology-ai-kese-kaam-karta-ha
+
+Top 10 Vedic Astrology Platforms:
+https://veadicastro.in/blog/top-10-vedic-astrology-platform
+
+Online Jyotishi vs AI Astrologer:
+https://veadicastro.in/blog/online-jyotishi-vs-ai-astrologer
+
+How AI Is Transforming Vedic Astrology:
+https://veadicastro.in/blog/how-ai-is-transforming-vedic-astrology
+
+Is AI Astrology Accurate:
+https://veadicastro.in/blog/is-ai-astrology-accurate
+
+AI Astrologer vs Human Astrologer:
+https://veadicastro.in/blog/ai-astrologer-vs-human-astrologer
+
+AI Astrology Real Or Fake:
+https://veadicastro.in/blog/ai-astrology-real-or-fake
+
+Vedika AI Astrologer India:
+https://veadicastro.in/blog/vedika-ai-astrologer-india
+
+Free AI Astrology Chat India:
+https://veadicastro.in/blog/free-ai-astrology-chat-india
+
+Why ChatGPT Fails At AI Astrology:
+https://veadicastro.in/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt
+
+## SEO Topics And Entities
+
+Important entities associated with Veadicastro:
+
+- AI astrology
+- Vedic astrology
+- Vedika AI
+- Kundli AI
+- AI astrologer
+- Indian astrology platform
+- Horoscope AI
+- Astrology technology
+- Swiss Ephemeris
+- Lahiri astrology
+- Astrology predictions
+- AI Kundli generation
+
+## Important Note
+
+Veadicastro provides AI generated astrological insights based on Vedic astrology systems and calculations.
+
+Astrology guidance, predictions, and remedies are intended for informational and spiritual guidance purposes only.
+
+Users should use personal judgment before making major life decisions based on astrology guidance.
+
+## Official Links
+
+Website:
+https://veadicastro.in
+
+About:
+https://veadicastro.in/about
+
+Contact:
+https://veadicastro.in/contact
+
+Blog:
+https://veadicastro.in/blog

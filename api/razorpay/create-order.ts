@@ -36,9 +36,8 @@ const COMPATIBILITY_PRICES: Record<string, number> = {
 };
 
 const STORE_PRODUCT_PRICES: Record<string, number> = {
-  'Money Magnet Dhan Yog Bracelet - Pack of 1': 99900,
-  'Money Magnet Dhan Yog Bracelet - Pack of 2': 179900,
-  'Money Magnet Dhan Yog Bracelet - Pack of 3': 249900,
+  'Money Magnet Dhan Yog Bracelet - Pack of 1': 49900,
+  'Money Magnet Dhan Yog Bracelet - Pack of 2': 59900,
 };
 
 const getSpecialReportPrice = (planName: string): number | undefined => {

@@ -1252,7 +1252,7 @@ useEffect(() => {
                     <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
                       only{" "}
                       <span className="text-sm font-extrabold text-secondary sm:text-base lg:text-lg">
-                        Rs. 999
+                        Rs. 499
                       </span>{" "}
                       for limited time - only 50 pieces left
                     </span>
@@ -1395,7 +1395,7 @@ useEffect(() => {
                     Authentic Launch
                   </Badge>
                   <Badge variant="outline" className="border-border/70">
-                    Rs. 999
+                    Rs. 499
                   </Badge>
                   <Badge variant="outline" className="border-border/70">
                     Free India Delivery

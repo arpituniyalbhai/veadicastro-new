@@ -20,9 +20,8 @@ const gallery = [
 ];
 
 const packs = [
-  { id: "single", label: "Pack of 1", qty: 1, price: 999, note: "Launch price" },
-  { id: "couple", label: "Pack of 2", qty: 2, price: 1799, note: "Save Rs. 199" },
-  { id: "family", label: "Pack of 3", qty: 3, price: 2499, note: "Save Rs. 498" },
+  { id: "single", label: "Pack of 1", qty: 1, price: 499, note: "Launch price" },
+  { id: "couple", label: "Pack of 2", qty: 2, price: 599, note: "Save Rs. 399" },
 ];
 
 const coupons: Record<string, { label: string; discount: (amount: number) => number }> = {
@@ -117,8 +116,8 @@ const productSchema = {
   })),
   offers: {
     "@type": "AggregateOffer",
-    lowPrice: "999",
-    highPrice: "2499",
+    lowPrice: "499",
+    highPrice: "599",
     priceCurrency: "INR",
     availability: "https://schema.org/InStock",
     url: "https://veadicastro.in/dhan-yog-bracelet",
@@ -236,11 +235,13 @@ const DhanYogBracelet = () => {
   const [supportOpen, setSupportOpen] = useState(false);
 
   const total = useMemo(() => selectedPack.price * quantity, [selectedPack, quantity]);
+  const originalTotal = useMemo(() => selectedPack.qty * 999 * quantity, [selectedPack, quantity]);
   const discount = useMemo(() => {
     if (!appliedCoupon) return 0;
     return Math.min(total - 1, coupons[appliedCoupon]?.discount(total) || 0);
   }, [appliedCoupon, total]);
   const payableTotal = total - discount;
+  const savings = Math.max(0, originalTotal - payableTotal);
   const checkoutReady = Boolean(
     buyer.name.trim() &&
     buyer.phone.trim() &&
@@ -457,7 +458,7 @@ const DhanYogBracelet = () => {
     <div className="min-h-screen bg-[#f8f6f1] text-[#171717]">
       <SEO
         title="Buy Dhan Yog Money Bracelet Online - Tiger Eye & Pyrite"
-        description="Buy Dhan Yog Bracelet at Rs. 999. Tiger's Eye, Pyrite, Citrine and Aventurine inspired stones with free delivery all India and 1600+ buyer reviews."
+        description="Buy Dhan Yog Bracelet at Rs. 499. Tiger's Eye, Pyrite, Citrine and Aventurine inspired stones with free delivery all India and 1600+ buyer reviews."
         url="https://veadicastro.in/dhan-yog-bracelet"
         type="product"
         schema={[productSchema, generateFAQSchema(faqs), breadcrumbSchema]}
@@ -535,7 +536,7 @@ const DhanYogBracelet = () => {
 
             <div className="flex flex-wrap items-center gap-3">
               <span className="text-4xl font-bold">Rs. {payableTotal}</span>
-              <span className="text-xl text-black/35 line-through">Rs. 1,999</span>
+              <span className="text-xl text-black/35 line-through">Rs. {originalTotal.toLocaleString("en-IN")}</span>
               <span className="font-bold text-green-700">{appliedCoupon ? `${appliedCoupon} applied` : "Launch 10% OFF"}</span>
               <span className="rounded-full bg-[#6f2d3d] px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
                 Only 50 pieces left
@@ -544,7 +545,7 @@ const DhanYogBracelet = () => {
 
             <div>
               <p className="mb-3 text-xs font-bold uppercase tracking-wide">Select quantity</p>
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 {packs.map((pack) => (
                   <button
                     key={pack.id}
@@ -570,7 +571,7 @@ const DhanYogBracelet = () => {
                   <h3 className="font-semibold">Launch Special Sale Offer</h3>
                   <p className="text-sm text-black/60">Digital proof card + free shipping included. Try coupon DHAN10 or VEDIC100.</p>
                 </div>
-                <span className="rounded-full bg-green-600 px-3 py-1 text-xs font-bold text-white">Save Rs. {500 + discount}</span>
+                <span className="rounded-full bg-green-600 px-3 py-1 text-xs font-bold text-white">Save Rs. {savings}</span>
               </div>
             </div>
 
@@ -777,50 +778,52 @@ const DhanYogBracelet = () => {
       </main>
 
       <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
-        <DialogContent className="border border-black/10 bg-[#f8f6f1] text-[#171717] shadow-2xl sm:max-w-lg">
-          <DialogTitle className="font-serif text-2xl text-[#6f2d3d]">Reserve Your Dhan Yog Bracelet</DialogTitle>
-          <DialogDescription className="text-base leading-relaxed text-black/65">
-            Please enter your delivery contact details in this step. The Dhan Yog Bracelet is a rare spiritual product, so after payment our support team will contact you within 24 hours to confirm dispatch, care guidance, and final delivery support.
-          </DialogDescription>
-          <div className="grid gap-4">
-            <div className="rounded-xl border border-[#f3b338]/40 bg-white p-4 text-sm leading-relaxed text-black/70">
-              Your payment opens securely through Razorpay. These details are saved with your store order in Firestore so the support team can contact you quickly.
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="store-name-popup">Name</Label>
-                <Input id="store-name-popup" className="bg-white" value={buyer.name} onChange={(e) => setBuyer((prev) => ({ ...prev, name: e.target.value }))} />
+        <DialogContent className="left-0 top-0 h-[100dvh] max-h-[100dvh] max-w-none translate-x-0 translate-y-0 overflow-y-auto border-0 bg-[#f8f6f1] p-0 text-[#171717] shadow-2xl sm:left-[50%] sm:top-[50%] sm:h-auto sm:max-h-[calc(100vh-2rem)] sm:max-w-lg sm:translate-x-[-50%] sm:translate-y-[-50%] sm:overflow-y-auto sm:rounded-lg sm:border sm:border-black/10 sm:p-6">
+          <div className="min-h-full px-5 pb-14 pt-8 sm:min-h-0 sm:px-0 sm:pb-0 sm:pt-0">
+            <DialogTitle className="pr-10 font-serif text-2xl text-[#6f2d3d]">Reserve Your Dhan Yog Bracelet</DialogTitle>
+            <DialogDescription className="mt-4 text-base leading-relaxed text-black/65 sm:mt-0">
+              Please enter your delivery contact details in this step. The Dhan Yog Bracelet is a rare spiritual product, so after payment our support team will contact you within 24 hours to confirm dispatch, care guidance, and final delivery support.
+            </DialogDescription>
+            <div className="mt-5 grid gap-4 sm:mt-0">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="store-name-popup">Name</Label>
+                  <Input id="store-name-popup" className="bg-white" value={buyer.name} onChange={(e) => setBuyer((prev) => ({ ...prev, name: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="store-phone-popup">Phone Number</Label>
+                  <Input id="store-phone-popup" className="bg-white" value={buyer.phone} onChange={(e) => setBuyer((prev) => ({ ...prev, phone: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="store-location-popup">Location</Label>
+                  <Input id="store-location-popup" className="bg-white" value={buyer.location} onChange={(e) => setBuyer((prev) => ({ ...prev, location: e.target.value }))} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="store-pincode-popup">Pin Code</Label>
+                  <Input id="store-pincode-popup" className="bg-white" value={buyer.pincode} onChange={(e) => setBuyer((prev) => ({ ...prev, pincode: e.target.value }))} />
+                </div>
+                <p className="text-xs text-black/55 sm:col-span-2">Name, location, phone number, and pin code are required for reservation.</p>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-phone-popup">Phone Number</Label>
-                <Input id="store-phone-popup" className="bg-white" value={buyer.phone} onChange={(e) => setBuyer((prev) => ({ ...prev, phone: e.target.value }))} />
+              <div className="flex items-center justify-between rounded-xl border border-black/10 bg-white p-4 text-sm">
+                <span>Total payable</span>
+                <span className="text-lg font-bold">Rs. {payableTotal}</span>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-location-popup">Location</Label>
-                <Input id="store-location-popup" className="bg-white" value={buyer.location} onChange={(e) => setBuyer((prev) => ({ ...prev, location: e.target.value }))} />
+              <div className="flex gap-3 pb-[env(safe-area-inset-bottom)]">
+                <Button variant="outline" className="flex-1 bg-white" onClick={() => setCheckoutOpen(false)}>Cancel</Button>
+                <Button disabled={!checkoutReady || isProcessingPayment} className="flex-1 bg-[#6f2d3d] text-white hover:bg-[#5b2130]" onClick={openCheckout}>
+                  {isProcessingPayment ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Opening Razorpay
+                    </>
+                  ) : (
+                    "Continue to Razorpay"
+                  )}
+                </Button>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="store-pincode-popup">Pin Code</Label>
-                <Input id="store-pincode-popup" className="bg-white" value={buyer.pincode} onChange={(e) => setBuyer((prev) => ({ ...prev, pincode: e.target.value }))} />
+              <div className="rounded-xl border border-[#f3b338]/40 bg-white p-4 text-sm leading-relaxed text-black/70">
+                Your payment opens securely through Razorpay. These details are saved with your store order in Firestore so the support team can contact you quickly.
               </div>
-              <p className="text-xs text-black/55 sm:col-span-2">Name, location, phone number, and pin code are required for reservation.</p>
-            </div>
-            <div className="flex items-center justify-between rounded-xl border border-black/10 bg-white p-4 text-sm">
-              <span>Total payable</span>
-              <span className="text-lg font-bold">Rs. {payableTotal}</span>
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" className="flex-1 bg-white" onClick={() => setCheckoutOpen(false)}>Cancel</Button>
-              <Button disabled={!checkoutReady || isProcessingPayment} className="flex-1 bg-[#6f2d3d] text-white hover:bg-[#5b2130]" onClick={openCheckout}>
-                {isProcessingPayment ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Opening Razorpay
-                  </>
-                ) : (
-                  "Continue to Razorpay"
-                )}
-              </Button>
             </div>
           </div>
         </DialogContent>

@@ -7,8 +7,8 @@ import SEO from "@/components/SEO";
 
 const product = {
   name: "Money Magnet Dhan Yog Bracelet",
-  price: 999,
-  mrp: 1999,
+  price: 499,
+  mrp: 999,
   reviews: 1612,
   image: "/store/dhan-yog-second-image.webp",
   pagePath: "/dhan-yog-bracelet",
@@ -38,7 +38,7 @@ const productSchema = {
   },
   offers: {
     "@type": "Offer",
-    price: "999",
+    price: "499",
     priceCurrency: "INR",
     availability: "https://schema.org/InStock",
     url: "https://veadicastro.in/dhan-yog-bracelet",
@@ -64,7 +64,7 @@ const AstrologyStore = () => {
     <div className="min-h-screen bg-[#f8f6f1] text-[#171717]">
       <SEO
         title="Veadicastro Store - Astrology Related Products"
-        description="Buy Dhan Yog Bracelet at Rs. 999. Tiger's Eye, Pyrite, Citrine and Aventurine. Free delivery all India. 1600+ buyers. Order now on Veadicastro."
+        description="Buy Dhan Yog Bracelet at Rs. 499. Tiger's Eye, Pyrite, Citrine and Aventurine. Free delivery all India. 1600+ buyers. Order now on Veadicastro."
         url="https://veadicastro.in/astrology-store"
         type="product"
         schema={productSchema}
@@ -102,7 +102,7 @@ const AstrologyStore = () => {
               Dhan Yog Money Bracelet for Wealth & Prosperity
             </h1>
             <div className="inline-flex rounded-full border border-[#6f2d3d]/50 px-8 py-4 text-3xl font-bold text-[#6f2d3d]">
-              Rs. 999
+              Rs. 499
             </div>
             <p className="max-w-md text-lg leading-relaxed text-[#4f3b2f]">
               A prosperity bracelet made with Tiger's Eye, Pyrite, Citrine and Aventurine for wealth attraction, focus, luck and stability.
@@ -208,7 +208,7 @@ const AstrologyStore = () => {
             className="my-8 w-full rounded-lg object-cover"
           />
           <p className="mt-5">
-            The Dhan Yog Bracelet is priced at Rs. 999 as a launch offer because we want more people in India to try a quality astrology product without paying a very high amount. Many spiritual bracelets online are either too cheap with poor quality or too expensive without clear explanation. We are keeping the price simple. At Rs. 999, you get a carefully selected money bracelet, free delivery across India, product guidance, digital proof card support, and Veadicastro trust. The low launch price does not mean low quality. It means we are keeping our margin controlled during the launch period so more customers can experience the product.
+            The Dhan Yog Bracelet is priced at Rs. 499 as a launch offer because we want more people in India to try a quality astrology product without paying a very high amount. Many spiritual bracelets online are either too cheap with poor quality or too expensive without clear explanation. We are keeping the price simple. At Rs. 499, you get a carefully selected money bracelet, free delivery across India, product guidance, digital proof card support, and Veadicastro trust. The low launch price does not mean low quality. It means we are keeping our margin controlled during the launch period so more customers can experience the product.
           </p>
           <p className="mt-5">
             Our working process is simple. First, we select the bracelet design and stones based on the purpose of the product. For the Money Magnet Dhan Yog Bracelet, the purpose is wealth, prosperity, focus, confidence, and luck. Second, we check the product quality and make sure the bracelet is wearable for daily life. Third, we do puja and energizing for the bracelet. Fourth, after the order is placed, our support team contacts the buyer for final delivery details and helps with dispatch. This process keeps the order personal and trustworthy instead of making it feel like a random online purchase.
