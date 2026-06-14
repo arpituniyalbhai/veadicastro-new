@@ -326,17 +326,17 @@ KEY INSIGHTS:
         <title>Free 5-Minute Astrology Reading | Instant Vedic Predictions | Vedika AI</title>
         <meta name="description" content="Get instant free Vedic astrology readings in 5 minutes. Personalized predictions for love, career, health, and life. AI-powered accurate insights." />
         <meta name="keywords" content="free 5 minute astrology, instant vedic predictions, AI astrology reading, free kundli, personalized horoscope, love prediction, career astrology, health astrology" />
-        <link rel="canonical" href="https://veadicastro.in/free-5-minutes-astrology" />
+        <link rel="canonical" href="https://veadicastro.in/free-5-minutes-astrology-ai" />
         <meta property="og:title" content="Free 5-Minute Astrology Reading | Instant Vedic Predictions" />
         <meta property="og:description" content="Get instant free Vedic astrology readings in 5 minutes. Personalized predictions for love, career, health, and life." />
-        <meta property="og:url" content="https://veadicastro.in/free-5-minutes-astrology" />
+        <meta property="og:url" content="https://veadicastro.in/free-5-minutes-astrology-ai" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
             "name": "Free 5-Minute Astrology Reading",
             "description": "Get instant free Vedic astrology readings in 5 minutes. Personalized predictions for love, career, health, and life.",
-            "url": "https://veadicastro.in/free-5-minutes-astrology",
+            "url": "https://veadicastro.in/free-5-minutes-astrology-ai",
             "mainEntity": {
               "@type": "SoftwareApplication",
               "name": "Vedika AI Astrology",
@@ -349,6 +349,26 @@ KEY INSIGHTS:
             }
           })
         }
+        </script>
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://veadicastro.in"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Free 5 Minutes Astrology AI",
+                "item": "https://veadicastro.in/free-5-minutes-astrology-ai"
+              }
+            ]
+          })}
         </script>
       </Helmet>
 

@@ -163,6 +163,33 @@ const FifaWorldCup2026WinnerAstrologyPrediction = () => {
             ],
           })}
         </script>
+
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://veadicastro.in",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Blog",
+                item: "https://veadicastro.in/blog",
+              },
+              {
+                "@type": "ListItem",
+                position: 3,
+                name: "FIFA World Cup 2026 Winner Prediction",
+                item: "https://veadicastro.in/blog/fifa-world-cup-2026-winner-astrology-prediction",
+              },
+            ],
+          })}
+        </script>
       </Helmet>
 
       <div className="fixed left-0 top-0 z-[999] h-1 w-full bg-gray-900">

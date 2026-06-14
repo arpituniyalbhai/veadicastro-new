@@ -2,26 +2,70 @@
   "rewrites": [
     { "source": "/api/mistral", "destination": "/api/mistral.ts" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/free-ai-astrologer-chat", "destination": "/api/meta?path=free-ai-astrologer-chat" },
+    { "source": "/free-5-minutes-astrology-ai", "destination": "/api/meta?path=free-5-minutes-astrology-ai" },
+    { "source": "/free-kundli-generator", "destination": "/api/meta?path=free-kundli-generator" },
+    { "source": "/free-kundali-matching", "destination": "/api/meta?path=free-kundali-matching" },
+    { "source": "/kundali-matching", "destination": "/api/meta?path=kundali-matching" },
+    { "source": "/today-horoscope", "destination": "/api/meta?path=today-horoscope" },
+    { "source": "/angel-number-calculator", "destination": "/api/meta?path=angel-number-calculator" },
+    { "source": "/lucky-colour-for-today", "destination": "/api/meta?path=lucky-colour-for-today" },
+    { "source": "/astrology-store", "destination": "/api/meta?path=astrology-store" },
+    { "source": "/dhan-yog-bracelet", "destination": "/api/meta?path=dhan-yog-bracelet" },
+    { "source": "/dhan-yoga-bracelet", "destination": "/api/meta?path=dhan-yoga-bracelet" },
+    { "source": "/chatgpt-astrology", "destination": "/api/meta?path=chatgpt-astrology" },
+    { "source": "/ai-astrology-prediction", "destination": "/api/meta?path=ai-astrology-prediction" },
+    { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },
+    { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },
+    { "source": "/about", "destination": "/api/meta?path=about" },
+    { "source": "/about-founder", "destination": "/api/meta?path=about-founder" },
+    { "source": "/mission", "destination": "/api/meta?path=mission" },
+    { "source": "/how-it-works", "destination": "/api/meta?path=how-it-works" },
+    { "source": "/contact", "destination": "/api/meta?path=contact" },
+    { "source": "/blog", "destination": "/api/meta?path=blog" },
+    { "source": "/terms", "destination": "/api/meta?path=terms" },
+    { "source": "/privacy", "destination": "/api/meta?path=privacy" },
+    { "source": "/disclaimer", "destination": "/api/meta?path=disclaimer" },
+    { "source": "/refund", "destination": "/api/meta?path=refund" },
+    { "source": "/blog/vedic-astrology-ai-kese-kaam-karta-ha", "destination": "/api/meta?path=blog/vedic-astrology-ai-kese-kaam-karta-ha" },
+    { "source": "/blog/top-10-vedic-astrology-platform", "destination": "/api/meta?path=blog/top-10-vedic-astrology-platform" },
+    { "source": "/blog/online-jyotishi-vs-ai-astrologer", "destination": "/api/meta?path=blog/online-jyotishi-vs-ai-astrologer" },
+    { "source": "/blog/ipl-2026-winner-prediction-astrology", "destination": "/api/meta?path=blog/ipl-2026-winner-prediction-astrology" },
+    { "source": "/blog/best-careers-for-each-zodiac-sign-in-2026", "destination": "/api/meta?path=blog/best-careers-for-each-zodiac-sign-in-2026" },
+    { "source": "/blog/next-pm-india-2029-astrology-prediction", "destination": "/api/meta?path=blog/next-pm-india-2029-astrology-prediction" },
+    { "source": "/blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis", "destination": "/api/meta?path=blog/rahu-ketu-transit-2026-predictions-for-all-12-rashis" },
+    { "source": "/blog/vedic-vs-western-astrology", "destination": "/api/meta?path=blog/vedic-vs-western-astrology" },
+    { "source": "/blog/marriage-compatibility-based-on-your-zodiac-sign", "destination": "/api/meta?path=blog/marriage-compatibility-based-on-your-zodiac-sign" },
+    { "source": "/blog/yearly-horoscope-2026-complete-zodiac-predictions-for-all-12-rashis", "destination": "/api/meta?path=blog/yearly-horoscope-2026-complete-zodiac-predictions-for-all-12-rashis" },
+    { "source": "/blog/how-ai-is-transforming-vedic-astrology", "destination": "/api/meta?path=blog/how-ai-is-transforming-vedic-astrology" },
+    { "source": "/blog/manglik-dosha-myths-vs-reality", "destination": "/api/meta?path=blog/manglik-dosha-myths-vs-reality" },
+    { "source": "/blog/marriage-muhurat-2026", "destination": "/api/meta?path=blog/marriage-muhurat-2026" },
+    { "source": "/blog/how-to-sleep-as-per-vastu-in-2026", "destination": "/api/meta?path=blog/how-to-sleep-as-per-vastu-in-2026" },
+    { "source": "/blog/job-vs-business-what-your-chart-say", "destination": "/api/meta?path=blog/job-vs-business-what-your-chart-say" },
+    { "source": "/blog/is-ai-astrology-accurate", "destination": "/api/meta?path=blog/is-ai-astrology-accurate" },
+    { "source": "/blog/ai-jyotish-vedic-astrology", "destination": "/api/meta?path=blog/ai-jyotish-vedic-astrology" },
+    { "source": "/blog/ai-astrologer-vs-human-astrologer", "destination": "/api/meta?path=blog/ai-astrologer-vs-human-astrologer" },
+    { "source": "/blog/ai-astrology-real-or-fake", "destination": "/api/meta?path=blog/ai-astrology-real-or-fake" },
+    { "source": "/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt", "destination": "/api/meta?path=blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt" },
+    { "source": "/blog/ai-astrology-prediction-for-2026", "destination": "/api/meta?path=blog/ai-astrology-prediction-for-2026" },
+    { "source": "/blog/the-great-astrology-scam", "destination": "/api/meta?path=blog/the-great-astrology-scam" },
+    { "source": "/blog/vedika-ai-astrologer-india", "destination": "/api/meta?path=blog/vedika-ai-astrologer-india" },
+    { "source": "/blog/free-ai-astrology-chat-india", "destination": "/api/meta?path=blog/free-ai-astrology-chat-india" },
+    { "source": "/blog/fifa-world-cup-2026-winner-astrology-prediction", "destination": "/api/meta?path=blog/fifa-world-cup-2026-winner-astrology-prediction" },
     { "source": "/((?!api|assets|.*\\.js|.*\\.css|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.ico|.*\\.webp|.*\\.woff|.*\\.woff2).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
       "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
       "source": "/(.*\\.js)",
-      "headers": [
-        { "key": "Content-Type", "value": "application/javascript" }
-      ]
+      "headers": [{ "key": "Content-Type", "value": "application/javascript" }]
     },
     {
       "source": "/(.*\\.css)",
-      "headers": [
-        { "key": "Content-Type", "value": "text/css" }
-      ]
+      "headers": [{ "key": "Content-Type", "value": "text/css" }]
     }
   ]
 }

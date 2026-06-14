@@ -331,7 +331,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <title>Free AI Astrologer - No signup | Veadicastro</title>
         <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta name="keywords" content="astrology ai, ai astrology free chat, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology" />
-        <link rel="canonical" href="https://veadicastro.in/vedika-ai-astrology-chat" />
+        <link rel="canonical" href="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="theme-color" content="#0a0a0f" />
         <meta name="language" content="en" />
@@ -342,7 +342,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         {/* Open Graph */}
         <meta property="og:title" content="Free AI Astrology Chat — Vedic Birth Chart Analysis | Veadicastro" />
         <meta property="og:description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
-        <meta property="og:url" content="https://veadicastro.in/vedika-ai-astrology-chat" />
+        <meta property="og:url" content="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
         <meta property="og:image:width" content="1200" />
@@ -381,7 +381,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             "Birth Chart Reading AI"
           ],
           "description": "Personal Vedic astrology consultant providing authentic birth chart analysis based on Parashari, Jaimini, and Nadi astrology traditions. AI astrology free chat available 24/7.",
-          "url": "https://veadicastro.in/vedika-ai-astrology-chat",
+          "url": "https://veadicastro.in/free-ai-astrologer-chat",
           "applicationCategory": "LifestyleApplication",
           "operatingSystem": "Web",
           "inLanguage": ["en", "hi"],
@@ -430,8 +430,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "Vedic Astrology AI Astrology Consultation",
-              "item": "https://veadicastro.in/vedika-ai-astrology-chat"
+              "name": "Free AI Astrologer Chat",
+              "item": "https://veadicastro.in/free-ai-astrologer-chat"
             }
           ]
         }
