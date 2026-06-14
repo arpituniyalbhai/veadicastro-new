@@ -15,6 +15,18 @@ type BlogPost = {
 
 const latestBlogPosts: BlogPost[] = [
   {
+    id: "26",
+    title: "Who Will Win FIFA World Cup 2026? Astrology Prediction",
+    excerpt:
+      "Spain, France, England, Brazil and Argentina analyzed through Vedic astrology with a winner pick and probability table.",
+    author: "Veadicastro Team",
+    date: "2026-06-14",
+    readTime: "14 min read",
+    category: "Sports Astrology",
+    image: "/blog-images/fifa-world-cup-2026-astrology-main.webp",
+    externalLink: "/blog/fifa-world-cup-2026-winner-astrology-prediction",
+  },
+  {
     id: "20",
     title: "Online Astrologer Per Minute Scam - The Truth",
     excerpt:
@@ -37,18 +49,6 @@ const latestBlogPosts: BlogPost[] = [
     category: "AI & Technology",
     image: "/Ai-Astrology-image/free-ai-astrology-chat-india.webp",
     externalLink: "/blog/free-ai-astrology-chat-india",
-  },
-  {
-    id: "24",
-    title: "Vedika AI - India's Most Accurate AI Astrologer",
-    excerpt:
-      "Meet Vedika AI, built on Vedic chart logic, Lahiri sidereal calculations, and practical interpretation in Hindi and English.",
-    author: "Arpit Uniyal",
-    date: "2026-04-27",
-    readTime: "20 min read",
-    category: "AI & Technology",
-    image: "/optimized/vedika-ai-16.5-image.webp",
-    externalLink: "/blog/vedika-ai-astrologer-india",
   },
 ];
 

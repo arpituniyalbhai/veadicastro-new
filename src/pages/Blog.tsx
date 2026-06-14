@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "26",
+    title: "Who Will Win FIFA World Cup 2026? Astrology Prediction",
+    excerpt: "Spain, France, England, Brazil and Argentina analyzed through Vedic astrology for FIFA World Cup 2026. See Veadicastro's winner pick, planetary table and probability matrix.",
+    author: "Veadicastro Team",
+    date: "2026-06-14",
+    readTime: "14 min read",
+    category: "Sports Astrology",
+    image: "/blog-images/fifa-world-cup-2026-astrology-main.webp",
+    externalLink: "/blog/fifa-world-cup-2026-winner-astrology-prediction"
+  },
+  {
     id: "23",
     title: "The Great Astrology Scam",
     excerpt: "Every second on the clock costs you money. Here's how the astrology industry is milking that — and who's actually doing it differently. Expose the per-minute pricing trap and discover VeadicAstro's ₹799 flat-rate solution.",
