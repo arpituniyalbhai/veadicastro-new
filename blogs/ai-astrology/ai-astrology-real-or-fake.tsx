@@ -413,6 +413,9 @@ const AiAstrologyRealOrFake = () => {
                 <Link to="/blog/ai-astrologer-vs-human-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrologer vs Human Astrologer - Which is Better?
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Chart-based marriage timing test
+                </Link>
                 <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   How AI is Transforming Vedic Astrology
                 </Link>
@@ -468,12 +471,20 @@ const AiAstrologyRealOrFake = () => {
               <p className="text-lg text-purple-200 mb-8">
                 Discover the truth about AI astrology with a real reading based on your birth chart. See how authentic Vedic principles meet modern technology.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/ai-marriage-prediction-by-date-of-birth"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+              >
+                Try a Marriage Reading
+              </Link>
               <Link
                 to="/"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
               >
                 Try AI Astrology Free
               </Link>
+              </div>
             </div>
           </div>
         </div>

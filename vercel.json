@@ -3,6 +3,7 @@
     { "source": "/api/mistral", "destination": "/api/mistral.ts" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/free-ai-astrologer-chat", "destination": "/api/meta?path=free-ai-astrologer-chat" },
+    { "source": "/ai-marriage-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-marriage-prediction-by-date-of-birth" },
     { "source": "/free-5-minutes-astrology-ai", "destination": "/api/meta?path=free-5-minutes-astrology-ai" },
     { "source": "/free-kundli-generator", "destination": "/api/meta?path=free-kundli-generator" },
     { "source": "/free-kundali-matching", "destination": "/api/meta?path=free-kundali-matching" },

@@ -5,6 +5,7 @@ const linkGroups = [
     title: "AI Astrology",
     links: [
       { name: "AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
+      { name: "Marriage Timing AI", path: "/ai-marriage-prediction-by-date-of-birth" },
       { name: "AI Kundli", path: "/free-kundli-generator" },
       { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
       { name: "AI Predictions", path: "/free-5-minutes-astrology-ai" },
@@ -16,6 +17,7 @@ const linkGroups = [
       { name: "Free 5-Minute Astrology", path: "/free-5-minutes-astrology-ai" },
       { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
       { name: "Free AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
+      { name: "Marriage Prediction Tool", path: "/ai-marriage-prediction-by-date-of-birth" },
       { name: "Kundli Generator", path: "/free-kundli-generator" },
       { name: "Kundli Matching", path: "/free-kundali-matching" },
       { name: "Today Horoscope", path: "/today-horoscope" },

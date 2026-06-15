@@ -470,12 +470,19 @@ What has changed is who gets to listen.
                   <Zap className="w-4 h-4 mr-2" />
                   Free 5-Minutes Astrology
                 </Link>
-                <Link 
+                <Link
                   to="/free-ai-astrologer-chat"
                   className="inline-flex items-center justify-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
                   Try AI Astrologer Free
+                </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-flex items-center justify-center px-8 py-3 bg-pink-600 text-white font-semibold rounded-xl hover:bg-pink-700 transition-colors"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Marriage Timing with Vedika
                 </Link>
                 <button 
                   onClick={() => window.location.href = '/angel-number-calculator'}

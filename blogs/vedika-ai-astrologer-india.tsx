@@ -620,6 +620,9 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
                 <Link to="/ai-astrology" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Ai Astrology
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Vedika's marriage timing analysis
+                </Link>
                 <Link to="/blog/is-ai-astrology-accurate" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Is AI Astrology Accurate? We Tested It
                 </Link>
@@ -662,12 +665,20 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
               <p className="text-lg text-purple-200 mb-6">
                 Get your free Kundli and ask 2 questions absolutely free. No credit card required.
               </p>
-              <Link
-                to="/"
-                className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-              >
-                Chat with Vedika AI astrologer
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/"
+                  className="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                >
+                  Chat with Vedika AI astrologer
+                </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                >
+                  Ask Vedika About Marriage
+                </Link>
+              </div>
             </div>
           </div>
         </div>

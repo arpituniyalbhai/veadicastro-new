@@ -547,7 +547,11 @@ const ManglikDoshaMythsVsReality = () => {
                 <Link to="/free-kundli-generator" className="text-purple-400 hover:text-purple-300 underline">
                   birth chart analysis
                 </Link>{" "}
-                to understand your complete Mars placement and any cancellation factors in your chart. Or consult our{" "}
+                to understand your complete Mars placement and any cancellation factors in your chart. For marriage timing and relationship patterns, try{" "}
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-purple-400 hover:text-purple-300 underline">
+                  marriage timing and relationship pattern reading
+                </Link>
+                . Or consult our{" "}
                 <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">
                   free AI astrologer Vedika
                 </Link>{" "}

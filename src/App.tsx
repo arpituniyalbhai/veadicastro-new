@@ -74,6 +74,7 @@ const FifaWorldCup2026WinnerAstrologyPrediction = lazy(() => import("../blogs/fi
 
 // Lazy load tool pages
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
+const AiMarriagePredictionByDateOfBirth = lazy(() => import("@/pages/AiMarriagePredictionByDateOfBirth"));
 const FreeKundliGenerator = lazy(() => import("@/pages/FreeKundliGenerator"));
 const FreeKundliMatching = lazy(() => import("@/pages/free-kundali-matching"));
 const TodayHoroscope = lazy(() => import("@/pages/today-horoscope"));
@@ -173,6 +174,7 @@ const AuthenticatedRoutes = ({
         {/* Public Routes */}
         <Route path="/" element={<Index />} />
         <Route path="/free-ai-astrologer-chat" element={<Suspense fallback={<PageLoading />}><FreeAiAstrologerChat /></Suspense>} />
+        <Route path="/ai-marriage-prediction-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiMarriagePredictionByDateOfBirth /></Suspense>} />
         <Route path="/free-5-minutes-astrology-ai" element={<Suspense fallback={<PageLoading />}><Free5MinutesAstrologyAI /></Suspense>} />
         <Route path="/free-kundli-generator" element={<Suspense fallback={<PageLoading />}><FreeKundliGenerator /></Suspense>} />
         <Route path="/free-kundali-matching" element={<Suspense fallback={<PageLoading />}><FreeKundliMatching /></Suspense>} />

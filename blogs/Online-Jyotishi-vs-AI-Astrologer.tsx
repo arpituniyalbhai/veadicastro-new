@@ -512,6 +512,12 @@ const OnlineJyotishiVsAIAstrologer = () => {
                 Chat with Vedika AI — Free
               </Link>
               <Link
+                to="/ai-marriage-prediction-by-date-of-birth"
+                className="px-8 py-3 bg-purple-500 text-white font-semibold rounded-xl hover:bg-purple-600 transition-colors"
+              >
+                Get a Marriage Timing Reading
+              </Link>
+              <Link
                 to="/free-kundli-generator"
                 className="px-8 py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20"
               >

@@ -915,6 +915,12 @@ const MarriageMuhurat2026 = () => {
               <h3 className="text-xl font-semibold text-purple-300 mb-6">Explore More Astrology Content</h3>
               <div className="space-y-3">
                 <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="block text-purple-400 hover:text-purple-300 transition-colors"
+                >
+                  -> Find your personal marriage timing window
+                </Link>
+                <Link
                   to="/kundali-matching"
                   className="block text-purple-400 hover:text-purple-300 transition-colors"
                 >

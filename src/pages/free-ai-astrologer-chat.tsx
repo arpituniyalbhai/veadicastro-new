@@ -526,6 +526,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
       </h1>
       <div className="flex flex-wrap justify-center gap-4 mt-6">
         <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
+        <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Marriage Timing by DOB</a>
         <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
         <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
         <a href="/blog/free-ai-astrology-chat-india" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free AI Astrology Chat India</a>
@@ -1066,6 +1067,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <div className="max-w-5xl mx-auto px-4 mb-8">
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
+            <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Ask Vedika About Marriage</a>
             <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
             <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
             <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>

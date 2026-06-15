@@ -475,6 +475,9 @@ const WhyChatGptFailsAtAiAstrology = () => {
                 <Link to="/blog/is-ai-astrology-accurate" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Is AI Astrology Accurate? We Tested It
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Why marriage timing needs birth details
+                </Link>
                 <Link to="/blog/ai-astrologer-vs-human-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrologer vs Human Astrologer - Which is Better?
                 </Link>
@@ -533,12 +536,20 @@ const WhyChatGptFailsAtAiAstrology = () => {
               <p className="text-lg text-purple-200 mb-8">
                 Discover the truth about AI astrology with a real reading based on your birth chart. See how authentic Vedic principles meet modern technology.
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/ai-marriage-prediction-by-date-of-birth"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+              >
+                Compare Marriage Timing
+              </Link>
               <Link
                 to="/"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
               >
                 Try AI Astrology Free
               </Link>
+              </div>
             </div>
           </div>
         </div>

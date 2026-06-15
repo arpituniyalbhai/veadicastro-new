@@ -367,7 +367,14 @@ const AiJyotishVedicAstrology = () => {
 
         {/* Back to AI Astrology Hub */}
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-3xl mx-auto space-y-4">
+            <Link
+              to="/ai-marriage-prediction-by-date-of-birth"
+              className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
+            >
+              Marriage timing through AI Jyotish
+            </Link>
+            <br />
             <Link
               to="/ai-astrology"
               className="inline-flex items-center gap-2 text-purple-300 hover:text-purple-200 transition-colors"
@@ -385,6 +392,12 @@ const AiJyotishVedicAstrology = () => {
               <p className="text-lg text-purple-200 mb-8">
                 Get authentic Vedic astrology readings powered by AI. Enter your birth details and discover what your chart reveals about your life path.
               </p>
+              <Link
+                to="/ai-marriage-prediction-by-date-of-birth"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all transform hover:scale-105 mr-3"
+              >
+                Read Your Marriage Yog
+              </Link>
               <Link
                 to="/"
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"

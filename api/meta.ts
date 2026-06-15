@@ -9,6 +9,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/free-ai-astrologer-chat',
     breadcrumb: 'Free AI Astrologer Chat',
   },
+  '/ai-marriage-prediction-by-date-of-birth': {
+    title: 'AI Marriage Prediction by Date of Birth | Free Marriage Astrology',
+    description: 'Get an AI marriage prediction by date of birth with Vedika. Enter your birth details to check marriage timing, love or arranged marriage chances, relationship patterns, and simple remedies.',
+    canonical: 'https://veadicastro.in/ai-marriage-prediction-by-date-of-birth',
+    breadcrumb: 'AI Marriage Prediction by Date of Birth',
+  },
   '/free-5-minutes-astrology-ai': {
     title: 'Free 5 Minute Astrology AI Reading — Instant Vedic Predictions | Veadicastro',
     description: 'Get a free 5-minute Vedic astrology AI reading instantly. Enter birth details and get predictions from Vedika AI — no signup needed.',

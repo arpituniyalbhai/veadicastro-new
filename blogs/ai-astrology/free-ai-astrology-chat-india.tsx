@@ -513,6 +513,9 @@ const FreeAiAstrologyChat = () => {
                 <Link to="/blog/ai-astrologer-vs-human-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-1">
                   AI Astrologer vs Human Astrologer — Which Should You Use?
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-1">
+                  Marriage questions by birth details
+                </Link>
                 <Link to="/free-kundli-generator" className="block text-purple-400 hover:text-purple-300 transition-colors py-1">
                   Free Kundali Generator — Generate Your Birth Chart
                 </Link>
@@ -555,6 +558,12 @@ const FreeAiAstrologyChat = () => {
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-purple-700 transition-all"
                 >
                   Chat with Vedika AI Free
+                </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-purple-700 transition-all"
+                >
+                  Ask About Marriage Timing
                 </Link>
                 <Link
                   to="/free-kundli-generator"

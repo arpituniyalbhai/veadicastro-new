@@ -956,7 +956,11 @@ const TalkToAstrologer = () => {
             <a href="/free-ai-astrologer-chat" className="text-accent hover:text-accent/80 underline ml-1">
               Try our free AI astrology chat
             </a>{" "}
-            for instant answers, or book a live consultation above.
+            for instant answers, check{" "}
+            <a href="/ai-marriage-prediction-by-date-of-birth" className="text-accent hover:text-accent/80 underline">
+              Vedika's marriage timing tool
+            </a>{" "}
+            for marriage timing, or book a live consultation above.
           </p>
         </section>
       </div>

@@ -356,6 +356,9 @@ const IsAiAstrologyAccurate = () => {
                 <Link to="/ai-astrology-prediction" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrology Prediction - Generate 10 Personal Vedic Predictions
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  DOB-based marriage timing tool
+                </Link>
                 <Link to="/blog/ai-astrology-prediction-for-2026" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrology Predictions for 2026 - What to Expect
                 </Link>
@@ -412,6 +415,12 @@ const IsAiAstrologyAccurate = () => {
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
                 >
                   Free 5-Minutes Astrology
+                </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                >
+                  Check your marriage window
                 </Link>
                 <Link
                   to="/"

@@ -357,6 +357,9 @@ const AiAstrologerVsHumanAstrologer = () => {
                 <Link to="/blog/ai-astrology-prediction-for-2026" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrology Predictions for 2026 - What to Expect
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Marriage timing from your birth chart
+                </Link>
                 <Link to="/blog/the-great-astrology-scam" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Online Astrologer Per Minute Scam — The Truth About Industry Pricing
                 </Link>
@@ -410,6 +413,12 @@ const AiAstrologerVsHumanAstrologer = () => {
                   className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105"
                 >
                   Free 5-Minutes Astrology
+                </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold px-8 py-3 rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all transform hover:scale-105"
+                >
+                  Check Marriage Timing
                 </Link>
                 <Link
                   to="/"

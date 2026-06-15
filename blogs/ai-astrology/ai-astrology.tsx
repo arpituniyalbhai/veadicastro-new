@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap, Calendar } from "lucide-react";
+import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap, Calendar, Heart } from "lucide-react";
 import { Card } from "../../src/components/ui/card";
 import AdBanner from "../../src/components/AdBanner";
 
@@ -1050,8 +1050,15 @@ export default function AiAstrology() {
                   Free 5-Minutes Astrology
                   <Zap className="w-4 h-4" />
                 </Link>
-                <Link 
-                  to="/" 
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-purple-700 transition-all"
+                >
+                  Check Marriage Timing
+                  <Heart className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-full hover:from-pink-700 hover:to-purple-700 transition-all"
                 >
                   See Your Future in Just 30 Second

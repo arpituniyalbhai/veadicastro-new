@@ -6,7 +6,7 @@ import { useEffect, Suspense, lazy, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ButtonLite } from "@/components/ui/button-lite";
-import { Plus, MessageCircle, Sparkles, Brain, Send, ArrowRight, Heart, Calendar } from "lucide-react";
+import { Plus, MessageCircle, Sparkles, Brain, Send, ArrowRight, Heart, Calendar, Star, Palette } from "lucide-react";
 
 // Get current date for SEO
 const getCurrentDate = () => {
@@ -624,10 +624,59 @@ const Index = () => {
                 {/* Hover Effect */}
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
-            </div>
 
-            {/* Tools Cards - Second Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* AI Marriage Prediction Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/ai-marriage-prediction-by-date-of-birth');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/ai-marriage-prediction-by-date-of-birth" />
+                <meta itemProp="name" content="AI Marriage Prediction by Date of Birth - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Get AI marriage prediction by date of birth with Vedika. Check marriage timing, love or arranged marriage chances, spouse qualities, and simple remedies.</span>
+
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-accent flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Heart className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    AI Marriage Prediction
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Enter your birth details to check marriage timing, love or arranged marriage chances, spouse qualities, and remedies with Vedika.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Marriage timing window
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Love vs arranged guidance
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Birth chart based
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Predict Marriage</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
               {/* Free 5-Minutes Astrology Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
                    itemScope itemType="https://schema.org/SoftwareApplication"
@@ -791,6 +840,112 @@ const Index = () => {
                 </div>
 
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-secondary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+
+              {/* Angel Number Calculator Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/angel-number-calculator');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/angel-number-calculator" />
+                <meta itemProp="name" content="Angel Number Calculator - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Calculate your angel number from date of birth and understand your ruling planet, lucky stone, mantra, and remedies.</span>
+
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Star className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    Angel Number Calculator
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Calculate your angel number from date of birth and discover your ruling planet, lucky stone, mantra, and simple remedies.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      DOB-based number
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Ruling planet insight
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Simple remedies
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Calculate Number</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+
+              {/* Lucky Colour Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/lucky-colour-for-today');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/lucky-colour-for-today" />
+                <meta itemProp="name" content="Lucky Colour for Today - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Find your lucky colour for today using Vedic astrology and date of birth based guidance.</span>
+
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-accent to-primary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Palette className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    Lucky Colour Today
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Find your lucky colour for today based on Vedic astrology, date of birth, and daily planetary energy.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Daily colour guidance
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Birth-date based
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Planetary meaning
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Find Colour</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-accent/20 via-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
             </div>
 

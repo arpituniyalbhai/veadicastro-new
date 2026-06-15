@@ -931,12 +931,19 @@ const Top10VedicAstrologyPlatform = () => {
                 <Sparkles className="w-5 h-5" />
                 Try Best AI Astrology FREE
               </Link>
-              <Link 
+              <Link
                 to="/free-kundli-generator"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors border border-white/20 backdrop-blur-sm"
               >
                 <Target className="w-5 h-5" />
                 Generate Accurate Kundali
+              </Link>
+              <Link
+                to="/ai-marriage-prediction-by-date-of-birth"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-pink-500 text-white font-bold rounded-xl hover:bg-pink-600 transition-colors shadow-lg"
+              >
+                <Sparkles className="w-5 h-5" />
+                Try the Marriage Timing Tool
               </Link>
               <Link 
                 to="/"

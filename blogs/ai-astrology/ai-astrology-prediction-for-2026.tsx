@@ -478,6 +478,9 @@ const AiAstrologyPredictionFor2026 = () => {
                 <Link to="/" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Best AI Astrology Platform India — VeadicAstro.in
                 </Link>
+                <Link to="/ai-marriage-prediction-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Personal marriage timing reading
+                </Link>
                 <Link to="/blog/the-great-astrology-scam" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Online Astrologer Per Minute Scam — The Truth About Industry Pricing
                 </Link>

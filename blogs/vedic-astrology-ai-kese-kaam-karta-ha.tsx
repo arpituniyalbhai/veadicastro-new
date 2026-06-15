@@ -527,6 +527,12 @@ const VedAstrologyAIKaiseKaamKartaHai = () => {
                 >
                   Chat with AI Astrologer
                 </Link>
+                <Link
+                  to="/ai-marriage-prediction-by-date-of-birth"
+                  className="inline-block bg-pink-600 hover:bg-pink-500 text-white font-semibold px-7 py-3 rounded-xl transition-all"
+                >
+                  Marriage Reading with AI
+                </Link>
               </div>
             </div>
           </section>

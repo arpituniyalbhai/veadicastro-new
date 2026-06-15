@@ -65,6 +65,7 @@ const internalLinks = [
   { label: "Home", href: "/" },
   { label: "Free AI Astrologer", href: "/free-ai-astrologer-chat" },
   { label: "5 Minutes Astrology", href: "/free-5-minutes-astrology-ai" },
+  { label: "Marriage Timing AI", href: "/ai-marriage-prediction-by-date-of-birth" },
   { label: "AI Astrology Prediction", href: "/ai-astrology-prediction" },
   { label: "Free Kundli Generator", href: "/free-kundli-generator" },
   { label: "AI Astrology", href: "/ai-astrology" },
