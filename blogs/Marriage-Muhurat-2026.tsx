@@ -918,7 +918,7 @@ const MarriageMuhurat2026 = () => {
                   to="/ai-marriage-prediction-by-date-of-birth"
                   className="block text-purple-400 hover:text-purple-300 transition-colors"
                 >
-                  -> Find your personal marriage timing window
+                  Find your personal marriage timing window
                 </Link>
                 <Link
                   to="/kundali-matching"
