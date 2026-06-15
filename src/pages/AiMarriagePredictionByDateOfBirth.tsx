@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   ArrowRight,
@@ -23,6 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { getPlanetaryData, type AstroPayload } from "@/lib/astroCalc";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { generateGeminiStream, type ChatTurn } from "@/lib/gemini";
+import { useAuth } from "@/context/AuthContext";
 
 type Gender = "not-specified" | "male" | "female";
 
@@ -108,8 +109,8 @@ const faqs = [
     a: "Yes. Veadicastro uses a chart-first Vedic astrology approach with Lahiri sidereal calculations, dasha logic, and transit context.",
   },
   {
-    q: "Can I ask follow-up questions after the result?",
-    a: "Yes. You can ask Vedika a follow-up question on this page or continue in the free AI astrologer chat for a broader conversation.",
+    q: "Can I ask more personal questions after the result?",
+    a: "Yes. Sign up to ask Vedika any personal question about marriage timing, compatibility, relationships, career, or other life topics.",
   },
   {
     q: "Is AI marriage prediction better than a horoscope?",
@@ -176,7 +177,7 @@ const inputClass =
 const labelClass = "mb-2 flex items-center gap-2 text-sm font-medium text-white/75";
 
 export default function AiMarriagePredictionByDateOfBirth() {
-  const navigate = useNavigate();
+  const { setAuthOpen } = useAuth();
   const [birthDetails, setBirthDetails] = useState<BirthDetails>({
     name: "",
     gender: "not-specified",
@@ -188,7 +189,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
     birthPlace: "",
   });
   const [question, setQuestion] = useState("When will I get married?");
-  const [followUp, setFollowUp] = useState("");
   const [astroData, setAstroData] = useState<AstroPayload | null>(null);
   const [result, setResult] = useState("");
   const [messages, setMessages] = useState<ChatTurn[]>([]);
@@ -282,7 +282,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
       const history = customQuestion ? messages : [];
       const nextMessages: ChatTurn[] = [...history, { role: "user", content: activeQuestion }];
       setMessages(nextMessages);
-      setStatus(customQuestion ? "Vedika is reading your follow-up..." : "Vedika is preparing your marriage prediction...");
+      setStatus(customQuestion ? "Vedika is reading your question..." : "Vedika is preparing your marriage prediction...");
 
       let streamed = "";
       await generateGeminiStream(
@@ -300,7 +300,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
 
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);
       setStatus("");
-      if (customQuestion) setFollowUp("");
     } catch {
       setError("Something went wrong while preparing the marriage prediction. Please try again.");
       setStatus("");
@@ -399,9 +398,9 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 <a href="#marriage-tool" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-pink-500/20 hover:bg-pink-400">
                   Get My Marriage Prediction <ArrowRight className="h-4 w-4" />
                 </a>
-                <Link to="/free-ai-astrologer-chat" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/60 hover:text-pink-200">
-                  Ask Vedika a Follow-Up Question
-                </Link>
+                <button type="button" onClick={() => setAuthOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/60 hover:text-pink-200">
+                  Ask any question to AI
+                </button>
               </div>
             </div>
 
@@ -581,25 +580,18 @@ export default function AiMarriagePredictionByDateOfBirth() {
               <div className="mt-5 rounded-[1.25rem] border border-pink-400/20 bg-pink-400/10 p-5">
                 <h3 className="font-bold text-white">Want a deeper marriage reading with timing, compatibility, and remedies?</h3>
                 <p className="mt-2 text-sm leading-6 text-white/65">
-                  You can continue with Vedika for a quick follow-up or speak with a human astrologer for deeper guidance.
+                  Sign up to ask Vedika any personal question about marriage timing, compatibility, spouse qualities, remedies, or relationship patterns.
                 </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
-                  <Input
-                    className={inputClass}
-                    value={followUp}
-                    onChange={(e) => setFollowUp(e.target.value)}
-                    placeholder="Ask Vedika a follow-up question"
-                  />
+                <div className="mt-4">
                   <ButtonLite
-                    disabled={!followUp.trim() || isLoading}
-                    onClick={() => runPrediction(followUp)}
+                    onClick={() => setAuthOpen(true)}
                     className="h-12 rounded-2xl bg-white text-sm font-bold text-black hover:bg-pink-100"
                   >
-                    Ask Follow-Up
+                    Ask any question to AI
                   </ButtonLite>
                 </div>
                 <div className="mt-4 flex flex-wrap gap-3 text-sm">
-                  <Link to="/free-ai-astrologer-chat" className="text-pink-200 underline-offset-4 hover:underline">Open AI chat</Link>
+                  <button type="button" onClick={() => setAuthOpen(true)} className="text-pink-200 underline-offset-4 hover:underline">Ask any question to AI</button>
                   <Link to="/talk-to-astrologer" className="text-pink-200 underline-offset-4 hover:underline">Talk to an astrologer</Link>
                 </div>
               </div>
@@ -847,7 +839,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <a href="#marriage-tool" className="inline-flex items-center justify-center rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white hover:bg-pink-400">Get My Marriage Prediction</a>
-              <button onClick={() => navigate("/free-ai-astrologer-chat")} className="rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">Ask Vedika a Follow-Up Question</button>
+              <button onClick={() => setAuthOpen(true)} className="rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">Ask any question to AI</button>
             </div>
           </div>
         </section>
