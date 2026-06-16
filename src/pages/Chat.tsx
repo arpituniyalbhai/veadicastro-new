@@ -115,6 +115,7 @@ export default function Chat() {
   const [hasChatted, setHasChatted] = useState<boolean>(false);
   const [hasTyped, setHasTyped] = useState<boolean>(false);
   const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
+  const [loadingSuggestions, setLoadingSuggestions] = useState<Record<number, boolean>>({});
   const [inputBarLeft, setInputBarLeft] = useState<string>('0');
   const assistantAvatarUrl = "/optimized/vedika.webp"; // Vedika avatar from public
   const userAvatarUrl = (() => { try { return localStorage.getItem('profile_photo') || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } catch { return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } })(); // user's avatar
@@ -273,6 +274,7 @@ export default function Chat() {
         localStorage.setItem(historyMetaKey, JSON.stringify({ date: dateStamp }));
         setMessages([]);
         setAnswerSuggestions({});
+        setLoadingSuggestions({});
         setHasChatted(false);
         setHasTyped(false);
         return;
@@ -320,6 +322,7 @@ export default function Chat() {
           localStorage.setItem(historyMetaKey, JSON.stringify({ date: dateStamp }));
           setMessages([]);
           setAnswerSuggestions({});
+          setLoadingSuggestions({});
           setHasChatted(false);
           setHasTyped(false);
         }
@@ -661,15 +664,23 @@ export default function Chat() {
       }
 
       console.log("AI answer completed, credit deducted successfully");
+      const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
+      if (assistantIndex >= 0) {
+        setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: true }));
+      }
       generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang)
         .then((nextQuestions) => {
-          if (!nextQuestions.length) return;
-          const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
+          if (!nextQuestions.length || assistantIndex < 0) return;
           if (assistantIndex >= 0) {
             setAnswerSuggestions((prev) => ({ ...prev, [assistantIndex]: nextQuestions }));
           }
         })
-        .catch((error) => console.debug("[Chat] Suggestion generation failed", error));
+        .catch((error) => console.debug("[Chat] Suggestion generation failed", error))
+        .finally(() => {
+          if (assistantIndex >= 0) {
+            setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: false }));
+          }
+        });
     } catch (e) {
       setMessages((m) => {
         const copy = [...m];
@@ -767,6 +778,7 @@ export default function Chat() {
             setActiveItem("New Chat");
             setMessages([]);
             setAnswerSuggestions({});
+            setLoadingSuggestions({});
             setMessage("");
             setActiveSessionId(""); // ← ADD THIS
             setHasChatted(false);   // ← ADD THIS
@@ -803,6 +815,7 @@ export default function Chat() {
                 onClick={() => {
                   setMessages(session.messages);
                   setAnswerSuggestions({});
+                  setLoadingSuggestions({});
                   setActiveSessionId(session.id);
                   setHasChatted(true);
                   setHasTyped(true);
@@ -827,6 +840,7 @@ export default function Chat() {
                     if (activeSessionId === session.id) {
                       setMessages([]);
                       setAnswerSuggestions({});
+                      setLoadingSuggestions({});
                       setActiveSessionId("");
                       setHasChatted(false);
                     }
@@ -949,6 +963,16 @@ export default function Chat() {
                         )}
                       </div>
                     </Card>
+                    {m.role === "assistant" && loadingSuggestions[idx] && (
+                      <div className="mt-2 ml-0 sm:ml-1 flex flex-col gap-2 sm:flex-row sm:flex-wrap" aria-label="Loading suggested questions">
+                        {[0, 1].map((item) => (
+                          <div
+                            key={item}
+                            className="h-10 w-full animate-pulse rounded-2xl border border-secondary/20 bg-secondary/10 sm:w-64"
+                          />
+                        ))}
+                      </div>
+                    )}
                     {m.role === "assistant" && answerSuggestions[idx]?.length > 0 && (
                       <div className="mt-2 ml-0 sm:ml-1 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
                         {answerSuggestions[idx].map((question, questionIndex) => (
@@ -1298,8 +1322,11 @@ async function generateAnswerSuggestions(question: string, answer: string, lang:
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
 Create exactly 2 short, natural next-question suggestions for an astrology chat.
-They must help the user explore the same topic deeper, but do not call them follow-up questions.
-No predictions, no answers, no markdown.
+Generate the questions from the final practical advice and user's likely next curiosity, not from astrological terms.
+Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
+Questions should sound like what a normal person would naturally ask next.
+Make them specific to the practical outcome in the answer, such as career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
+Do not include predictions, answers, markdown, numbering, or labels.
 Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
 
 User question:
