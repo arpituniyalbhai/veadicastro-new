@@ -648,9 +648,16 @@ export default function Chat() {
       if (!finalAnswerForSuggestions) {
         finalAnswerForSuggestions = sanitize(streamedAnswer || "");
       }
+      const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
+      if (assistantIndex >= 0) {
+        setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: true }));
+      }
 
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
+        if (assistantIndex >= 0) {
+          setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: false }));
+        }
         setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
@@ -664,10 +671,6 @@ export default function Chat() {
       }
 
       console.log("AI answer completed, credit deducted successfully");
-      const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
-      if (assistantIndex >= 0) {
-        setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: true }));
-      }
       generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang)
         .then((nextQuestions) => {
           if (!nextQuestions.length || assistantIndex < 0) return;
@@ -968,7 +971,7 @@ export default function Chat() {
                         {[0, 1].map((item) => (
                           <div
                             key={item}
-                            className="h-10 w-full animate-pulse rounded-2xl border border-secondary/20 bg-secondary/10 sm:w-64"
+                            className="h-10 w-full animate-pulse rounded-2xl border border-border/60 bg-card/45 sm:w-64"
                           />
                         ))}
                       </div>
@@ -981,7 +984,7 @@ export default function Chat() {
                             type="button"
                             disabled={sending}
                             onClick={() => send(question)}
-                            className="rounded-2xl border border-secondary/30 bg-secondary/10 px-3.5 py-2.5 text-left text-xs sm:text-sm leading-5 text-foreground/85 transition hover:border-secondary/60 hover:bg-secondary/15 disabled:cursor-not-allowed disabled:opacity-60"
+                            className="rounded-2xl border border-border/60 bg-card/45 px-3.5 py-2.5 text-left text-xs sm:text-sm leading-5 text-foreground/85 shadow-sm transition hover:border-white/20 hover:bg-card/70 disabled:cursor-not-allowed disabled:opacity-60"
                           >
                             {question}
                           </button>
