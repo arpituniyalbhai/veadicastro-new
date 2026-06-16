@@ -7,7 +7,7 @@ import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, Chevr
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
-import { generateGeminiStream, generateGemini, VAANI_SYSTEM_PROMPT, type ChatTurn } from "@/lib/gemini";
+import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
 import type { AstroInput } from "@/lib/astroCalc";
@@ -108,15 +108,21 @@ export default function Chat() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string>("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const messagesRef = useRef<ChatTurn[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
   // Show suggestions the first time until typing or first message is sent
   const [hasChatted, setHasChatted] = useState<boolean>(false);
   const [hasTyped, setHasTyped] = useState<boolean>(false);
+  const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
   const [inputBarLeft, setInputBarLeft] = useState<string>('0');
   const assistantAvatarUrl = "/optimized/vedika.webp"; // Vedika avatar from public
   const userAvatarUrl = (() => { try { return localStorage.getItem('profile_photo') || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } catch { return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } })(); // user's avatar
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   // Dynamic thinking messages
   const thinkingMessages = [
@@ -266,6 +272,7 @@ export default function Chat() {
         localStorage.removeItem(historyKey);
         localStorage.setItem(historyMetaKey, JSON.stringify({ date: dateStamp }));
         setMessages([]);
+        setAnswerSuggestions({});
         setHasChatted(false);
         setHasTyped(false);
         return;
@@ -312,6 +319,7 @@ export default function Chat() {
           localStorage.removeItem(historyKey);
           localStorage.setItem(historyMetaKey, JSON.stringify({ date: dateStamp }));
           setMessages([]);
+          setAnswerSuggestions({});
           setHasChatted(false);
           setHasTyped(false);
         }
@@ -460,8 +468,9 @@ export default function Chat() {
     setSuggestions(base.slice(0, 4));
   }, [lang]);
 
-  const send = async () => {
-    if (!message.trim() || sending) return;
+  const send = async (overrideMessage?: string) => {
+    const outgoingMessage = (overrideMessage ?? message).trim();
+    if (!outgoingMessage || sending) return;
 
     // Create session ID if this is a new chat
     let sessionId = activeSessionId;
@@ -471,7 +480,7 @@ export default function Chat() {
     }
     
     // Send message immediately for better UX
-    const userTurn: ChatTurn = { role: "user", content: message.trim() };
+    const userTurn: ChatTurn = { role: "user", content: outgoingMessage };
     setMessages((m) => [...m, userTurn]);
     setMessage("");
     setHasChatted(true);
@@ -507,6 +516,7 @@ export default function Chat() {
       let deltaCount = 0;
       let aiAnswerCompleted = false;
       let streamedAnswer = "";
+      let finalAnswerForSuggestions = "";
       // Ensure Hindi output when UI is set to Hindi
       const userText = userTurn.content;
       // Gather onboarding details for AstrologyAPI
@@ -618,6 +628,7 @@ export default function Chat() {
         // Fallback: non-streaming final response
         const final = await generateGemini(promptText, messages, systemExtra, lang, displayName);
         const sanitizedFinal = sanitize(final || "");
+        finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
           setMessages((m) => {
           const copy = [...m];
@@ -630,6 +641,9 @@ export default function Chat() {
       }
       if (!aiAnswerCompleted) {
         throw new Error("AI response was empty");
+      }
+      if (!finalAnswerForSuggestions) {
+        finalAnswerForSuggestions = sanitize(streamedAnswer || "");
       }
 
       const creditDeducted = await deductCredit();
@@ -647,6 +661,15 @@ export default function Chat() {
       }
 
       console.log("AI answer completed, credit deducted successfully");
+      generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang)
+        .then((nextQuestions) => {
+          if (!nextQuestions.length) return;
+          const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
+          if (assistantIndex >= 0) {
+            setAnswerSuggestions((prev) => ({ ...prev, [assistantIndex]: nextQuestions }));
+          }
+        })
+        .catch((error) => console.debug("[Chat] Suggestion generation failed", error));
     } catch (e) {
       setMessages((m) => {
         const copy = [...m];
@@ -743,6 +766,7 @@ export default function Chat() {
             e.preventDefault();
             setActiveItem("New Chat");
             setMessages([]);
+            setAnswerSuggestions({});
             setMessage("");
             setActiveSessionId(""); // ← ADD THIS
             setHasChatted(false);   // ← ADD THIS
@@ -778,6 +802,7 @@ export default function Chat() {
                 key={session.id}
                 onClick={() => {
                   setMessages(session.messages);
+                  setAnswerSuggestions({});
                   setActiveSessionId(session.id);
                   setHasChatted(true);
                   setHasTyped(true);
@@ -801,6 +826,7 @@ export default function Chat() {
                     localStorage.setItem(sessionsKey, JSON.stringify(next));
                     if (activeSessionId === session.id) {
                       setMessages([]);
+                      setAnswerSuggestions({});
                       setActiveSessionId("");
                       setHasChatted(false);
                     }
@@ -895,50 +921,50 @@ export default function Chat() {
           </div>
         </div>
         
-        <div className="max-w-6xl mx-auto w-full px-2 sm:px-4 lg:px-6 pt-[96px] sm:pt-4 md:pt-4 pb-44 sm:pb-48 flex flex-col flex-1">
+        <div className="max-w-6xl mx-auto w-full px-1 sm:px-4 lg:px-6 pt-[96px] sm:pt-4 md:pt-4 pb-44 sm:pb-48 flex flex-col flex-1">
 
           {/* Conversation */}
-          <div className="max-w-3xl w-full mx-auto px-3 sm:px-4 min-h-[40vh] space-y-3">
+          <div className="max-w-4xl w-full mx-auto px-1.5 sm:px-4 min-h-[40vh] space-y-4">
             {messages.map((m, idx) => (
               m.role === "assistant" && !m.content?.trim() ? null : (
-                <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-2 sm:px-4`}>
+                <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-0.5 sm:px-4`}>
                   {m.role === "assistant" && (
                     <div className="mr-2 sm:mr-3 mt-1 shrink-0">
                       <img src="/optimized/vedika.webp" alt="Vedika — AI Vedic astrologer by Veadicastro" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
                     </div>
                   )}
-                  <Card className={`${m.role === "user" ? "bg-secondary/15" : "bg-card/40"} max-w-[80%] px-4 py-3 rounded-2xl border border-border/60 whitespace-pre-wrap ${m.role === "user" ? "" : "ml-1 sm:ml-3"}`}>
-                    <div className="text-sm">
-                      {m.role === "assistant" ? (
-                        (() => {
-                          const content = m.content || "";
-                          // Split by sentence - newline ya period+space pe
-                          const sentences = content
-                            .replace(/([.!])\s+/g, '$1\n')
-                            .split('\n')
-                            .map(s => s.trim())
-                            .filter(Boolean);
-
-                          const lastSentence = sentences[sentences.length - 1] || '';
-                          const isFollowUp = lastSentence.endsWith('?') && sentences.length > 1;
-                          if (isFollowUp) {
-                            const mainText = sentences.slice(0, -1).join(' ').trim();
-                            return (
-                              <>
-                                <span style={{ whiteSpace: 'pre-wrap' }}>{mainText}</span>
-                                <div className="mt-3">
-                                  {lastSentence}
-                                </div>
-                              </>
-                            );
-                          }
-                          return <span style={{ whiteSpace: 'pre-wrap' }}>{content}</span>;
-                        })()
-                      ) : (
-                        m.content
-                      )}
-                    </div>
-                  </Card>
+                  <div className={`${m.role === "user" ? "max-w-[82%] sm:max-w-[70%]" : "max-w-[calc(100%-2.25rem)] sm:max-w-[88%] md:max-w-[82%]"} min-w-0`}>
+                    <Card className={`${m.role === "user" ? "bg-secondary/15" : "bg-card/45"} w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-border/60 ${m.role === "user" ? "" : "ml-0 sm:ml-1"}`}>
+                      <div className="text-sm sm:text-[15px] leading-7 text-foreground/90">
+                        {m.role === "assistant" ? (
+                          <div className="space-y-3">
+                            {formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => (
+                              <p key={paragraphIndex} className="whitespace-pre-wrap">
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+                        ) : (
+                          <span className="whitespace-pre-wrap">{m.content}</span>
+                        )}
+                      </div>
+                    </Card>
+                    {m.role === "assistant" && answerSuggestions[idx]?.length > 0 && (
+                      <div className="mt-2 ml-0 sm:ml-1 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                        {answerSuggestions[idx].map((question, questionIndex) => (
+                          <button
+                            key={`${idx}-${questionIndex}`}
+                            type="button"
+                            disabled={sending}
+                            onClick={() => send(question)}
+                            className="rounded-2xl border border-secondary/30 bg-secondary/10 px-3.5 py-2.5 text-left text-xs sm:text-sm leading-5 text-foreground/85 transition hover:border-secondary/60 hover:bg-secondary/15 disabled:cursor-not-allowed disabled:opacity-60"
+                          >
+                            {question}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             ))}
@@ -1009,14 +1035,19 @@ export default function Chat() {
                       setMessage(v);
                       if (!hasChatted) setHasTyped(v.trim().length > 0);
                     }}
-                    onKeyDown={(e) => e.key === "Enter" && send()}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        send();
+                      }
+                    }}
                     className="h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm"
                   />
                   <Button
                     variant="cosmic"
                     size="icon"
                     className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full"
-                    onClick={send}
+                    onClick={() => send()}
                     aria-label="Send"
                   >
                     <Send className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
@@ -1235,4 +1266,85 @@ export default function Chat() {
       )}
     </div>
   );
+}
+
+function parseQuestionSuggestions(raw: string): string[] {
+  const clean = raw
+    .replace(/```json/gi, "")
+    .replace(/```/g, "")
+    .trim();
+
+  try {
+    const parsed = JSON.parse(clean);
+    const questions = Array.isArray(parsed) ? parsed : parsed?.questions;
+    if (Array.isArray(questions)) {
+      return questions
+        .map((q) => String(q || "").trim())
+        .filter((q) => q.endsWith("?"))
+        .slice(0, 2);
+    }
+  } catch {
+    /* fallback below */
+  }
+
+  return clean
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^[-*\d.\s]+/, "").trim())
+    .filter((line) => line.endsWith("?"))
+    .slice(0, 2);
+}
+
+async function generateAnswerSuggestions(question: string, answer: string, lang: string): Promise<string[]> {
+  const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
+  const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
+Create exactly 2 short, natural next-question suggestions for an astrology chat.
+They must help the user explore the same topic deeper, but do not call them follow-up questions.
+No predictions, no answers, no markdown.
+Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
+
+User question:
+${question}
+
+Vedika answer:
+${answer.slice(0, 1200)}`;
+
+  const response = await fetch(`${API_BASE}/api/mistral`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt,
+      history: [],
+      systemExtra: "Return valid JSON only. Do not include markdown fences.",
+      lang,
+      apiKeySlot: "secondary",
+    }),
+  });
+
+  if (!response.ok) throw new Error(await response.text());
+  const data = await response.json();
+  return parseQuestionSuggestions(String(data?.text || ""));
+}
+
+function formatAssistantContent(content: string): string[] {
+  const text = content.trim();
+  if (!text) return [];
+
+  const explicitLines = text
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (explicitLines.length > 1) return explicitLines;
+
+  const sentences = text
+    .replace(/\s+/g, " ")
+    .match(/[^.!?]+[.!?]+|[^.!?]+$/g)
+    ?.map((sentence) => sentence.trim())
+    .filter(Boolean) || [text];
+
+  const chunks: string[] = [];
+  for (let i = 0; i < sentences.length; i += 2) {
+    chunks.push(sentences.slice(i, i + 2).join(" "));
+  }
+  return chunks;
 }

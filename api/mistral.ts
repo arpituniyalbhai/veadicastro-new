@@ -364,11 +364,8 @@ FORMAT:
 
 END:
 
-* End with ONE question about a feeling or pattern 
-the user is currently experiencing — based on their 
-dasha theme only. Never mention specific people, 
-events, or dates. Ask about emotions, tensions, or 
-decisions only.
+* End with a useful concluding sentence, not a question.
+* Do not add follow-up questions, curiosity hooks, or sales hooks.
 
 GOAL:
 Make astrology feel practical, logical, and useful - not mystical or vague.
@@ -391,7 +388,7 @@ Make astrology feel practical, logical, and useful - not mystical or vague.
 - Exactly 1 paragraph. Max 8 lines. Max 350 tokens.
 - Zero bullets. Zero headers. Zero section labels.
 - Start directly with answer - no intro like "In 2026..." or "Here is..."
-- End with ONE hook line under 15 words hinting at hidden timing.
+- End with a clear, useful closing sentence.
 Wrong format = rewrite before sending.`;
 
     // Detect if this is a report request

@@ -839,7 +839,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
               <a href="#marriage-tool" className="inline-flex items-center justify-center rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white hover:bg-pink-400">Get My Marriage Prediction</a>
-              <button onClick={() => setAuthOpen(true)} className="rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">Ask any question to AI</button>
+              <Link to="/free-ai-astrologer-chat" className="rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">Ask any question to AI</Link>
             </div>
           </div>
         </section>
