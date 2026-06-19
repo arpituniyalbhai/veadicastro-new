@@ -18,6 +18,8 @@ const linkGroups = [
       { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
       { name: "Free AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
       { name: "Marriage Prediction Tool", path: "/ai-marriage-prediction-by-date-of-birth" },
+      { name: "Love Astrology by Date of Birth", path: "/love-astrology-by-date-of-birth" },
+      { name: "Astrology AI Tools", path: "/#features" },
       { name: "Kundli Generator", path: "/free-kundli-generator" },
       { name: "Kundli Matching", path: "/free-kundali-matching" },
       { name: "Today Horoscope", path: "/today-horoscope" },

@@ -876,7 +876,7 @@ const KundaliMatching = () => {
             </div>
             
             <p className="text-pink-400 font-bold text-lg mt-6">
-              Get your <strong>marriage timing prediction</strong> + Expert guidance at Veadicastro.in
+              Get your <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-white hover:text-pink-200 underline">AI marriage prediction by date of birth</Link> + Expert guidance at Veadicastro.in
             </p>
           </div>
 

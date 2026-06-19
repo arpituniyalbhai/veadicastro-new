@@ -185,7 +185,7 @@ const MarriageMuhurat2026 = () => {
                 Marriage is one of the biggest moments in a person's life. In India, getting married is not just about two people. It is about two families coming together. That is why choosing the right wedding dates 2026 India families rely on is so important.
               </p>
               <p className="text-gray-300 leading-relaxed mb-5">
-                This right date and time is called a Marriage Muhurat. It is a special moment when the planets and stars are in a good position. Marrying at this time is believed to bring love, happiness, and good luck to the couple.
+                This right date and time is called a Marriage Muhurat. It is a special moment when the planets and stars are in a good position. Marrying at this time is believed to bring <Link to="/love-astrology-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">love, happiness, and good luck</Link> to the couple.
               </p>
               <p className="text-gray-300 leading-relaxed mb-5">
                 This guide covers all marriage muhurat 2026 dates, also known as shadi muhurat 2026 or vivah muhurat 2026 in Hindi-speaking families. This article gives you all the auspicious marriage dates for 2026 month by month. It also explains the best Nakshatras and Tithis so you can plan your wedding with full confidence. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you understand how these cosmic alignments affect your specific relationship.
@@ -918,7 +918,7 @@ const MarriageMuhurat2026 = () => {
                   to="/ai-marriage-prediction-by-date-of-birth"
                   className="block text-purple-400 hover:text-purple-300 transition-colors"
                 >
-                  Find your personal marriage timing window
+                  → AI marriage prediction by date of birth
                 </Link>
                 <Link
                   to="/kundali-matching"

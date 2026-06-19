@@ -821,18 +821,6 @@ KEY INSIGHTS:
 
             <h2 className="text-2xl font-bold text-white mt-12 mb-6">What Can You Ask in 5 Minutes?</h2>
             
-            <div className="text-white/80 leading-relaxed space-y-4">
-              <p>A lot, actually. Here are some of the most common things people ask:</p>
-              
-              <div className="ml-6 space-y-4">
-                <p><strong>Love and Marriage —</strong><br />
-                When will I get married? Is this person right for me? Why does my love life
-                feel stuck? Will I have a love marriage or arranged marriage?</p>
-                
-                <p><strong>Career and Money —</strong><br />
-                Should I take this new job offer? Will my business do well this year?
-                When will my financial situation improve? Is 2026 a good year for me?</p>
-                
                 <p><strong>Health —</strong><br />
                 Which area of health should I focus on? What does my chart say about my
                 energy levels this year? Are there any health patterns I should know about?</p>
@@ -930,7 +918,7 @@ KEY INSIGHTS:
               </p>
               
               <p>
-                Try the free love and marriage prediction. It takes less than 5 minutes.
+                Try the <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">free love and marriage prediction</Link>. It takes less than 5 minutes.
               </p>
             </div>
 

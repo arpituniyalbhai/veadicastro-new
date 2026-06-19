@@ -4,6 +4,7 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/free-ai-astrologer-chat", "destination": "/api/meta?path=free-ai-astrologer-chat" },
     { "source": "/ai-marriage-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-marriage-prediction-by-date-of-birth" },
+    { "source": "/love-astrology-by-date-of-birth", "destination": "/api/meta?path=love-astrology-by-date-of-birth" },
     { "source": "/free-5-minutes-astrology-ai", "destination": "/api/meta?path=free-5-minutes-astrology-ai" },
     { "source": "/free-kundli-generator", "destination": "/api/meta?path=free-kundli-generator" },
     { "source": "/free-kundali-matching", "destination": "/api/meta?path=free-kundali-matching" },
@@ -16,6 +17,7 @@
     { "source": "/dhan-yoga-bracelet", "destination": "/api/meta?path=dhan-yoga-bracelet" },
     { "source": "/chatgpt-astrology", "destination": "/api/meta?path=chatgpt-astrology" },
     { "source": "/ai-astrology-prediction", "destination": "/api/meta?path=ai-astrology-prediction" },
+
     { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },
     { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },
     { "source": "/about", "destination": "/api/meta?path=about" },

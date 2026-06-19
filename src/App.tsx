@@ -75,6 +75,7 @@ const FifaWorldCup2026WinnerAstrologyPrediction = lazy(() => import("../blogs/fi
 // Lazy load tool pages
 const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"));
 const AiMarriagePredictionByDateOfBirth = lazy(() => import("@/pages/AiMarriagePredictionByDateOfBirth"));
+const AiLoveAstrologyByDateOfBirth = lazy(() => import("@/pages/AiLoveAstrologyByDateOfBirth"));
 const FreeKundliGenerator = lazy(() => import("@/pages/FreeKundliGenerator"));
 const FreeKundliMatching = lazy(() => import("@/pages/free-kundali-matching"));
 const TodayHoroscope = lazy(() => import("@/pages/today-horoscope"));
@@ -86,6 +87,7 @@ const AstrologyStore = lazy(() => import("@/pages/AstrologyStore"));
 const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
 const ChatGPTAstrology = lazy(() => import("@/pages/ChatGPTAstrology"));
 const AiAstrologyPrediction = lazy(() => import("@/pages/AiAstrologyPrediction"));
+
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
 
@@ -175,6 +177,7 @@ const AuthenticatedRoutes = ({
         <Route path="/" element={<Index />} />
         <Route path="/free-ai-astrologer-chat" element={<Suspense fallback={<PageLoading />}><FreeAiAstrologerChat /></Suspense>} />
         <Route path="/ai-marriage-prediction-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiMarriagePredictionByDateOfBirth /></Suspense>} />
+        <Route path="/love-astrology-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiLoveAstrologyByDateOfBirth /></Suspense>} />
         <Route path="/free-5-minutes-astrology-ai" element={<Suspense fallback={<PageLoading />}><Free5MinutesAstrologyAI /></Suspense>} />
         <Route path="/free-kundli-generator" element={<Suspense fallback={<PageLoading />}><FreeKundliGenerator /></Suspense>} />
         <Route path="/free-kundali-matching" element={<Suspense fallback={<PageLoading />}><FreeKundliMatching /></Suspense>} />
@@ -187,6 +190,7 @@ const AuthenticatedRoutes = ({
         <Route path="/astrology-store/dhan-yog-bracelet" element={<Suspense fallback={<PageLoading />}><DhanYogBracelet /></Suspense>} />
         <Route path="/chatgpt-astrology" element={<Suspense fallback={<PageLoading />}><ChatGPTAstrology /></Suspense>} />
         <Route path="/ai-astrology-prediction" element={<Suspense fallback={<PageLoading />}><AiAstrologyPrediction /></Suspense>} />
+
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />

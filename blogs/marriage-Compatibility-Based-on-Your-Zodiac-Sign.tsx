@@ -183,7 +183,7 @@ const MarriageCompatibilityZodiac = () => {
                 Before any wedding in a traditional Indian home, an astrologer is called. Not as a formality — but because generations of wisdom have proven that the right planetary match changes everything. Marriage in Vedic tradition was never left to chance or feeling alone. The planets were consulted before the vows were spoken, because what the stars reveal about two people together goes far deeper than chemistry or coincidence. For detailed compatibility analysis, try our <Link to="/free-kundali-matching" className="text-blue-600 hover:text-blue-700 underline">Kundli Matching</Link> tool. Our advanced <Link to="/ai-astrology" className="text-blue-600 hover:text-blue-700 underline">AI astrology platform</Link> can help you understand these planetary alignments for your relationship. Here is what your Rashi truly says about your best — and most difficult — matches for marriage in 2026.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-6">
-                If your main question is timing, try <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">a chart-based marriage window reading</Link> for spouse qualities, timing signals, and love or arranged marriage indicators.
+                If your main question is timing, try our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">AI marriage prediction by date of birth</Link> tool for spouse qualities, timing signals, and love or arranged marriage indicators.
               </p>
             </div>
 
@@ -588,7 +588,7 @@ const MarriageCompatibilityZodiac = () => {
                 couple in the zodiac still has to choose each other — every day, through the ordinary and the hard.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed mb-4">
-                But understanding how your sign operates — what you need, what you fear, how you love — is never wasted knowledge. 
+                But understanding how your sign operates — what you need, what you fear, <Link to="/love-astrology-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">how you love</Link> — is never wasted knowledge. 
                 It makes you a more aware partner. And aware partners build better marriages.
               </p>
               <p className="text-gray-700 text-lg leading-relaxed">

@@ -230,7 +230,7 @@ const ManglikDoshaMythsVsReality = () => {
                 </div>
               </div>
               <p className="text-gray-300 leading-relaxed mb-4">
-                Some astrologers also calculate from Venus since Venus directly governs love and marriage. But if someone is Manglik only from the Moon and not from Lagna, the practical impact is minor. Most people who panic about Manglik Dosha are Partial Manglik at best — they were simply never given this detail.
+                Some astrologers also calculate from Venus since Venus directly governs <Link to="/love-astrology-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">love and marriage</Link>. But if someone is Manglik only from the Moon and not from Lagna, the practical impact is minor. Most people who panic about Manglik Dosha are Partial Manglik at best — they were simply never given this detail.
               </p>
             </section>
 
@@ -547,9 +547,9 @@ const ManglikDoshaMythsVsReality = () => {
                 <Link to="/free-kundli-generator" className="text-purple-400 hover:text-purple-300 underline">
                   birth chart analysis
                 </Link>{" "}
-                to understand your complete Mars placement and any cancellation factors in your chart. For marriage timing and relationship patterns, try{" "}
+                to understand your complete Mars placement and any cancellation factors in your chart. For marriage timing and relationship patterns, try our{" "}
                 <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-purple-400 hover:text-purple-300 underline">
-                  marriage timing and relationship pattern reading
+                  AI marriage prediction by date of birth
                 </Link>
                 . Or consult our{" "}
                 <Link to="/free-ai-astrologer-chat" className="text-purple-400 hover:text-purple-300 underline">

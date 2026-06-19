@@ -1262,7 +1262,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               
               <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">Why We Built This</h4>
               <p>
-                This page isn't just a tool; it's a mission. We wanted to combine the speed of 2026 technology with the wisdom of 3000 BC. We know that sometimes you just need a quick "Yes" or "No" about a career move or a relationship, and you need it based on your unique DNA—your birth chart.
+                This page isn't just a tool; it's a mission. We wanted to combine the speed of 2026 technology with the wisdom of 3000 BC. We know that sometimes you just need a quick "Yes" or "No" about a career move or <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">a relationship</Link>, and you need it based on your unique DNA—your birth chart.
               </p>
               <p>
                 If you want the complete product overview before asking a question, the <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro homepage</a> explains Vedika AI, pricing, free tools, daily horoscope, Kundli generation, and detailed astrology reports in one place.

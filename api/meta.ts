@@ -15,6 +15,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-marriage-prediction-by-date-of-birth',
     breadcrumb: 'AI Marriage Prediction by Date of Birth',
   },
+  '/love-astrology-by-date-of-birth': {
+    title: 'Free Love Astrology by Date of Birth – AI Relationship Predictions',
+    description: 'Get an instant AI love astrology reading by date of birth. Vedika analyzes your 5th house, Venus, and dasha for relationship patterns and romantic outlook.',
+    canonical: 'https://veadicastro.in/love-astrology-by-date-of-birth',
+    breadcrumb: 'Free Love Astrology by Date of Birth',
+  },
   '/free-5-minutes-astrology-ai': {
     title: 'Free 5 Minute Astrology AI Reading — Instant Vedic Predictions | Veadicastro',
     description: 'Get a free 5-minute Vedic astrology AI reading instantly. Enter birth details and get predictions from Vedika AI — no signup needed.',
@@ -87,6 +93,7 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-astrology-prediction',
     breadcrumb: 'AI Astrology Prediction',
   },
+
   '/ai-astrology': {
     title: 'AI Astrology — Vedic Astrology Powered by AI | Veadicastro',
     description: 'Explore AI astrology with Veadicastro. Get accurate Vedic astrology predictions powered by artificial intelligence.',

@@ -49,9 +49,9 @@ interface LocationSuggestion {
 }
 
 const SITE_URL = "https://veadicastro.in";
-const PAGE_PATH = "/ai-marriage-prediction-by-date-of-birth";
+const PAGE_PATH = "/love-astrology-by-date-of-birth";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
-const PAGE_IMAGE = `${SITE_URL}/optimized/ai-marriage-prediction-v2.webp`;
+const PAGE_IMAGE = `${SITE_URL}/optimized/love-astrology-bg.webp`;
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
@@ -74,60 +74,28 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 
 const faqs = [
   {
-    q: "Can AI predict my marriage by date of birth?",
-    a: "AI can explain marriage indicators from your Vedic birth chart when your date, time, and place of birth are provided. It gives a timing window and relationship themes, not a guaranteed event date.",
+    q: "Can astrology predict my love life?",
+    a: "Yes, Vedic astrology can explain patterns in your love life by studying the 5th house of romance, Venus (the planet of love), and related transits to reveal when meaningful connections are most likely.",
   },
   {
-    q: "Is birth time required for marriage prediction?",
-    a: "Birth time is strongly recommended because it sets the ascendant, houses, and Navamsa context. Without it, the reading becomes more general.",
+    q: "How does AI analyze love compatibility?",
+    a: "AI reads the planetary positions at your exact birth time, checking the strength of romantic planets and houses to explain emotional compatibility, attraction styles, and relationship strengths.",
   },
   {
-    q: "Can this tell love marriage or arranged marriage?",
-    a: "Yes, the reading can discuss love marriage and arranged marriage tendencies by studying the 5th house, 7th house, Venus, Jupiter, Rahu, and related dasha periods.",
+    q: "When will I find true love?",
+    a: "Finding true love is indicated when positive dasha periods and Jupiter or Venus transits activate your 5th or 7th house. The reading provides a window of supportive time rather than a fixed date.",
   },
   {
-    q: "How does Vedic astrology check marriage timing?",
-    a: "Vedic astrology checks the 7th house, its lord, Venus, Jupiter, Navamsa, Vimshottari dasha, and supportive transits to estimate likely timing windows.",
+    q: "Can birth dates reveal relationship patterns?",
+    a: "Absolutely. Your birth details determine your chart, which reflects how you approach trust, emotional bonding, and partnership, helping you understand repeating themes in your relationships.",
   },
   {
-    q: "What if I do not know my exact birth time?",
-    a: "You can still try an approximate time, but treat the answer as broad guidance. For serious decisions, birth-time rectification with a human astrologer is better.",
-  },
-  {
-    q: "Can AI marriage prediction be 100% accurate?",
-    a: "No prediction should be treated as 100% guaranteed. Astrology works best as a clarity tool, especially when birth details are accurate and the reading is used responsibly.",
-  },
-  {
-    q: "Which houses are checked for marriage?",
-    a: "The 7th house is primary. Astrologers also study the 2nd, 5th, 8th, 11th, and 12th houses depending on compatibility, attraction, family support, and married life.",
-  },
-  {
-    q: "What are simple remedies for marriage delay?",
-    a: "Simple remedies may include strengthening Venus or Jupiter, prayer, charity, mantra practice, and practical relationship effort. Remedies should be gentle, not fear-based.",
-  },
-  {
-    q: "Is this prediction based on Vedic astrology?",
-    a: "Yes. Veadicastro uses a chart-first Vedic astrology approach with Lahiri sidereal calculations, dasha logic, and transit context.",
-  },
-  {
-    q: "Can I ask more personal questions after the result?",
-    a: "Yes. Sign up to ask Vedika any personal question about marriage timing, compatibility, relationships, career, or other life topics.",
-  },
-  {
-    q: "Is AI marriage prediction better than a horoscope?",
-    a: "It is usually more personal than a generic horoscope because it uses your birth details, chart houses, dasha, and transit context instead of one zodiac sign.",
-  },
-  {
-    q: "How is this different from ChatGPT astrology?",
-    a: "Generic ChatGPT astrology may answer from broad text patterns. Vedika is framed around Veadicastro's chart-first flow, birth details, and Vedic astrology interpretation.",
-  },
-  {
-    q: "Can AI replace a human astrologer for marriage decisions?",
-    a: "No. AI can explain patterns and timing windows, but important relationship decisions should also include personal judgment, family context, and, when needed, a human astrologer.",
+    q: "Is AI love astrology accurate?",
+    a: "AI love astrology is highly insightful because it calculates your real Vedic chart data and explains it clearly. However, it should be used for clarity and guidance, not as a 100% fixed destiny.",
   },
 ];
 
-const buildMarriagePrompt = (details: BirthDetails, question: string) => {
+const buildLovePrompt = (details: BirthDetails, question: string) => {
   const nameLine = details.name.trim() ? `Name: ${details.name.trim()}` : "Name: not provided";
   const genderLine = details.gender !== "not-specified" ? `Gender: ${details.gender}` : "Gender: not provided";
   return `${nameLine}
@@ -135,12 +103,12 @@ ${genderLine}
 Birth date: ${details.day} ${months[details.month - 1]} ${details.year}
 Birth time: ${String(details.hour).padStart(2, "0")}:${String(details.minute).padStart(2, "0")}
 Birth place: ${details.birthPlace}
-Main question: ${question.trim() || "When will I get married?"}
+Main question: ${question.trim() || "What is the outlook for my love life?"}
 
-Give a personalized AI marriage prediction by date of birth. Focus only on marriage and relationships.`;
+Give a personalized AI love astrology reading by date of birth. Focus only on love life, romance, emotional compatibility, and relationship patterns.`;
 };
 
-const buildMarriageSystemPrompt = (data: AstroPayload | null) => {
+const buildLoveSystemPrompt = (data: AstroPayload | null) => {
   const chartLines = data
     ? `User's Vedic chart data:
 - Sun Sign: ${data.sunSign}
@@ -150,7 +118,7 @@ const buildMarriageSystemPrompt = (data: AstroPayload | null) => {
     : "Use only the provided birth details and avoid inventing exact planetary placements.";
 
   return `You are Vedika, Veadicastro's AI Vedic astrologer.
-Respond in calm, simple English. Be marriage-specific, warm, practical, and non-fear-based.
+Respond in calm, simple English. Be focused on love, romance, dating, and emotional compatibility. Be warm, practical, and non-fear-based.
 
 ${chartLines}
 
@@ -159,15 +127,15 @@ Rules:
 - Do not promise certainty. Give timing as a window, not an exact guaranteed date.
 - Do not create fear or pressure.
 - Explain any technical point in easy language.
-- Mention 7th house, Venus, Jupiter, dasha/transit, and Navamsa only when helpful.
+- Mention 5th house, 7th house, Venus, Mars, dasha/transit only when helpful.
 - Keep the answer structured and useful.
 
 Required result format:
-Marriage Timing Window:
-Love or Arranged Marriage Possibility:
+Romantic Nature:
+Emotional Compatibility:
 Relationship Strengths:
-Possible Delays or Challenges:
-Spouse Qualities:
+Areas to Improve:
+Love Outlook & Timing Window:
 Current Dasha/Transit Influence:
 Simple Remedies:
 Next Best Question to Ask Vedika:`;
@@ -177,7 +145,7 @@ const inputClass =
   "h-12 rounded-2xl border-white/10 bg-white/[0.06] text-white placeholder:text-white/35 focus:border-pink-400 focus:ring-pink-400";
 const labelClass = "mb-2 flex items-center gap-2 text-sm font-medium text-white/75";
 
-export default function AiMarriagePredictionByDateOfBirth() {
+export default function AiLoveAstrologyByDateOfBirth() {
   const { setAuthOpen } = useAuth();
   const [birthDetails, setBirthDetails] = useState<BirthDetails>({
     name: "",
@@ -189,7 +157,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
     minute: 0,
     birthPlace: "",
   });
-  const [question, setQuestion] = useState("When will I get married?");
+  const [question, setQuestion] = useState("What is the outlook for my love life?");
   const [astroData, setAstroData] = useState<AstroPayload | null>(null);
   const [result, setResult] = useState("");
   const [messages, setMessages] = useState<ChatTurn[]>([]);
@@ -279,11 +247,11 @@ export default function AiMarriagePredictionByDateOfBirth() {
         persistAstroPayload(chart);
       }
 
-      const userPrompt = buildMarriagePrompt(birthDetails, activeQuestion);
+      const userPrompt = buildLovePrompt(birthDetails, activeQuestion);
       const history = customQuestion ? messages : [];
       const nextMessages: ChatTurn[] = [...history, { role: "user", content: activeQuestion }];
       setMessages(nextMessages);
-      setStatus(customQuestion ? "Vedika is reading your question..." : "Vedika is preparing your marriage prediction...");
+      setStatus(customQuestion ? "Vedika is reading your question..." : "Vedika is preparing your love astrology reading...");
 
       let streamed = "";
       await generateGeminiStream(
@@ -293,7 +261,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
           streamed += delta;
           setResult((prev) => customQuestion ? `${prev}${prev.endsWith("\n\n") ? "" : "\n\n"}Follow-up Answer:\n${streamed}` : streamed);
         },
-        buildMarriageSystemPrompt(chart),
+        buildLoveSystemPrompt(chart),
         "en",
         birthDetails.name || undefined,
         "secondary"
@@ -327,19 +295,19 @@ export default function AiMarriagePredictionByDateOfBirth() {
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
-      { "@type": "ListItem", "position": 2, "name": "AI Marriage Prediction by Date of Birth", "item": PAGE_URL },
+      { "@type": "ListItem", "position": 2, "name": "Free Love Astrology by Date of Birth – AI Relationship Predictions", "item": PAGE_URL },
     ],
   }), []);
 
   const appSchema = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "AI Marriage Prediction by Date of Birth",
+    "name": "Free Love Astrology by Date of Birth – AI Relationship Predictions",
     "url": PAGE_URL,
     "applicationCategory": "LifestyleApplication",
     "operatingSystem": "Web",
     "image": PAGE_IMAGE,
-    "description": "Free, instant AI marriage prediction by date of birth with Vedika, based on Vedic birth chart, Swiss Ephemeris calculations, dasha, transit, and relationship indicators.",
+    "description": "Free, instant AI love astrology reading by date of birth. Vedika analyzes your 5th house, Venus, and dasha for relationship patterns and romantic outlook.",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -350,25 +318,25 @@ export default function AiMarriagePredictionByDateOfBirth() {
   return (
     <>
       <Helmet>
-        <title>AI Marriage Prediction by Date of Birth - Free, Instant & Chart-Based</title>
+        <title>Free Love Astrology by Date of Birth – AI Relationship Predictions</title>
         <meta
           name="description"
-          content="Enter your birth details and get an instant AI marriage prediction - no signup, no payment. Vedika reads your 7th house, Venus, dasha & Navamsa and gives you a real chart-based answer in seconds."
+          content="Enter your birth details to get an instant AI love astrology reading. Vedika reveals romantic tendencies, emotional compatibility, and relationship patterns based on your birth chart."
         />
         <meta
           name="keywords"
-          content="AI marriage prediction by date of birth, marriage prediction by date of birth, AI marriage prediction, free marriage prediction, when will I get married astrology, love marriage prediction, arranged marriage prediction, marriage astrology by DOB, marriage prediction calculator"
+          content="love astrology by date of birth, free love astrology, AI relationship prediction, love compatibility astrology, when will I find love astrology, romance prediction by DOB, love life reading, AI love calculator"
         />
         <link rel="canonical" href={PAGE_URL} />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-        <meta property="og:title" content="AI Marriage Prediction by Date of Birth - Free, Instant & Chart-Based" />
-        <meta property="og:description" content="Get an instant chart-based AI marriage prediction with no signup and no payment. Vedika reads your 7th house, Venus, dasha, and Navamsa." />
+        <meta property="og:title" content="Free Love Astrology by Date of Birth – AI Relationship Predictions - Free, Instant & Chart-Based" />
+        <meta property="og:description" content="Get an instant chart-based AI love reading with no signup and no payment. Vedika reads your 5th house, Venus, Mars, and relationship patterns." />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={PAGE_IMAGE} />
         <meta property="og:site_name" content="Veadicastro" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="AI Marriage Prediction by Date of Birth - Free, Instant & Chart-Based" />
+        <meta name="twitter:title" content="Free Love Astrology by Date of Birth – AI Relationship Predictions - Free, Instant & Chart-Based" />
         <meta name="twitter:description" content="Get an instant chart-based AI marriage prediction from Vedika using your date, time, and place of birth." />
         <meta name="twitter:image" content={PAGE_IMAGE} />
         <script type="application/ld+json">{JSON.stringify(appSchema)}</script>
@@ -387,13 +355,13 @@ export default function AiMarriagePredictionByDateOfBirth() {
               </Link>
               <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-pink-400/30 bg-pink-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">
                 <Heart className="h-4 w-4" />
-                Free marriage astrology tool
+                Free love astrology tool
               </div>
               <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">
-                AI Marriage Prediction by Date of Birth
+                Free Love Astrology by Date of Birth – AI Relationship Predictions
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
-                Enter your birth details and ask Vedika about marriage timing, love or arranged marriage possibilities, spouse qualities, delays, and simple remedies through a chart-first Vedic reading.
+                Enter your birth details to discover your romantic tendencies, emotional compatibility, relationship strengths, and love life outlook through an authentic Vedic reading.
               </p>
               <div className="mt-6 grid max-w-2xl gap-3 text-sm text-white/75 sm:grid-cols-2">
                 {["No signup required", "No payment", "Instant streaming result", "Real Vedic chart - not a generic horoscope"].map((item) => (
@@ -410,12 +378,12 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 </div>
                 <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
                   <Sparkles className="h-4 w-4 text-pink-200" />
-                  3,000+ marriage predictions given | Trusted across India, UK & Canada
+                  Thousands of love readings given | Trusted across India, UK & Canada
                 </div>
               </div>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <a href="#marriage-tool" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-pink-500/20 hover:bg-pink-400">
-                  Get My Marriage Prediction <ArrowRight className="h-4 w-4" />
+                  Get My Love Prediction <ArrowRight className="h-4 w-4" />
                 </a>
                 <button type="button" onClick={() => setAuthOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/60 hover:text-pink-200">
                   Ask any question to AI
@@ -426,7 +394,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
             <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] shadow-2xl shadow-black/30">
               <img
                 src="/optimized/ai-marriage-prediction-v2.webp"
-                alt="AI marriage prediction by date of birth with Vedic astrology chart insights"
+                alt="Love astrology by date of birth with Vedic relationship insights"
                 className="h-full min-h-[320px] w-full object-cover"
                 loading="eager"
                 fetchPriority="high"
@@ -443,14 +411,14 @@ export default function AiMarriagePredictionByDateOfBirth() {
           <div className="rounded-[1.75rem] border border-pink-400/20 bg-pink-400/10 p-5 sm:p-6">
             <div className="grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-pink-200">How Vedika reads your marriage chart</p>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-pink-200">How Vedika reads your love chart</p>
                 <h2 className="mt-2 text-2xl font-black text-white">From birth details to instant chart-based answer</h2>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {[
                   ["Step 1", "Enter your birth details"],
                   ["Step 2", "Swiss Ephemeris calculates the chart"],
-                  ["Step 3", "7th house, Venus, dasha are analyzed"],
+                  ["Step 3", "5th house, Venus, and Mars are analyzed"],
                   ["Step 4", "Instant streaming AI result"],
                 ].map(([step, text]) => (
                   <div key={step} className="rounded-2xl border border-white/10 bg-black/20 p-4">
@@ -468,7 +436,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold text-pink-300">Birth Details</p>
-                <h2 className="mt-1 text-2xl font-black">Marriage prediction calculator</h2>
+                <h2 className="mt-1 text-2xl font-black">Love astrology calculator</h2>
               </div>
               <div className="rounded-2xl bg-white/10 p-3 text-pink-200">
                 <Heart className="h-6 w-6" />
@@ -571,7 +539,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
                   className="min-h-[92px] rounded-2xl border-white/10 bg-white/[0.06] text-white placeholder:text-white/35 focus:border-pink-400 focus:ring-pink-400"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="When will I get married?"
+                  placeholder="What is the outlook for my love life?"
                 />
               </div>
 
@@ -595,7 +563,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 <img src="/optimized/vedika.webp" alt="Vedika AI astrologer" className="h-full w-full object-cover" loading="lazy" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-pink-300">Vedika's marriage reading</p>
+                <p className="text-sm font-semibold text-pink-300">Vedika's love reading</p>
                 <h2 className="text-2xl font-black">Your result appears here</h2>
               </div>
             </div>
@@ -611,10 +579,11 @@ export default function AiMarriagePredictionByDateOfBirth() {
                   </div>
                   <div className="space-y-4">
                     {[
-                      ["Marriage Timing Window:", "A stronger window appears after dasha and 7th house support become active."],
-                      ["Love or Arranged:", "Chart patterns show whether self-choice, family support, or a mixed path is more likely."],
-                      ["Spouse Qualities:", "Vedika reads Venus, Jupiter, 7th lord, and Navamsa for partner traits."],
-                      ["Simple Remedies:", "Gentle non-fear-based guidance for clarity, patience, and relationship harmony."],
+                      ["Romantic Nature:", "Venus shows a deep need for emotional connection and loyalty in love."],
+                      ["Emotional Compatibility:", "You match best with partners who understand your need for steady affection."],
+                      ["Relationship Strengths:", "You bring stability and patience into your romantic partnerships."],
+                      ["Areas to Improve:", "Learning to express your needs openly will prevent misunderstandings."],
+                      ["Love Outlook:", "A supportive period for meeting someone meaningful begins during the next Jupiter transit."],
                     ].map(([label, text]) => (
                       <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                         <p className="text-sm font-bold text-white">{label}</p>
@@ -623,7 +592,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
                     ))}
                   </div>
                   <a href="#marriage-tool" className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-5 py-3 text-sm font-bold text-white hover:bg-pink-400">
-                    Get Your Real Prediction <ArrowRight className="h-4 w-4" />
+                    Get Your Real Love Reading <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
               )}
@@ -640,9 +609,9 @@ export default function AiMarriagePredictionByDateOfBirth() {
 
             {result && (
               <div className="mt-5 rounded-[1.25rem] border border-pink-400/20 bg-pink-400/10 p-5">
-                <h3 className="font-bold text-white">Want a deeper marriage reading with timing, compatibility, and remedies?</h3>
+                <h3 className="font-bold text-white">Want a deeper love reading about romance, compatibility, and relationships?</h3>
                 <p className="mt-2 text-sm leading-6 text-white/65">
-                  Sign up to ask Vedika any personal question about marriage timing, compatibility, spouse qualities, remedies, or relationship patterns.
+                  Sign up to ask Vedika any personal question about your love life, soulmate connections, relationship challenges, or dating patterns.
                 </p>
                 <div className="mt-4">
                   <ButtonLite
@@ -668,10 +637,10 @@ export default function AiMarriagePredictionByDateOfBirth() {
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid gap-4 md:grid-cols-4">
             {[
-              ["Marriage timing window", "A practical period instead of a guaranteed date."],
-              ["Love vs arranged", "Relationship route indicators from chart patterns."],
-              ["Spouse qualities", "Nature, values, and compatibility tendencies."],
-              ["Simple remedies", "Gentle actions for clarity and self-reflection."],
+              ["Romantic nature", "How you express and seek affection."],
+              ["Emotional compatibility", "The core needs for your relationships."],
+              ["Relationship strengths", "What makes your connections last."],
+              ["Love outlook", "Timing window and upcoming relationship trends."],
             ].map(([title, desc]) => (
               <div key={title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
                 <CheckCircle2 className="mb-4 h-5 w-5 text-green-300" />
@@ -686,160 +655,64 @@ export default function AiMarriagePredictionByDateOfBirth() {
           <article className="rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8">
             <div className="mb-8 border-b border-white/10 pb-8">
               <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">
-                Marriage Astrology Article
+                Love Astrology Guide
               </p>
               <h2 className="max-w-3xl text-3xl font-black leading-tight text-white sm:text-4xl">
-                AI Marriage Prediction by Date of Birth: Meaning, Method, and Responsible Use
+                Understanding Love Astrology by Date of Birth
               </h2>
               <p className="mt-4 max-w-3xl text-base leading-8 text-white/70">
-                This guide explains how AI marriage prediction works on <Link to="/" className="text-pink-300 underline-offset-4 hover:underline">Veadicastro</Link>, why complete birth details matter, and how Vedika uses Vedic astrology signals to explain marriage timing, love or arranged marriage possibilities, spouse qualities, and remedies in simple language.
+                Your birth chart holds profound insights into your romantic life. By providing your exact birth details, our AI analyzes planetary positions to reveal your romantic tendencies, emotional compatibility, and relationship patterns. This tool focuses entirely on how you give and receive love.
               </p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm font-bold text-white">Main focus</p>
-                  <p className="mt-1 text-sm leading-6 text-white/55">Marriage timing, relationship pattern, and compatibility signals.</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm font-bold text-white">Astrology base</p>
-                  <p className="mt-1 text-sm leading-6 text-white/55">7th house, Venus, Jupiter, dasha, transit, and Navamsa context.</p>
-                </div>
-                <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <p className="text-sm font-bold text-white">Best use</p>
-                  <p className="mt-1 text-sm leading-6 text-white/55">Clarity and self-reflection, not fixed promises or fear.</p>
-                </div>
-              </div>
-              <div className="mt-6 rounded-2xl border border-pink-400/25 bg-pink-400/10 p-5">
-                <h3 className="text-xl font-black text-white">Direct answer</h3>
-                <p className="mt-3 text-sm leading-8 text-white/75 sm:text-base">
-                  AI marriage prediction by date of birth uses your birth chart, birth time, and birth place to analyze marriage timing, relationship tendencies, love marriage indicators, arranged marriage support, and possible marriage windows. It helps you understand patterns, not guaranteed events.
-                </p>
-              </div>
-              <div className="mt-4 rounded-2xl border border-yellow-300/20 bg-yellow-300/10 p-5">
-                <p className="text-lg font-black text-yellow-100">★★★★★</p>
-                <p className="mt-2 text-sm leading-7 text-white/70">
-                  Users from India, the UK, the USA, and Canada use Vedika to understand relationship patterns, marriage timing, and compatibility questions with a calm Vedic astrology approach.
-                </p>
-              </div>
             </div>
 
             <div className="space-y-9">
               <section>
-                <h3 className="text-2xl font-black text-white">1. What AI marriage prediction by date of birth means</h3>
+                <h3 className="text-2xl font-black text-white">How Vedic Astrology Reads Your Love Life</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  AI marriage prediction by date of birth means using your birth details to prepare a Vedic astrology reading about marriage and relationships, then using AI to explain that reading clearly. It is not a random answer and it is not the same as a generic zodiac prediction. Vedika reads the chart foundation first and then explains what the marriage indicators suggest. If you want to see your complete planetary positions before asking about marriage, you can also use the <Link to="/free-kundli-generator" className="text-pink-300 underline-offset-4 hover:underline">Free Kundli Generator</Link>.
+                  In Vedic astrology, romance and relationships are primarily governed by the fifth house and the planet Venus. The fifth house rules courtship, romance, and creative expression of love. Venus is the natural indicator of affection, attraction, and how we bond with others. By studying these elements along with Mars, which brings passion and drive, Vedika builds a complete picture of your romantic nature.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-2xl font-black text-white">AI marriage prediction vs generic horoscope</h3>
-                <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
-                  <table className="w-full border-collapse text-left text-sm">
-                    <thead className="bg-white/10 text-white">
-                      <tr>
-                        <th className="p-3 font-bold">Feature</th>
-                        <th className="p-3 font-bold">AI Marriage Prediction</th>
-                        <th className="p-3 font-bold">Generic Horoscope</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/10 text-white/70">
-                      <tr>
-                        <td className="p-3 text-white/90">Uses date of birth</td>
-                        <td className="p-3">Yes</td>
-                        <td className="p-3">Usually no</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 text-white/90">Uses birth time and place</td>
-                        <td className="p-3">Yes</td>
-                        <td className="p-3">No</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 text-white/90">Marriage focused</td>
-                        <td className="p-3">Yes</td>
-                        <td className="p-3">Limited</td>
-                      </tr>
-                      <tr>
-                        <td className="p-3 text-white/90">Personalized timing window</td>
-                        <td className="p-3">Based on chart, dasha, and transit</td>
-                        <td className="p-3">Broad and general</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <h3 className="text-2xl font-black text-white">Sample Love Astrology Reading</h3>
+                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base mb-4">
+                  Wondering what a reading looks like? Here is an example of what Vedika might reveal about your love life:
+                </p>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <p className="text-pink-300 font-bold mb-2">Romantic Nature:</p>
+                  <p className="text-sm leading-6 text-white/80 mb-4">You have a deeply passionate and devoted approach to love. With Venus positioned strongly, you value loyalty and meaningful emotional connection over superficial dating.</p>
+                  
+                  <p className="text-pink-300 font-bold mb-2">Emotional Compatibility:</p>
+                  <p className="text-sm leading-6 text-white/80 mb-4">You align best with partners who offer stability and open communication. Fire signs or strong Mars placements may complement your nurturing energy.</p>
+                  
+                  <p className="text-pink-300 font-bold mb-2">Relationship Strengths:</p>
+                  <p className="text-sm leading-6 text-white/80 mb-4">Your patience and willingness to support your partner are your greatest strengths. You create a safe space for vulnerability.</p>
+                  
+                  <p className="text-pink-300 font-bold mb-2">Areas to Improve:</p>
+                  <p className="text-sm leading-6 text-white/80 mb-4">You may sometimes sacrifice your own needs to keep peace. Learning to set healthy boundaries will greatly improve your relationship satisfaction.</p>
+                  
+                  <p className="text-pink-300 font-bold mb-2">Love Outlook:</p>
+                  <p className="text-sm leading-6 text-white/80">The upcoming Jupiter transit over your fifth house brings a highly supportive period for finding genuine romance or deepening an existing bond.</p>
                 </div>
               </section>
 
               <section>
-                <h3 className="text-2xl font-black text-white">2. Why DOB, time, and place matter</h3>
+                <h3 className="text-2xl font-black text-white">Why Your Exact Birth Time Matters</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Date of birth gives the broad planetary background, but time and place complete the chart. Time of birth helps calculate the Lagna, or ascendant, which decides the house structure. Birth place helps calculate accurate planetary positions and house cusps. These details are important because marriage is mainly studied through houses, especially the 7th house.
+                  While your birth date provides the general position of planets like Venus and Mars, your exact birth time determines your rising sign and the specific houses these planets occupy. A Venus in the fifth house behaves very differently from a Venus in the eighth house. Precise details ensure your relationship patterns are read accurately.
+                </p>
+                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
+                  If you want to see exactly where your planets are placed, you can also use our <Link to="/free-kundli-generator" className="text-pink-300 underline-offset-4 hover:underline">Free Kundli Generator</Link> to generate your complete birth chart.
                 </p>
               </section>
 
               <section>
-                <h3 className="text-2xl font-black text-white">3. When will I get married? How AI reads your Kundli</h3>
+                <h3 className="text-2xl font-black text-white">Exploring Your Relationship Journey</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  In Vedic astrology, the 7th house shows marriage, partnership, and long-term commitment. The 7th lord shows how that area behaves. Venus is connected with <Link to="/love-astrology-by-date-of-birth" className="text-pink-300 underline-offset-4 hover:underline">affection, attraction, comfort, and relationship harmony</Link>. Jupiter shows support, wisdom, blessings, and maturity. For deeper marriage insight, astrologers may also look at the Navamsa chart because it shows the inner strength of married life.
+                  Understanding your love astrology is just the beginning. The goal is to bring awareness to your choices and emotional needs. It helps you recognize why certain dynamics repeat and how you can foster healthier, more fulfilling connections.
                 </p>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  A proper reading does not depend on one planet alone. It checks how the 5th house of romance connects with the 7th house of marriage, whether family support is visible through the 2nd and 11th houses, and whether planets like Saturn, Rahu, or Mars are creating delay, intensity, unconventional choices, or important lessons.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">4. Love marriage and arranged marriage indicators</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Love marriage indicators are usually connected with the 5th house, Venus, Rahu, and links between the 5th and 7th houses. These patterns can show attraction, personal choice, or a relationship that begins before family involvement. Arranged marriage indicators are often seen when the 7th house, 2nd house, Jupiter, and family-support houses are stronger. Many charts show a mixed path where personal choice and family approval both matter. For partner-to-partner compatibility, the <Link to="/free-kundali-matching" className="text-pink-300 underline-offset-4 hover:underline">Free Kundali Matching</Link> page is a better next step than a single-person timing reading.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">5. Why marriage timing is shown as a window</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Marriage timing is normally checked through dasha and transit. Dasha shows which planetary period is active in your life. Transit shows what current planets are triggering in the chart. When marriage-related houses and planets become active together, the chart can show a stronger window for meeting someone, engagement, commitment, or marriage. A window is more responsible than a fixed guaranteed date because real-life choices and circumstances also matter.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">6. Marriage prediction by Kundli - what Vedika checks</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Vedic astrology can become technical quickly. In marriage prediction by Kundli, Vedika checks the 7th house, 7th lord, Venus, Jupiter, Navamsa, Vimshottari dasha, transit, aspect, and conjunction patterns, then converts the chart logic into easy English. This helps you understand the marriage pattern, possible delay factors, spouse qualities, and simple remedies without needing to study Jyotish first. If you want a broader discussion after the result, continue in the <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline-offset-4 hover:underline">Free AI Astrologer Chat</Link>; if you want to compare AI astrology with general AI tools, read our <Link to="/chatgpt-astrology" className="text-pink-300 underline-offset-4 hover:underline">ChatGPT Astrology</Link> guide.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">7. Use the prediction responsibly</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  A marriage prediction should help you reflect, not make you fearful. If the chart shows delay, it does not mean denial. If the chart shows support, it still asks for wise choices. Use this guidance alongside honest communication, shared values, <Link to="/love-astrology-by-date-of-birth" className="text-pink-300 underline-offset-4 hover:underline">emotional maturity, and practical compatibility</Link>. For deeper personal situations, you can also <Link to="/talk-to-astrologer" className="text-pink-300 underline-offset-4 hover:underline">talk to a human astrologer</Link>.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">8. Example marriage prediction</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Imagine a person born on 14 March 2008 at 10:30 AM in Delhi. A responsible AI marriage prediction would not say, "You will marry on one exact date." Instead, Vedika would first read the 7th house, Venus, Jupiter, and the active dasha period. If the marriage-related dasha becomes stronger in the late twenties and supportive transits touch the 7th house around that time, the result may describe a marriage window such as "stronger chances between age 26 and 29." If the 5th house is also active, Vedika may explain that love marriage or a self-choice connection can become more visible. If Saturn is influencing the 7th house, the answer may mention maturity, delay, or the need to choose carefully.
-                </p>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  This example shows why timing is best explained as a window. The chart can show when marriage energy becomes more active, but real life still includes education, career, family readiness, emotional maturity, and the choices of both people involved.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">9. Common reasons marriage gets delayed</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Marriage delay can appear for many reasons in Vedic astrology. Saturn's influence can show maturity, responsibility, or late commitment. Rahu can show unconventional choices, confusion, or attraction outside the expected path. A weak or stressed Venus may show difficulty in comfort, trust, or relationship flow. Sometimes the dasha simply does not activate marriage houses early. Delay can also come from practical life factors like career focus, family expectations, location changes, or emotional unreadiness.
-                </p>
-              </section>
-
-              <section>
-                <h3 className="text-2xl font-black text-white">10. What makes a marriage reading more accurate</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Accuracy improves when the birth date, birth time, and birth place are correct. Exact birth time helps the ascendant and house placements become clearer. A specific question also helps: "When will I get married?" is useful, but "Is the next two years supportive for marriage?" can be even more focused. For daily context around timing, you can check the <Link to="/today-horoscope" className="text-pink-300 underline-offset-4 hover:underline">Today Horoscope</Link>, and for broader AI-based predictions you can explore <Link to="/ai-astrology-prediction" className="text-pink-300 underline-offset-4 hover:underline">AI Astrology Prediction</Link>. The <Link to="/" className="text-pink-300 underline-offset-4 hover:underline">Veadicastro homepage</Link> also connects this marriage tool with Vedika AI chat, Kundli matching, daily predictions, and complete Vedic reports.
-                </p>
-              </section>
-
-              <section className="rounded-2xl border border-green-300/20 bg-green-300/10 p-5">
-                <h3 className="text-2xl font-black text-white">Trust and methodology</h3>
-                <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Veadicastro uses chart-first interpretation. Birth chart logic, dashas, and transits remain the foundation. AI is used to explain the reading in simple language, not to replace the chart. The guidance is designed for clarity and self-reflection, not fear, pressure, or guaranteed events.
+                  If you are curious about deeper marriage timing, you can try our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-pink-300 underline-offset-4 hover:underline">Marriage Prediction by Date of Birth</Link> tool. Alternatively, if you want to chat directly with Vedika about a specific romantic situation, visit the <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline-offset-4 hover:underline">Free AI Astrologer Chat</Link>. We also offer a <Link to="/free-5-minutes-astrology-ai" className="text-pink-300 underline-offset-4 hover:underline">Free 5 Minutes Astrology</Link> session for quick, personalized insights.
                 </p>
               </section>
             </div>

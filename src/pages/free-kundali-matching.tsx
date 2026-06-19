@@ -1299,7 +1299,7 @@ return (
                 The word "Kundli" means birth chart. Every person has a unique Kundli based on the exact date, time, and place of their birth. The position of the moon, planets, and stars at the time of birth shapes a person's personality, behavior, and destiny. When two people decide to get married, their Kundlis are matched to see if their energies align well together.
               </p>
               <p className="mt-3">
-                In India, this is not just a ritual — it is taken very seriously. Even modern educated families check Kundli compatibility before finalising a match. Our free calculator makes this process simple and instant. You don't need to visit a pandit or pay anyone. Just enter both birth details and get your score in seconds.
+                In India, this is not just a ritual — it is taken very seriously. Even modern educated families check Kundli compatibility before finalising a match. Our free calculator makes this process simple and instant. You don't need to visit a pandit or pay anyone. Just enter both birth details and get your score in seconds. For individual insights into your romantic patterns, you can also explore our <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Love Astrology by Date of Birth</Link> tool.
               </p>
             </section>
 

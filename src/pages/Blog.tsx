@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "27",
+    title: "AI Astrologer: How Vedika Reads Your Kundli",
+    excerpt: "A simple guide to AI astrologers, AI vs human astrologers, Kundli based answers, free AI astrologer chat, 5 minutes astrology, and marriage prediction tools.",
+    author: "Arpit Uniyal",
+    date: "2026-06-19",
+    readTime: "9 min read",
+    category: "AI & Technology",
+    image: "/optimized/ai-astrologer-hero.webp",
+    externalLink: "/ai-astrologer"
+  },
+  {
     id: "26",
     title: "Who Will Win FIFA World Cup 2026? Astrology Prediction",
     excerpt: "Spain, France, England, Brazil and Argentina analyzed through Vedic astrology for FIFA World Cup 2026. See Veadicastro's winner pick, planetary table and probability matrix.",
