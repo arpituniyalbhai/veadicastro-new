@@ -786,6 +786,10 @@ KEY INSIGHTS:
               </p>
               
               <p>
+                This quick reading is one entry point into the full <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro AI astrology platform</a>, where you can explore Vedika AI chat, Kundli generation, daily horoscope, marriage tools, and detailed Vedic reports from the homepage.
+              </p>
+              
+              <p>
                 Everything is based on your actual Vedic birth chart — your Moon sign, your
                 Lagna, your Nakshatra, your current Dasha period. Not just your sun sign like
                 most apps do.
@@ -869,6 +873,10 @@ KEY INSIGHTS:
               <p>
                 That is the difference between a real free life prediction online and a
                 generic horoscope you could read anywhere.
+              </p>
+              
+              <p>
+                For the broader product context, the <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro homepage</a> connects this free 5-minute reading with AI chat, Kundli matching, today's horoscope, lucky colour guidance, and other Vedic astrology tools.
               </p>
             </div>
 

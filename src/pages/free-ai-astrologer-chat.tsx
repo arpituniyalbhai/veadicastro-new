@@ -46,6 +46,55 @@ interface SavedKundli {
 }
 
 // ── Decorative star-field dots ──────────────────────────────────────────────
+const getDailyQuestions = () => {
+  const today = new Date();
+  const day = today.getDate();
+  const dateStr = today.toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const allQuestions = [
+    ["Is today a good day to start something new?", "When will my career change?", "How will my day go today?"],
+    ["Will marriage talks move forward this week?", "Is there a money gain yoga this month?", "Is my partner being honest with me?"],
+    ["Does my chart show a government job?", "What should I avoid today?", "What is my lucky color today?"],
+    ["Will I have love marriage or arranged marriage?", "When is the right time to start a business?", "Will my health improve soon?"],
+    ["When will tension at home reduce?", "Should I switch my job?", "When will my financial growth become strong?"],
+    ["Why is my marriage getting delayed?", "Do I have foreign travel yoga?", "What is my lucky number today?"],
+    ["Which career field will bring me success?", "Will my ex come back?", "Which period is luckiest for me this month?"],
+    ["How is my current dasha period?", "Will this relationship become serious?", "When can I buy property?"],
+    ["Are my partner's feelings genuine?", "Can I clear my interview?", "What remedy should I do today?"],
+    ["What is my marriage timing according to my Kundli?", "Is there a promotion chance?", "When will I get family support?"],
+    ["When will my business profit increase?", "Should I settle abroad?", "When will relationship confusion clear?"],
+    ["When will a good phase start in my life?", "Will I get relief from loans or debt?", "Does my Kundli have Raj Yoga?"],
+    ["Is today good for an important call?", "What type of spouse will I get?", "What is blocking my career?"],
+    ["When will my savings improve?", "Will my current relationship lead to marriage?", "How is the time for study or exams?"],
+    ["Do I have Manglik dosha in my Kundli?", "Which travel direction should I avoid today?", "How will my next 6 months go?"],
+    ["Should I expand my business?", "Should I accept this marriage proposal?", "What is the strongest area of my chart?"],
+    ["Will my job remain stable?", "When will my love life move forward?", "Will a mantra remedy help me?"],
+    ["Is there a sudden career change yoga?", "Will my marriage happen through family?", "Is today good for investing money?"],
+    ["Is today a good day to start something new?", "When will my career change?", "Will marriage talks move forward this week?"],
+    ["What spouse qualities are shown in my Kundli?", "Will 2026 be lucky for me?", "When will my mental stress reduce?"],
+    ["Should I leave my current job?", "Is compatibility strong with my partner?", "What is the best time today?"],
+    ["Why is my money getting stuck astrologically?", "When is the next strong marriage window?", "Should I change my city?"],
+    ["Does my Kundli show delayed marriage?", "Which planet supports my career growth?", "Tell me a simple remedy for today"],
+    ["Should I try a startup?", "Will trust issues in my relationship resolve?", "Which gemstone is lucky for me?"],
+    ["Does my Kundli show a foreign job?", "Will arranged marriage be better for me?", "Is it safe to take a financial risk?"],
+    ["When will my next big opportunity come?", "Will my legal matter settle?", "How is today for love?"],
+    ["Is there any health warning in my chart?", "When is the peak period of my career?", "Is my partner loyal?"],
+    ["Should I buy a home or property?", "How is marriage compatibility checked?", "Will my dasha get better now?"],
+    ["Does my Kundli show Dhan Yoga?", "Is marriage possible in 2026?", "What is my spiritual guidance today?"],
+    ["Should I go for higher studies?", "Is there a breakup yoga in my relationship?", "Is business partnership safe for me?"],
+    ["Which is the most powerful planet in my Kundli?", "How will next month be for career?", "Can Vedika tell my marriage timing?"],
+  ];
+
+  return {
+    date: dateStr,
+    questions: allQuestions[(day - 1) % allQuestions.length],
+  };
+};
+
 const StarField = () => (
   <div className="pointer-events-none absolute inset-0 overflow-hidden">
     {Array.from({ length: 8 }).map((_, i) => (
@@ -85,6 +134,7 @@ export default function FreeAiAstrologyChat() {
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const dailyQuestions = getDailyQuestions();
 
   const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
@@ -193,7 +243,7 @@ export default function FreeAiAstrologyChat() {
     if (!message.trim() || isTyping) return;
     
     // Check if this is the second message (after first free question)
-    if (messageCount >= 1 && !showSignupModal) {
+    if (messageCount >= 2 && !showSignupModal) {
       setShowSignupModal(true);
       return;
     }
@@ -403,13 +453,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             "Yoga Combinations Analysis",
             "House Lordship Predictions",
             "Hindi & English Support"
-          ],
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": "4.8",
-            "reviewCount": "1250",
-            "bestRating": "5"
-          }
+          ]
         }
         `}
         </script>
@@ -524,6 +568,14 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         Chat with Your Personal Ai Assistant<br />
         <span className="text-pink-400 pink-glow">Vedika AI</span>
       </h1>
+      <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-white/75">
+        {["No per-minute charges", "Chart-based - not sun-sign", "Hindi & English both"].map((chip) => (
+          <span key={chip} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
+            <CheckCircle2 className="h-4 w-4 text-green-400" />
+            {chip}
+          </span>
+        ))}
+      </div>
       <div className="flex flex-wrap justify-center gap-4 mt-6">
         <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
         <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Marriage Timing by DOB</a>
@@ -545,6 +597,42 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     </section>
 
     {/* ── MAIN CONTENT ── */}
+    <section className="max-w-5xl mx-auto px-4 pb-10">
+      <div className="card-glass rounded-3xl border border-pink-500/20 p-6 text-left shadow-xl shadow-pink-950/10">
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-red-300">
+            <span className="h-2 w-2 rounded-full bg-red-400" />
+            Live
+          </span>
+          <span className="text-sm font-semibold text-white/70">{dailyQuestions.date}</span>
+        </div>
+        <h2 className="mb-5 text-2xl font-black text-white">Today users asked Vedika:</h2>
+        <div className="grid gap-3">
+          {dailyQuestions.questions.map((question) => (
+            <button
+              key={question}
+              type="button"
+              onClick={() => {
+                setMessage(question);
+                document.querySelector(".max-w-5xl.mx-auto.px-4.pb-8")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+              className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm leading-6 text-white/70 transition-all hover:border-pink-500/40 hover:bg-pink-500/10 hover:text-white"
+            >
+              <ChevronRight className="mt-1 h-4 w-4 flex-shrink-0 text-pink-400 transition-transform group-hover:translate-x-0.5" />
+              <span>"{question}"</span>
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() => setAuthOpen(true)}
+          className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-pink-500 px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-pink-400"
+        >
+          Ask Vedika <ChevronRight className="h-4 w-4" />
+        </button>
+      </div>
+    </section>
+
     <div className="max-w-5xl mx-auto px-4 pb-8">
       {/* AdSense Ad - Above Content */}
       <div className="my-6 flex justify-center">
@@ -900,7 +988,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { icon: <Heart className="w-5 h-5" />, topic: "Love & Relationships", questions: ["When will I meet my soulmate?", "Is my partner compatible?", "Should I get married now?"] },
+              { icon: <Heart className="w-5 h-5" />, topic: "Marriage & Relationships", questions: ["When will I get married?", "Will I have love marriage or arranged marriage?", "Why is marriage getting delayed?", "What kind of spouse is shown in my chart?", "Is the next two years good for marriage?", "Is my partner compatible?"] },
               { icon: <TrendingUp className="w-5 h-5" />, topic: "Career & Finance", questions: ["Which career is best for me?", "When will I get promoted?", "Will my business succeed?"] },
               { icon: <Shield className="w-5 h-5" />, topic: "Health & Wellbeing", questions: ["What health issues should I watch?", "When is my health best?", "What remedies help me?"] },
               { icon: <Star className="w-5 h-5" />, topic: "Life Purpose", questions: ["What is my life's purpose?", "What are my hidden talents?", "Am I on the right path?"] },
@@ -922,6 +1010,45 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 </ul>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Crawlable SEO Content */}
+        <section className="max-w-5xl mx-auto px-4 mb-20">
+          <div className="grid gap-6 md:grid-cols-2">
+            <article className="card-glass rounded-2xl p-6">
+              <h2 className="text-2xl font-black text-white mb-4">What is a free AI astrologer chat?</h2>
+              <div className="space-y-4 text-sm leading-7 text-white/55">
+                <p>
+                  A free AI astrologer chat lets you ask personal astrology questions without paying per minute or waiting for an astrologer to come online. On Veadicastro, Vedika first reads your birth details and Vedic chart, then answers in simple Hindi or English. The goal is not a generic sun-sign horoscope. Vedika uses Swiss Ephemeris precision and a chart-first approach, including houses, planets, dashas, transits, and relationship or career indicators that match your question.
+                </p>
+                <p>
+                  You can start with practical questions about marriage, career, finance, health, family, timing, or remedies. Because the chat is free to begin, you can test the quality of the answer before choosing any deeper report or paid consultation.
+                </p>
+              </div>
+            </article>
+
+            <article className="card-glass rounded-2xl p-6">
+              <h2 className="text-2xl font-black text-white mb-4">What can you ask Vedika?</h2>
+              <ul className="space-y-3 text-sm leading-6 text-white/55">
+                {[
+                  "When will I get married according to my Kundli?",
+                  "Will I have love marriage or arranged marriage?",
+                  "Which career path suits my birth chart?",
+                  "When will my financial situation improve?",
+                  "Is this a good time to change job or start business?",
+                  "Which remedies can support this difficult phase?",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2">
+                    <ChevronRight className="mt-1 h-3.5 w-3.5 flex-shrink-0 text-pink-400" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-5 text-sm leading-7 text-white/55">
+                For a dedicated marriage prediction reading, see our <a href="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">AI Marriage Prediction by Date of Birth</a>.
+              </p>
+            </article>
           </div>
         </section>
 
@@ -968,7 +1095,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <div className="card-glass rounded-2xl p-6 border-l-4 border-pink-500/50">
               <h3 className="font-semibold text-white/90 text-lg mb-3">What makes Veadicastro different from other astrology apps?</h3>
               <div className="text-white/50 text-sm leading-relaxed">
-                <p>We use JPL ephemeris data for arc-second accuracy and follow Parashari principles exactly as written in Bṛhat Parāśara Horāśāstra. No Western astrology mixing, no generic interpretations — pure Vedic Jyotish with calculations like professional astronomers use.</p>
+                <p>We use JPL ephemeris data for arc-second accuracy and follow Parashari principles exactly as written in Bṛhat Parāśara Horāśāstra. No Western astrology mixing, no generic interpretations — pure Vedic Jyotish with calculations like professional astronomers use. You can also start from the <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro homepage</a> to explore the full AI astrology platform, Kundli tools, daily predictions, and reports together.</p>
               </div>
             </div>
 
@@ -1071,7 +1198,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
             <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
             <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
-            <a href="/blogs/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Traditional Jyotish</a>
+            <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Traditional Jyotish</a>
             <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>
           </div>
         </div>
@@ -1136,6 +1263,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">Why We Built This</h4>
               <p>
                 This page isn't just a tool; it's a mission. We wanted to combine the speed of 2026 technology with the wisdom of 3000 BC. We know that sometimes you just need a quick "Yes" or "No" about a career move or a relationship, and you need it based on your unique DNA—your birth chart.
+              </p>
+              <p>
+                If you want the complete product overview before asking a question, the <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro homepage</a> explains Vedika AI, pricing, free tools, daily horoscope, Kundli generation, and detailed astrology reports in one place.
               </p>
               
               <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">Ready to Chat?</h4>
