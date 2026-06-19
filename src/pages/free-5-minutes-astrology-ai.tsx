@@ -799,6 +799,56 @@ KEY INSIGHTS:
             <h2 className="text-2xl font-bold text-white mt-12 mb-6">How This Free 5 Minute Astrology Tool Works</h2>
             
             <div className="text-white/80 leading-relaxed space-y-4">
+              <p>It's simple. Three steps and you're done.</p>
+              
+              <div className="ml-6 space-y-4">
+                <p><strong>Step 1 — Enter your birth details</strong><br />
+                Your name, date of birth, time of birth, and city where you were born.
+                We use this to calculate your real Vedic birth chart using Swiss Ephemeris —
+                the same system professional Jyotishis use.</p>
+                
+                <p><strong>Step 2 — Choose your topic</strong><br />
+                Pick what's on your mind right now. Love and marriage, career and money,
+                health, or life in general. You can also pick "surprise me" if you want
+                Vedika AI to decide what matters most for you right now.</p>
+                
+                <p><strong>Step 3 — Get your reading</strong><br />
+                In about 30 seconds, you get a 200-300 word personalized prediction with
+                3 key insights. No fluff. No generic lines. Just a real answer based on
+                your chart.</p>
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-white mt-12 mb-6">What Can You Ask in 5 Minutes?</h2>
+            
+            <div className="text-white/80 leading-relaxed space-y-4">
+              <p>A lot, actually. Here are some of the most common things people ask:</p>
+              
+              <div className="ml-6 space-y-4">
+                <p><strong>Love and Marriage —</strong><br />
+                When will I get married? Is this person right for me? Why does my love life
+                feel stuck? Will I have a love marriage or arranged marriage?</p>
+                
+                <p><strong>Career and Money —</strong><br />
+                Should I take this new job offer? Will my business do well this year?
+                When will my financial situation improve? Is 2026 a good year for me?</p>
+                
+                <p><strong>Health —</strong><br />
+                Which area of health should I focus on? What does my chart say about my
+                energy levels this year? Are there any health patterns I should know about?</p>
+                
+                <p><strong>Life and Future —</strong><br />
+                Am I on the right path? What's coming in the next 6 months? What is my
+                strongest time period this year? What does my current Mahadasha mean for me?</p>
+              </div>
+              
+              <p>The tool covers all of this. In under 5 minutes.</p>
+            </div>
+
+            <h2 className="text-2xl font-bold text-white mt-12 mb-6">Free Life Predictions Online — What Makes This Different</h2>
+            
+            <div className="text-white/80 leading-relaxed space-y-4">
+              <p>
                 Most free astrology sites give you the same prediction for everyone born in
                 April. That is not a prediction. That is a guess.
               </p>
@@ -880,7 +930,7 @@ KEY INSIGHTS:
               </p>
               
               <p>
-                Try the <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">free love and marriage prediction</Link>. It takes less than 5 minutes.
+                Try the free love and marriage prediction. It takes less than 5 minutes.
               </p>
             </div>
 
