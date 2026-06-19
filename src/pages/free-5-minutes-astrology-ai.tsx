@@ -799,44 +799,6 @@ KEY INSIGHTS:
             <h2 className="text-2xl font-bold text-white mt-12 mb-6">How This Free 5 Minute Astrology Tool Works</h2>
             
             <div className="text-white/80 leading-relaxed space-y-4">
-              <p>It's simple. Three steps and you're done.</p>
-              
-              <div className="ml-6 space-y-4">
-                <p><strong>Step 1 — Enter your birth details</strong><br />
-                Your name, date of birth, time of birth, and city where you were born.
-                We use this to calculate your real Vedic birth chart using Swiss Ephemeris —
-                the same system professional Jyotishis use.</p>
-                
-                <p><strong>Step 2 — Choose your topic</strong><br />
-                Pick what's on your mind right now. Love and marriage, career and money,
-                health, or life in general. You can also pick "surprise me" if you want
-                Vedika AI to decide what matters most for you right now.</p>
-                
-                <p><strong>Step 3 — Get your reading</strong><br />
-                In about 30 seconds, you get a 200-300 word personalized prediction with
-                3 key insights. No fluff. No generic lines. Just a real answer based on
-                your chart.</p>
-              </div>
-            </div>
-
-            <h2 className="text-2xl font-bold text-white mt-12 mb-6">What Can You Ask in 5 Minutes?</h2>
-            
-                <p><strong>Health —</strong><br />
-                Which area of health should I focus on? What does my chart say about my
-                energy levels this year? Are there any health patterns I should know about?</p>
-                
-                <p><strong>Life and Future —</strong><br />
-                Am I on the right path? What's coming in the next 6 months? What is my
-                strongest time period this year? What does my current Mahadasha mean for me?</p>
-              </div>
-              
-              <p>The tool covers all of this. In under 5 minutes.</p>
-            </div>
-
-            <h2 className="text-2xl font-bold text-white mt-12 mb-6">Free Life Predictions Online — What Makes This Different</h2>
-            
-            <div className="text-white/80 leading-relaxed space-y-4">
-              <p>
                 Most free astrology sites give you the same prediction for everyone born in
                 April. That is not a prediction. That is a guess.
               </p>
