@@ -41,6 +41,15 @@ export type AstroPayload = {
   moonSign: string | null;
   sunSign: string | null;
   lagnaSign: string;
+  dasha: {
+    mahadasha: string;
+    antardasha: string;
+    mahaEnds: string;
+    antarEnds: string;
+  };
+  houseLords: string[];
+  astro_locked: boolean;
+  source: string;
 };
 
 const SIGN_NAMES = [
@@ -147,6 +156,18 @@ const YONI_TYPES = [
   "Elephant",     // Uttara Bhadrapada
   "Horse",        // Revati
 ];
+
+const SIGN_LORDS: Record<string, string> = {
+  "Aries": "Mars", "Taurus": "Venus", "Gemini": "Mercury", "Cancer": "Moon",
+  "Leo": "Sun", "Virgo": "Mercury", "Libra": "Venus", "Scorpio": "Mars",
+  "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn", "Pisces": "Jupiter"
+};
+
+const DASHA_SEQUENCE = ['Ketu', 'Venus', 'Sun', 'Moon', 'Mars', 'Rahu', 'Jupiter', 'Saturn', 'Mercury'];
+const DASHA_YEARS: Record<string, number> = {
+  Ketu: 7, Venus: 20, Sun: 6, Moon: 10, Mars: 7,
+  Rahu: 18, Jupiter: 16, Saturn: 19, Mercury: 17
+};
 
 type SwissEphInstance = Awaited<ReturnType<typeof SwissEPH.init>>;
 
@@ -273,6 +294,75 @@ const convertToUtcParts = (
   };
 };
 
+const addYears = (date: Date, years: number): Date => {
+  const result = new Date(date);
+  const wholeYears = Math.floor(years);
+  const fractionalYears = years - wholeYears;
+  result.setFullYear(result.getFullYear() + wholeYears);
+  result.setDate(result.getDate() + Math.round(fractionalYears * 365.25));
+  return result;
+};
+
+const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
+  const NAKSHATRA_SIZE = 13.3333333333;
+  const moonPositionInNakshatra = moonLongitude % NAKSHATRA_SIZE;
+  const fractionElapsed = moonPositionInNakshatra / NAKSHATRA_SIZE;
+  const fractionRemaining = 1 - fractionElapsed;
+
+  const birthDashaLord = NAKSHATRA_LORDS[moonNakshatraIndex] || 'Ketu';
+  const birthDashaTotalYears = DASHA_YEARS[birthDashaLord];
+  const birthDashaRemainingYears = birthDashaTotalYears * fractionRemaining;
+
+  const exactBirthDate = new Date(Date.UTC(utcParts.year, utcParts.month - 1, utcParts.day, utcParts.hour, utcParts.minute, Math.floor(utcParts.second)));
+  const currentDate = new Date();
+
+  const dashaStartIndex = DASHA_SEQUENCE.indexOf(birthDashaLord);
+  let dashaStart = new Date(exactBirthDate);
+  let dashaEnd = addYears(exactBirthDate, birthDashaRemainingYears);
+  let idx = Math.max(0, dashaStartIndex);
+
+  while (dashaEnd < currentDate) {
+    idx = (idx + 1) % 9;
+    dashaStart = new Date(dashaEnd);
+    dashaEnd = addYears(dashaStart, DASHA_YEARS[DASHA_SEQUENCE[idx]]);
+  }
+
+  const currentMaha = DASHA_SEQUENCE[idx];
+  const mahaStart = dashaStart;
+  const mahaEnd = dashaEnd;
+
+  const mahaYears = (idx === dashaStartIndex) 
+    ? birthDashaRemainingYears 
+    : DASHA_YEARS[currentMaha];
+
+  let antarStart = new Date(mahaStart);
+  let antarEnd = new Date(mahaStart);
+  let antarIdx = idx;
+  let currentAntar = '';
+  let finalAntarEnd = new Date();
+
+  for (let i = 0; i < 9; i++) {
+    const antarLord = DASHA_SEQUENCE[antarIdx % 9];
+    const antarYears = (DASHA_YEARS[antarLord] / 120) * mahaYears;
+    antarEnd = addYears(antarStart, antarYears);
+
+    if (antarEnd >= currentDate) {
+      currentAntar = antarLord;
+      finalAntarEnd = antarEnd;
+      break;
+    }
+    antarStart = new Date(antarEnd);
+    antarIdx++;
+  }
+
+  return {
+    mahadasha: currentMaha,
+    antardasha: currentAntar,
+    mahaEnds: mahaEnd.toISOString().split('T')[0],
+    antarEnds: finalAntarEnd.toISOString().split('T')[0],
+  };
+};
+
 export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload> => {
   const tzone = typeof input.tzone === "number" ? input.tzone : -new Date().getTimezoneOffset() / 60;
   const details = { ...input, tzone };
@@ -305,6 +395,11 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
   const ascendantSign = getSign(ascendant).name;
   const houseCusps = Array.from({ length: 12 }, (_, idx) => normalizeDegree(houses.cusps?.[idx] ?? 0));
+  
+  const houseLords = houseCusps.map((cuspDeg) => {
+    const signName = getSign(cuspDeg).name;
+    return SIGN_LORDS[signName] || "Unknown";
+  });
 
   const flags = swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL | swe.SEFLG_SPEED;
   const planetMap: Record<string, PlanetEntry> = {};
@@ -345,6 +440,11 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   const sunData = planetMap.sun || null;
   const moonNakshatra = moonData ? moonData.nakshatra : null;
 
+  let dasha = { mahadasha: '', antardasha: '', mahaEnds: '', antarEnds: '' };
+  if (moonData && moonNakshatra) {
+    dasha = calculateDasha(utcParts, moonNakshatra.index, moonData.longitude);
+  }
+
   return {
     planets: planetMap,
     planetsList: planetList,
@@ -357,6 +457,10 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     moonSign: moonData?.sign || null,
     sunSign: sunData?.sign || null,
     lagnaSign: ascendantSign,
+    dasha,
+    houseLords,
+    astro_locked: true,
+    source: "swiss_ephemeris_v1"
   };
 };
 

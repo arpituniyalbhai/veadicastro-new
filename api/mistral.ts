@@ -2,219 +2,73 @@ export const config = {
   runtime: 'edge',
 };
 
-// Vedic astrology calculation helpers
-const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo',
-                'Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
-
-const HOUSE_LORDS: Record<number, string[]> = {
-  0: ['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter'],
-  1: ['Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars'],
-  2: ['Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus'],
-  3: ['Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury'],
-  4: ['Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon'],
-  5: ['Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun'],
-  6: ['Venus','Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury'],
-  7: ['Mars','Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury','Venus'],
-  8: ['Jupiter','Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars'],
-  9: ['Saturn','Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter'],
-  10: ['Saturn','Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn'],
-  11: ['Jupiter','Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn'],
-};
-
-// Vimshottari Dasha sequence
-const DASHA_SEQUENCE = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
-
-const DASHA_YEARS: Record<string, number> = {
-  Ketu: 7, Venus: 20, Sun: 6, Moon: 10, Mars: 7,
-  Rahu: 18, Jupiter: 16, Saturn: 19, Mercury: 17
-};
-
-// 0-based nakshatra index (as coming from Swiss Ephemeris)
-const NAKSHATRA_LORD: Record<number, string> = {
-  0: 'Ketu',     // Ashwini
-  1: 'Venus',    // Bharani
-  2: 'Sun',      // Krittika
-  3: 'Moon',     // Rohini
-  4: 'Mars',     // Mrigashira
-  5: 'Rahu',     // Ardra
-  6: 'Jupiter',  // Punarvasu
-  7: 'Saturn',   // Pushya
-  8: 'Mercury',  // Ashlesha
-  9: 'Ketu',     // Magha
-  10: 'Venus',   // Purva Phalguni
-  11: 'Sun',     // Uttara Phalguni
-  12: 'Moon',    // Hasta
-  13: 'Mars',    // Chitra
-  14: 'Rahu',    // Swati
-  15: 'Jupiter', // Vishakha
-  16: 'Saturn',  // Anuradha
-  17: 'Mercury', // Jyeshtha
-  18: 'Ketu',    // Mula
-  19: 'Venus',   // Purva Ashadha
-  20: 'Sun',     // Uttara Ashadha
-  21: 'Moon',    // Shravana
-  22: 'Mars',    // Dhanishtha
-  23: 'Rahu',    // Shatabhisha
-  24: 'Jupiter', // Purva Bhadrapada
-  25: 'Saturn',  // Uttara Bhadrapada
-  26: 'Mercury', // Revati
-};
-
-function calculateDasha(dob: string, moonNakshatraIndex: number, moonLongitude: number) {
-  const NAKSHATRA_SIZE = 13.333333; // 13°20' per nakshatra
-
-  // Step 1: Moon ka nakshatra mein exact position
-  const moonPositionInNakshatra = moonLongitude % NAKSHATRA_SIZE;
-  const fractionElapsed = moonPositionInNakshatra / NAKSHATRA_SIZE;
-  const fractionRemaining = 1 - fractionElapsed;
-
-  // Step 2: Birth ke time kaunsa dasha tha
-  const birthDashaLord = NAKSHATRA_LORD[moonNakshatraIndex];
-  const birthDashaTotalYears = DASHA_YEARS[birthDashaLord];
-  const birthDashaRemainingYears = birthDashaTotalYears * fractionRemaining;
-
-  // Step 3: DOB se dasha timeline build karo
-  const dobDate = new Date(dob);
-  const currentDate = new Date();
-
-  // Pehla dasha partial hai — birth ke time se
-  const dashaStartIndex = DASHA_SEQUENCE.indexOf(birthDashaLord);
-
-  let dashaStart = new Date(dobDate);
-  let dashaEnd = addYears(dobDate, birthDashaRemainingYears);
-  let idx = dashaStartIndex;
-
-  // Current mahadasha dhundho
-  while (dashaEnd < currentDate) {
-    idx = (idx + 1) % 9;
-    dashaStart = new Date(dashaEnd);
-    dashaEnd = addYears(dashaStart, DASHA_YEARS[DASHA_SEQUENCE[idx]]);
-  }
-
-  const currentMaha = DASHA_SEQUENCE[idx];
-  const mahaEnd = dashaEnd;
-  const mahaStart = dashaStart;
-
-  // Step 4: Current antardasha dhundho
-  const mahaYears = (idx === dashaStartIndex) 
-    ? birthDashaRemainingYears 
-    : DASHA_YEARS[currentMaha];
-
-  let antarStart = new Date(mahaStart);
-  let antarEnd = new Date(mahaStart);
-  let antarIdx = idx;
-  let currentAntar = '';
-  let finalAntarEnd = new Date();
-
-  for (let i = 0; i < 9; i++) {
-    const antarLord = DASHA_SEQUENCE[antarIdx % 9];
-    const antarYears = (DASHA_YEARS[antarLord] / 120) * mahaYears;
-    antarEnd = addYears(antarStart, antarYears);
-
-    if (antarEnd >= currentDate) {
-      currentAntar = antarLord;
-      finalAntarEnd = antarEnd;
-      break;
-    }
-    antarStart = new Date(antarEnd);
-    antarIdx++;
-  }
-
-  return {
-    mahadasha: currentMaha,
-    antardasha: currentAntar,
-    mahaEnds: mahaEnd.toISOString().split('T')[0],
-    antarEnds: finalAntarEnd.toISOString().split('T')[0],
-  };
-}
-
-// Helper - years add karna (decimal years support ke saath)
-function addYears(date: Date, years: number): Date {
-  const result = new Date(date);
-  const wholeYears = Math.floor(years);
-  const fractionalYears = years - wholeYears;
-  result.setFullYear(result.getFullYear() + wholeYears);
-  result.setDate(result.getDate() + Math.round(fractionalYears * 365.25));
-  return result;
-}
+// api/mistral.ts - strict pass-through layer
 
 function buildVedicSummary(systemExtra: string, userName?: string): string {
   try {
     if (!systemExtra.includes('Planetary Data:')) return systemExtra;
 
-    // REPLACE regex with simple string slicing
     const dataStart = systemExtra.indexOf('Planetary Data:');
-    const userStart = systemExtra.indexOf('User Details:');
-    const userMatch = systemExtra.match(/DOB:\s*(\d{4}-\d{2}-\d{2})/);
+    const jsonString = systemExtra.slice(dataStart + 'Planetary Data:'.length).trim();
 
-    if (dataStart === -1 || userStart === -1 || !userMatch) return systemExtra;
-
-    const jsonString = systemExtra
-      .slice(dataStart + 'Planetary Data:'.length, userStart)
-      .trim();
-
-    const chart = JSON.parse(jsonString);
-    const dob = userMatch[1];
-    
-    // Debug log - Vercel mein dikhega
-    console.log('✅ Lagna:', chart.ascendantSign);
-    console.log('✅ Saturn house:', Math.floor(((chart.planets.saturn.longitude - chart.ascendant + 360) % 360) / 30) + 1);
-    const asc = chart.ascendant;
-    const lagnaIndex = SIGNS.indexOf(chart.ascendantSign);
-    const lords = HOUSE_LORDS[lagnaIndex] || HOUSE_LORDS[6];
-
-    function getHouse(lon: number): number {
-      return Math.floor(((lon - asc + 360) % 360) / 30) + 1;
+    let chart;
+    try {
+      chart = JSON.parse(jsonString);
+    } catch (e) {
+      return systemExtra;
     }
 
-    // Build planet summary
-    const planetLines: string[] = [];
-    const p = chart.planets;
-
-    for (const [key, val] of Object.entries(p) as any) {
-      const house = getHouse(val.longitude);
-      const lord = lords[house - 1];
-      planetLines.push(
-        `${val.name}: ${val.sign}, House ${house}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}` 
-      );
+    // 🔒 ASTRO LOCK VALIDATION (CRITICAL)
+    if (chart.astro_locked !== true || chart.source !== "swiss_ephemeris_v1") {
+      throw new Error("Astrology data validation failed. Missing strict lock flag. Rejecting payload to prevent hallucination.");
     }
 
-    // House lords summary
-    const houseLordLines = lords.map((lord: string, i: number) =>
-      `House ${i + 1} Lord: ${lord}` 
-    );
-
-    // Dasha calculation
-    const moon = p.moon;
-    const dasha = calculateDasha(dob, moon.nakshatra.index, moon.longitude);
+    // Ensure no raw DOB leakage in the system extra
+    if (systemExtra.includes('DOB:') && /\d{4}-\d{2}-\d{2}/.test(systemExtra)) {
+      throw new Error("Raw DOB leakage detected in prompt payload. Rejecting to prevent recalculation.");
+    }
 
     const displayName = userName && userName.trim() ? userName.trim() : 'User';
 
+    const planetLines: string[] = [];
+    if (chart.planets) {
+      for (const [key, val] of Object.entries(chart.planets) as any) {
+        planetLines.push(
+          `${val.name}: ${val.sign}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}`
+        );
+      }
+    }
+
+    const dasha = chart.dasha || {};
+    const houseLords = chart.houseLords || [];
+    const houseLordLines = houseLords.map((lord: string, i: number) => `House ${i + 1} Lord: ${lord}`);
+
     const summary = `
-=== CALCULATED VEDIC CHART (DO NOT RECALCULATE) ===
+=== PRE-CALCULATED VEDIC CHART (LOCKED) ===
 USER INFO:
 Name: ${displayName}
 
-Lagna: ${chart.ascendantSign} (${asc.toFixed(2)}°)
+Lagna: ${chart.ascendantSign || 'Unknown'} (${chart.ascendant?.toFixed(2) || 0}°)
 
-PLANET POSITIONS:
+PLANETARY POSITIONS (DO NOT RECALCULATE):
 ${planetLines.join('\n')}
 
-HOUSE LORDS:
+HOUSE LORDS (PLACIDUS CUSPS):
 ${houseLordLines.join('\n')}
 
-CURRENT DASHA:
-Mahadasha: ${dasha.mahadasha} (ends ${dasha.mahaEnds})
-Antardasha: ${dasha.antardasha} (ends ${dasha.antarEnds})
-=== END CALCULATED FACTS ===
+CURRENT DASHA TIMING (PRE-CALCULATED):
+Mahadasha: ${dasha.mahadasha || 'N/A'} (ends ${dasha.mahaEnds || 'N/A'})
+Antardasha: ${dasha.antardasha || 'N/A'} (ends ${dasha.antarEnds || 'N/A'})
+=== END PRE-CALCULATED FACTS ===
 
+(Raw source block below, but rely on the facts above)
 ${systemExtra}`;
 
     return summary;
 
   } catch (e) {
-    console.error('buildVedicSummary error:', e);
-    return systemExtra;
+    console.error('buildVedicSummary validation error:', e);
+    throw e; // Bubble up to reject request
   }
 }
 
@@ -322,53 +176,42 @@ export default async function handler(req: Request) {
 
     // System prompt - unified for both languages
     const SYSTEM_PROMPT = `
-You are AI Astrologer "Vedika" - an expert Vedic Jyotish advisor who prioritizes planetary degrees and shadvarga charts.
+You are AI Astrologer "Vedika" - an expert Vedic Jyotish advisor.
 Tone: confident, natural easy wording in Hindi-English (Hinglish), human-like, no dramatics.
 
-CORE RULES:
-
-* Use sidereal Vedic astrology (Lahiri) ONLY.
-* Use ONLY chart data provided. If data is missing, ask for it briefly instead of assuming.
-* Never invent nakshatra, house, or planetary placements.
-"LANGUAGE RULE: Detect user's language from their last message. If they wrote in English, reply in English. If they wrote in Hinglish or Hindi, reply in Hinglish. Mirror their style exactly."
+CORE RULES (STRICT):
+* All astrology data is pre-calculated using Swiss Ephemeris.
+* You MUST NOT recalculate, estimate, or modify any astrological values.
+* You may only interpret the provided locked data.
+* Use ONLY chart data provided.
+"LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."
 
 LOGIC ORDER:
-
 House → Lord → Sign → Nakshatra → Dasha → Transit
 Focus on strongest 1 planetary indicator only. Pick the strongest factor and commit to it - no multiple options.
-When divisional charts are available, cross-check D9 for marriage, D10 for career.
 
 REALITY FILTER:
-
 * Never describe physical traits of spouse/people.
 * Never use phrases like "watch for", "notice if", "possibly".
 * Give practical, grounded advice (career, money, studies).
-* No extreme claims (e.g., "you will be rich for sure").
-* No manipulative hooks or fake mystical observations.
+* No extreme claims.
 
 AGE FILTER:
-
 * Match predictions to user's life stage.
-* Keep timelines realistic and believable.
+* Keep timelines realistic.
 
 STYLE:
-
 * Start with direct answer (no intro).
 * Speak about real life situations relevant to the user's age and birth chart.
 * Use confident tone but allow realistic uncertainty when needed.
 * Keep it concise and clear.
 
 FORMAT:
-
 * 5-8 lines max
 
 END:
-
 * End with a useful concluding sentence, not a question.
 * Do not add follow-up questions, curiosity hooks, or sales hooks.
-
-GOAL:
-Make astrology feel practical, logical, and useful - not mystical or vague.
 `;
 
     const contents = [
