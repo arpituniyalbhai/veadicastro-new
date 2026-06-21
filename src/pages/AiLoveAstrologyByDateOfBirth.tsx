@@ -318,7 +318,7 @@ export default function AiLoveAstrologyByDateOfBirth() {
   return (
     <>
       <Helmet>
-        <title>Free Love Astrology by Date of Birth – AI Relationship Predictions</title>
+        <title> AI Love Predictions by Date of Birth – Free, Instant & Chart-Based </title>
         <meta
           name="description"
           content="Enter your birth details to get an instant AI love astrology reading. Vedika reveals romantic tendencies, emotional compatibility, and relationship patterns based on your birth chart."
@@ -329,14 +329,14 @@ export default function AiLoveAstrologyByDateOfBirth() {
         />
         <link rel="canonical" href={PAGE_URL} />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-        <meta property="og:title" content="Free Love Astrology by Date of Birth – AI Relationship Predictions - Free, Instant & Chart-Based" />
+        <meta property="og:title" content=" AI Love Predictions by Date of Birth – Free, Instant & Chart-Based  " />
         <meta property="og:description" content="Get an instant chart-based AI love reading with no signup and no payment. Vedika reads your 5th house, Venus, Mars, and relationship patterns." />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={PAGE_IMAGE} />
         <meta property="og:site_name" content="Veadicastro" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free Love Astrology by Date of Birth – AI Relationship Predictions - Free, Instant & Chart-Based" />
+        <meta name="twitter:title" content=" AI Love Predictions by Date of Birth – Free, Instant & Chart-Based" />
         <meta name="twitter:description" content="Get an instant chart-based AI marriage prediction from Vedika using your date, time, and place of birth." />
         <meta name="twitter:image" content={PAGE_IMAGE} />
         <script type="application/ld+json">{JSON.stringify(appSchema)}</script>
@@ -358,7 +358,7 @@ export default function AiLoveAstrologyByDateOfBirth() {
                 Free love astrology tool
               </div>
               <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">
-                Free Love Astrology by Date of Birth – AI Relationship Predictions
+                AI Love Predictions by Date of Birth – Free, Instant & Chart-Based
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
                 Enter your birth details to discover your romantic tendencies, emotional compatibility, relationship strengths, and love life outlook through an authentic Vedic reading.

@@ -1324,12 +1324,19 @@ function parseQuestionSuggestions(raw: string): string[] {
 async function generateAnswerSuggestions(question: string, answer: string, lang: string): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
-Create exactly 2 short, natural next-question suggestions for an astrology chat.
-Generate the questions from the final practical advice and user's likely next curiosity, not from astrological terms.
-Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
-Questions should sound like what a normal person would naturally ask next.
-Make them specific to the practical outcome in the answer, such as career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
-Do not include predictions, answers, markdown, numbering, or labels.
+Create exactly 2 short, natural next-question suggestions for an astrology chat, written so the user genuinely wants to spend a credit to ask them.
+
+RULES:
+- Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
+- Questions should sound like what a normal person would naturally ask next — never robotic or templated.
+- Each question must feel like it unlocks something MORE specific or deeper than what was just answered — not a restatement or a generic continuation. If a question doesn't add a new layer beyond the answer above, don't suggest it.
+- Make the two questions genuinely different from each other:
+  - Question 1: goes deeper on the exact same topic just discussed — sharper, more specific angle than the answer gave.
+  - Question 2: opens a different but related practical life area connected to the same answer (e.g. if the answer was about marriage timing, question 2 could pivot to how that affects career or finances — not just rephrase the same question).
+- Match the emotional tone of the answer given. If the topic was sensitive or heavy, keep the tone grounded and caring, not flippant. If it was positive, keep it light and exciting.
+- Make them specific to the practical outcome in the answer: career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
+- Do not include predictions, answers, markdown, numbering, or labels — questions only.
+
 Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
 
 User question:
