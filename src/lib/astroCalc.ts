@@ -50,6 +50,7 @@ export type AstroPayload = {
   houseLords: string[];
   astro_locked: boolean;
   source: string;
+  planetHouseMap: Record<string, number>;
 };
 
 const SIGN_NAMES = [
@@ -303,6 +304,20 @@ const addYears = (date: Date, years: number): Date => {
   return result;
 };
 
+const getHouseOfPlanet = (planetLongitude: number, cusps: number[]) => {
+  for (let i = 0; i < 12; i++) {
+    const start = cusps[i];
+    const end = cusps[(i + 1) % 12];
+
+    if (start < end) {
+      if (planetLongitude >= start && planetLongitude < end) return i + 1;
+    } else {
+      if (planetLongitude >= start || planetLongitude < end) return i + 1;
+    }
+  }
+  return 1;
+};
+
 const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
   const NAKSHATRA_SIZE = 13.3333333333;
   const moonPositionInNakshatra = moonLongitude % NAKSHATRA_SIZE;
@@ -436,6 +451,11 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     }
   }
 
+  const planetHouseMap: Record<string, number> = {};
+  for (const p of planetList) {
+    planetHouseMap[p.key] = getHouseOfPlanet(p.longitude, houseCusps);
+  }
+
   const moonData = planetMap.moon || null;
   const sunData = planetMap.sun || null;
   const moonNakshatra = moonData ? moonData.nakshatra : null;
@@ -460,7 +480,8 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     dasha,
     houseLords,
     astro_locked: true,
-    source: "swiss_ephemeris_v1"
+    source: "swiss_ephemeris_v1",
+    planetHouseMap
   };
 };
 
