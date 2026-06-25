@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
 import { useI18n } from "@/context/I18nContext";
-import { predictionService } from "@/services/predictionService";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -92,11 +91,9 @@ export default function Dashboard() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
   const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
-  const [weeklyPrediction, setWeeklyPrediction] = useState<{ text: string; date: string; weekStart: string; weekEnd: string } | null>(null);
   const [monthlyPrediction, setMonthlyPrediction] = useState<{ text: string; month: number; year: number } | null>(null);
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
-  const [weeklyLoading, setWeeklyLoading] = useState(false);
   const [monthlyLoading, setMonthlyLoading] = useState(false);
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
@@ -518,26 +515,12 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
     }
   }, [lang, user?.uid, tomorrowLoading]);
 
-  const fetchWeeklyPrediction = useCallback(async () => {
-    if (typeof window === "undefined") return;
-    
-    setWeeklyLoading(true);
-    try {
-      const prediction = predictionService.getWeeklyPrediction();
-      setWeeklyPrediction(prediction);
-    } catch (error: any) {
-      console.error('Error fetching weekly prediction:', error);
-    } finally {
-      setWeeklyLoading(false);
-    }
-  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      fetchWeeklyPrediction();
       hydrateDailyPredictionsFromCache();
     }
-  }, [fetchWeeklyPrediction, hydrateDailyPredictionsFromCache]);
+  }, [hydrateDailyPredictionsFromCache]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -570,7 +553,6 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
     if (tomorrowUnlocked) {
       fetchTomorrowPrediction();
     }
-    // Weekly predictions refresh automatically every Monday
   };
 
   const fetchMonthlyPrediction = useCallback(async () => {
@@ -1240,25 +1222,16 @@ useEffect(() => {
             </button>
             <div className="flex-1">
               <div className="rounded-sm bg-secondary/15 border border-border/60 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 lg:py-1.5 text-xs sm:text-xs lg:text-sm text-muted-foreground text-center">
-                <button
-                  onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-header")}
-                  className="inline-flex max-w-full items-center justify-center gap-1.5 text-foreground hover:text-secondary transition-colors"
-                >
-                  <ShoppingBag className="h-3.5 w-3.5 shrink-0" />
+                <div className="inline-flex max-w-full items-center justify-center gap-1.5 text-foreground hover:text-secondary transition-colors">
                   <span className="flex min-w-0 flex-col items-center justify-center leading-tight sm:flex-row sm:gap-1.5 sm:leading-normal">
                     <span className="text-[11px] font-semibold sm:text-xs lg:text-sm">
-                      Dhan Yog Bracelet authentic launch offer
+                      🎉 {lang === "hi" ? "30 सवाल केवल 699" : "30 questions only 699"}
                     </span>
                     <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
-                      only{" "}
-                      <span className="text-sm font-extrabold text-secondary sm:text-base lg:text-lg">
-                        Rs. 499
-                      </span>{" "}
-                      for limited time - only 50 pieces left
+                      {lang === "hi" ? "सीमित समय ऑफर - केवल आपके लिए" : "Limited Time offer - only for you"} {displayName}
                     </span>
                   </span>
-                  <ChevronRight className="h-3.5 w-3.5 shrink-0" />
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1271,7 +1244,7 @@ useEffect(() => {
               <div className="w-12 h-12 rounded-full overflow-hidden ring-1 ring-border/60">
                 <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" loading="lazy" />
               </div>
-              <h2 className="font-semibold">{t("askTitle")}</h2>
+              <h2 className="font-semibold">{displayName}, {t("askTitle")}</h2>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
@@ -1306,130 +1279,9 @@ useEffect(() => {
             </div>
           </Card>
 
-          {/* Astro Details */}
-          <Card className="p-4 sm:p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-            <h2 className="font-semibold text-base sm:text-lg mb-3 sm:mb-4">{t("astroDetails")}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4">
-              <div className="p-3 sm:p-4 rounded-xl border border-border/60 bg-background/60 shadow-inner">
-                <div className="text-xs sm:text-sm text-muted-foreground mb-1">{t("yourVedicSign")}</div>
-                <div className="text-2xl font-semibold tracking-wide">{astroBasics.vedicSign}</div>
-                <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">{t("basedOnAscendant")}</p>
-              </div>
-              <div className="p-3 sm:p-4 rounded-xl border border-border/60 bg-background/60">
-                <div className="text-xs sm:text-sm text-muted-foreground mb-1">{t("birthDetails")}</div>
-                <div className="text-xs sm:text-sm font-medium">{t("date")}: {astroBasics.dob}</div>
-                <div className="text-xs sm:text-sm font-medium mt-1">{t("time")}: {astroBasics.time}</div>
-                <div className="text-xs sm:text-sm font-medium mt-1">{t("place")}: {astroBasics.place}</div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
-              {(() => {
-                const items: { label: string; value: string | number }[] = [];
-                const p = storedPreds;
-                // Predictions-driven items (now free for everyone)
-                if (p?.today) {
-                  if (p.today.luckyNumber != null) items.push({ label: t("luckyNumber"), value: luckyToday });
-                  if (p.today.luckyColor) items.push({ label: t("luckyColour"), value: String(p.today.luckyColor) });
-                }
-                // Vedic astrology details
-                try {
-                  const planets = JSON.parse(localStorage.getItem('astrology_planets') || 'null');
-                  const ascendant = localStorage.getItem('ascendant') || 'Not Set';
-                  const astroPayload = JSON.parse(localStorage.getItem('astro_payload') || 'null');
-                  
-                  if (Array.isArray(planets)) {
-                    const moon = planets.find((x: any) => (x.name || x.planet) === 'Moon');
-                    
-                    // Nakshatra
-                    if (moon?.nakshatra?.name) {
-                      items.push({ label: "Nakshatra", value: moon.nakshatra.name });
-                    }
-                    
-                    // Nakshatra Lord
-                    if (moon?.nakshatra?.index !== undefined) {
-                      const nakshatraLord = getNakshatraLord(moon.nakshatra.index);
-                      items.push({ label: "Nakshatra Lord", value: nakshatraLord });
-                    }
-                    
-                    // Yoni
-                    if (moon?.nakshatra?.index !== undefined) {
-                      const yoni = getYoni(moon.nakshatra.index);
-                      items.push({ label: "Yoni", value: yoni });
-                    }
-                  }
-                  
-                  // Ascendant
-                  if (ascendant !== 'Not Set') {
-                    items.push({ label: "Ascendant", value: ascendant });
-                  }
-                } catch {}
-                return items.slice(0, 4).map((d) => (
-                  <div key={d.label} className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-background/50 border border-border/60">
-                    <div className="text-[10px] sm:text-xs text-muted-foreground mb-1">{d.label}</div>
-                    <div className="text-xs sm:text-sm font-medium truncate">{d.value}</div>
-                  </div>
-                ));
-              })()}
-            </div>
-            <div className="mt-3 text-xs text-muted-foreground">{t("insightsUpdated")}</div>
-          </Card>
+          {/* Astro Details section removed */}
 
-          <Card className="overflow-hidden bg-card/45 backdrop-blur-sm border-border/60 rounded-2xl">
-            <div className="grid md:grid-cols-[220px_1fr]">
-              <button
-                type="button"
-                onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-card")}
-                className="min-h-[220px] bg-background/60 text-left"
-                aria-label="Open Dhan Yog Bracelet product page"
-              >
-                <img
-                  src="/store/dhan-yog-second-image.webp"
-                  alt="Dhan Yog Bracelet authentic wealth bracelet from Veadicastro Store"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </button>
-              <div className="p-5 sm:p-6 flex flex-col justify-center">
-                <div className="mb-3 flex flex-wrap items-center gap-2">
-                  <Badge className="bg-secondary/15 text-secondary border-secondary/20 hover:bg-secondary/15">
-                    Authentic Launch
-                  </Badge>
-                  <Badge variant="outline" className="border-border/70">
-                    Rs. 499
-                  </Badge>
-                  <Badge variant="outline" className="border-border/70">
-                    Free India Delivery
-                  </Badge>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-semibold text-foreground">
-                  Dhan Yog Bracelet for Money, Focus and Prosperity Intention
-                </h2>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-                  A Veadicastro Store product made with Tiger Eye, Pyrite, Citrine, and
-                  Aventurine inspired stones. Every bracelet is quality checked, prepared
-                  with proper puja intention, and supported by our team after payment for
-                  delivery details and wearing guidance.
-                </p>
-                <div className="mt-5 flex flex-col sm:flex-row gap-3">
-                  <Button
-                    variant="cosmic"
-                    className="rounded-xl"
-                    onClick={() => navigate("/dhan-yog-bracelet?referral=dashboard-card")}
-                  >
-                    Buy Dhan Yog Bracelet
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-xl"
-                    onClick={() => navigate("/astrology-store?referral=dashboard-card")}
-                  >
-                    Visit Astrology Store
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Card>
+          {/* Dhan Yog Bracelet product card removed */}
 
           {/* Promo Banner */}
           <Card className="relative overflow-hidden p-4 bg-card/50 border-border/60 rounded-2xl mt-2">
@@ -1585,50 +1437,7 @@ useEffect(() => {
           </Tabs>
           )}
 
-          {/* Weekly Predictions */}
-          <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="font-semibold text-lg">Weekly Predictions</h2>
-                {weeklyPrediction && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {new Date(weeklyPrediction.weekStart).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - 
-                    {new Date(weeklyPrediction.weekEnd).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </p>
-                )}
-              </div>
-            </div>
-            
-            {/* Show skeleton loading while fetching */}
-            {weeklyLoading ? (
-              <div className="space-y-4">
-                {/* Skeleton for header */}
-                <div className="space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-4 bg-muted rounded w-1/2"></div>
-                </div>
-                {/* Skeleton for content lines */}
-                <div className="space-y-3">
-                  <div className="h-4 bg-muted rounded"></div>
-                  <div className="h-4 bg-muted rounded w-5/6"></div>
-                  <div className="h-4 bg-muted rounded w-4/5"></div>
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                </div>
-              </div>
-            ) : weeklyPrediction ? (
-              /* Show content ONLY when data is available */
-              <div className="space-y-4">
-                <div className="prose prose-sm max-w-none">
-                  <p className="text-muted-foreground leading-relaxed">{weeklyPrediction.text}</p>
-                </div>
-              </div>
-            ) : (
-              /* Show empty state only when not loading and no data */
-              <div className="text-center py-8 text-muted-foreground">
-                <p>No weekly predictions available</p>
-              </div>
-            )}
-          </Card>
+          {/* Weekly Predictions removed */}
 
           {/* Monthly Predictions - Only show if monthly predictions are enabled */}
           {showMonthlyPredictions && (

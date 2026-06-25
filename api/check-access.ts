@@ -105,7 +105,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           transaction.create(userDocRef, {
             email: email,
             planName: "Free",
-            credits: 1,
+            credits: 2,
             reportCredits: 0,
             compatibilitycredits: 0,
             purchasedReports: [],
@@ -118,7 +118,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           if (type === 'report') {
             return {
               deducted: false,
-              credits: 1,
+              credits: 2,
               reportCredits: 0,
               compatibilityCredits: 0,
               reason: 'no_report_credits'
@@ -126,7 +126,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           } else if (type === 'compatibility') {
             return {
               deducted: false,
-              credits: 1,
+              credits: 2,
               reportCredits: 0,
               compatibilityCredits: 0,
               reason: 'no_compatibility_credits'
@@ -134,7 +134,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           } else {
             return {
               deducted: false,
-              credits: 1,
+              credits: 2,
               reportCredits: 0,
               compatibilityCredits: 0,
               reason: 'new_user_created'
@@ -143,7 +143,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
 
         const userData = userDoc.data();
-        const credits = userData.credits ?? 1;
+        const credits = userData.credits ?? 2;
         const reportCredits = userData.reportCredits || 0;
         const compatibilityCredits = userData.compatibilitycredits || 0;
         const unlimitedExpiry = userData.unlimitedExpiry?.toDate();
