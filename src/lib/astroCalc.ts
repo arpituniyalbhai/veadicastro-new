@@ -407,10 +407,23 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   );
 
   const houses = swe.swe_houses(julianUT, details.lat, details.lon, "P");
-  const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
-  const ascendantSign = getSign(ascendant).name;
+  const tropicalAscendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
+  
+  // Calculate sidereal ascendant to get ayanamsa offset
+  const siderealAscResult = swe.swe_calc_ut(julianUT, swe.SE_ASCMC, swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL) as Float64Array;
+  const siderealAscendant = normalizeDegree(siderealAscResult[0]);
+  
+  // Ayanamsa = tropical - sidereal
+  const ayanamsa = normalizeDegree(tropicalAscendant - siderealAscendant);
+  
+  // Convert tropical house cusps to sidereal by subtracting ayanamsa
   // Swiss Ephemeris returns cusps as 1-based array (index 0 is unused, indices 1-12 are house cusps)
-  const houseCusps = Array.from({ length: 12 }, (_, idx) => normalizeDegree(houses.cusps?.[idx + 1] ?? 0));
+  const houseCusps = Array.from({ length: 12 }, (_, idx) => 
+    normalizeDegree(normalizeDegree(houses.cusps?.[idx + 1] ?? 0) - ayanamsa)
+  );
+  
+  const ascendant = siderealAscendant;
+  const ascendantSign = getSign(ascendant).name;
   
   const houseLords = houseCusps.map((cuspDeg) => {
     const signName = getSign(cuspDeg).name;

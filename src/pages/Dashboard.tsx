@@ -1006,7 +1006,7 @@ useEffect(() => {
                     <img src={profilePhoto} alt="profile" className="w-10 h-10 rounded-full object-cover" />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5">
-                        <h3 className="font-semibold text-sm truncate">{displayName}</h3>
+                        <h3 className="font-semibold text-xs truncate">{displayName}</h3>
                         {isPro ? (
                           <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-secondary/25 text-secondary border border-secondary/40 uppercase tracking-wide">
                             Pro ✦
