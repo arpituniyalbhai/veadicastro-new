@@ -604,7 +604,7 @@ export default function Chat() {
       };
 
       let firstChunkReceived = false;
-      await generateGeminiStream(promptText, messages, (delta) => {
+      await generateGeminiStream(promptText, messages.slice(-10), (delta) => {
         streamedAnswer += delta;
         if (sanitize(streamedAnswer).trim()) {
           aiAnswerCompleted = true;
@@ -629,7 +629,7 @@ export default function Chat() {
       }, systemExtra, lang, displayName);
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages, systemExtra, lang, displayName);
+        const final = await generateGemini(promptText, messages.slice(-10), systemExtra, lang, displayName);
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
