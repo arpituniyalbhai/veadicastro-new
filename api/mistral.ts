@@ -67,7 +67,7 @@ ${planetLines.join('\n')}
 PLANET HOUSE PLACEMENTS (PRE-CALCULATED):
 ${planetHouseLines.join('\n')}
 
-HOUSE LORDS (PLACIDUS CUSPS):
+HOUSE LORDS (WHOLE SIGN):
 ${houseLordLines.join('\n')}
 
 CURRENT DASHA TIMING (PRE-CALCULATED):

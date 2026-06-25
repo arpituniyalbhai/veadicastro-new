@@ -770,7 +770,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
               <section>
                 <h3 className="text-2xl font-black text-white">2. Why DOB, time, and place matter</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Date of birth gives the broad planetary background, but time and place complete the chart. Time of birth helps calculate the Lagna, or ascendant, which decides the house structure. Birth place helps calculate accurate planetary positions and house cusps. These details are important because marriage is mainly studied through houses, especially the 7th house.
+                  Date of birth gives the broad planetary background, but time and place complete the chart. Time of birth helps calculate the Lagna, or ascendant, which decides the house structure. Birth place helps calculate accurate planetary positions. These details are important because marriage is mainly studied through houses, especially the 7th house.
                 </p>
               </section>
 

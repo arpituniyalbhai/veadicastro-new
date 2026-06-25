@@ -304,20 +304,6 @@ const addYears = (date: Date, years: number): Date => {
   return result;
 };
 
-const getHouseOfPlanet = (planetLongitude: number, cusps: number[]) => {
-  for (let i = 0; i < 12; i++) {
-    const start = cusps[i];
-    const end = cusps[(i + 1) % 12];
-
-    if (start < end) {
-      if (planetLongitude >= start && planetLongitude < end) return i + 1;
-    } else {
-      if (planetLongitude >= start || planetLongitude < end) return i + 1;
-    }
-  }
-  return 1;
-};
-
 const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
   const NAKSHATRA_SIZE = 13.3333333333;
   const moonPositionInNakshatra = moonLongitude % NAKSHATRA_SIZE;
@@ -406,27 +392,22 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     swe.SE_GREG_CAL
   );
 
-  const houses = swe.swe_houses(julianUT, details.lat, details.lon, "P");
-  const tropicalAscendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
-  
-  // Calculate sidereal ascendant to get ayanamsa offset
-  const siderealAscResult = swe.swe_calc_ut(julianUT, swe.SE_ASCMC, swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL) as Float64Array;
-  const siderealAscendant = normalizeDegree(siderealAscResult[0]);
-  
-  // Ayanamsa = tropical - sidereal
-  const ayanamsa = normalizeDegree(tropicalAscendant - siderealAscendant);
-  
-  // Convert tropical house cusps to sidereal by subtracting ayanamsa
-  // Swiss Ephemeris returns cusps as 1-based array (index 0 is unused, indices 1-12 are house cusps)
-  const houseCusps = Array.from({ length: 12 }, (_, idx) => 
-    normalizeDegree(normalizeDegree(houses.cusps?.[idx + 1] ?? 0) - ayanamsa)
-  );
-  
-  const ascendant = siderealAscendant;
+  // Whole Sign House System: Each house = one sign, starting from ascendant sign
+  const houses = swe.swe_houses(julianUT, details.lat, details.lon, "W");
+  const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
   const ascendantSign = getSign(ascendant).name;
+  const ascendantSignIndex = getSign(ascendant).index;
   
-  const houseLords = houseCusps.map((cuspDeg) => {
-    const signName = getSign(cuspDeg).name;
+  // Whole Sign house cusps: House 1 starts at 0° of ascendant sign, each house is 30°
+  const houseCusps = Array.from({ length: 12 }, (_, idx) => {
+    const signIndex = (ascendantSignIndex + idx) % 12;
+    return signIndex * 30; // Each house starts at 0° of its sign
+  });
+  
+  // Whole Sign house lords: Lord of the sign that rules each house
+  const houseLords = Array.from({ length: 12 }, (_, idx) => {
+    const signIndex = (ascendantSignIndex + idx) % 12;
+    const signName = SIGN_NAMES[signIndex];
     return SIGN_LORDS[signName] || "Unknown";
   });
 
@@ -465,9 +446,13 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     }
   }
 
+  // Whole Sign planet house calculation: House based on sign relative to ascendant
   const planetHouseMap: Record<string, number> = {};
   for (const p of planetList) {
-    planetHouseMap[p.key] = getHouseOfPlanet(p.longitude, houseCusps);
+    // In Whole Sign, house is determined by sign only
+    // House 1 = Ascendant Sign, House 2 = Next Sign, etc.
+    const house = ((p.signIndex - ascendantSignIndex + 12) % 12) + 1;
+    planetHouseMap[p.key] = house;
   }
 
   const moonData = planetMap.moon || null;

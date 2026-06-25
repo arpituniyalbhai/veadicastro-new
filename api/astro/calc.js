@@ -22,6 +22,12 @@ const SIGN_NAMES = [
   "Pisces",
 ];
 
+const SIGN_LORDS = {
+  "Aries": "Mars", "Taurus": "Venus", "Gemini": "Mercury", "Cancer": "Moon",
+  "Leo": "Sun", "Virgo": "Mercury", "Libra": "Venus", "Scorpio": "Mars",
+  "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn", "Pisces": "Jupiter"
+};
+
 const NAKSHATRA_NAMES = [
   "Ashwini",
   "Bharani",
@@ -179,24 +185,24 @@ export default async function handler(req, res) {
       swe.SE_GREG_CAL
     );
 
-    const houses = swe.swe_houses(julianUT, lat, lon, "P");
-    const tropicalAscendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
-    
-    // Calculate sidereal ascendant to get ayanamsa offset
-    const siderealAscResult = swe.swe_calc_ut(julianUT, swe.SE_ASCMC, swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL);
-    const siderealAscendant = normalizeDegree(siderealAscResult[0]);
-    
-    // Ayanamsa = tropical - sidereal
-    const ayanamsa = normalizeDegree(tropicalAscendant - siderealAscendant);
-    
-    // Convert tropical house cusps to sidereal by subtracting ayanamsa
-    // Swiss Ephemeris returns cusps as 1-based array (index 0 is unused, indices 1-12 are house cusps)
-    const houseCusps = Array.from({ length: 12 }, (_, idx) => 
-      normalizeDegree(normalizeDegree(houses.cusps?.[idx + 1] ?? 0) - ayanamsa)
-    );
-    
-    const ascendant = siderealAscendant;
+    // Whole Sign House System: Each house = one sign, starting from ascendant sign
+    const houses = swe.swe_houses(julianUT, lat, lon, "W");
+    const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
     const ascendantSign = getSign(ascendant).name;
+    const ascendantSignIndex = getSign(ascendant).index;
+    
+    // Whole Sign house cusps: House 1 starts at 0° of ascendant sign, each house is 30°
+    const houseCusps = Array.from({ length: 12 }, (_, idx) => {
+      const signIndex = (ascendantSignIndex + idx) % 12;
+      return signIndex * 30; // Each house starts at 0° of its sign
+    });
+    
+    // Whole Sign house lords: Lord of the sign that rules each house
+    const houseLords = Array.from({ length: 12 }, (_, idx) => {
+      const signIndex = (ascendantSignIndex + idx) % 12;
+      const signName = SIGN_NAMES[signIndex];
+      return SIGN_LORDS[signName] || "Unknown";
+    });
 
     const flags = swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL | swe.SEFLG_SPEED;
     const planetMap = {};
@@ -232,6 +238,15 @@ export default async function handler(req, res) {
       }
     }
 
+    // Whole Sign planet house calculation: House based on sign relative to ascendant
+    const planetHouseMap = {};
+    for (const p of planetList) {
+      // In Whole Sign, house is determined by sign only
+      // House 1 = Ascendant Sign, House 2 = Next Sign, etc.
+      const house = ((p.signIndex - ascendantSignIndex + 12) % 12) + 1;
+      planetHouseMap[p.key] = house;
+    }
+
     const moonData = planetMap.moon || null;
     const sunData = planetMap.sun || null;
     const moonNakshatra = moonData ? moonData.nakshatra : null;
@@ -248,6 +263,8 @@ export default async function handler(req, res) {
       moonSign: moonData?.sign || null,
       sunSign: sunData?.sign || null,
       lagnaSign: ascendantSign,
+      houseLords,
+      planetHouseMap,
     };
 
     return res.status(200).json(payload);
