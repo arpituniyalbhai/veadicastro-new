@@ -182,7 +182,8 @@ export default async function handler(req, res) {
     const houses = swe.swe_houses(julianUT, lat, lon, "P");
     const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
     const ascendantSign = getSign(ascendant).name;
-    const houseCusps = Array.from({ length: 12 }, (_, idx) => normalizeDegree(houses.cusps?.[idx] ?? 0));
+    // Swiss Ephemeris returns cusps as 1-based array (index 0 is unused, indices 1-12 are house cusps)
+    const houseCusps = Array.from({ length: 12 }, (_, idx) => normalizeDegree(houses.cusps?.[idx + 1] ?? 0));
 
     const flags = swe.SEFLG_SWIEPH | swe.SEFLG_SIDEREAL | swe.SEFLG_SPEED;
     const planetMap = {};
