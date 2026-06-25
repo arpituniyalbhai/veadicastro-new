@@ -302,7 +302,7 @@ export default function AiLoveAstrologyByDateOfBirth() {
   const appSchema = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "Free Love Astrology by Date of Birth – AI Relationship Predictions",
+    "name": " AI Love Astrology by Date of Birth – AI Relationship Predictions",
     "url": PAGE_URL,
     "applicationCategory": "LifestyleApplication",
     "operatingSystem": "Web",

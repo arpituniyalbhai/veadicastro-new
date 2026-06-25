@@ -138,11 +138,6 @@ const Top10VedicAstrologyPlatform = () => {
         </script>
       </Helmet>
 
-      {/* AdSense Ad - Above Content */}
-      <div className="flex justify-center my-6">
-        <AdBanner adSlot="7266666400" className="w-full max-w-[728px]" />
-      </div>
-
       <div className="min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#1a1020] to-[#0a0a0f] text-white">
         {/* Hero Section */}
         <div className="relative overflow-hidden">
@@ -166,11 +161,6 @@ const Top10VedicAstrologyPlatform = () => {
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 Top 10 AI Powered <span className="text-pink-400">Astrology Platforms</span> (2026)
               </h1>
-              
-              {/* AdSense Ad - After Title */}
-              <div className="flex justify-center my-8">
-                <AdBanner adSlot="4333838156" className="w-full max-w-[728px]" />
-              </div>
               
               <p className="text-xl text-white/70 mb-8 leading-relaxed max-w-3xl mx-auto">
                 The integration of ancient Jyotish principles with cutting-edge Machine Learning has reached its peak in 2026. 
@@ -227,121 +217,105 @@ const Top10VedicAstrologyPlatform = () => {
               For those interested in understanding <Link to="/blog/ai-jyotish-vedic-astrology" className="text-purple-400 underline">AI Jyotish</Link> and how it differs from traditional approaches, this comprehensive comparison will help you make informed decisions about which platform suits your needs best.
             </p>
           </div>
-          
-          {/* Ad 1 - After Introduction */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="6005555625" className="w-full max-w-[728px]" />
-          </div>
-
-          {/* Comparison Table */}
-          <div id="comparison-table" className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-center">Ek Comparison Table</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
-                <thead>
-                  <tr className="border-b border-white/20">
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-pink-400">Rank</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-pink-400">Platform</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-pink-400">Specialty</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-pink-400">Price</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-pink-400">Accuracy</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">1</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Veadicastro</td>
-                    <td className="px-6 py-4 text-white/80">Extreme accuracy & affordability</td>
-                    <td className="px-6 py-4 text-white/80">Affordable</td>
-                    <td className="px-6 py-4 text-white/80">Exceptional</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">2</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Melooha</td>
-                    <td className="px-6 py-4 text-white/80">Hyper-personalized guidance</td>
-                    <td className="px-6 py-4 text-white/80">Premium</td>
-                    <td className="px-6 py-4 text-white/80">Very High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">3</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">KundliGPT</td>
-                    <td className="px-6 py-4 text-white/80">Conversational analysis</td>
-                    <td className="px-6 py-4 text-white/80">Freemium</td>
-                    <td className="px-6 py-4 text-white/80">High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">4</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Jyotir AI</td>
-                    <td className="px-6 py-4 text-white/80">Technical precision</td>
-                    <td className="px-6 py-4 text-white/80">Premium</td>
-                    <td className="px-6 py-4 text-white/80">Very High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">5</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">AstroSure</td>
-                    <td className="px-6 py-4 text-white/80">Youth-friendly</td>
-                    <td className="px-6 py-4 text-white/80">Freemium</td>
-                    <td className="px-6 py-4 text-white/80">High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">6</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Astroscience AI</td>
-                    <td className="px-6 py-4 text-white/80">Remedial astrology</td>
-                    <td className="px-6 py-4 text-white/80">Premium</td>
-                    <td className="px-6 py-4 text-white/80">High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">7</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Lagna360</td>
-                    <td className="px-6 py-4 text-white/80">Mental well-being</td>
-                    <td className="px-6 py-4 text-white/80">Freemium</td>
-                    <td className="px-6 py-4 text-white/80">High</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">8</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">AstroX</td>
-                    <td className="px-6 py-4 text-white/80">Speed & simplicity</td>
-                    <td className="px-6 py-4 text-white/80">Free</td>
-                    <td className="px-6 py-4 text-white/80">Medium</td>
-                  </tr>
-                  <tr className="border-b border-white/10">
-                    <td className="px-6 py-4 text-white/80">9</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Himalaya E-Kundali</td>
-                    <td className="px-6 py-4 text-white/80">Traditional format</td>
-                    <td className="px-6 py-4 text-white/80">Premium</td>
-                    <td className="px-6 py-4 text-white/80">High</td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 text-white/80">10</td>
-                    <td className="px-6 py-4 text-white/80 font-medium">Jeffrey Celavie</td>
-                    <td className="px-6 py-4 text-white/80">Hybrid systems</td>
-                    <td className="px-6 py-4 text-white/80">Freemium</td>
-                    <td className="px-6 py-4 text-white/80">Medium</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          
-          {/* AdSense Ad - After Comparison Table */}
-          <div className="flex justify-center my-8">
-            <AdBanner adSlot="3327421393" className="w-full max-w-[728px]" />
-          </div>
 
           {/* Platform Rankings */}
           <div id="platform-rankings" className="space-y-8 mb-12">
             <h2 className="text-2xl font-bold mb-6 text-center">Platform Rankings</h2>
-            {/* Platform 1 - Veadicastro */}
+            {/* Platform 1 - Melooha */}
             <div className="bg-gradient-to-r from-pink-600/20 to-purple-600/20 backdrop-blur-sm rounded-2xl p-8 border border-pink-400/30 shadow-2xl">
               <div className="flex items-start gap-4 mb-4">
                 <div className="text-3xl font-bold text-pink-400">1</div>
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-2xl font-bold">Veadicastro</h3>
+                    <h3 className="text-2xl font-bold">Melooha</h3>
                     <span className="px-3 py-1 bg-pink-500 text-white text-xs font-bold rounded-full">🏆 BEST CHOICE</span>
                   </div>
                   <p className="text-lg leading-relaxed text-white/80 mb-4">
-                    <strong>Clearly the #1 choice for 2026</strong>, Veadicastro has revolutionized the AI astrology space with its exceptional accuracy and affordable pricing. 
+                    Melooha remains a strong contender with its hyper-personalized life guidance, 
+                    focusing on the intricate interplay of planetary transits on a user's specific career and health trajectory.
+                    However, it falls short due to premium pricing that makes it inaccessible to many users.
+                  </p>
+                  
+                  {/* AI Summary */}
+                  <div className="bg-white/10 rounded-xl p-4 mb-4">
+                    <p className="text-sm text-white/90">
+                      <strong>Summary:</strong> Premium platform with advanced transit analysis, but expensive pricing limits accessibility. Good for detailed career predictions if budget allows.
+                    </p>
+                  </div>
+                  
+                  {/* Pros & Cons */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-green-400 mb-2">✅ Pros:</h4>
+                      <ul className="text-sm text-white/80 space-y-1">
+                        <li>• Hyper-personalized insights</li>
+                        <li>• Advanced transit analysis</li>
+                        <li>• Career-focused predictions</li>
+                        <li>• High accuracy rate</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-red-400 mb-2">❌ Cons:</h4>
+                      <ul className="text-sm text-white/80 space-y-1">
+                        <li>• <strong>Very expensive</strong></li>
+                        <li>• Steep learning curve</li>
+                        <li>• Limited free features</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Platform 2 - KundliGPT */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="text-3xl font-bold text-pink-400">2</div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">KundliGPT</h3>
+                  <p className="text-lg leading-relaxed text-white/80 mb-4">
+                    A pioneer in conversational astrology, KundliGPT uses a chatbot interface to provide detailed Kundali analysis. 
+                    It excels in answering specific user queries regarding marriage and wealth through a simple chat window, 
+                    but lacks the comprehensive analysis capabilities of top platforms.
+                  </p>
+                  
+                  {/* AI Summary */}
+                  <div className="bg-white/10 rounded-xl p-4 mb-4">
+                    <p className="text-sm text-white/90">
+                      <strong>Summary:</strong> Good for conversational astrology and specific questions, but limited in comprehensive birth chart analysis compared to top platforms.
+                    </p>
+                  </div>
+                  
+                  {/* Pros & Cons */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-green-400 mb-2">✅ Pros:</h4>
+                      <ul className="text-sm text-white/80 space-y-1">
+                        <li>• Conversational interface</li>
+                        <li>• Good for specific queries</li>
+                        <li>• Freemium model available</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-red-400 mb-2">❌ Cons:</h4>
+                      <ul className="text-sm text-white/80 space-y-1">
+                        <li>• Limited comprehensive analysis</li>
+                        <li>• Less accurate than top platforms</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Platform 3 - Veadicastro */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="text-3xl font-bold text-pink-400">3</div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold mb-2">Veadicastro</h3>
+                  <p className="text-lg leading-relaxed text-white/80 mb-4">
+                    Veadicastro has revolutionized the AI astrology space with its exceptional accuracy and affordable pricing. 
                     This platform combines cutting-edge machine learning with authentic Vedic principles to deliver <strong>unmatched precision in birth chart analysis</strong>. 
                     What sets Veadicastro apart is its perfect balance of professional-grade insights and user-friendly accessibility, making it the go-to platform for both beginners and experienced astrology enthusiasts.
                   </p>
@@ -374,7 +348,7 @@ const Top10VedicAstrologyPlatform = () => {
                   {/* AI Summary */}
                   <div className="bg-white/10 rounded-xl p-4 mb-4">
                     <p className="text-sm text-white/90">
-                      <strong>Summary:</strong> <strong>The #1 AI astrology platform</strong> offering exceptional accuracy, instant insights, and affordable pricing. 
+                      <strong>Summary:</strong> <strong>A top AI astrology platform</strong> offering exceptional accuracy, instant insights, and affordable pricing. 
                       Perfect for <strong>career guidance, marriage compatibility, and life predictions</strong> with <strong>AI-driven birth chart analysis</strong>.
                     </p>
                   </div>
@@ -410,90 +384,6 @@ const Top10VedicAstrologyPlatform = () => {
                       <Sparkles className="w-4 h-4" />
                       Try Veadicastro Free
                     </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Platform 2 */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="text-3xl font-bold text-pink-400">2</div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-2">Melooha</h3>
-                  <p className="text-lg leading-relaxed text-white/80 mb-4">
-                    Melooha remains a strong contender with its hyper-personalized life guidance, 
-                    focusing on the intricate interplay of planetary transits on a user's specific career and health trajectory.
-                    However, it falls short due to premium pricing that makes it inaccessible to many users.
-                  </p>
-                  
-                  {/* AI Summary */}
-                  <div className="bg-white/10 rounded-xl p-4 mb-4">
-                    <p className="text-sm text-white/90">
-                      <strong>Summary:</strong> Premium platform with advanced transit analysis, but expensive pricing limits accessibility. Good for detailed career predictions if budget allows.
-                    </p>
-                  </div>
-                  
-                  {/* Pros & Cons */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-green-400 mb-2">Pros:</h4>
-                      <ul className="text-sm text-white/80 space-y-1">
-                        <li>• Hyper-personalized insights</li>
-                        <li>• Advanced transit analysis</li>
-                        <li>• Career-focused predictions</li>
-                        <li>• High accuracy rate</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-red-400 mb-2">Cons:</h4>
-                      <ul className="text-sm text-white/80 space-y-1">
-                        <li>• <strong>Very expensive</strong></li>
-                        <li>• Steep learning curve</li>
-                        <li>• Limited free features</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Platform 3 */}
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="text-3xl font-bold text-pink-400">3</div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold mb-2">KundliGPT</h3>
-                  <p className="text-lg leading-relaxed text-white/80 mb-4">
-                    A pioneer in conversational astrology, KundliGPT uses a chatbot interface to provide detailed Kundali analysis. 
-                    It excels in answering specific user queries regarding marriage and wealth through a simple chat window, 
-                    but lacks the comprehensive analysis capabilities of Veadicastro.
-                  </p>
-                  
-                  {/* AI Summary */}
-                  <div className="bg-white/10 rounded-xl p-4 mb-4">
-                    <p className="text-sm text-white/90">
-                      <strong>Summary:</strong> Good for conversational astrology and specific questions, but limited in comprehensive birth chart analysis compared to top platforms.
-                    </p>
-                  </div>
-                  
-                  {/* Pros & Cons */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-semibold text-green-400 mb-2">Pros:</h4>
-                      <ul className="text-sm text-white/80 space-y-1">
-                        <li>• Conversational interface</li>
-                        <li>• Good for specific queries</li>
-                        <li>• Freemium model available</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-red-400 mb-2">Cons:</h4>
-                      <ul className="text-sm text-white/80 space-y-1">
-                        <li>• Limited comprehensive analysis</li>
-                        <li>• Less accurate than Veadicastro</li>
-                      </ul>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -669,11 +559,6 @@ const Top10VedicAstrologyPlatform = () => {
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Mid content bonus ad - high scroll zone */}
-            <div className="flex justify-center my-8">
-              <AdBanner adSlot="REPLACE_WITH_MID_CONTENT_SLOT_ID" className="w-full max-w-[728px]" />
             </div>
 
             {/* Platform 8 */}
@@ -958,11 +843,6 @@ const Top10VedicAstrologyPlatform = () => {
             </p>
           </div>
         </div>
-      </div>
-      
-      {/* AdSense Ad - Below Content */}
-      <div className="flex justify-center my-6">
-        <AdBanner adSlot="8388176384" className="w-full max-w-[728px]" />
       </div>
     </>
   );
