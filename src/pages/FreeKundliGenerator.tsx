@@ -308,11 +308,7 @@ Respond in English only.`;
   const luckyColors: Record<string,string>  = { Leo:"Gold, Orange",Taurus:"White, Pink",Libra:"White, Pink",Cancer:"White, Cream",Aries:"Red, Maroon",Scorpio:"Red, Maroon",Sagittarius:"Yellow, Orange",Pisces:"Yellow, Orange",Capricorn:"Black, Blue",Aquarius:"Black, Blue",Gemini:"Green, Light Blue",Virgo:"Green, Light Blue" };
   const planetEmoji: Record<string,string>  = { sun:"☀️",moon:"🌙",mars:"♂️",mercury:"☿",jupiter:"♃",venus:"♀",saturn:"♄",rahu:"🌑",ketu:"🌘" };
 
-  const getHouseNum = (pLng: number, aLng: number) => {
-    let h = Math.floor(((pLng % 360) - (aLng % 360) + 360) / 30) + 1;
-    return h > 12 ? h - 12 : h;
-  };
-  const hasManglik  = () => !!kundliData?.planets?.mars && [1,2,4,7,8,12].includes(getHouseNum(kundliData.planets.mars.longitude, kundliData.ascendant));
+  const hasManglik  = () => !!kundliData?.planetHouseMap?.mars && [1,2,4,7,8,12].includes(kundliData.planetHouseMap.mars);
   const hasKalsarpa = () => {
     if (!kundliData?.planets?.rahu || !kundliData?.planets?.ketu) return false;
     const r = kundliData.planets.rahu.longitude, k = kundliData.planets.ketu.longitude;
@@ -326,7 +322,7 @@ Respond in English only.`;
     return count >= 6;
   };
   const hasSadhesati= () => { if (!kundliData?.planets?.saturn||!kundliData?.planets?.moon) return false; const d=Math.abs(kundliData.planets.saturn.longitude-kundliData.planets.moon.longitude); return d<=45||d>=315; };
-  const hasPitra    = () => !!kundliData?.planets?.sun && getHouseNum(kundliData.planets.sun.longitude, kundliData.ascendant)===9;
+  const hasPitra    = () => !!kundliData?.planetHouseMap?.sun && kundliData.planetHouseMap.sun === 9;
 
   // Helper functions for real calculations
   const getTatva = (sign: string) => {

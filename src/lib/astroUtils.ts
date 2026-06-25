@@ -159,38 +159,40 @@ export function calculateVimshottariDasha(moonLongitude: number, birthDate: Date
 
 export function generatePersonalizedRemedies(kundaliData: AstroPayload): string[] {
   const remedies: string[] = [];
-  
+
   // Basic remedies based on lagna (ascendant)
   const lagnaLord = getLagnaLord(kundaliData.lagnaSign);
   remedies.push(`Worship ${lagnaLord} for overall prosperity and success`);
-  
-  // Remedies based on planet positions
+
+  // Remedies based on planet positions using pre-calculated planetHouseMap
+  const planetHouseMap = kundaliData.planetHouseMap || {};
+
   if (kundaliData.planets.sun) {
-    const sunHouse = getHouseNumber(kundaliData.planets.sun.longitude, kundaliData.ascendant);
+    const sunHouse = planetHouseMap.sun;
     if (sunHouse === 6 || sunHouse === 8 || sunHouse === 12) {
       remedies.push("Offer water to Sun every morning and recite Aditya Hridayam");
     }
   }
-  
+
   if (kundaliData.planets.mars) {
-    const marsHouse = getHouseNumber(kundaliData.planets.mars.longitude, kundaliData.ascendant);
+    const marsHouse = planetHouseMap.mars;
     if (marsHouse === 1 || marsHouse === 4 || marsHouse === 7 || marsHouse === 8 || marsHouse === 12) {
       remedies.push("Recite Hanuman Chalisa daily and donate red items on Tuesdays");
     }
   }
-  
+
   if (kundaliData.planets.saturn) {
-    const saturnHouse = getHouseNumber(kundaliData.planets.saturn.longitude, kundaliData.ascendant);
+    const saturnHouse = planetHouseMap.saturn;
     if (saturnHouse === 1 || saturnHouse === 4 || saturnHouse === 7 || saturnHouse === 8 || saturnHouse === 10 || saturnHouse === 12) {
       remedies.push("Light mustard oil lamp on Saturdays and serve elderly people");
     }
   }
-  
+
   // General remedies
   remedies.push("Practice meditation and yoga for mental peace");
   remedies.push("Donate food to the needy on your birthday");
   remedies.push("Keep your living space clean and organized");
-  
+
   return remedies;
 }
 
@@ -201,11 +203,6 @@ function getLagnaLord(lagnaSign: string): string {
     "Sagittarius": "Jupiter", "Capricorn": "Saturn", "Aquarius": "Saturn", "Pisces": "Jupiter"
   };
   return lords[lagnaSign] || "Jupiter";
-}
-
-function getHouseNumber(planetLongitude: number, ascendant: number): number {
-  let house = Math.floor(((planetLongitude % 360) - (ascendant % 360) + 360) / 30) + 1;
-  return house > 12 ? house - 12 : house;
 }
 
 export function analyzeKundali(kundaliData: AstroPayload, birthDate: Date): KundaliAnalysis {

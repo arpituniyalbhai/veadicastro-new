@@ -1228,7 +1228,7 @@ useEffect(() => {
                       🎉 {lang === "hi" ? "30 सवाल केवल 699" : "30 questions only 699"}
                     </span>
                     <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
-                      {lang === "hi" ? "सीमित समय ऑफर - केवल आपके लिए" : "Limited Time offer - only for you"} {displayName}
+                      {lang === "hi" ? "सीमित समय ऑफर - केवल आपके लिए" : "Limited Time offer - only for you"} <span className="font-extrabold text-white sm:text-base lg:text-lg">{displayName}</span>
                     </span>
                   </span>
                 </div>

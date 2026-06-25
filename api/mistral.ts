@@ -39,6 +39,17 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
       }
     }
 
+    const planetHouseMap = chart.planetHouseMap || {};
+    const planetHouseLines: string[] = [];
+    const planetOrder = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'];
+    for (const planetName of planetOrder) {
+      const planetKey = planetName.toLowerCase();
+      const houseNum = planetHouseMap[planetKey];
+      if (houseNum !== undefined) {
+        planetHouseLines.push(`${planetName} â†’ House ${houseNum}`);
+      }
+    }
+
     const dasha = chart.dasha || {};
     const houseLords = chart.houseLords || [];
     const houseLordLines = houseLords.map((lord: string, i: number) => `House ${i + 1} Lord: ${lord}`);
@@ -52,6 +63,9 @@ Lagna: ${chart.ascendantSign || 'Unknown'} (${chart.ascendant?.toFixed(2) || 0}Â
 
 PLANETARY POSITIONS (DO NOT RECALCULATE):
 ${planetLines.join('\n')}
+
+PLANET HOUSE PLACEMENTS (PRE-CALCULATED):
+${planetHouseLines.join('\n')}
 
 HOUSE LORDS (PLACIDUS CUSPS):
 ${houseLordLines.join('\n')}
@@ -184,6 +198,9 @@ CORE RULES (STRICT):
 * You MUST NOT recalculate, estimate, or modify any astrological values.
 * You may only interpret the provided locked data.
 * Use ONLY chart data provided.
+* Planet house numbers are authoritative. Never calculate house positions.
+* Never infer houses from signs. Never modify provided house numbers.
+* Always use the supplied planetHouseMap exactly as received.
 "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."
 
 LOGIC ORDER:
@@ -215,8 +232,8 @@ END:
 `;
 
     const contents = [
-      // Limit history to last 3 messages to prevent token overflow
-      ...(Array.isArray(history) ? history.slice(-3) : []).map((h: any) => ({
+      // Include last 10 messages for conversation context
+      ...(Array.isArray(history) ? history.slice(-10) : []).map((h: any) => ({
         role: h?.role === 'user' ? 'user' : 'assistant',
         content: String(h?.content || ''),
       })),

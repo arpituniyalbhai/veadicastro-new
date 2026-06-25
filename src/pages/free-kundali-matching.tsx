@@ -216,7 +216,7 @@ export default function FreeKundliMatching() {
     
     // Calculate house position of Mars
     // House 1 starts at ascendant, each house is 30 degrees
-    let marsHouse = Math.floor(((marsLong - ascendant + 360) % 360) / 30) + 1;
+    let marsHouse = astroData.planetHouseMap?.mars ?? 0;
     
     // Check if Mars is in 1st, 2nd, 4th, 7th, 8th, or 12th house
     const manglikHouses = [1, 2, 4, 7, 8, 12];
