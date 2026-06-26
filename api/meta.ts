@@ -3,6 +3,12 @@ import fs from 'fs';
 import path from 'path';
 
 const META: Record<string, { title: string; description: string; canonical: string; breadcrumb: string; isBlog?: boolean }> = {
+  '/': {
+  title: 'AI Astrology — Free AI Chat, Daily Horoscope & Detailed Report | Veadicastro',
+  description: "India's most accurate AI Astrology platform. Get personalized Kundli, daily health, wealth & self predictions, AI chat with Vedika — in Hindi & English. Plans from ₹149/month.",
+  canonical: 'https://veadicastro.in/',
+  breadcrumb: 'Home',
+},
   '/free-ai-astrologer-chat': {
     title: 'Free AI Astrologer Chat — No Signup | Veadicastro',
     description: 'Get free AI astrology chat powered by Vedic birth chart. Instant kundli analysis, dasha predictions — no signup needed. Ask in Hindi or English.',

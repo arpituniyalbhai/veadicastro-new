@@ -22,11 +22,11 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
         }}
       />
 
-      <div className="container relative z-10 px-4 sm:px-6 mx-auto">
+      <div className="container relative z-10 px-4 sm:px-6 mx-auto -mt-20 md:mt-0">
         <div className="text-center space-y-6 md:space-y-8 max-w-4xl mx-auto">
 
           {/* Badge */}
-          <div className="mb-8 md:mb-0" style={{
+          <div className="mb-2 md:mb-4" style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
@@ -37,7 +37,7 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
             maxWidth: '100%',
           }}>
             <span style={{ color: '#d9277a', fontSize: '13px', fontWeight: 500 }}>
-              ✦ Powered by Advanced AI & Vedic Knowledge
+              Powered by Advanced AI & Vedic Knowledge
             </span>
           </div>
 
@@ -45,17 +45,17 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
           <h1 style={{
             fontSize: 'clamp(2.2rem, 7vw, 4.2rem)',
             fontWeight: 800,
-            lineHeight: 1.15,
+            lineHeight: 1.20,
             color: '#f2f2f2',
             margin: 0,
             letterSpacing: '-0.02em',
           }}>
-            Your Stars Know<br />
-            <span style={{ color: '#d9277a' }}>What's Coming Next</span>
+            India's Most Accurate
+            <span style={{ color: '#d9277a', fontSize: '0.85em', display: 'block', marginTop: '-0.1em' }}>AI Astrology Platform</span>
           </h1>
 
           {/* Subtitle */}
-          <p style={{
+          <p className="pt-4 md:pt-0" style={{
             color: '#c4c4d4',
             fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
             lineHeight: 1.7,
@@ -112,7 +112,7 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
               ★★★★★
             </div>
             <p style={{ color: '#f2f2f2', fontSize: '14px', margin: 0 }}>
-              Chosen by 21,500+ Users Worldwide
+              Chosen by 50,000+ Users Worldwide
             </p>
           </div>
 
