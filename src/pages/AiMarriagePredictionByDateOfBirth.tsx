@@ -55,18 +55,8 @@ const PAGE_IMAGE = `${SITE_URL}/optimized/ai-marriage-prediction-v2.webp`;
 
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
 ];
 const years = Array.from({ length: 95 }, (_, i) => new Date().getFullYear() - i);
 const hours = Array.from({ length: 24 }, (_, i) => i);
@@ -111,7 +101,7 @@ const faqs = [
   },
   {
     q: "Can I ask more personal questions after the result?",
-    a: "Yes. Sign up to ask Vedika any personal question about marriage timing, compatibility, relationships, career, or other life topics.",
+    a: "Yes. Sign up to ask Vedika any personal question about marriage timing, compatibility, relationships, <Link to=\"/ai-career-prediction-by-date-of-birth\" className=\"text-pink-300 underline-offset-4 hover:underline\">career</Link>, or other life topics.",
   },
   {
     q: "Is AI marriage prediction better than a horoscope?",
@@ -210,7 +200,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
       setShowLocationSuggestions(false);
       return;
     }
-
     setIsSearchingLocation(true);
     try {
       const key = "764ba629707b4648af1b0a7f4da18981";
@@ -256,12 +245,10 @@ export default function AiMarriagePredictionByDateOfBirth() {
       setError("Please enter your birth place and choose a suggestion for better accuracy.");
       return;
     }
-
     setIsLoading(true);
     setError("");
     setResult(customQuestion ? result : "");
     setStatus("Calculating your Vedic birth chart...");
-
     try {
       const chart = astroData || await getPlanetaryData({
         day: birthDetails.day,
@@ -273,18 +260,15 @@ export default function AiMarriagePredictionByDateOfBirth() {
         lon: birthDetails.lon || 77.2090,
         tzone: birthDetails.tzone || 5.5,
       });
-
       if (!astroData) {
         setAstroData(chart);
         persistAstroPayload(chart);
       }
-
       const userPrompt = buildMarriagePrompt(birthDetails, activeQuestion);
       const history = customQuestion ? messages : [];
       const nextMessages: ChatTurn[] = [...history, { role: "user", content: activeQuestion }];
       setMessages(nextMessages);
       setStatus(customQuestion ? "Vedika is reading your question..." : "Vedika is preparing your marriage prediction...");
-
       let streamed = "";
       await generateGeminiStream(
         userPrompt,
@@ -298,7 +282,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
         birthDetails.name || undefined,
         "secondary"
       );
-
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);
       setStatus("");
     } catch {
@@ -315,10 +298,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
     "mainEntity": faqs.map((faq) => ({
       "@type": "Question",
       "name": faq.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.a,
-      },
+      "acceptedAnswer": { "@type": "Answer", "text": faq.a },
     })),
   }), []);
 
@@ -340,11 +320,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
     "operatingSystem": "Web",
     "image": PAGE_IMAGE,
     "description": "Free, instant AI marriage prediction by date of birth with Vedika, based on Vedic birth chart, Swiss Ephemeris calculations, dasha, transit, and relationship indicators.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR",
-    },
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
   }), []);
 
   return (
@@ -377,151 +353,117 @@ export default function AiMarriagePredictionByDateOfBirth() {
       </Helmet>
 
       <main className="min-h-screen bg-[#07070d] text-white">
+
+        {/* ── HERO: Title + Subtitle only ── */}
         <section className="relative overflow-hidden border-b border-white/10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(236,72,153,0.18),transparent_32%),radial-gradient(circle_at_78%_12%,rgba(34,197,94,0.10),transparent_28%),linear-gradient(135deg,#080812,#11101a_42%,#090711)]" />
-          <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_0.88fr] lg:px-8 lg:py-14">
-            <div className="flex flex-col justify-center">
-              <Link to="/" className="mb-8 inline-flex w-fit items-center gap-3 text-sm text-white/70 hover:text-pink-300">
-                <img src="/optimized/logo.webp" alt="Veadicastro logo" className="h-9 w-9 rounded-full" loading="eager" />
-                Veadicastro
-              </Link>
-              <div className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-pink-400/30 bg-pink-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">
-                <Heart className="h-4 w-4" />
-                Free marriage astrology tool
-              </div>
-              <h1 className="max-w-3xl text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">
-                AI Marriage Prediction by Date of Birth
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
-                Enter your birth details and ask Vedika about marriage timing, love or arranged marriage possibilities, spouse qualities, delays, and simple remedies through a chart-first Vedic reading.
-              </p>
-              <div className="mt-6 grid max-w-2xl gap-3 text-sm text-white/75 sm:grid-cols-2">
-                {["No signup required", "No payment", "Instant streaming result", "Real Vedic chart - not a generic horoscope"].map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 flex-shrink-0 text-green-300" />
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 flex flex-col gap-3 text-sm text-white/70 sm:flex-row sm:flex-wrap">
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-green-300/25 bg-green-300/10 px-4 py-2 text-green-100">
-                  <ShieldCheck className="h-4 w-4" />
-                  Powered by Swiss Ephemeris calculations
+          <div className="relative mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+            <div className="flex items-center justify-between gap-6">
+              {/* Left side: Badge and content */}
+              <div className="flex-1">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-pink-400/30 bg-pink-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">
+                  <Heart className="h-3.5 w-3.5" />
+                  Free · No signup · Instant result
                 </div>
-                <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2">
-                  <Sparkles className="h-4 w-4 text-pink-200" />
-                  3,000+ marriage predictions given | Trusted across India, UK & Canada
-                </div>
-              </div>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a href="#marriage-tool" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white shadow-lg shadow-pink-500/20 hover:bg-pink-400">
-                  Get My Marriage Prediction <ArrowRight className="h-4 w-4" />
-                </a>
-                <button type="button" onClick={() => setAuthOpen(true)} className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/60 hover:text-pink-200">
-                  Ask any question to AI
-                </button>
-              </div>
-            </div>
 
-            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] shadow-2xl shadow-black/30">
-              <img
-                src="/optimized/ai-marriage-prediction-v2.webp"
-                alt="AI marriage prediction by date of birth with Vedic astrology chart insights"
-                className="h-full min-h-[320px] w-full object-cover"
-                loading="eager"
-                fetchPriority="high"
-              />
+                <h1 className="text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">
+                  AI Marriage Prediction<br className="hidden sm:block" /> by Date of Birth
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
+                  Enter your birth details below. Vedika reads your 7th house, Venus, dasha, and Navamsa to give you a chart-based marriage timing reading — instantly.
+                </p>
+
+                {/* Trust badges */}
+                <div className="mt-6 flex flex-wrap gap-3 text-sm">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-green-300/25 bg-green-300/10 px-4 py-2 text-green-100 text-xs font-medium">
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    Swiss Ephemeris calculations
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2 text-white/70 text-xs font-medium">
+                    <Sparkles className="h-3.5 w-3.5 text-pink-300" />
+                    3,000+ predictions given
+                  </span>
+                </div>
+              </div>
+
+              {/* Right side: Logo */}
+              <Link to="/" className="hidden lg:flex items-center gap-2 text-sm text-white/55 hover:text-pink-300 flex-shrink-0">
+                <img src="/optimized/logo.webp" alt="Veadicastro logo" className="h-10 w-10 rounded-full" loading="eager" />
+                <span className="font-semibold">Veadicastro</span>
+              </Link>
             </div>
           </div>
         </section>
 
-        <div className="flex justify-center px-4 mt-8">
+        {/* ── AD 1: Below hero title ── */}
+        <div className="flex justify-center px-4 py-5">
           <AdBanner adSlot="5098435505" className="w-full max-w-[728px]" />
         </div>
 
-        <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
-          <div className="rounded-[1.75rem] border border-pink-400/20 bg-pink-400/10 p-5 sm:p-6">
-            <div className="grid gap-5 lg:grid-cols-[0.72fr_1.28fr] lg:items-center">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-pink-200">How Vedika reads your marriage chart</p>
-                <h2 className="mt-2 text-2xl font-black text-white">From birth details to instant chart-based answer</h2>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                {[
-                  ["Step 1", "Enter your birth details"],
-                  ["Step 2", "Swiss Ephemeris calculates the chart"],
-                  ["Step 3", "7th house, Venus, dasha are analyzed"],
-                  ["Step 4", "Instant streaming AI result"],
-                ].map(([step, text]) => (
-                  <div key={step} className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-pink-200">{step}</p>
-                    <p className="mt-2 text-sm leading-6 text-white/75">{text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* ── MAIN TOOL: Input + Result side by side ── */}
+        <section id="marriage-tool" className="mx-auto grid max-w-7xl gap-6 px-4 pb-10 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
 
-        <section id="marriage-tool" className="mx-auto grid max-w-7xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:px-8">
+          {/* LEFT: Input form */}
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20 sm:p-7">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-pink-300">Birth Details</p>
-                <h2 className="mt-1 text-2xl font-black">Marriage prediction calculator</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-pink-300">Step 1 — Your birth details</p>
+                <h2 className="mt-1 text-xl font-black">Marriage prediction calculator</h2>
               </div>
-              <div className="rounded-2xl bg-white/10 p-3 text-pink-200">
-                <Heart className="h-6 w-6" />
+              <div className="rounded-2xl bg-pink-500/20 p-3 text-pink-200">
+                <Heart className="h-5 w-5" />
               </div>
             </div>
 
             <div className="grid gap-4">
+              {/* Name */}
               <div>
-                <Label className={labelClass}><User className="h-4 w-4" /> Name optional</Label>
-                <Input className={inputClass} value={birthDetails.name} onChange={(e) => setField("name", e.target.value)} placeholder="Your name" />
+                <Label className={labelClass}>
+                  <User className="h-4 w-4" /> Name <span className="ml-1 text-white/35">(optional)</span>
+                </Label>
+                <Input
+                  className={inputClass}
+                  value={birthDetails.name}
+                  onChange={(e) => setField("name", e.target.value)}
+                  placeholder="Your name"
+                />
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <Label className={labelClass}><Calendar className="h-4 w-4" /> Day</Label>
+              {/* Date row */}
+              <div>
+                <Label className={labelClass}>
+                  <Calendar className="h-4 w-4" /> Date of Birth
+                </Label>
+                <div className="grid grid-cols-3 gap-3">
                   <Select value={String(birthDetails.day)} onValueChange={(v) => setField("day", Number(v))}>
-                    <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
-                    <SelectContent>{days.map((day) => <SelectItem key={day} value={String(day)}>{day}</SelectItem>)}</SelectContent>
+                    <SelectTrigger className={inputClass}><SelectValue placeholder="Day" /></SelectTrigger>
+                    <SelectContent>{days.map((d) => <SelectItem key={d} value={String(d)}>{d}</SelectItem>)}</SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label className={labelClass}>Month</Label>
                   <Select value={String(birthDetails.month)} onValueChange={(v) => setField("month", Number(v))}>
-                    <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
-                    <SelectContent>{months.map((month, i) => <SelectItem key={month} value={String(i + 1)}>{month}</SelectItem>)}</SelectContent>
+                    <SelectTrigger className={inputClass}><SelectValue placeholder="Month" /></SelectTrigger>
+                    <SelectContent>{months.map((m, i) => <SelectItem key={m} value={String(i + 1)}>{m}</SelectItem>)}</SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label className={labelClass}>Year</Label>
                   <Select value={String(birthDetails.year)} onValueChange={(v) => setField("year", Number(v))}>
-                    <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
-                    <SelectContent>{years.map((year) => <SelectItem key={year} value={String(year)}>{year}</SelectItem>)}</SelectContent>
+                    <SelectTrigger className={inputClass}><SelectValue placeholder="Year" /></SelectTrigger>
+                    <SelectContent>{years.map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}</SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <Label className={labelClass}><Clock className="h-4 w-4" /> Hour</Label>
+              {/* Time + Gender row */}
+              <div>
+                <Label className={labelClass}>
+                  <Clock className="h-4 w-4" /> Birth Time &amp; Gender
+                </Label>
+                <div className="grid grid-cols-3 gap-3">
                   <Select value={String(birthDetails.hour)} onValueChange={(v) => setField("hour", Number(v))}>
-                    <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
-                    <SelectContent>{hours.map((hour) => <SelectItem key={hour} value={String(hour)}>{String(hour).padStart(2, "0")}</SelectItem>)}</SelectContent>
+                    <SelectTrigger className={inputClass}><SelectValue placeholder="HH" /></SelectTrigger>
+                    <SelectContent>{hours.map((h) => <SelectItem key={h} value={String(h)}>{String(h).padStart(2, "0")}</SelectItem>)}</SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label className={labelClass}>Minute</Label>
                   <Select value={String(birthDetails.minute)} onValueChange={(v) => setField("minute", Number(v))}>
-                    <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
-                    <SelectContent>{minutes.map((minute) => <SelectItem key={minute} value={String(minute)}>{String(minute).padStart(2, "0")}</SelectItem>)}</SelectContent>
+                    <SelectTrigger className={inputClass}><SelectValue placeholder="MM" /></SelectTrigger>
+                    <SelectContent>{minutes.map((m) => <SelectItem key={m} value={String(m)}>{String(m).padStart(2, "0")}</SelectItem>)}</SelectContent>
                   </Select>
-                </div>
-                <div>
-                  <Label className={labelClass}>Gender</Label>
                   <Select value={birthDetails.gender} onValueChange={(v: Gender) => setField("gender", v)}>
                     <SelectTrigger className={inputClass}><SelectValue /></SelectTrigger>
                     <SelectContent>
@@ -533,8 +475,11 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 </div>
               </div>
 
+              {/* Birth Place */}
               <div className="relative">
-                <Label className={labelClass}><MapPin className="h-4 w-4" /> Birth place</Label>
+                <Label className={labelClass}>
+                  <MapPin className="h-4 w-4" /> Birth Place
+                </Label>
                 <div className="relative">
                   <Input
                     className={`${inputClass} pr-10`}
@@ -544,9 +489,12 @@ export default function AiMarriagePredictionByDateOfBirth() {
                       searchLocation(e.target.value);
                     }}
                     onFocus={() => locationSuggestions.length > 0 && setShowLocationSuggestions(true)}
-                    placeholder="Start typing your city"
+                    placeholder="Start typing your city or town"
                   />
-                  {isSearchingLocation ? <Loader2 className="absolute right-3 top-3.5 h-5 w-5 animate-spin text-pink-300" /> : <Search className="absolute right-3 top-3.5 h-5 w-5 text-white/35" />}
+                  {isSearchingLocation
+                    ? <Loader2 className="absolute right-3 top-3.5 h-5 w-5 animate-spin text-pink-300" />
+                    : <Search className="absolute right-3 top-3.5 h-5 w-5 text-white/35" />
+                  }
                 </div>
                 {showLocationSuggestions && (
                   <div className="absolute z-20 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-white/10 bg-[#15131f] p-2 shadow-2xl">
@@ -565,17 +513,24 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 )}
               </div>
 
+              {/* Question */}
               <div>
-                <Label className={labelClass}><MessageCircle className="h-4 w-4" /> Main question optional</Label>
+                <Label className={labelClass}>
+                  <MessageCircle className="h-4 w-4" /> Your question <span className="ml-1 text-white/35">(optional)</span>
+                </Label>
                 <Textarea
-                  className="min-h-[92px] rounded-2xl border-white/10 bg-white/[0.06] text-white placeholder:text-white/35 focus:border-pink-400 focus:ring-pink-400"
+                  className="min-h-[88px] rounded-2xl border-white/10 bg-white/[0.06] text-white placeholder:text-white/35 focus:border-pink-400 focus:ring-pink-400"
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="When will I get married?"
                 />
               </div>
 
-              {error && <p className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">{error}</p>}
+              {error && (
+                <p className="rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                  {error}
+                </p>
+              )}
 
               <ButtonLite
                 type="button"
@@ -583,33 +538,42 @@ export default function AiMarriagePredictionByDateOfBirth() {
                 onClick={() => runPrediction()}
                 className="h-14 rounded-2xl bg-pink-500 text-base font-black text-white hover:bg-pink-400 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Sparkles className="mr-2 h-5 w-5" />}
+                {isLoading
+                  ? <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  : <Sparkles className="mr-2 h-5 w-5" />
+                }
                 Get My Marriage Prediction
               </ButtonLite>
+
+              <p className="text-center text-xs text-white/35">
+                No signup required · No payment · Instant result
+              </p>
             </div>
           </div>
 
+          {/* RIGHT: Result panel */}
           <div className="rounded-[1.75rem] border border-white/10 bg-[#0d0d16] p-5 shadow-xl shadow-black/20 sm:p-7">
             <div className="mb-5 flex items-center gap-3">
-              <div className="h-12 w-12 overflow-hidden rounded-2xl border border-pink-400/25 bg-pink-500/15">
+              <div className="h-11 w-11 overflow-hidden rounded-2xl border border-pink-400/25 bg-pink-500/15 flex-shrink-0">
                 <img src="/optimized/vedika.webp" alt="Vedika AI astrologer" className="h-full w-full object-cover" loading="lazy" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-pink-300">Vedika's marriage reading</p>
-                <h2 className="text-2xl font-black">Your result appears here</h2>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-pink-300">Step 2 — Vedika's reading</p>
+                <h2 className="text-xl font-black">Your result appears here</h2>
               </div>
             </div>
 
-            <div className="min-h-[420px] rounded-[1.25rem] border border-white/10 bg-black/25 p-5">
+            <div className="min-h-[460px] rounded-[1.25rem] border border-white/10 bg-black/25 p-5">
+              {/* Empty state / sample preview */}
               {!result && !isLoading && (
-                <div className="flex h-full min-h-[360px] flex-col justify-center">
-                  <div className="mb-5 flex items-center justify-between gap-3">
-                    <span className="inline-flex w-fit items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-pink-200">
-                      Sample Result
+                <div className="flex h-full min-h-[400px] flex-col justify-center">
+                  <div className="mb-5 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-pink-200">
+                      Sample preview
                     </span>
-                    <span className="text-xs font-semibold text-white/45">Preview</span>
+                    <span className="text-xs text-white/35">Fill the form →</span>
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {[
                       ["Marriage Timing Window:", "A stronger window appears after dasha and 7th house support become active."],
                       ["Love or Arranged:", "Chart patterns show whether self-choice, family support, or a mixed path is more likely."],
@@ -618,55 +582,86 @@ export default function AiMarriagePredictionByDateOfBirth() {
                     ].map(([label, text]) => (
                       <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
                         <p className="text-sm font-bold text-white">{label}</p>
-                        <p className="mt-2 select-none text-sm leading-6 text-white/45 blur-[2px]">{text}</p>
+                        <p className="mt-1 select-none text-sm leading-6 text-white/40 blur-[2.5px]">{text}</p>
                       </div>
                     ))}
                   </div>
-                  <a href="#marriage-tool" className="mt-5 inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-5 py-3 text-sm font-bold text-white hover:bg-pink-400">
-                    Get Your Real Prediction <ArrowRight className="h-4 w-4" />
-                  </a>
                 </div>
               )}
 
+              {/* Loading status */}
               {status && (
                 <div className="mb-4 flex items-center gap-2 rounded-2xl border border-pink-400/20 bg-pink-400/10 px-4 py-3 text-sm text-pink-100">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin flex-shrink-0" />
                   {status}
                 </div>
               )}
 
-              {result && <div className="whitespace-pre-wrap text-sm leading-7 text-white/82">{result}</div>}
+              {/* Streamed result */}
+              {result && (
+                <div className="whitespace-pre-wrap text-sm leading-7 text-white/82">{result}</div>
+              )}
             </div>
 
+            {/* Post-result CTA */}
             {result && (
               <div className="mt-5 rounded-[1.25rem] border border-pink-400/20 bg-pink-400/10 p-5">
-                <h3 className="font-bold text-white">Want a deeper marriage reading with timing, compatibility, and remedies?</h3>
+                <h3 className="font-bold text-white">Want a deeper reading with timing, compatibility, and remedies?</h3>
                 <p className="mt-2 text-sm leading-6 text-white/65">
-                  Sign up to ask Vedika any personal question about marriage timing, compatibility, spouse qualities, remedies, or relationship patterns.
+                  Sign up to ask Vedika any personal question about marriage timing, compatibility, spouse qualities, or remedies.
                 </p>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap gap-3">
                   <ButtonLite
                     onClick={() => setAuthOpen(true)}
-                    className="h-12 rounded-2xl bg-white text-sm font-bold text-black hover:bg-pink-100"
+                    className="h-11 rounded-2xl bg-white px-5 text-sm font-bold text-black hover:bg-pink-100"
                   >
                     Ask any question to AI
                   </ButtonLite>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-3 text-sm">
-                  <button type="button" onClick={() => setAuthOpen(true)} className="text-pink-200 underline-offset-4 hover:underline">Ask any question to AI</button>
-                  <Link to="/talk-to-astrologer" className="text-pink-200 underline-offset-4 hover:underline">Talk to an astrologer</Link>
+                  <Link
+                    to="/talk-to-astrologer"
+                    className="inline-flex h-11 items-center rounded-2xl border border-white/15 px-5 text-sm font-bold text-white/80 hover:border-pink-400/50 hover:text-pink-200"
+                  >
+                    Talk to an astrologer
+                  </Link>
                 </div>
               </div>
             )}
           </div>
         </section>
 
-        <div className="flex justify-center px-4 mt-8">
+        {/* ── AD 2: After result section ── */}
+        <div className="flex justify-center px-4 py-4">
           <AdBanner adSlot="6711166008" className="w-full max-w-[400px]" />
         </div>
 
+        {/* ── HOW IT WORKS strip ── */}
         <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="rounded-[1.75rem] border border-pink-400/20 bg-pink-400/10 p-5 sm:p-6">
+            <div className="grid gap-5 lg:grid-cols-[0.65fr_1.35fr] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">How Vedika reads your chart</p>
+                <h2 className="mt-2 text-xl font-black text-white">From birth details to instant answer</h2>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-4">
+                {[
+                  ["1", "Enter your birth details"],
+                  ["2", "Swiss Ephemeris calculates the chart"],
+                  ["3", "7th house, Venus, dasha are analyzed"],
+                  ["4", "Instant streaming AI result"],
+                ].map(([step, text]) => (
+                  <div key={step} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-pink-200">Step {step}</p>
+                    <p className="mt-2 text-sm leading-6 text-white/75">{text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── WHAT YOU GET ── */}
+        <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
             {[
               ["Marriage timing window", "A practical period instead of a guaranteed date."],
               ["Love vs arranged", "Relationship route indicators from chart patterns."],
@@ -682,8 +677,20 @@ export default function AiMarriagePredictionByDateOfBirth() {
           </div>
         </section>
 
+        {/* ── ARTICLE with image moved here ── */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <article className="rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+
+            {/* Image — now lives at top of article */}
+            <div className="mb-8 overflow-hidden rounded-[1.5rem] border border-white/10">
+              <img
+                src="/optimized/ai-marriage-prediction-v2.webp"
+                alt="AI marriage prediction by date of birth with Vedic astrology chart insights"
+                className="w-full object-cover max-h-[340px]"
+                loading="lazy"
+              />
+            </div>
+
             <div className="mb-8 border-b border-white/10 pb-8">
               <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-pink-200">
                 Marriage Astrology Article
@@ -799,7 +806,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
               </section>
 
               <section>
-                <h3 className="text-2xl font-black text-white">6. Marriage prediction by Kundli - what Vedika checks</h3>
+                <h3 className="text-2xl font-black text-white">6. Marriage prediction by Kundli — what Vedika checks</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
                   Vedic astrology can become technical quickly. In marriage prediction by Kundli, Vedika checks the 7th house, 7th lord, Venus, Jupiter, Navamsa, Vimshottari dasha, transit, aspect, and conjunction patterns, then converts the chart logic into easy English. This helps you understand the marriage pattern, possible delay factors, spouse qualities, and simple remedies without needing to study Jyotish first. If you want a broader discussion after the result, continue in the <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline-offset-4 hover:underline">Free AI Astrologer Chat</Link>; if you want to compare AI astrology with general AI tools, read our <Link to="/chatgpt-astrology" className="text-pink-300 underline-offset-4 hover:underline">ChatGPT Astrology</Link> guide.
                 </p>
@@ -825,7 +832,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
               <section>
                 <h3 className="text-2xl font-black text-white">9. Common reasons marriage gets delayed</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Marriage delay can appear for many reasons in Vedic astrology. Saturn's influence can show maturity, responsibility, or late commitment. Rahu can show unconventional choices, confusion, or attraction outside the expected path. A weak or stressed Venus may show difficulty in comfort, trust, or relationship flow. Sometimes the dasha simply does not activate marriage houses early. Delay can also come from practical life factors like career focus, family expectations, location changes, or emotional unreadiness.
+                  Marriage delay can appear for many reasons in Vedic astrology. Saturn's influence can show maturity, responsibility, or late commitment. Rahu can show unconventional choices, confusion, or attraction outside the expected path. A weak or stressed Venus may show difficulty in comfort, trust, or relationship flow. Sometimes the dasha simply does not activate marriage houses early. Delay can also come from practical life factors like <Link to="/ai-career-prediction-by-date-of-birth" className="text-pink-300 underline-offset-4 hover:underline">career focus</Link>, family expectations, location changes, or emotional unreadiness.
                 </p>
               </section>
 
@@ -846,6 +853,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
           </article>
         </section>
 
+        {/* ── Trust section ── */}
         <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 sm:p-8">
             <div className="mb-6 flex items-start gap-4">
@@ -865,6 +873,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
           </div>
         </section>
 
+        {/* ── FAQs ── */}
         <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
           <h2 className="mb-6 text-3xl font-black">FAQs</h2>
           <p className="mb-6 text-sm leading-7 text-white/65">
@@ -880,6 +889,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
           </div>
         </section>
 
+        {/* ── Where to go next ── */}
         <section className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="rounded-[1.75rem] border border-white/10 bg-[#0d0d16] p-6 sm:p-8">
             <h2 className="text-2xl font-black">Where to go next</h2>
@@ -900,6 +910,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
           </div>
         </section>
 
+        {/* ── Final CTA ── */}
         <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="rounded-[2rem] border border-pink-400/20 bg-pink-400/10 p-8 text-center">
             <h2 className="text-3xl font-black">Ready to understand your marriage timing?</h2>
@@ -907,11 +918,16 @@ export default function AiMarriagePredictionByDateOfBirth() {
               Start with the free AI marriage prediction by date of birth, then go deeper with Vedika or a human astrologer when you need more context.
             </p>
             <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href="#marriage-tool" className="inline-flex items-center justify-center rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white hover:bg-pink-400">Get My Marriage Prediction</a>
-              <Link to="/free-ai-astrologer-chat" className="rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">Ask any question to AI</Link>
+              <a href="#marriage-tool" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-pink-500 px-6 py-4 text-sm font-bold text-white hover:bg-pink-400">
+                Get My Marriage Prediction <ArrowRight className="h-4 w-4" />
+              </a>
+              <Link to="/free-ai-astrologer-chat" className="inline-flex items-center justify-center rounded-2xl border border-white/15 px-6 py-4 text-sm font-bold text-white/85 hover:border-pink-400/50">
+                Ask any question to AI
+              </Link>
             </div>
           </div>
         </section>
+
       </main>
     </>
   );

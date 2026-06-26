@@ -351,7 +351,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>ChatGPT Astrology | Veadicastro</title>
+        <title>Free Chatgpt Astrology - Free | Veadicastro</title>
         <meta
           name="description"
           content="ChatGPT for astrology — ask any life question and get instant Vedic predictions powered by AI. Free, no signup needed. Career, love, finance predictions."

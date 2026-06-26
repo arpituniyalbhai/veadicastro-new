@@ -310,7 +310,7 @@ export default function AiAstrologyPrediction() {
   return (
     <>
       <Helmet>
-        <title>AI Astrology Prediction | Veadicastro</title>
+        <title>AI Astrology predictions by date of birth - Free | Veadicastro</title>
         <meta
           name="description"
           content="Get 10 free AI astrology predictions based on your Vedic birth chart. Career, marriage, money, health and more - personalized to your age and kundli."

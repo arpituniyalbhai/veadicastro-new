@@ -21,6 +21,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-marriage-prediction-by-date-of-birth',
     breadcrumb: 'AI Marriage Prediction by Date of Birth',
   },
+  '/ai-career-prediction-by-date-of-birth': {
+    title: 'AI Career Prediction by Date of Birth | Free Career Astrology',
+    description: 'Get an AI career prediction by date of birth with Vedika. Enter your birth details to check career direction, growth timing, job vs business suitability, and simple remedies.',
+    canonical: 'https://veadicastro.in/ai-career-prediction-by-date-of-birth',
+    breadcrumb: 'AI Career Prediction by Date of Birth',
+  },
   '/love-astrology-by-date-of-birth': {
     title: 'Free Love Astrology by Date of Birth – AI Relationship Predictions',
     description: 'Get an instant AI love astrology reading by date of birth. Vedika analyzes your 5th house, Venus, and dasha for relationship patterns and romantic outlook.',

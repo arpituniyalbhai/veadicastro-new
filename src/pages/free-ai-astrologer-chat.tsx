@@ -989,7 +989,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { icon: <Heart className="w-5 h-5" />, topic: "Marriage & Relationships", questions: ["When will I get married?", "Will I have love marriage or arranged marriage?", "Why is marriage getting delayed?", "What kind of spouse is shown in my chart?", "Is the next two years good for marriage?", "Is my partner compatible?"] },
-              { icon: <TrendingUp className="w-5 h-5" />, topic: "Career & Finance", questions: ["Which career is best for me?", "When will I get promoted?", "Will my business succeed?"] },
+              { icon: <TrendingUp className="w-5 h-5" />, topic: "Career & Finance", questions: ["Which career is best for me?", "When will I get promoted?", "Will my business succeed?", <Link key="career-link" to="/ai-career-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline text-xs mt-1 block">Try AI Career Prediction →</Link>] },
               { icon: <Shield className="w-5 h-5" />, topic: "Health & Wellbeing", questions: ["What health issues should I watch?", "When is my health best?", "What remedies help me?"] },
               { icon: <Star className="w-5 h-5" />, topic: "Life Purpose", questions: ["What is my life's purpose?", "What are my hidden talents?", "Am I on the right path?"] },
               { icon: <Target className="w-5 h-5" />, topic: "Timing & Muhurat", questions: ["Best time to start something new?", "Is this year lucky for me?", "When does my luck change?"] },

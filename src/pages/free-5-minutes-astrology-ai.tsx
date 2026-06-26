@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -904,7 +904,7 @@ KEY INSIGHTS:
               
               <p>
                 Get your free career astrology prediction right now. Scroll up, enter your
-                details, pick Career and Money, and see what your chart actually says.
+                details, pick Career and Money, and see what your chart actually says. For a more detailed career analysis, you can also try our <Link to="/ai-career-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">AI Career Prediction by Date of Birth</Link> tool.
               </p>
             </div>
 

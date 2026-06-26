@@ -303,7 +303,7 @@ export default function AiAstrology() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-semibold mb-2">AI Pattern Analysis</h3>
-                    <p className="text-white/60 mb-3">Career, love, marriage, health predictions based on your exact chart</p>
+                    <p className="text-white/60 mb-3">Career, love, marriage, health predictions based on your exact chart. Try our <Link to="/ai-career-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI Career Prediction</Link> for detailed career guidance.</p>
                     <div className="bg-white/5 rounded-lg p-3 border border-white/10">
                       <p className="text-sm text-white/50">Machine learning identifies patterns from thousands of authentic Vedic charts. <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">Ask our AI astrologer for marriage prediction India</Link> and specific life areas.</p>
                     </div>
@@ -690,7 +690,7 @@ export default function AiAstrology() {
                     <li>• When will I get a job? - ask our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">AI career astrologer</Link></li>
                     <li>• Should I switch careers?</li>
                     <li>• Business success timing</li>
-                    <li>• Best career options for me - check our <Link to="/blog/best-careers-for-each-zodiac-sign-in-2026" className="text-pink-400 hover:text-pink-300 underline">career predictions</Link></li>
+                    <li>• Best career options for me - check our <Link to="/ai-career-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI Career Prediction by Date of Birth</Link></li>
                   </ul>
                 </div>
                 <div>

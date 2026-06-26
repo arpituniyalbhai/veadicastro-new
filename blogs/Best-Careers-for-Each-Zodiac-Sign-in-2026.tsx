@@ -221,7 +221,7 @@ const BestCareersForZodiacSign2026 = () => {
             </p>
             
             <p className="text-lg leading-relaxed text-white/80 mb-6">
-              The year 2026 is a powerful turning point for professional growth. Strong planetary movements are reshaping the career paths of every zodiac sign. Jupiter's energy during this year will open new doors leading to promotions, recognition, and financial growth. Saturn will demand patience, persistence, and discipline — ensuring that real success comes only to those who put in consistent effort. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you understand how these planetary movements specifically affect your career path.
+              The year 2026 is a powerful turning point for professional growth. Strong planetary movements are reshaping the career paths of every zodiac sign. Jupiter's energy during this year will open new doors leading to promotions, recognition, and financial growth. Saturn will demand patience, persistence, and discipline — ensuring that real success comes only to those who put in consistent effort. Our advanced <Link to="/ai-astrology" className="text-purple-400 hover:text-purple-300 underline">AI astrology platform</Link> can help you understand how these planetary movements specifically affect your career path. For a personalized career analysis based on your exact birth chart, try our <Link to="/ai-career-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">AI Career Prediction by Date of Birth</Link> tool.
             </p>
             
             <p className="text-lg leading-relaxed text-white/80">
