@@ -423,7 +423,7 @@ export default function AiCareerPredictionByDateOfBirth() {
 
         {/* ── AD 1: Below hero title ── */}
         <div className="flex justify-center px-4 py-5">
-          <AdBanner adSlot="5098435506" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="4574799703" className="w-full max-w-[728px]" />
         </div>
 
         {/* ── MAIN TOOL: Input + Result side by side ── */}
@@ -653,7 +653,7 @@ export default function AiCareerPredictionByDateOfBirth() {
 
         {/* ── AD 2: After result section ── */}
         <div className="flex justify-center px-4 py-4">
-          <AdBanner adSlot="6711166009" className="w-full max-w-[400px]" />
+          <AdBanner adSlot="4574799703" className="w-full max-w-[400px]" />
         </div>
 
         {/* ── HOW IT WORKS strip ── */}
