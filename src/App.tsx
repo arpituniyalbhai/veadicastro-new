@@ -13,6 +13,7 @@ import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import RedirectComponent from "@/components/RedirectComponent";
 import { PageLoading } from "@/components/PageLoading";
+import CookieConsent from "@/components/CookieConsent";
 
 // Lazy load heavy components to reduce initial bundle size
 const Welcome = lazy(() => import("@/pages/Welcome"));
@@ -265,6 +266,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <CookieConsent />
         <I18nProvider>
           <BrowserRouter>
             <RouterShell />

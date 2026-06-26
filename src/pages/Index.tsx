@@ -336,22 +336,30 @@ const Index = () => {
 
                 {/* Chat Input */}
                 <div className="border-t border-border/40 px-4 sm:px-6 py-3 sm:py-4">
-                  <div className="flex gap-3">
+                  <form 
+                    className="flex gap-3"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      setAuthRequested(true);
+                      import("sonner").then(({ toast }) => {
+                        toast.success("Please signup to chat with me - 2 free chats for you!");
+                      });
+                    }}
+                  >
                     <input
                       type="text"
                       placeholder="Ask Vedika AI anything about your astrology..."
                       className="flex-1 px-3 sm:px-4 py-2 sm:py-3 bg-background border border-border/40 rounded-full text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-accent/60 transition-colors"
-                      disabled
                     />
                     <ButtonLite
+                      type="submit"
                       variant="cosmic"
                       size="sm"
                       className="px-4 sm:px-6 py-2 sm:py-3 rounded-full"
-                      disabled
                     >
                       <Send className="w-4 h-4" />
                     </ButtonLite>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
