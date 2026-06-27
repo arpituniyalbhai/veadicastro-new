@@ -255,7 +255,7 @@ const IsAiAstrologyAccurate = () => {
                 VeadicAstro isn't a generic horoscope app. The way it works is a bit different from what most people expect.
               </p>
               <p className="mb-4 leading-relaxed">
-                When you enter your birth details, the platform generates your actual Vedic birth chart — this means your Lagna (ascendant), all 12 houses, planetary placements, Nakshatra positions, and your current Dasha-Antardasha period. This isn't a templated reading built for "all Scorpios." It's built specifically for your chart.
+                When you enter your birth details, the platform generates your actual Vedic birth chart — this means your Lagna (ascendant), all 12 houses, planetary placements, Nakshatra positions, and your current Dasha-Antardasha period. You can explore this in detail with our <Link to="/ai-kundli-analysis" className="text-purple-400 underline">AI Kundli Analysis</Link> tool. This isn't a templated reading built for "all Scorpios." It's built specifically for your chart.
               </p>
               <p className="mb-4 leading-relaxed">
                 Then Vedika — the AI astrologer on the platform — analyses that chart using classical Jyotish principles. When you ask a question, she's not pulling from a generic database of zodiac answers. She's reading your chart in the context of what you asked.

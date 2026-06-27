@@ -259,7 +259,7 @@ const AiAstrologerVsHumanAstrologer = () => {
                 A good human astrologer consultation in India typically runs anywhere from 500 to 5,000 per session, depending on the astrologer's reputation and how much time they spend with you. Prominent astrologers with large followings can charge 10,000 or more for a detailed reading. And that's per visit - if your situation changes six months later and you want to revisit, you pay again.
               </p>
               <p className="mb-4 leading-relaxed">
-                The best AI astrologer platforms work completely differently. VeadicAstro, for example, starts free - you get 2 questions at no cost. After that, chat readings start at just 99 for 5 questions or 399 for 30 questions. For a complete detailed report of your birth chart, it's 199 - still a fraction of what any human astrologer charges per session.
+                The best AI astrologer platforms work completely differently. VeadicAstro, for example, starts free - you get 2 questions at no cost. After that, chat readings start at just 99 for 5 questions or 399 for 30 questions. For a complete detailed report of your birth chart with our <Link to="/ai-kundli-analysis" className="text-purple-400 underline">AI Kundli Analysis</Link> tool, it's 199 - still a fraction of what any human astrologer charges per session.
               </p>
               <p className="mb-4 leading-relaxed">
                 There's something people don't talk about enough when it comes to astrology - the questions people are actually embarrassed to ask.

@@ -1146,6 +1146,7 @@ KEY INSIGHTS:
                 <a href="/ai-astrology-prediction" className="text-pink-400 hover:text-pink-300 transition-colors">Generate 10 AI astrology predictions</a>
                 <a href="/today-horoscope" className="text-pink-400 hover:text-pink-300 transition-colors">See today's horoscope</a>
                 <a href="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 transition-colors">See your full Vedic birth chart</a>
+                <a href="/ai-kundli-analysis" className="text-pink-400 hover:text-pink-300 transition-colors">AI Kundli Analysis - Complete Chart Reading</a>
                 <a href="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 transition-colors">Check kundali compatibility for marriage</a>
 <a href="/" className="text-pink-400 hover:text-pink-300 transition-colors">Try Best Vedic Astrology Platform</a>
                 <a href="/ai-astrology" className="text-pink-400 hover:text-pink-300 transition-colors">AI Astrology — Complete Guide</a>

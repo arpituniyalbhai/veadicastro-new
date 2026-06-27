@@ -7,6 +7,7 @@ const linkGroups = [
       { name: "AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
       { name: "Marriage Timing AI", path: "/ai-marriage-prediction-by-date-of-birth" },
       { name: "Career Prediction AI", path: "/ai-career-prediction-by-date-of-birth" },
+      { name: "AI Kundli Analysis", path: "/ai-kundli-analysis" },
       { name: "AI Kundli", path: "/free-kundli-generator" },
       { name: "AI Astrology Prediction", path: "/ai-astrology-prediction" },
       { name: "AI Predictions", path: "/free-5-minutes-astrology-ai" },

@@ -105,6 +105,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-astrology-prediction',
     breadcrumb: 'AI Astrology Prediction',
   },
+  '/ai-kundli-analysis': {
+    title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
+    description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',
+    canonical: 'https://veadicastro.in/ai-kundli-analysis',
+    breadcrumb: 'AI Kundli Analysis',
+  },
 
   '/ai-astrology': {
     title: 'AI Astrology — Vedic Astrology Powered by AI | Veadicastro',

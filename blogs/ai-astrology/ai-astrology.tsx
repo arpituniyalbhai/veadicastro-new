@@ -344,7 +344,7 @@ export default function AiAstrology() {
                   title: "AI Kundali Analysis",
                   desc: "Complete birth chart analysis with planetary positions, dasha periods, and predictions",
                   features: ["Lagna Analysis", "Planetary Strengths", "Dasha Predictions", "Life Areas"],
-                  link: "/free-kundli-generator"
+                  link: "/ai-kundli-analysis"
                 },
                 {
                   title: "AI Chat Astrologer",

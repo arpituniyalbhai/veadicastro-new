@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   Sparkles, Calendar, MapPin, Clock, User, Loader2,
@@ -904,7 +904,7 @@ Respond in English only.`;
                                 <td style={{ padding:"8px 8px" }}>{p.longitude.toFixed(2)}</td>
                                 <td style={{ padding:"8px 8px" }}>{p.nakshatra.name}</td>
                                 <td style={{ padding:"8px 8px", color:"rgba(255,255,255,0.4)" }}>{nakLords[p.nakshatra.name]??"-"}</td>
-                                <td style={{ padding:"8px 8px", color:"rgba(255,255,255,0.4)" }}>{getHouseNum(p.longitude,kundliData.ascendant)}</td>
+                                <td style={{ padding:"8px 8px", color:"rgba(255,255,255,0.4)" }}>{kundliData.planetHouseMap?.[p.key] ?? "-"}</td>
                               </tr>
                             ))}
                             <tr style={{ borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
@@ -1284,7 +1284,7 @@ Respond in English only.`;
                   </div>
                   
                   <p style={{ color:"rgba(255,255,255,0.5)", fontSize:"14px", marginBottom:"20px", textAlign:"center", lineHeight:1.5 }}>
-                    Sign up to get 5 chats per day free with your personalized kundli report
+                    Sign up to get 5 chats per day free with your personalized kundli report. For a complete AI-powered birth chart analysis with planetary positions, doshas, yogas, and dasha predictions, try our <Link to="/ai-kundli-analysis" style={{ color:"#ec4899", textDecoration:"underline" }}>AI Kundli Analysis</Link> tool.
                   </p>
 
                   <div style={{ position:"relative", marginBottom:"16px" }}>

@@ -306,7 +306,7 @@ const AiJyotishVedicAstrology = () => {
                 So if you ask "how is this period for my career," she looks at your 10th house, its lord, what dashas are currently running, what transiting planets are touching your career-related houses, and answers from that. If your chart has a strong 6th house with Saturn sitting there, and you're in a Rahu dasha, she'll explain what that combination typically brings and how to navigate it - not just give you a vague "be careful."
               </p>
               <p className="mb-4 leading-relaxed">
-                The platform also has an AI Kundali generator, which gives you a structured breakdown of your chart across all major life areas - relationships, finances, career, health, spirituality. This is generated fresh from your chart, not a templated report.
+                The platform also has an <Link to="/ai-kundli-analysis" className="text-purple-400 underline">AI Kundli Analysis</Link> tool, which gives you a structured breakdown of your chart across all major life areas - relationships, finances, career, health, spirituality. This is generated fresh from your chart, not a templated report.
               </p>
               <p className="mb-4 leading-relaxed">
                 What makes VeadicAstro's approach to vedic astrology AI different is that the Vedic logic is built into how the AI thinks, not just surface presentation. The difference shows up in the answers - they're grounded, specific, and connected to your actual chart rather than the kind of vague spiritual language that could apply to anyone.
