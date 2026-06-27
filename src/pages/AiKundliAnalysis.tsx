@@ -345,12 +345,14 @@ export default function AiKundliAnalysis() {
     setStatus("Vedika is analyzing your complete birth chart...");
     try {
       const userPrompt = buildKundliPrompt(birthDetails, astroData);
+      console.log("Starting AI prediction with prompt length:", userPrompt.length);
       let streamed = "";
       await generateGeminiStream(
         userPrompt,
         [],
         (delta) => {
           streamed += delta;
+          console.log("Received delta, total length:", streamed.length);
           parseAndUpdatePredictions(streamed);
         },
         buildKundliSystemPrompt(astroData),
@@ -358,8 +360,10 @@ export default function AiKundliAnalysis() {
         birthDetails.name || undefined,
         "secondary"
       );
+      console.log("Streaming complete, final text length:", streamed.length);
       setStatus("");
-    } catch {
+    } catch (err) {
+      console.error("AI prediction error:", err);
       setError("Something went wrong while preparing the AI analysis. Please try again.");
       setStatus("");
     } finally {
@@ -368,6 +372,7 @@ export default function AiKundliAnalysis() {
   };
 
   const parseAndUpdatePredictions = (text: string) => {
+    console.log("Parsing text, length:", text.length);
     const sections: PredictionBlock[] = [];
     const lines = text.split('\n');
     let currentSection: PredictionBlock | null = null;
@@ -396,6 +401,7 @@ export default function AiKundliAnalysis() {
           title: matchingHeader.replace(':', ''),
           content: ''
         };
+        console.log("Found section:", matchingHeader);
       } else if (currentSection && trimmedLine) {
         currentSection.content += (currentSection.content ? ' ' : '') + trimmedLine;
       }
@@ -405,6 +411,8 @@ export default function AiKundliAnalysis() {
       sections.push(currentSection);
     }
 
+    console.log("Parsed sections count:", sections.length);
+    console.log("Sections:", sections);
     setPredictions(sections);
   };
 
