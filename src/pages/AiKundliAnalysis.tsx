@@ -188,45 +188,25 @@ const buildKundliSystemPrompt = (data: AstroPayload) => {
   return `You are Vedika, Veadicastro's AI Vedic astrologer.
 Respond in calm, simple English. Be comprehensive, practical, and non-fear-based.
 
-User's complete Vedic chart data is provided above.
+CRITICAL: You MUST use EXACTLY these section headers, each on its own line, with ** on both sides:
+
+**Health Prediction:**
+**Wealth & Finance:**
+**Career & Profession:**
+**Relationship & Love:**
+**Future Predictions:**
+**Active Doshas:**
+**Beneficial Yogas:**
+**Current Dasha Impact:**
+**Simple Remedies:**
 
 Rules:
-- Use sidereal Vedic astrology and chart-first interpretation.
-- Do not promise certainty. Give timing as a window, not an exact guaranteed date.
-- Do not create fear or pressure.
-- Explain any technical point in easy language.
-- Cover all 12 houses, major planets, and important yogas/doshas.
-- Keep each prediction section under 60 words.
-
-Required result format (keep each section under 60 words):
-**Health Prediction:**
-[Your health analysis under 60 words]
-
-**Wealth & Finance:**
-[Your wealth analysis under 60 words]
-
-**Career & Profession:**
-[Your career analysis under 60 words]
-
-**Relationship & Love:**
-[Your relationship analysis under 60 words]
-
-**Future Predictions:**
-[Your future predictions under 60 words]
-
-**Active Doshas:**
-[List present doshas with brief effects]
-
-**Beneficial Yogas:**
-[List present yogas with brief benefits]
-
-**Current Dasha Impact:**
-[Current mahadasha and antardasha effects]
-
-**Simple Remedies:**
-[Practical remedies for overall wellbeing]
-
-Next Best Question to Ask Vedika:`;
+- Start directly with **Health Prediction:** — no intro paragraph before it
+- Each section content under 60 words
+- Use sidereal Vedic astrology and chart-first interpretation
+- Do not promise certainty
+- Do not create fear or pressure
+- NEVER skip any section header`;
 };
 
 const inputClass =
@@ -392,34 +372,33 @@ export default function AiKundliAnalysis() {
     ];
 
     lines.forEach(line => {
-      const trimmedLine = line.trim();
-      const cleanedLine = trimmedLine.replace(/\*\*/g, '').trim();
+      const cleanedLine = line.trim().replace(/\*\*/g, '').trim();
 
       const matchingHeader = sectionHeaders.find(h =>
-        cleanedLine.startsWith(h + ':') || cleanedLine === h
+        cleanedLine.startsWith(h + ':') ||
+        cleanedLine.startsWith(h) ||
+        cleanedLine.toLowerCase().startsWith(h.toLowerCase() + ':')
       );
 
       if (matchingHeader) {
-        if (currentSection) {
-          sections.push(currentSection);
-        }
-        currentSection = {
-          title: matchingHeader,
-          content: ''
-        };
+        if (currentSection) sections.push(currentSection);
+        currentSection = { title: matchingHeader, content: '' };
         console.log("Found section:", matchingHeader);
       } else if (currentSection && cleanedLine) {
-        currentSection.content += (currentSection.content ? ' ' : '') + cleanedLine;
+        if (!cleanedLine.startsWith('Next Best Question')) {
+          currentSection.content += (currentSection.content ? ' ' : '') + cleanedLine;
+        }
       }
     });
 
-    if (currentSection) {
-      sections.push(currentSection);
-    }
+    if (currentSection) sections.push(currentSection);
 
     console.log("Parsed sections count:", sections.length);
     console.log("Sections:", sections);
-    setPredictions(sections);
+
+    if (sections.length > 0) {
+      setPredictions(sections);
+    }
   };
 
   const faqSchema = useMemo(() => ({
