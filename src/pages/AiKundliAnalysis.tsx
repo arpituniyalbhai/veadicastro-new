@@ -342,6 +342,7 @@ export default function AiKundliAnalysis() {
     setIsLoading(true);
     setError("");
     setPredictions([]);
+    setShowDetailedData(false);
     setStatus("Vedika is analyzing your complete birth chart...");
     try {
       const userPrompt = buildKundliPrompt(birthDetails, astroData);
@@ -373,37 +374,42 @@ export default function AiKundliAnalysis() {
 
   const parseAndUpdatePredictions = (text: string) => {
     console.log("Parsing text, length:", text.length);
+    console.log("Actual text preview:", text.substring(0, 500));
     const sections: PredictionBlock[] = [];
     const lines = text.split('\n');
     let currentSection: PredictionBlock | null = null;
-    
+
     const sectionHeaders = [
-      'Health Prediction:',
-      'Wealth & Finance:',
-      'Career & Profession:',
-      'Relationship & Love:',
-      'Future Predictions:',
-      'Active Doshas:',
-      'Beneficial Yogas:',
-      'Current Dasha Impact:',
-      'Simple Remedies:',
+      'Health Prediction',
+      'Wealth & Finance',
+      'Career & Profession',
+      'Relationship & Love',
+      'Future Predictions',
+      'Active Doshas',
+      'Beneficial Yogas',
+      'Current Dasha Impact',
+      'Simple Remedies',
     ];
 
     lines.forEach(line => {
       const trimmedLine = line.trim();
-      const matchingHeader = sectionHeaders.find(h => trimmedLine.startsWith(h));
-      
+      const cleanedLine = trimmedLine.replace(/\*\*/g, '').trim();
+
+      const matchingHeader = sectionHeaders.find(h =>
+        cleanedLine.startsWith(h + ':') || cleanedLine === h
+      );
+
       if (matchingHeader) {
         if (currentSection) {
           sections.push(currentSection);
         }
         currentSection = {
-          title: matchingHeader.replace(':', ''),
+          title: matchingHeader,
           content: ''
         };
         console.log("Found section:", matchingHeader);
-      } else if (currentSection && trimmedLine) {
-        currentSection.content += (currentSection.content ? ' ' : '') + trimmedLine;
+      } else if (currentSection && cleanedLine) {
+        currentSection.content += (currentSection.content ? ' ' : '') + cleanedLine;
       }
     });
 
