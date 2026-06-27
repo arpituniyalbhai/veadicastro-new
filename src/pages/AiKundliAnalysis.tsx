@@ -9,7 +9,6 @@ import {
   Heart,
   Loader2,
   MapPin,
-  MessageCircle,
   Search,
   ShieldCheck,
   Sparkles,
@@ -22,10 +21,8 @@ import { ButtonLite } from "@/components/ui/button-lite";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { getPlanetaryData, type AstroPayload } from "@/lib/astroCalc";
 import { persistAstroPayload } from "@/lib/astroStorage";
-import { generateGeminiStream, type ChatTurn } from "@/lib/gemini";
 import { useAuth } from "@/context/AuthContext";
 import AdBanner from "@/components/AdBanner";
 
@@ -49,11 +46,6 @@ interface LocationSuggestion {
   display_name: string;
   lat: string;
   lon: string;
-}
-
-interface PredictionBlock {
-  title: string;
-  content: string;
 }
 
 const SITE_URL = "https://veadicastro.in";
@@ -226,16 +218,15 @@ export default function AiKundliAnalysis() {
     birthPlace: "",
   });
   const [astroData, setAstroData] = useState<AstroPayload | null>(null);
-  const [predictions, setPredictions] = useState<PredictionBlock[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingKundli, setIsGeneratingKundli] = useState(false);
   const [showResultsView, setShowResultsView] = useState(false);
-  const [showDetailedData, setShowDetailedData] = useState(false);
-  const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const [showVedikaPopup, setShowVedikaPopup] = useState(false);
+  const [status, setStatus] = useState("");
+  const [predictions, setPredictions] = useState<{title: string, content: string}[]>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -308,96 +299,10 @@ export default function AiKundliAnalysis() {
       setAstroData(chart);
       persistAstroPayload(chart);
       setShowResultsView(true);
-      setStatus("");
     } catch {
       setError("Something went wrong while generating your kundli. Please try again.");
-      setStatus("");
     } finally {
       setIsGeneratingKundli(false);
-    }
-  };
-
-  const runAIPrediction = async () => {
-    if (!astroData) return;
-    setIsLoading(true);
-    setError("");
-    setPredictions([]);
-    setShowDetailedData(false);
-    setStatus("Vedika is analyzing your complete birth chart...");
-    try {
-      const userPrompt = buildKundliPrompt(birthDetails, astroData);
-      console.log("Starting AI prediction with prompt length:", userPrompt.length);
-      let streamed = "";
-      await generateGeminiStream(
-        userPrompt,
-        [],
-        (delta) => {
-          streamed += delta;
-          console.log("Received delta, total length:", streamed.length);
-          parseAndUpdatePredictions(streamed);
-        },
-        buildKundliSystemPrompt(astroData),
-        "en",
-        birthDetails.name || undefined,
-        "secondary"
-      );
-      console.log("Streaming complete, final text length:", streamed.length);
-      setStatus("");
-    } catch (err) {
-      console.error("AI prediction error:", err);
-      setError("Something went wrong while preparing the AI analysis. Please try again.");
-      setStatus("");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const parseAndUpdatePredictions = (text: string) => {
-    console.log("Parsing text, length:", text.length);
-    console.log("Actual text preview:", text.substring(0, 500));
-    const sections: PredictionBlock[] = [];
-    const lines = text.split('\n');
-    let currentSection: PredictionBlock | null = null;
-
-    const sectionHeaders = [
-      'Health Prediction',
-      'Wealth & Finance',
-      'Career & Profession',
-      'Relationship & Love',
-      'Future Predictions',
-      'Active Doshas',
-      'Beneficial Yogas',
-      'Current Dasha Impact',
-      'Simple Remedies',
-    ];
-
-    lines.forEach(line => {
-      const cleanedLine = line.trim().replace(/\*\*/g, '').trim();
-
-      const matchingHeader = sectionHeaders.find(h =>
-        cleanedLine.startsWith(h + ':') ||
-        cleanedLine.startsWith(h) ||
-        cleanedLine.toLowerCase().startsWith(h.toLowerCase() + ':')
-      );
-
-      if (matchingHeader) {
-        if (currentSection) sections.push(currentSection);
-        currentSection = { title: matchingHeader, content: '' };
-        console.log("Found section:", matchingHeader);
-      } else if (currentSection && cleanedLine) {
-        if (!cleanedLine.startsWith('Next Best Question')) {
-          currentSection.content += (currentSection.content ? ' ' : '') + cleanedLine;
-        }
-      }
-    });
-
-    if (currentSection) sections.push(currentSection);
-
-    console.log("Parsed sections count:", sections.length);
-    console.log("Sections:", sections);
-
-    if (sections.length > 0) {
-      setPredictions(sections);
     }
   };
 
@@ -726,41 +631,12 @@ export default function AiKundliAnalysis() {
                 </div>
               </div>
 
-              {/* AI Prediction Button */}
-              <div className="mt-6 text-center">
-                <ButtonLite
-                  type="button"
-                  disabled={isLoading}
-                  onClick={runAIPrediction}
-                  className="h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-base font-black text-white hover:from-pink-400 hover:to-purple-400 disabled:cursor-not-allowed disabled:opacity-50 px-8"
-                >
-                  {isLoading
-                    ? <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    : <Zap className="mr-2 h-5 w-5" />
-                  }
-                  Get AI Prediction - Free
-                </ButtonLite>
-                <p className="mt-3 text-xs text-white/35">
-                  Get complete AI analysis covering health, wealth, career, relationship & future
-                </p>
-              </div>
-
-              {/* Toggle Detailed Data Button */}
-              <div className="mt-4 text-center">
-                <button
-                  type="button"
-                  onClick={() => setShowDetailedData(!showDetailedData)}
-                  className="text-sm text-pink-300 hover:text-pink-200 underline underline-offset-4"
-                >
-                  {showDetailedData ? 'Hide' : 'Show'} detailed astrological data
-                </button>
-              </div>
             </div>
           </section>
         )}
 
-        {/* ── DETAILED ASTROLOGICAL DATA (toggleable) ── */}
-        {astroData && showResultsView && showDetailedData && (
+        {/* ── DETAILED ASTROLOGICAL DATA ── */}
+        {astroData && showResultsView && (
           <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
             <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20 sm:p-7">
               <div className="mb-6 flex items-center justify-between gap-4">
@@ -906,6 +782,25 @@ export default function AiKundliAnalysis() {
             </div>
           </div>
         </section>
+        )}
+
+        {/* AI Prediction Button */}
+        {astroData && showResultsView && (
+          <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <ButtonLite
+                type="button"
+                onClick={() => setShowVedikaPopup(true)}
+                className="h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-base font-black text-white hover:from-pink-400 hover:to-purple-400 px-8"
+              >
+                <Zap className="mr-2 h-5 w-5" />
+                Get AI Prediction - Free
+              </ButtonLite>
+              <p className="mt-3 text-xs text-white/35">
+                Get complete AI analysis covering health, wealth, career, relationship & future
+              </p>
+            </div>
+          </div>
         )}
 
         {/* ── AD: After predictions section ── */}
@@ -1334,6 +1229,57 @@ export default function AiKundliAnalysis() {
         </section>
 
       </main>
+
+      {showVedikaPopup && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4"
+          onClick={() => setShowVedikaPopup(false)}
+        >
+          <div
+            className="relative w-full max-w-sm rounded-[1.5rem] border border-pink-500/30 bg-[#0d0b18] p-7 text-center shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Avatar */}
+            <div className="mx-auto mb-4 h-16 w-16 overflow-hidden rounded-full border-2 border-pink-400/50">
+              <img src="/optimized/vedika.webp" alt="Vedika" className="h-full w-full object-cover" />
+            </div>
+
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-pink-300">
+              Vedika · AI Astrologer
+            </p>
+            <h3 className="mb-3 text-lg font-black leading-snug text-white">
+              Namaste! I'm Vedika, your personal Vedic astrologer
+            </h3>
+            <p className="mb-4 text-sm leading-6 text-white/60">
+              Sign up to chat with me about your kundli, relationships, career, and life path.
+              Your first <span className="font-bold text-pink-300">2 chats are completely free</span> — no payment needed.
+            </p>
+
+            {/* Info box */}
+            <div className="mb-5 rounded-xl border border-pink-400/20 bg-pink-400/8 p-4 text-left">
+              <p className="mb-2 text-xs text-white/50">After signing up you'll need to share:</p>
+              <div className="space-y-1.5 text-sm text-white/80">
+                <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-pink-300" /> Date, time &amp; place of birth</div>
+                <div className="flex items-center gap-2"><User className="h-4 w-4 text-pink-300" /> Your name (optional)</div>
+              </div>
+            </div>
+
+            <ButtonLite
+              onClick={() => { setShowVedikaPopup(false); setAuthOpen(true); }}
+              className="mb-3 h-12 w-full rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-sm font-black text-white hover:from-pink-400 hover:to-purple-400"
+            >
+              Sign up — it's free
+            </ButtonLite>
+
+            <button
+              onClick={() => setShowVedikaPopup(false)}
+              className="w-full rounded-xl border border-white/10 py-2 text-sm text-white/40 hover:text-white/60"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
