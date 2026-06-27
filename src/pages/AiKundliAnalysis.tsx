@@ -118,8 +118,16 @@ const buildKundliPrompt = (details: BirthDetails, chartData: AstroPayload) => {
   const genderLine = details.gender !== "not-specified" ? `Gender: ${details.gender}` : "Gender: not provided";
   
   const planetsInfo = Object.entries(chartData.planets || {})
-    .map(([name, planet]) => `${name}: ${planet.sign} at ${planet.longitude.toFixed(2)}°`)
+    .map(([name, planet]) => `${name}: ${planet.sign} at ${planet.longitude.toFixed(2)}°, Nakshatra: ${planet.nakshatra.name} Pada ${planet.nakshatra.pada}`)
     .join('\n');
+  
+  const houseCuspsInfo = chartData.houses?.map((cusp, index) => `House ${index + 1}: ${cusp.toFixed(2)}°`).join('\n') || "Not available";
+  
+  const houseLordsInfo = chartData.houseLords?.map((lord, index) => `House ${index + 1}: ${lord}`).join('\n') || "Not available";
+  
+  const planetHouseMapInfo = Object.entries(chartData.planetHouseMap || {})
+    .map(([planet, house]) => `${planet}: House ${house}`)
+    .join('\n') || "Not available";
   
   const doshaInfo = `
 - Manglik Dosha: ${chartData.planetHouseMap?.mars && [1,2,4,7,8,12].includes(chartData.planetHouseMap.mars) ? 'Present' : 'Not Present'}
@@ -136,19 +144,30 @@ Birth place: ${details.birthPlace}
 Complete Birth Chart Data:
 - Sun Sign: ${chartData.sunSign}
 - Moon Sign: ${chartData.moonSign}
-- Ascendant/Lagna: ${chartData.lagnaSign}
+- Ascendant/Lagna: ${chartData.lagnaSign} at ${chartData.ascendant?.toFixed(2)}°
 - Nakshatra: ${chartData.nakshatra?.name || "Not available"} Pada ${chartData.nakshatra?.pada || ""}
+- Julian Day UT: ${chartData.julianDayUT?.toFixed(6)}
+- Julian Day ET: ${chartData.julianDayET?.toFixed(6)}
 
-Planetary Positions:
+Planetary Positions with Nakshatras:
 ${planetsInfo}
+
+Planet House Placements:
+${planetHouseMapInfo}
+
+House Cusps (Degrees):
+${houseCuspsInfo}
+
+House Lords:
+${houseLordsInfo}
+
+Current Dasha: ${chartData.dasha?.mahadasha || "Not available"} (Ends: ${chartData.dasha?.mahaEnds || "N/A"})
+Antar Dasha: ${chartData.dasha?.antardasha || "Not available"} (Ends: ${chartData.dasha?.antarEnds || "N/A"})
 
 Dosha Analysis:
 ${doshaInfo}
 
-Current Dasha: ${chartData.dasha?.mahadasha || "Not available"}
-Antar Dasha: ${chartData.dasha?.antardasha || "Not available"}
-
-Provide a complete AI kundli analysis covering all life aspects.`;
+Provide a complete AI kundli analysis covering all life aspects based on this complete chart data.`;
 };
 
 const checkKaalSarp = (data: AstroPayload) => {
@@ -231,6 +250,7 @@ export default function AiKundliAnalysis() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingKundli, setIsGeneratingKundli] = useState(false);
   const [showResultsView, setShowResultsView] = useState(false);
+  const [showDetailedData, setShowDetailedData] = useState(false);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
@@ -697,19 +717,6 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* Planetary Positions */}
-                <div className="rounded-2xl border border-gradient-to-r from-blue-500/20 to-cyan-500/20 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-300">Planetary Positions</h3>
-                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2 custom-scrollbar">
-                    {Object.entries(astroData.planets || {}).map(([name, planet]) => (
-                      <div key={name} className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
-                        <span className="text-white/60 capitalize">{name}:</span>
-                        <span className="font-medium text-cyan-200">{planet.sign} ({planet.longitude.toFixed(2)}°)</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Current Dasha */}
                 <div className="rounded-2xl border border-gradient-to-r from-green-500/20 to-emerald-500/20 bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-5 backdrop-blur-sm">
                   <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-300">Current Dasha</h3>
@@ -724,37 +731,74 @@ export default function AiKundliAnalysis() {
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Dosha Check */}
-                <div className="rounded-2xl border border-gradient-to-r from-red-500/20 to-orange-500/20 bg-gradient-to-br from-red-500/10 to-orange-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-orange-300">Dosha Analysis</h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
-                      <span className="text-white/60">Manglik Dosha:</span>
-                      <span className="font-medium text-yellow-300">Not Calculated</span>
-                    </div>
-                    <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
-                      <span className="text-white/60">Kaal Sarp Dosha:</span>
-                      <span className="font-medium text-yellow-300">Not Calculated</span>
-                    </div>
-                    <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
-                      <span className="text-white/60">Pitra Dosha:</span>
-                      <span className="font-medium text-yellow-300">Not Calculated</span>
-                    </div>
-                    <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
-                      <span className="text-white/60">Sadhesati:</span>
-                      <span className="font-medium text-yellow-300">Not Calculated (requires transit data)</span>
-                    </div>
+              {/* AI Prediction Button */}
+              <div className="mt-6 text-center">
+                <ButtonLite
+                  type="button"
+                  disabled={isLoading}
+                  onClick={runAIPrediction}
+                  className="h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-base font-black text-white hover:from-pink-400 hover:to-purple-400 disabled:cursor-not-allowed disabled:opacity-50 px-8"
+                >
+                  {isLoading
+                    ? <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    : <Zap className="mr-2 h-5 w-5" />
+                  }
+                  Get AI Prediction - Free
+                </ButtonLite>
+                <p className="mt-3 text-xs text-white/35">
+                  Get complete AI analysis covering health, wealth, career, relationship & future
+                </p>
+              </div>
+
+              {/* Toggle Detailed Data Button */}
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowDetailedData(!showDetailedData)}
+                  className="text-sm text-pink-300 hover:text-pink-200 underline underline-offset-4"
+                >
+                  {showDetailedData ? 'Hide' : 'Show'} detailed astrological data
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── DETAILED ASTROLOGICAL DATA (toggleable) ── */}
+        {astroData && showResultsView && showDetailedData && (
+          <section className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+            <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.045] p-5 shadow-xl shadow-black/20 sm:p-7">
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-pink-300">Detailed Astrological Data</p>
+                  <h2 className="mt-1 text-xl font-black">Swiss Ephemeris Calculations</h2>
+                </div>
+                <div className="rounded-2xl bg-purple-500/20 p-3 text-purple-200">
+                  <Star className="h-5 w-5" />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto -mx-5 px-5">
+                <div className="grid gap-6 grid-cols-2 lg:grid-cols-3 min-w-[600px] lg:min-w-[1000px]">
+                  {/* Planetary Positions */}
+                  <div className="rounded-2xl border border-gradient-to-r from-blue-500/20 to-cyan-500/20 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-300">Planetary Positions</h3>
+                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                    {Object.entries(astroData.planets || {}).map(([name, planet]) => (
+                      <div key={name} className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
+                        <span className="text-white/60 capitalize">{name}:</span>
+                        <span className="font-medium text-cyan-200">{planet.sign} ({planet.longitude.toFixed(2)}°)</span>
+                      </div>
+                    ))}
                   </div>
-                  <p className="mt-3 text-xs text-white/40 italic">
-                    Dosha calculations require backend implementation using Swiss Ephemeris with proper Vedic astrology rules.
-                  </p>
                 </div>
 
-                {/* House Map */}
-                <div className="rounded-2xl border border-gradient-to-r from-purple-500/20 to-pink-500/20 bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-5 md:col-span-2 lg:col-span-2 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300">Planet House Placements</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-sm">
+                  {/* House Map */}
+                  <div className="rounded-2xl border border-gradient-to-r from-purple-500/20 to-pink-500/20 bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300">Planet House Placements</h3>
+                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                     {Object.entries(astroData.planetHouseMap || {}).map(([planet, house]) => (
                       <div key={planet} className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2 border border-white/5 hover:border-pink-400/30 transition-colors">
                         <span className="text-white/60 capitalize">{planet}:</span>
@@ -764,10 +808,10 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* House Lords */}
-                <div className="rounded-2xl border border-gradient-to-r from-indigo-500/20 to-blue-500/20 bg-gradient-to-br from-indigo-500/10 to-blue-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-blue-300">House Lords</h3>
-                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2">
+                  {/* House Lords */}
+                  <div className="rounded-2xl border border-gradient-to-r from-indigo-500/20 to-blue-500/20 bg-gradient-to-br from-indigo-500/10 to-blue-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-blue-300">House Lords</h3>
+                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                     {astroData.houseLords?.map((lord, index) => (
                       <div key={index} className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
                         <span className="text-white/60">House {index + 1}:</span>
@@ -777,10 +821,10 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* House Cusps */}
-                <div className="rounded-2xl border border-gradient-to-r from-teal-500/20 to-cyan-500/20 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300">House Cusps (Degrees)</h3>
-                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2">
+                  {/* House Cusps */}
+                  <div className="rounded-2xl border border-gradient-to-r from-teal-500/20 to-cyan-500/20 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300">House Cusps (Degrees)</h3>
+                  <div className="space-y-2 text-sm max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                     {astroData.houses?.map((cusp, index) => (
                       <div key={index} className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
                         <span className="text-white/60">House {index + 1}:</span>
@@ -790,9 +834,9 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* Julian Day */}
-                <div className="rounded-2xl border border-gradient-to-r from-amber-500/20 to-yellow-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-300">Julian Day</h3>
+                  {/* Julian Day */}
+                  <div className="rounded-2xl border border-gradient-to-r from-amber-500/20 to-yellow-500/20 bg-gradient-to-br from-amber-500/10 to-yellow-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-300">Julian Day</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
                       <span className="text-white/60">Julian Day UT:</span>
@@ -805,9 +849,9 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* Ascendant Degree */}
-                <div className="rounded-2xl border border-gradient-to-r from-rose-500/20 to-pink-500/20 bg-gradient-to-br from-rose-500/10 to-pink-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Ascendant Details</h3>
+                  {/* Ascendant Degree */}
+                  <div className="rounded-2xl border border-gradient-to-r from-rose-500/20 to-pink-500/20 bg-gradient-to-br from-rose-500/10 to-pink-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-300 to-pink-300">Ascendant Details</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
                       <span className="text-white/60">Ascendant Degree:</span>
@@ -820,9 +864,9 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* Dasha End Dates */}
-                <div className="rounded-2xl border border-gradient-to-r from-violet-500/20 to-purple-500/20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 p-5 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-purple-300">Dasha Period End Dates</h3>
+                  {/* Dasha End Dates */}
+                  <div className="rounded-2xl border border-gradient-to-r from-violet-500/20 to-purple-500/20 bg-gradient-to-br from-violet-500/10 to-purple-500/10 p-5 backdrop-blur-sm min-w-[280px]">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 to-purple-300">Dasha Period End Dates</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between items-center rounded-lg bg-black/30 px-3 py-2">
                       <span className="text-white/60">Mahadasha Ends:</span>
@@ -835,11 +879,11 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
 
-                {/* Detailed Planet Data */}
-                <div className="rounded-2xl border border-gradient-to-r from-fuchsia-500/20 to-pink-500/20 bg-gradient-to-br from-fuchsia-500/10 to-pink-500/10 p-5 md:col-span-2 lg:col-span-3 backdrop-blur-sm">
-                  <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-300 to-pink-300">Complete Planetary Data</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                  {/* Detailed Planet Data */}
+                  <div className="rounded-2xl border border-gradient-to-r from-fuchsia-500/20 to-pink-500/20 bg-gradient-to-br from-fuchsia-500/10 to-pink-500/10 p-5 md:col-span-2 lg:col-span-3 backdrop-blur-sm">
+                    <h3 className="mb-4 font-bold text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-300 to-pink-300">Complete Planetary Data</h3>
+                  <div className="overflow-x-auto -mx-5 px-5">
+                    <table className="w-full text-sm min-w-[600px]">
                       <thead>
                         <tr className="border-b border-white/10">
                           <th className="text-left py-2 px-3 text-white/60">Planet</th>
@@ -866,27 +910,9 @@ export default function AiKundliAnalysis() {
                   </div>
                 </div>
               </div>
-
-              {/* AI Prediction Button */}
-              <div className="mt-6 text-center">
-                <ButtonLite
-                  type="button"
-                  disabled={isLoading}
-                  onClick={runAIPrediction}
-                  className="h-14 rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 text-base font-black text-white hover:from-pink-400 hover:to-purple-400 disabled:cursor-not-allowed disabled:opacity-50 px-8"
-                >
-                  {isLoading
-                    ? <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    : <Zap className="mr-2 h-5 w-5" />
-                  }
-                  Get AI Prediction - Free
-                </ButtonLite>
-                <p className="mt-3 text-xs text-white/35">
-                  Get complete AI analysis covering health, wealth, career, relationship & future
-                </p>
-              </div>
             </div>
-          </section>
+          </div>
+        </section>
         )}
 
         {/* ── AD: After predictions section ── */}

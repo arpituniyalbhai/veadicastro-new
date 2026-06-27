@@ -5,6 +5,7 @@
     { "source": "/free-ai-astrologer-chat", "destination": "/api/meta?path=free-ai-astrologer-chat" },
     { "source": "/ai-marriage-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-marriage-prediction-by-date-of-birth" },
     { "source": "/ai-career-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-career-prediction-by-date-of-birth" },
+    { "source": "/ai-kundli-analysis", "destination": "/api/meta?path=ai-kundli-analysis" },
     { "source": "/love-astrology-by-date-of-birth", "destination": "/api/meta?path=love-astrology-by-date-of-birth" },
     { "source": "/free-5-minutes-astrology-ai", "destination": "/api/meta?path=free-5-minutes-astrology-ai" },
     { "source": "/free-kundli-generator", "destination": "/api/meta?path=free-kundli-generator" },
