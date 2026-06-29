@@ -97,7 +97,21 @@ const Navbar = ({ user = null, onAuthOpen }: NavbarProps) => {
           </div>
 
           {/* Desktop CTA Button */}
-          <div className="hidden md:block flex-shrink-0">
+          <div className="hidden md:block flex items-center gap-3 flex-shrink-0">
+            <Button
+              variant="outline"
+              size={scrolled ? "sm" : "default"}
+              className={`transition-all duration-600 ${scrolled ? 'px-3 py-1 text-[15px]' : 'px-4 py-2 text-sm'}`}
+              onClick={() => {
+                if (!user) {
+                  onAuthOpen?.();
+                } else {
+                  navigate(`/dashboard?referral=${currentPage}`);
+                }
+              }}
+            >
+              Try Vedika Free
+            </Button>
             <Button
               variant="cosmic"
               size={scrolled ? "sm" : "default"}
@@ -111,7 +125,7 @@ const Navbar = ({ user = null, onAuthOpen }: NavbarProps) => {
                 }
               }}
             >
-              {user ? "Go to Dashboard" : "Get Started Free"}
+              {location.pathname === '/ai-future-spouse-prediction' ? "Ask Vedika about your future wife" : (user ? "Go to Dashboard" : "Get Started Free")}
             </Button>
           </div>
 
@@ -156,7 +170,22 @@ const Navbar = ({ user = null, onAuthOpen }: NavbarProps) => {
               >
                 Contact
               </button>
-              <div className="pt-4 border-t border-border/40">
+              <div className="pt-4 border-t border-border/40 space-y-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    if (!user) {
+                      onAuthOpen?.();
+                    } else {
+                      navigate(`/dashboard?referral=${currentPage}`);
+                    }
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  Try Vedika Free
+                </Button>
                 <Button
                   variant="cosmic"
                   size="sm"
@@ -171,7 +200,7 @@ const Navbar = ({ user = null, onAuthOpen }: NavbarProps) => {
                     setMobileMenuOpen(false);
                   }}
                 >
-                  {user ? "Go to Dashboard" : "Get Started Free"}
+                  {location.pathname === '/ai-future-spouse-prediction' ? "Ask Vedika about your future wife" : (user ? "Go to Dashboard" : "Get Started Free")}
                 </Button>
               </div>
             </div>

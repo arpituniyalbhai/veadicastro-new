@@ -78,6 +78,7 @@ const FreeAiAstrologerChat = lazy(() => import("@/pages/free-ai-astrologer-chat"
 const AiMarriagePredictionByDateOfBirth = lazy(() => import("@/pages/AiMarriagePredictionByDateOfBirth"));
 const AiCareerPredictionByDateOfBirth = lazy(() => import("@/pages/AiCareerPredictionByDateOfBirth"));
 const AiLoveAstrologyByDateOfBirth = lazy(() => import("@/pages/AiLoveAstrologyByDateOfBirth"));
+const FutureWifePrediction = lazy(() => import("@/pages/FutureWifePrediction"));
 const AiKundliAnalysis = lazy(() => import("@/pages/AiKundliAnalysis"));
 const FreeKundliGenerator = lazy(() => import("@/pages/FreeKundliGenerator"));
 const FreeKundliMatching = lazy(() => import("@/pages/free-kundali-matching"));
@@ -182,6 +183,7 @@ const AuthenticatedRoutes = ({
         <Route path="/ai-marriage-prediction-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiMarriagePredictionByDateOfBirth /></Suspense>} />
         <Route path="/ai-career-prediction-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiCareerPredictionByDateOfBirth /></Suspense>} />
         <Route path="/love-astrology-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AiLoveAstrologyByDateOfBirth /></Suspense>} />
+        <Route path="/ai-future-spouse-prediction" element={<Suspense fallback={<PageLoading />}><FutureWifePrediction /></Suspense>} />
         <Route path="/ai-kundli-analysis" element={<Suspense fallback={<PageLoading />}><AiKundliAnalysis /></Suspense>} />
         <Route path="/free-5-minutes-astrology-ai" element={<Suspense fallback={<PageLoading />}><Free5MinutesAstrologyAI /></Suspense>} />
         <Route path="/free-kundli-generator" element={<Suspense fallback={<PageLoading />}><FreeKundliGenerator /></Suspense>} />

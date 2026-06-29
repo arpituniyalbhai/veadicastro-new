@@ -42,6 +42,9 @@ const Footer = () => {
             <Link to="/love-astrology-by-date-of-birth" className="text-white/80 hover:text-white transition-colors">
               Love Astrology Tool
             </Link>
+            <Link to="/ai-future-spouse-prediction" className="text-white/80 hover:text-white transition-colors">
+              Future Spouse Prediction
+            </Link>
             <Link to="/ai-kundli-analysis" className="text-white/80 hover:text-white transition-colors">
               AI Kundli Analysis
             </Link>

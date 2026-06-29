@@ -310,7 +310,7 @@ export default function AiAstrologyPrediction() {
   return (
     <>
       <Helmet>
-        <title>AI Astrology predictions by date of birth - Free | Veadicastro</title>
+        <title>AI Astrology predictions by date of birth - No Signup | Veadicastro</title>
         <meta
           name="description"
           content="Get 10 free AI astrology predictions based on your Vedic birth chart. Career, marriage, money, health and more - personalized to your age and kundli."
@@ -399,6 +399,49 @@ export default function AiAstrologyPrediction() {
           </div>
         </header>
 
+        {/* Announcement Banner */}
+        {/* Announcement Banner */}
+<div className="mx-auto max-w-5xl px-4 py-4">
+  <div className="relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4">
+    <div className="absolute inset-0 opacity-20" style={{
+      background: 'radial-gradient(circle at 15% 20%, rgba(251,146,60,0.3) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(239,68,68,0.3) 0%, transparent 45%)'
+    }} />
+    
+    <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+      
+      {/* Image + Text row — always together */}
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="relative shrink-0">
+          <img
+            src="/amanuniyalastrologe.webp"
+            alt="Acharya ji - Expert Vedic Astrologer"
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-orange-500/50 shadow-lg"
+          />
+          <span className="absolute -bottom-1 -right-1 bg-green-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-semibold">Live</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full font-bold">SPECIAL OFFER</span>
+            <span className="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full font-semibold">Unlimited Call</span>
+          </div>
+          <h3 className="font-bold text-base sm:text-lg text-orange-400 leading-snug">
+            Talk to Best Astrologer of Uttarakhand — Acharya ji
+          </h3>
+          <p className="text-xs sm:text-sm text-white/70 mt-0.5">Get personalized guidance from expert Vedic astrologer.</p>
+          <p className="text-xs text-green-400 mt-0.5 font-medium">Full refund if not satisfied with Acharya ji</p>
+        </div>
+      </div>
+
+      {/* Button */}
+      <button
+        onClick={() => window.location.href = '/talk-to-astrologer'}
+        className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-5 py-3 text-sm font-bold text-white hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+      >
+        Book Now — Acharya Aman Uniyal Ji
+      </button>
+    </div>
+  </div>
+</div>
         <section className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-5xl flex-col justify-center px-4 py-10 sm:py-12">
           {step === "form" && (
             <div className="mx-auto w-full max-w-2xl">
@@ -703,7 +746,7 @@ export default function AiAstrologyPrediction() {
 
           <h2 className="mb-4 text-2xl font-semibold text-white">Why Use Veadicastro</h2>
           <p className="mb-5 leading-7">
-            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro homepage</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>.
+            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>.
           </p>
           <p className="mb-10 leading-7">
             Use this page as a simple first reading. Enter your birth details carefully, generate your predictions, and notice which parts feel close to your current life. Astrology works best when it gives you awareness. It should help you think better, choose better, and move through life with more clarity.

@@ -33,6 +33,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/love-astrology-by-date-of-birth',
     breadcrumb: 'Free Love Astrology by Date of Birth',
   },
+  '/ai-future-spouse-prediction': {
+    title: 'AI Future Spouse Prediction — Discover Your Future Partner | Veadicastro',
+    description: 'Discover your future spouse with Vedika AI. Get free spouse predictions, personality traits, relationship patterns, and marriage timing based on Vedic astrology.',
+    canonical: 'https://veadicastro.in/ai-future-spouse-prediction',
+    breadcrumb: 'AI Future Spouse Prediction',
+  },
   '/free-5-minutes-astrology-ai': {
     title: 'Free 5 Minute Astrology AI Reading — Instant Vedic Predictions | Veadicastro',
     description: 'Get a free 5-minute Vedic astrology AI reading instantly. Enter birth details and get predictions from Vedika AI — no signup needed.',
@@ -413,7 +419,11 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const pathname = rawPath ? `/${rawPath}` : '/';
 
   const ua = req.headers['user-agent'] || '';
-  const isBot = /googlebot|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebot|twitterbot|linkedinbot|whatsapp|telegrambot/i.test(ua);
+
+  const isBot =
+    /googlebot|google-inspectiontool|googleother|googleother-image|googleother-video|adsbot-google|mediapartners-google|apis-google|bingbot|slurp|duckduckbot|baiduspider|yandexbot|facebot|twitterbot|linkedinbot|whatsapp|telegrambot/i.test(
+      ua
+    );
 
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
   const rawHtml = fs.readFileSync(indexPath, 'utf-8');
@@ -432,5 +442,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const html = buildHtml(meta, pathname);
   res.setHeader('Content-Type', 'text/html');
   res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
+  res.setHeader('Vary', 'User-Agent');
   return res.send(html);
 }

@@ -739,6 +739,59 @@ const Index = () => {
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
 
+              {/* Future Spouse Prediction Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/ai-future-spouse-prediction');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/ai-future-spouse-prediction" />
+                <meta itemProp="name" content="AI Future Spouse Prediction - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Discover your future spouse with Vedika AI. Get free spouse predictions, personality traits, relationship patterns, and marriage timing based on Vedic astrology.</span>
+
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-rose-500 to-accent flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Heart className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    Future Spouse Prediction
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Discover your future spouse characteristics, relationship patterns, and marriage timing with Vedika AI.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Spouse personality traits
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Marriage timing window
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      AI-powered insights
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Predict Spouse</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-rose-500/20 via-accent/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+
               {/* AI Kundli Analysis Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
                    itemScope itemType="https://schema.org/SoftwareApplication"
