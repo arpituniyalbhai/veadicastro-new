@@ -60,7 +60,7 @@ const AuthModal = () => {
         email: normalizedEmail,
         displayName: userName,
         planName: "Free",
-        credits: 2,
+        credits: 1,
         reportCredits: 0,
         compatibilitycredits: 0,
         purchasedReports: [],

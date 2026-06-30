@@ -366,7 +366,7 @@ export default function FutureWifePrediction() {
                 </p>
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-pink-500/20 border border-pink-400/30 px-4 py-2">
                   <Sparkles className="h-4 w-4 text-pink-400" />
-                  <span className="text-sm font-semibold text-pink-200">2 chats are completely free</span>
+                  <span className="text-sm font-semibold text-pink-200">1 chat is completely free</span>
                 </div>
                 <button
                   onClick={() => setPopupStep(2)}
