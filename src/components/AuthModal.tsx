@@ -51,6 +51,9 @@ const AuthModal = () => {
         return;
       }
       
+      // Read traffic source from localStorage
+      const trafficSource = localStorage.getItem("traffic_source") || "organic";
+
       // First time only — create fresh doc with 2 free credits
       await setDoc(userDocRef, {
         uid,
@@ -62,6 +65,7 @@ const AuthModal = () => {
         compatibilitycredits: 0,
         purchasedReports: [],
         unlimitedExpiry: null,
+        trafficSource,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
