@@ -20,6 +20,7 @@
     { "source": "/dhan-yoga-bracelet", "destination": "/api/meta?path=dhan-yoga-bracelet" },
     { "source": "/chatgpt-astrology", "destination": "/api/meta?path=chatgpt-astrology" },
     { "source": "/ai-astrology-prediction", "destination": "/api/meta?path=ai-astrology-prediction" },
+    { "source": "/horoscope-by-date-of-birth", "destination": "/api/meta?path=horoscope-by-date-of-birth" },
 
     { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },
     { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },

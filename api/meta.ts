@@ -111,6 +111,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-astrology-prediction',
     breadcrumb: 'AI Astrology Prediction',
   },
+  '/horoscope-by-date-of-birth': {
+    title: 'Horoscope by Date of Birth - Free Vedic Astrology Predictions | Veadicastro',
+    description: 'Discover your personality, career, love life, and future with free horoscope predictions by date of birth. Get personalized Vedic astrology insights from Vedika AI.',
+    canonical: 'https://veadicastro.in/horoscope-by-date-of-birth',
+    breadcrumb: 'Horoscope by Date of Birth',
+  },
   '/ai-kundli-analysis': {
     title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
     description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',

@@ -1283,22 +1283,7 @@ useEffect(() => {
 
           {/* Dhan Yog Bracelet product card removed */}
 
-          {/* Promo Banner */}
-          <Card className="relative overflow-hidden p-4 bg-card/50 border-border/60 rounded-2xl mt-2">
-            <div className="absolute inset-0 opacity-20" style={{background:
-              'radial-gradient(circle at 15% 20%, rgba(147,51,234,0.25) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(236,72,153,0.25) 0%, transparent 45%)'}} />
-            <div className="relative flex items-center gap-4">
-              <div className="flex-1">
-                <h3 className="font-semibold mb-1">Best Seller Report: Deep Life Analysis - ₹1999</h3>
-                <p className="text-sm text-muted-foreground">Get a complete life blueprint with career, marriage, wealth timing, dasha analysis, and personalized remedies.</p>
-                <p className="text-xs text-orange-600 dark:text-orange-400 mt-1 font-medium">This is not an AI-generated astrology PDF. Every page is manually prepared specifically for your birth chart.</p>
-              </div>
-              {/* Promo graphic removed as requested */}
-              <Button variant="cosmic" className="rounded-xl" onClick={() => navigate("/pricing/onboarding?plan=Deep%20Life%20Analysis&amount=1999&type=report")}>
-                Book Now
-              </Button>
-            </div>
-          </Card>
+          {/* Best Seller Report removed */}
 
            {/* Offer Popup - Limited Time Deal */}
           <Card className="relative overflow-hidden p-4 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30 rounded-2xl mt-3 animate-pulse">

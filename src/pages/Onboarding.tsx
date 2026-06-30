@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
-import { Calendar, Clock, MapPin, Globe } from "lucide-react";
+import { Calendar, Clock, MapPin, Lock } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -53,7 +53,7 @@ const Onboarding = () => {
     if (step === 1 && requiredFilled && !wasmPreloaded && !wasmLoading) {
       preloadWasm();
     }
-    setStep((s) => Math.min(3, s + 1));
+    setStep((s) => Math.min(2, s + 1));
   };
   const back = () => setStep((s) => Math.max(1, s - 1));
 
@@ -193,7 +193,7 @@ useEffect(() => {
         <div className="rounded-xl border border-border/60 bg-card/30 backdrop-blur p-4 sm:p-6 md:p-8">
           {/* Step indicators */}
           <div className="flex items-center justify-center gap-2 mb-6">
-            {[1, 2, 3].map((i) => (
+            {[1, 2].map((i) => (
               <div key={i} className={`h-2 w-2 rounded-full ${i <= step ? 'bg-secondary' : 'bg-border'}`} />
             ))}
           </div>
@@ -388,57 +388,6 @@ useEffect(() => {
                 </div>
               </div>
               
-              <div className="space-y-6 text-center">
-                <h2 className="text-xl font-semibold">
-                  {t('languageSelectionTitle').replace('{name}', displayName)}
-                </h2>
-                <p className="text-muted-foreground">
-                  {t('selectLanguage')}
-                </p>
-                
-                {/* Language Selection */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-xs mx-auto">
-                  <button
-                    type="button"
-                    onClick={() => setLang('en')}
-                    className={`p-3 rounded-lg border-2 transition-all duration-300 ${
-                      lang === 'en' 
-                        ? 'border-secondary bg-secondary/10 shadow-lg shadow-secondary/20' 
-                        : 'border-border/60 bg-card/30 hover:border-secondary/50 hover:bg-accent/10'
-                    }`}
-                  >
-                    <Globe className="w-5 h-5 mx-auto mb-1 text-secondary" />
-                    <div className="font-semibold text-sm">English</div>
-                    <div className="text-xs text-muted-foreground">English</div>
-                  </button>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setLang('hi')}
-                    className={`p-3 rounded-lg border-2 transition-all duration-300 ${
-                      lang === 'hi' 
-                        ? 'border-secondary bg-secondary/10 shadow-lg shadow-secondary/20' 
-                        : 'border-border/60 bg-card/30 hover:border-secondary/50 hover:bg-accent/10'
-                    }`}
-                  >
-                    <Globe className="w-5 h-5 mx-auto mb-1 text-secondary" />
-                    <div className="font-semibold text-sm">हिंदी</div>
-                    <div className="text-xs text-muted-foreground">Hindi</div>
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="space-y-6">
-              {/* Vedika Avatar */}
-              <div className="flex justify-center">
-                <div className="w-24 h-24 rounded-full border-4 border-secondary/40 overflow-hidden shadow-lg">
-                  <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" loading="lazy" />
-                </div>
-              </div>
-              
               <div className="space-y-4 text-center">
                 <h2 className="text-xl font-semibold">
                   {t('welcomeMessage').replace('{name}', displayName)}!
@@ -452,7 +401,7 @@ useEffect(() => {
 
           <div className="flex justify-between mt-8">
             <Button variant="ghost" onClick={back} disabled={step === 1}>{t('back')}</Button>
-            {step < 3 ? (
+            {step < 2 ? (
               <Button variant="cosmic" onClick={next} disabled={step === 1 && !requiredFilled}>{t('next')}</Button>
             ) : (
               <Button
@@ -541,6 +490,12 @@ useEffect(() => {
                 {t('readMyStars')}
               </Button>
             )}
+          </div>
+
+          {/* Privacy Message */}
+          <div className="flex items-center justify-center gap-2 mt-6 text-xs text-muted-foreground">
+            <Lock className="w-3 h-3" />
+            <span>Your birth details are private and securely stored</span>
           </div>
         </div>
       </div>

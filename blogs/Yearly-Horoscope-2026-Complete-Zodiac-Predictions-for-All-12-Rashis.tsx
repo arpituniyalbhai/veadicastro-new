@@ -558,7 +558,7 @@ const YearlyHoroscope2026CompleteZodiacPredictionsForAll12Rashis = () => {
                 Get Your Personalized 2026 Horoscope
               </h3>
               <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-                Discover how these planetary transits specifically affect your personal birth chart. Get detailed insights, remedies, and guidance for navigating 2026 with confidence.
+                Discover how these planetary transits specifically affect your personal birth chart. Get detailed insights, remedies, and guidance for navigating 2026 with confidence. For a quick overview, try our <Link to="/horoscope-by-date-of-birth" className="text-blue-600 hover:text-blue-700 underline">horoscope by date of birth</Link> tool.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link 

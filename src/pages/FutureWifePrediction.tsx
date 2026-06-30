@@ -34,6 +34,10 @@ const faqs = [
     q: "Are spouse predictions only for a specific gender?",
     a: "No. Spouse predictions are available for everyone. Venus is analyzed for male charts and Jupiter for female charts in Vedic astrology.",
   },
+  {
+    q: "What is Darakaraka in spouse prediction?",
+    a: "Darakaraka is the planet with the lowest degree in your birth chart, considered the primary indicator of your spouse's nature, personality, and characteristics in Vedic astrology.",
+  },
 ];
 
 export default function FutureWifePrediction() {
@@ -75,7 +79,7 @@ export default function FutureWifePrediction() {
   return (
     <>
       <Helmet>
-        <title>AI Future Spouse Prediction by date of birth | Veadicastro</title>
+        <title>Future Spouse Prediction by Date of Birth | Free Vedic Astrology </title>
         <meta
           name="description"
           content="Discover your future spouse with Vedika AI. Get free spouse predictions, personality traits, relationship patterns, and marriage timing based on Vedic astrology."
@@ -194,7 +198,7 @@ export default function FutureWifePrediction() {
               Wondering what your future spouse will be like? Millions of people search for spouse prediction by date of birth every year — not just out of curiosity, but because understanding relationship patterns can help you make better choices in love and life. Vedic astrology has offered guidance on this for thousands of years, and today <Link to="/ai-astrology-prediction" className="text-pink-400 hover:text-pink-300 underline">AI astrology</Link> makes it more accessible than ever.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Using your date of birth, birth time, and birthplace, an AI-powered Vedic astrology system can analyze your birth chart to reveal the characteristics, personality, and timing of your future spouse. This is not guesswork — it is a structured reading of planetary positions that have guided marriage decisions across generations. You can also try <Link to="/free-5-minutes-astrology-ai" className="text-pink-400 hover:text-pink-300 underline">free 5-minute astrology AI</Link> for quick insights.
+              Using your date of birth, birth time, and birthplace, an AI-powered Vedic astrology system can analyze your birth chart to reveal the characteristics, personality, and timing of your future spouse. This is not guesswork — it is a structured reading of planetary positions that have guided marriage decisions across generations. You can also try <Link to="/free-5-minutes-astrology-ai" className="text-pink-400 hover:text-pink-300 underline">free 5-minute astrology AI</Link> for quick insights or check your <Link to="/horoscope-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">horoscope by date of birth</Link> for personality insights.
             </p>
 
             {/* Direct Answer */}
@@ -285,6 +289,31 @@ export default function FutureWifePrediction() {
             <p className="text-base leading-7 text-white/70 mb-6">
               A well-placed Jupiter often indicates a husband who is wise, generous, and supportive. Jupiter in Sagittarius or Pisces may suggest a spiritually inclined partner. The condition of the 7th house and its ruler further describes the timing and circumstances of marriage. Visit our <Link to="/" className="text-pink-400 hover:text-pink-300 underline">homepage</Link> to explore all AI astrology tools.
             </p>
+
+            <h3 className="text-2xl font-bold text-white mb-4 mt-10">
+              Darakaraka and D9 Navamsa — The Real Spouse Indicators
+            </h3>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              In Vedic astrology, two specific techniques are used to study future 
+              spouse characteristics with more precision. The <strong>Darakaraka</strong> 
+              is the planet with the lowest degree in your birth chart — it is 
+              considered the primary significator of your spouse and reveals 
+              personality traits, nature, and even physical characteristics of 
+              your future partner.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              The <strong>D9 Navamsa chart</strong> is a divisional chart specifically 
+              used for marriage analysis. While the main birth chart (D1) shows 
+              general life patterns, the Navamsa chart reveals deeper truths about 
+              marriage, spouse nature, and relationship strength. Astrologers 
+              cross-check the 7th house lord's placement in both D1 and D9 charts 
+              for accurate spouse predictions.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              Vedika AI analyzes your Darakaraka planet, 7th house lord, Venus 
+              placement, and D9 Navamsa positions together — not just the basic 
+              7th house — for a more complete future spouse reading.
+            </p>
           </article>
 
           {/* FAQ Section */}
@@ -306,7 +335,7 @@ export default function FutureWifePrediction() {
       {/* Popup Modal */}
       {showPopup && (
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/80" onClick={() => setShowPopup(false)} />
+          <div className="absolute inset-0 bg-black/80" />
           
           {popupStep === 1 ? (
             // Step 1: Message Popup
@@ -321,16 +350,19 @@ export default function FutureWifePrediction() {
               <div className="text-center">
                 <div className="mx-auto mb-6 h-24 w-24 rounded-full bg-gradient-to-br from-pink-500/20 to-purple-500/20 flex items-center justify-center border border-pink-400/30">
                   <img 
-                    src="/optimized/logo.webp" 
+                    src="/optimized/vedika.webp" 
                     alt="Vedika AI" 
                     className="h-16 w-16 rounded-full object-cover"
                   />
                 </div>
+                <h3 className="text-2xl font-black text-white mb-2">
+                  Hey, I am Vedika AI — An AI Astrologer
+                </h3>
                 <h3 className="text-2xl font-black text-white mb-4">
-                  Hey, I know you want to know about your future spouse
+                  I know you want to know about your future wife
                 </h3>
                 <p className="text-base leading-7 text-white/75 mb-6">
-                  I also know how he/she looks and how you'll meet. Just sign in, enter your date of birth, and chat with me.
+                  Just sign up, enter your date of birth, and ask me anything about your future spouse.
                 </p>
                 <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-pink-500/20 border border-pink-400/30 px-4 py-2">
                   <Sparkles className="h-4 w-4 text-pink-400" />
