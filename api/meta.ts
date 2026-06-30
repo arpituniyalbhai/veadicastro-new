@@ -148,6 +148,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/about-founder',
     breadcrumb: 'About Founder',
   },
+  '/arpit-uniyal': {
+    title: 'Arpit Uniyal — Founder of Veadicastro | AI Vedic Astrology',
+    description: 'The story of why I built Veadicastro — an AI-powered Vedic astrology platform rooted in 300 years of authentic astrological knowledge. Written by founder Arpit Uniyal.',
+    canonical: 'https://veadicastro.in/arpit-uniyal',
+    breadcrumb: 'About Founder',
+  },
   '/mission': {
     title: 'Our Mission — Veadicastro',
     description: 'Veadicastro\'s mission is to make authentic Vedic astrology accessible to everyone through AI technology.',

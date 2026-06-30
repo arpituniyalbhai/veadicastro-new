@@ -135,6 +135,9 @@ const Footer = () => {
             <Link to="/about" className="text-white/80 hover:text-white transition-colors">
               About Us
             </Link>
+            <Link to="/arpit-uniyal" className="text-white/80 hover:text-white transition-colors">
+              About Founder
+            </Link>
             <Link to="/mission" className="text-white/80 hover:text-white transition-colors">
               Our Mission
             </Link>

@@ -26,6 +26,7 @@
     { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },
     { "source": "/about", "destination": "/api/meta?path=about" },
     { "source": "/about-founder", "destination": "/api/meta?path=about-founder" },
+    { "source": "/arpit-uniyal", "destination": "/api/meta?path=arpit-uniyal" },
     { "source": "/mission", "destination": "/api/meta?path=mission" },
     { "source": "/how-it-works", "destination": "/api/meta?path=how-it-works" },
     { "source": "/contact", "destination": "/api/meta?path=contact" },

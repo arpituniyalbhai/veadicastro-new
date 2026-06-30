@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const FounderTrustSection = () => {
   return (
     <section className="py-16 px-4">
@@ -31,7 +33,7 @@ const FounderTrustSection = () => {
               />
             </div>
             <div>
-              <p className="font-semibold text-foreground text-lg">Arpit Uniyal</p>
+              <Link to="/arpit-uniyal" className="font-semibold text-foreground text-lg hover:text-accent transition-colors">Arpit Uniyal</Link>
               <p className="text-sm text-muted-foreground">Founder, Veadicastro</p>
               <p className="text-sm text-accent mt-1">📍 Pauri Garhwal, Uttarakhand</p>
             </div>

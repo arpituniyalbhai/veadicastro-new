@@ -92,6 +92,7 @@ const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
 const ChatGPTAstrology = lazy(() => import("@/pages/ChatGPTAstrology"));
 const AiAstrologyPrediction = lazy(() => import("@/pages/AiAstrologyPrediction"));
 const HoroscopeByDateOfBirth = lazy(() => import("@/pages/HoroscopeByDateOfBirth"));
+const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
@@ -203,6 +204,7 @@ const AuthenticatedRoutes = ({
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />
+        <Route path="/arpit-uniyal" element={<Suspense fallback={<PageLoading />}><ArpitUniyal /></Suspense>} />
         <Route path="/mission" element={<Suspense fallback={<PageLoading />}><Mission /></Suspense>} />
         <Route path="/how-it-works" element={<Suspense fallback={<PageLoading />}><HowItWorks /></Suspense>} />
         <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
