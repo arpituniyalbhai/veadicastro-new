@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import admin from 'firebase-admin';
 

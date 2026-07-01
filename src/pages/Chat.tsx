@@ -1345,21 +1345,32 @@ ${question}
 Vedika answer:
 ${answer.slice(0, 1200)}`;
 
-  const response = await fetch(`${API_BASE}/api/mistral`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      prompt,
-      history: [],
-      systemExtra: "Return valid JSON only. Do not include markdown fences.",
-      lang,
-      apiKeySlot: "secondary",
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-  if (!response.ok) throw new Error(await response.text());
-  const data = await response.json();
-  return parseQuestionSuggestions(String(data?.text || ""));
+  try {
+    const response = await fetch(`${API_BASE}/api/mistral`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        prompt,
+        history: [],
+        systemExtra: "Return valid JSON only. Do not include markdown fences.",
+        lang,
+        apiKeySlot: "secondary",
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) throw new Error(await response.text());
+    const data = await response.json();
+    return parseQuestionSuggestions(String(data?.text || ""));
+  } catch (error) {
+    console.error("[generateAnswerSuggestions] Failed:", error);
+    return []; // Return empty array on failure to prevent infinite loading
+  }
 }
 
 function formatAssistantContent(content: string): string[] {
