@@ -649,15 +649,9 @@ export default function Chat() {
         finalAnswerForSuggestions = sanitize(streamedAnswer || "");
       }
       const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
-      if (assistantIndex >= 0) {
-        setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: true }));
-      }
 
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
-        if (assistantIndex >= 0) {
-          setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: false }));
-        }
         setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
@@ -671,18 +665,16 @@ export default function Chat() {
       }
 
       console.log("AI answer completed, credit deducted successfully");
+
+      // Generate suggestions in background without blocking - no loading state
       generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang)
         .then((nextQuestions) => {
-          if (!nextQuestions.length || assistantIndex < 0) return;
-          if (assistantIndex >= 0) {
+          if (nextQuestions.length && assistantIndex >= 0) {
             setAnswerSuggestions((prev) => ({ ...prev, [assistantIndex]: nextQuestions }));
           }
         })
-        .catch((error) => console.debug("[Chat] Suggestion generation failed", error))
-        .finally(() => {
-          if (assistantIndex >= 0) {
-            setLoadingSuggestions((prev) => ({ ...prev, [assistantIndex]: false }));
-          }
+        .catch((error) => {
+          console.debug("[Chat] Suggestion generation failed", error);
         });
     } catch (e) {
       setMessages((m) => {
