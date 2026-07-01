@@ -1,6 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import admin from 'firebase-admin';
 
+export const config = { maxDuration: 30 };
+
 // INIT FIREBASE ADMIN
 let db: any;
 
@@ -247,7 +249,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         };
       }),
         new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Firestore transaction timeout')), 8000)
+          setTimeout(() => reject(new Error('Firestore transaction timeout')), 25000)
         )
       ]);
 
