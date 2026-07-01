@@ -32,6 +32,7 @@ function initializeFirebaseAdmin() {
   }
 
   db = admin.firestore();
+  db.settings({ preferRest: true });   // ← yeh line add karo — gRPC hang fix karta hai
   return db;
 }
 
@@ -94,8 +95,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     } else if (action === 'deduct') {
       // Atomic credit deduction using transaction
-      const result = await firestore.runTransaction(async (transaction: any) => {
-        const userDoc = await transaction.get(userDocRef);
+      const result = await Promise.race([
+        firestore.runTransaction(async (transaction: any) => {
+          const userDoc = await transaction.get(userDocRef);
         
         if (!userDoc.exists) {
           // Auto-create user document if not found
@@ -243,7 +245,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           compatibilityCredits: compatibilityCredits,
           reason: 'deducted'
         };
-      });
+      }),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Firestore transaction timeout')), 8000)
+        )
+      ]);
 
       return res.status(200).json(result);
 
