@@ -676,12 +676,19 @@ export default function Chat() {
         .catch((error) => {
           console.debug("[Chat] Suggestion generation failed", error);
         });
-    } catch (e) {
+    } catch (e: any) {
+      const errMsg = e?.message || String(e || "");
+      const isImageError = errMsg.includes("image.png") || errMsg.includes("does not support image");
       setMessages((m) => {
         const copy = [...m];
         const lastIndex = copy.length - 1;
         if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-          copy[lastIndex] = { role: "assistant", content: "Sorry, I couldn't process that right now." };
+          copy[lastIndex] = {
+            role: "assistant",
+            content: isImageError
+              ? "I can only read text messages — I'm not able to process images. Please describe in words what you'd like to know."
+              : "Sorry, I couldn't process that right now."
+          };
         }
         return copy;
       });
@@ -1140,7 +1147,9 @@ export default function Chat() {
               id="vp-cta"
               onClick={() => {
                 const p = selectedPlanMap[selectedPlan];
-                navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
+                if (p) {
+                  navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
+                }
                 setShowLimitWarning(false);
               }}
               style={{width:'100%',background:'#d9277a',border:'none',borderRadius:12,padding:14,fontSize:14,fontWeight:600,color:'#fff',cursor:'pointer',marginBottom:10,fontFamily:'Georgia,serif'}}
@@ -1153,6 +1162,7 @@ export default function Chat() {
                 setShowLimitWarning(false);
                 const streamAssistantMessage = (text: string) => {
                   const words = text.split(' ');
+                  if (!words.length) return;
                   const messageIndexRef = { current: -1 };
                   setMessages(m => {
                     messageIndexRef.current = m.length;
@@ -1168,7 +1178,7 @@ export default function Chat() {
                         const nextWord = words[wordIndex];
                         copy[messageIndex] = {
                           role: 'assistant',
-                          content: `${copy[messageIndex].content}${copy[messageIndex].content ? ' ' : ''}${nextWord}`
+                          content: `${copy[messageIndex]?.content || ''}${copy[messageIndex]?.content ? ' ' : ''}${nextWord ?? ''}`
                         };
                       }
                       return copy;
@@ -1183,7 +1193,7 @@ export default function Chat() {
                 setTimeout(() => {
                   const name = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || ''; } catch { return ''; } })();
                   const greeting = name ? `${name}, before` : 'Before';
-                  streamAssistantMessage(`${greeting} you go — I noticed something unusual in your chart. Something that doesn't show up often. It's connected to a decision you've been avoiding. I won't bring it up again unless you ask.`);
+                  streamAssistantMessage(`${greeting} you go — okay! Whenever you're ready, I'm here. Just remember — your chart has some important dasha periods coming up that are worth discussing. Whenever you feel like it, upgrade and let's talk.`);
                   setTimeout(() => {
                     streamAssistantMessage("The window I saw... it's tied to the next 90 days. After that, the planetary shift changes everything. Just so you know.");
                   }, 2200);

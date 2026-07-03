@@ -34,7 +34,7 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     if (chart.planets) {
       for (const [key, val] of Object.entries(chart.planets) as any) {
         planetLines.push(
-          `${val.name}: ${val.sign}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}`
+          `${val.name}: ${val.sign}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}${val.retrograde ? ' (Retrograde)' : ' (Direct)'}`
         );
       }
     }
@@ -73,6 +73,7 @@ ${houseLordLines.join('\n')}
 CURRENT DASHA TIMING (PRE-CALCULATED):
 Mahadasha: ${dasha.mahadasha || 'N/A'} (ends ${dasha.mahaEnds || 'N/A'})
 Antardasha: ${dasha.antardasha || 'N/A'} (ends ${dasha.antarEnds || 'N/A'})
+Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
 === END PRE-CALCULATED FACTS ===
 
 (Raw source block below, but rely on the facts above)
@@ -201,6 +202,8 @@ CORE RULES (STRICT):
 * Planet house numbers are authoritative. Never calculate house positions.
 * Never infer houses from signs. Never modify provided house numbers.
 * Always use the supplied planetHouseMap exactly as received.
+* Retrograde/Direct status is explicitly given for each planet — use it exactly as stated, never guess or assume.
+* The "Next Mahadasha" is explicitly given in the data — never invent or guess a different next dasha lord.
 "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."
 
 LOGIC ORDER:

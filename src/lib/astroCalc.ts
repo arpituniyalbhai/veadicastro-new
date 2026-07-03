@@ -20,6 +20,7 @@ export type PlanetEntry = {
   latitude: number;
   distance: number | null;
   speed: number | null;
+  retrograde: boolean;
   sign: string;
   signIndex: number;
   nakshatra: {
@@ -46,6 +47,7 @@ export type AstroPayload = {
     antardasha: string;
     mahaEnds: string;
     antarEnds: string;
+    nextMahadasha: string;
   };
   houseLords: string[];
   astro_locked: boolean;
@@ -264,6 +266,7 @@ const buildPlanetEntry = (
     latitude: latitude ?? 0,
     distance: distance ?? null,
     speed: speed ?? null,
+    retrograde: (speed ?? 0) < 0,
     sign: sign.name,
     signIndex: sign.index,
     nakshatra: {
@@ -361,6 +364,7 @@ const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude
     antardasha: currentAntar,
     mahaEnds: mahaEnd.toISOString().split('T')[0],
     antarEnds: finalAntarEnd.toISOString().split('T')[0],
+    nextMahadasha: DASHA_SEQUENCE[(idx + 1) % 9],
   };
 };
 
@@ -459,7 +463,7 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   const sunData = planetMap.sun || null;
   const moonNakshatra = moonData ? moonData.nakshatra : null;
 
-  let dasha = { mahadasha: '', antardasha: '', mahaEnds: '', antarEnds: '' };
+  let dasha = { mahadasha: '', antardasha: '', mahaEnds: '', antarEnds: '', nextMahadasha: '' };
   if (moonData && moonNakshatra) {
     dasha = calculateDasha(utcParts, moonNakshatra.index, moonData.longitude);
   }

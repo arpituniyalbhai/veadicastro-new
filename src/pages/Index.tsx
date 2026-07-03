@@ -20,6 +20,7 @@ const FeaturesSection = lazy(() => import("@/components/FeaturesSection"));
 const PricingComponent = lazy(() => import("@/components/PricingComponent"));
 const ReviewsSection = lazy(() => import("@/components/ReviewsSection"));
 const FAQSection = lazy(() => import("@/components/FAQSection"));
+const HomepageSEOArticle = lazy(() => import("@/components/HomepageSEOArticle"));
 const BlogSection = lazy(() => import("@/components/BlogSection"));
 const AstrologyEngineSection = lazy(() => import("@/components/AstrologyEngineSection"));
 const FounderTrustSection = lazy(() => import("@/components/FounderTrustSection"));
@@ -1150,6 +1151,10 @@ const Index = () => {
           </div>
         }>
           <FAQSection />
+        </Suspense>
+
+        <Suspense fallback={<div />}>
+          <HomepageSEOArticle />
         </Suspense>
 
         <Suspense fallback={
