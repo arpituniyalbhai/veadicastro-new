@@ -1326,17 +1326,19 @@ function parseQuestionSuggestions(raw: string): string[] {
 async function generateAnswerSuggestions(question: string, answer: string, lang: string): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
-Create exactly 2 short, natural next-question suggestions for an astrology chat, written so the user genuinely wants to spend a credit to ask them.
+
+Create exactly 2 short, curiosity-driven next-question suggestions for an astrology chat, written so the user genuinely feels they NEED to spend a credit to ask them — not generic follow-ups, but questions that create a real itch to know more.
 
 RULES:
 - Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
 - Questions should sound like what a normal person would naturally ask next — never robotic or templated.
-- Each question must feel like it unlocks something MORE specific or deeper than what was just answered — not a restatement or a generic continuation. If a question doesn't add a new layer beyond the answer above, don't suggest it.
+- Each question must open a curiosity gap: it should imply there's something specific and personal still unrevealed, connected directly to what was just answered. Do not restate or generically continue — it must feel like the next layer the user is dying to know.
 - Make the two questions genuinely different from each other:
-  - Question 1: goes deeper on the exact same topic just discussed — sharper, more specific angle than the answer gave.
-  - Question 2: opens a different but related practical life area connected to the same answer (e.g. if the answer was about marriage timing, question 2 could pivot to how that affects career or finances — not just rephrase the same question).
-- Match the emotional tone of the answer given. If the topic was sensitive or heavy, keep the tone grounded and caring, not flippant. If it was positive, keep it light and exciting.
-- Make them specific to the practical outcome in the answer: career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
+  - Question 1: goes deeper on the exact same topic just discussed — a sharper, more specific, more personal angle than the answer gave (e.g. exact timing, a named outcome, a decision point).
+  - Question 2: pivots to a different but connected practical life area implied by the same answer (e.g. if the answer was about marriage timing, question 2 could tease how that same period affects money or career — not just rephrase the same question).
+- Match the emotional tone of the answer given. If the topic was sensitive or heavy, keep curiosity grounded and caring, not flippant. If it was positive, make the curiosity feel exciting and rewarding.
+- Anchor both questions to the practical outcome in the answer: career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
+- Do not introduce any new chart claims, dates, or facts not already implied by the answer above — the curiosity comes from phrasing, not from inventing new information.
 - Do not include predictions, answers, markdown, numbering, or labels — questions only.
 
 Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
