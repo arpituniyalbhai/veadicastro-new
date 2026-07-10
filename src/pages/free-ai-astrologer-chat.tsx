@@ -1285,34 +1285,58 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
       </div>
 
       {/* Sign Up Modal */}
-      {showSignupModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="card-glass rounded-3xl p-8 max-w-md w-full">
-            <div className="text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden">
-                <img src="/optimized/vedika.webp" alt="Vedika — AI Vedic astrologer by Veadicastro" className="w-full h-full object-cover" />
-              </div>
-              <h3 className="font-bold text-2xl font-bold mb-3 text-white">
-                Sign up to Get 1 Chat Free
-              </h3>
-              <p className="text-white/60 text-sm mb-6">
-                You've used your free question! Sign up to get 1 free chat and unlock deeper astrology insights.
-              </p>
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    setShowSignupModal(false);
-                    setAuthOpen(true);
-                  }}
-                  className="w-full btn-pink text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </div>
-          </div>
+{showSignupModal && (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="card-glass rounded-3xl p-8 max-w-md w-full">
+      <div className="text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden">
+          <img
+            src="/optimized/vedika.webp"
+            alt="Vedika AI Astrologer"
+            className="w-full h-full object-cover"
+          />
         </div>
-      )}
+
+        <h3 className="text-2xl font-bold text-white mb-2">
+          Hey, I'm Vedika 👋
+        </h3>
+
+        <p className="text-pink-400 font-medium mb-4">
+          Your AI-powered Vedic astrologer.
+        </p>
+
+        <p className="text-white/70 text-sm leading-6 mb-6">
+          You've just experienced a <span className="text-white font-medium">basic reading</span>.
+          <br /><br />
+          Sign up to unlock a <span className="text-pink-400 font-semibold">deep, personalized astrology reading</span> based on your birth chart.
+        </p>
+
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6">
+          <p className="text-pink-400 font-semibold text-lg">
+            🎁 1 FREE Deep Reading Question
+          </p>
+          <p className="text-white/60 text-sm mt-2">
+            Ask about your career, love, marriage, finances, or any life question—and receive a detailed AI astrology analysis.
+          </p>
+        </div>
+
+        <button
+          onClick={() => {
+            setShowSignupModal(false);
+            setAuthOpen(true);
+          }}
+          className="w-full btn-pink text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity"
+        >
+          Unlock My Free Deep Reading
+        </button>
+
+        <p className="text-xs text-white/40 mt-3">
+          Free signup • No payment required
+        </p>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 }

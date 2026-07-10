@@ -270,7 +270,7 @@ const FifaWorldCup2026WinnerAstrologyPrediction = () => {
             <p className="text-lg leading-8 text-white/75">
               This is not betting advice. It is a sports astrology reading for entertainment and spiritual insight. For
               personal chart guidance, you can use the <Link to="/free-kundli-generator" className="text-pink-300 underline">Free Kundli Generator</Link>,
-              ask <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline">Vedika AI through free AI astrologer chat</Link>,
+              ask <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline">Vedika AI through free AI astrologer chat</Link> — try the best AI astrologer for instant personalized predictions,
               or visit the <Link to="/" className="text-pink-300 underline">Veadicastro home page</Link>.
             </p>
           </section>
@@ -450,7 +450,8 @@ const FifaWorldCup2026WinnerAstrologyPrediction = () => {
               For readers interested in how astrology and AI prediction overlap, read our article on <Link to="/blog/ai-astrology-real-or-fake" className="text-pink-300 underline">whether AI astrology is real or fake</Link>.
               You can also try <Link to="/free-5-minutes-astrology-ai" className="text-pink-300 underline">Free 5 Minutes Astrology AI</Link>,
               compare model behavior on <Link to="/chatgpt-astrology" className="text-pink-300 underline">ChatGPT Astrology</Link>,
-              or explore our <Link to="/ai-astrology-prediction" className="text-pink-300 underline">AI Astrology Prediction</Link> page.
+              explore our <Link to="/ai-astrology-prediction" className="text-pink-300 underline">AI Astrology Prediction</Link> page,
+              or <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline">try the best AI astrologer</Link> for instant Vedic guidance.
             </p>
           </section>
 

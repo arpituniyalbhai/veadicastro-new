@@ -237,7 +237,7 @@ This gap is exactly where AI is stepping in.
               <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg mb-6">
                 <p className="text-gray-700 leading-relaxed">
                   <strong>A 2024 survey of urban Indian millennials</strong> between ages 22 and 35 found that 64% had consulted some form of online astrology content in the past year — but less than 12% had paid for a professional online consultation. The interest is massive. The conversion to paid guidance is still small.
-AI bridges this gap by offering something in between — quality guidance without the friction of booking and paying for a human session. Try our <Link to="/free-ai-astrologer-chat" className="text-blue-600 hover:text-blue-700 underline">free AI astrologer</Link> to get instant insights. Visit our <Link to="/" className="text-blue-600 hover:text-blue-700 underline">home page</Link> to explore more AI astrology features.
+AI bridges this gap by offering something in between — quality guidance without the friction of booking and paying for a human session. <Link to="/free-ai-astrologer-chat" className="text-blue-600 hover:text-blue-700 underline">Try the best AI astrologer</Link> to get instant insights. Visit our <Link to="/" className="text-blue-600 hover:text-blue-700 underline">home page</Link> to explore more AI astrology features.
                 </p>
               </div>
             </div>
@@ -320,7 +320,7 @@ What AI handles is the everyday, the accessible, the immediate.
               </p>
               
               <p className="text-gray-700 leading-relaxed mb-8">
-                When someone is curious about their chart at midnight and has a quick question, they are not going to call their astrologer. When someone is new to astrology and wants to understand their birth chart without spending thousands of rupees, AI gives them a starting point. They can also try our <Link to="/free-kundli-generator" className="text-blue-600 hover:text-blue-700 underline">free Kundli generator</Link> for basic analysis. This automated kundali reading service makes astrology accessible to everyone.
+                When someone is curious about their chart at midnight and has a quick question, they are not going to call their astrologer. When someone is new to astrology and wants to understand their birth chart without spending thousands of rupees, AI gives them a starting point. They can also try our <Link to="/free-kundli-generator" className="text-blue-600 hover:text-blue-700 underline">free Kundli generator</Link> for basic analysis. This automated kundali reading service makes astrology accessible to everyone. For instant personalized guidance, <Link to="/free-ai-astrologer-chat" className="text-blue-600 hover:text-blue-700 underline">try the best AI astrologer</Link> available 24/7.
 Think of it like the difference between a doctor and a well-researched health app. The app helps you understand your body, track patterns, learn the basics. For serious medical decisions, you still see the doctor. Both have their place, and neither threatens the other.
               </p>
             </div>

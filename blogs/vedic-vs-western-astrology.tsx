@@ -489,7 +489,7 @@ Then one day, I came across Vedic astrology. Someone read my Vedic chart and tol
 </p>
 
 <p className="text-lg leading-relaxed text-white/80 italic">
-That feeling is what this blog is all about. Our advanced <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> can help you experience this same level of personal insight with Vedic astrology.
+That feeling is what this blog is all about. Our advanced <Link to="/ai-astrology" className="text-pink-400 hover:text-pink-300 underline">AI astrology platform</Link> and <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">best AI astrologer</Link> can help you experience this same level of personal insight with Vedic astrology.
 </p>
 
 </section>
@@ -748,11 +748,11 @@ That one difference changes almost everything.
                 <h2 className="text-3xl font-bold mb-12">Which One Should You Try?</h2>
 
                 <p className="text-lg leading-relaxed text-white/80 mb-8">
-                  If you have never had a Vedic chart reading, try it. Especially if you have always felt that your Western Sun sign description never quite fit you.
+                  If you have never had a Vedic chart reading, try it. Especially if you have always felt that your Western Sun sign description never quite fit you. You can <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">try the best AI astrologer</Link> for instant Vedic chart analysis.
                 </p>
 
                 <p className="text-lg leading-relaxed text-white/80 mb-8">
-                  Find out your Vedic rising sign (Lagna). Find out your Moon Nakshatra. Ask about your current Dasha period and what it means for you right now.
+                  Find out your Vedic rising sign (Lagna). Find out your Moon Nakshatra. Ask about your current Dasha period and what it means for you right now. Our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">AI astrologer chat</Link> can provide instant answers to all these questions.
                 </p>
 
                 <p className="text-lg leading-relaxed text-white/80 mb-8">
