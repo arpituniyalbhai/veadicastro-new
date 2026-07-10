@@ -52,6 +52,19 @@ const PLANET_EMOJI: Record<string, string> = {
   "Jupiter": "♃", "Venus": "♀", "Saturn": "♄", "Rahu": "🌑", "Ketu": "🌘"
 };
 
+const SIGN_GLYPHS: Record<string, string> = {
+  Aries: "♈", Taurus: "♉", Gemini: "♊", Cancer: "♋",
+  Leo: "♌", Virgo: "♍", Libra: "♎", Scorpio: "♏",
+  Sagittarius: "♐", Capricorn: "♑", Aquarius: "♒", Pisces: "♓",
+};
+
+const PLANET_SYMBOLS: Record<string, string> = {
+  Sun: "Su", Moon: "Mo", Mars: "Ma", Mercury: "Me",
+  Jupiter: "Ju", Venus: "Ve", Saturn: "Sa", Rahu: "Ra", Ketu: "Ke",
+};
+
+const ZODIAC = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+
 // Astrology helpers
 const signLords: Record<string,string> = { 
   Aries:"Mars",Taurus:"Venus",Gemini:"Mercury",Cancer:"Moon",
@@ -141,6 +154,103 @@ const S = {
   card: { background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:"16px", padding:"20px" } as React.CSSProperties,
   row: { display:"flex", justifyContent:"space-between", alignItems:"center", padding:"8px 0", borderBottom:"1px solid rgba(255,255,255,0.05)", fontSize:"13px" } as React.CSSProperties,
 };
+
+function NorthIndianChart({ chart }: { chart: ChartData }) {
+  const lagnaSign = chart.lagnaSign || "Aries";
+  const lagnaIdx = ZODIAC.indexOf(lagnaSign);
+  const houseSignNames = ZODIAC.slice(lagnaIdx).concat(ZODIAC.slice(0, lagnaIdx));
+
+  const planetMap: Record<string, { house: number }> = {};
+  (chart.planets || []).forEach((p) => {
+    const name = p.name || p.planet || "";
+    if (name) {
+      const h = parseInt(String(p.house || "1").replace("H", ""), 10);
+      planetMap[name] = { house: h };
+    }
+  });
+
+  const planetsInHouse = (h: number): string[] => {
+    const list: string[] = [];
+    for (const [name, pd] of Object.entries(planetMap)) {
+      if (pd.house === h) list.push(name);
+    }
+    return list;
+  };
+
+  const houseLabelPos: Record<number, { x: number; y: number }> = {
+    1: { x: 50, y: 23 },
+    2: { x: 25, y: 8 },
+    12: { x: 75, y: 8 },
+    3: { x: 8, y: 25 },
+    11: { x: 92, y: 25 },
+    4: { x: 22, y: 50 },
+    10: { x: 78, y: 50 },
+    5: { x: 8, y: 75 },
+    9: { x: 92, y: 75 },
+    6: { x: 25, y: 92 },
+    8: { x: 75, y: 92 },
+    7: { x: 50, y: 77 },
+  };
+
+  const renderHouseContent = (houseNum: number) => {
+    const signName = houseSignNames[houseNum - 1] || "";
+    const glyph = SIGN_GLYPHS[signName] || "";
+    const planets = planetsInHouse(houseNum);
+    const pos = houseLabelPos[houseNum];
+    const isKendra = [1, 4, 7, 10].includes(houseNum);
+
+    return (
+      <div
+        key={houseNum}
+        className="absolute flex flex-col items-center justify-center text-center pointer-events-none"
+        style={{
+          left: `${pos?.x || 50}%`,
+          top: `${pos?.y || 50}%`,
+          transform: "translate(-50%, -50%)",
+          width: isKendra ? "26%" : "20%",
+        }}
+      >
+        <div className={`flex items-center gap-1 ${houseNum === 1 ? "text-pink-400" : ""}`}>
+          <span className="text-xs md:text-sm leading-none">{glyph}</span>
+          <span className="text-[9px] md:text-[11px] font-medium leading-none">{signName}</span>
+        </div>
+        {planets.length > 0 && (
+          <div className="mt-1 flex flex-wrap justify-center gap-x-1 gap-y-0.5">
+            {planets.map((p) => (
+              <span
+                key={p}
+                className={`text-[10px] md:text-xs font-semibold`}
+                style={{ color: PLANET_COLORS[p] || "#fff" }}
+                title={p}
+              >
+                {PLANET_SYMBOLS[p] || p.substring(0, 2)}
+              </span>
+            ))}
+          </div>
+        )}
+        <span className="text-[8px] text-white/30 leading-none mt-0.5">
+          H{houseNum}
+        </span>
+      </div>
+    );
+  };
+
+  return (
+    <div className="relative mx-auto w-full max-w-[420px] aspect-square">
+      <svg viewBox="0 0 400 400" className="absolute inset-0 h-full w-full" style={{ color: "rgba(255,255,255,0.15)" }}>
+        <rect x="1" y="1" width="398" height="398" fill="none" stroke="currentColor" strokeWidth="2" />
+        <polygon points="200,0 300,100 200,200 100,100" fill="rgba(236,72,153,0.08)" />
+        <line x1="0" y1="0" x2="400" y2="400" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="400" y1="0" x2="0" y2="400" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="200" y1="0" x2="400" y2="200" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="400" y1="200" x2="200" y2="400" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="200" y1="400" x2="0" y2="200" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="0" y1="200" x2="200" y2="0" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(renderHouseContent)}
+    </div>
+  );
+}
 
 const Chart = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
@@ -341,6 +451,14 @@ const Chart = () => {
                   <div style={{ fontWeight:600, fontSize:"13px" }}>{v}</div>
                 </div>
               ))}
+            </div>
+
+            {/* North Indian Chart */}
+            <div className="fkg-glass" style={{ borderRadius:"22px", padding:"26px", marginTop:"18px" }}>
+              <h3 className="fkg-serif" style={{ fontSize:"17px", fontWeight:700, marginBottom:"18px", textAlign:"center", color:"rgba(255,255,255,0.7)" }}>
+                ⬡ North Indian Birth Chart
+              </h3>
+              <NorthIndianChart chart={chartData} />
             </div>
 
             {/* Tab bar */}

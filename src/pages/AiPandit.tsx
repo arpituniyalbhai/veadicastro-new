@@ -512,7 +512,7 @@ export default function AiPandit() {
               Users outside India can access AI Pandit from anywhere in the world. The system supports multiple time zones and provides insights relevant to users regardless of their location. This global accessibility has made Vedic astrology available to a much wider audience.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              For Indians living abroad, AI Pandit offers a connection to their cultural heritage. They can access authentic Vedic astrology guidance without needing to find local astrologers or travel to India. This accessibility helps preserve and share traditional wisdom globally.
+              For Indians living abroad, AI Pandit offers a connection to their cultural heritage. They can access authentic Vedic astrology guidance without needing to find local astrologers or travel to India. You can also explore <a href="https://astrovaanii.in/" className="text-purple-400 hover:text-purple-300 underline" target="_blank" rel="noopener noreferrer">Astrovaani</a> for traditional Vedic astrology consultations and personalized readings. This accessibility helps preserve and share traditional wisdom globally.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Future of AI and Vedic Astrology</h3>
