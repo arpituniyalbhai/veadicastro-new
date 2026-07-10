@@ -1299,7 +1299,7 @@ return (
                 The word "Kundli" means birth chart. Every person has a unique Kundli based on the exact date, time, and place of their birth. The position of the moon, planets, and stars at the time of birth shapes a person's personality, behavior, and destiny. When two people decide to get married, their Kundlis are matched to see if their energies align well together.
               </p>
               <p className="mt-3">
-                In India, this is not just a ritual — it is taken very seriously. Even modern educated families check Kundli compatibility before finalising a match. Our free calculator makes this process simple and instant. You don't need to visit a pandit or pay anyone. Just enter both birth details and get your score in seconds. For individual insights into your romantic patterns, you can also explore our <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Love Astrology by Date of Birth</Link> tool.
+                In India, this is not just a ritual — it is taken very seriously. Even modern educated families check Kundli compatibility before finalising a match. Our free calculator makes this process simple and instant. You don't need to visit a pandit or pay anyone. Just enter both birth details and get your score in seconds. For individual insights into your romantic patterns, you can also explore our <Link to="/love-astrology-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Love Astrology by Date of Birth</Link> tool. If you are looking for a trustworthy <Link to="/hi-astro-alternative" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">HiAstro alternative</Link> for accurate Kundli matching without hidden charges, Veadicastro delivers complete Guna Milan analysis for free.
               </p>
             </section>
 
@@ -1380,7 +1380,7 @@ return (
                 Traditionally, it is believed that a Manglik person should marry another Manglik. This is because when both partners have the dosha, it is said to cancel each other out. If only one partner is Manglik and the other is not, some astrologers believe it can create tension or conflict in the marriage.
               </p>
               <p className="mt-3">
-                However, modern astrologers often point out that Manglik Dosha alone is not enough to reject a match. Many other factors in the chart — like the strength of Jupiter, the position of Venus, and the overall Guna Milan score — matter equally. Our calculator checks for Manglik Dosha in both charts automatically and shows you the result clearly.
+                However, modern astrologers often point out that Manglik Dosha alone is not enough to reject a match. Many other factors in the chart — like the strength of Jupiter, the position of Venus, and the overall Guna Milan score — matter equally. Our calculator checks for Manglik Dosha in both charts automatically and shows you the result clearly. Unlike many platforms that charge extra for detailed dosha analysis, Veadicastro provides comprehensive matching free of cost — <Link to="/hi-astro-alternative" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">see why we are the better HiAstro alternative</Link>.
               </p>
             </section>
 

@@ -686,7 +686,7 @@ export default function AiAstrologyPrediction() {
             AI Astrology Prediction is a free Vedic astrology tool that reads your birth details and gives you ten personal predictions in clear language. You enter your name, gender, date of birth, time of birth, and birth place. The tool then calculates your birth chart and creates predictions for career, marriage, money, business, health, family, travel, education, love life, and lucky timing.
           </p>
           <p className="mb-5 leading-7">
-            The goal of this page is simple. Many people want astrology answers, but they do not want long reports that feel hard to understand. They want direct guidance that feels useful. This tool is built for that. It gives short, focused predictions based on your Vedic chart, not random daily horoscope text. If you are looking for a quick way to understand your future direction, this page is a good starting point.
+            The goal of this page is simple. Many people want astrology answers, but they do not want long reports that feel hard to understand. They want direct guidance that feels useful. This tool is built for that. It gives short, focused predictions based on your Vedic chart, not random daily horoscope text. If you are looking for a quick way to understand your future direction, this page is a good starting point. If you have been searching for a <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">HiAstro alternative</Link> that delivers real chart based predictions without hidden paywalls, you will find everything you need here.
           </p>
 
           <h2 className="mb-4 text-2xl font-semibold text-white">How This Tool Works</h2>
@@ -734,7 +734,7 @@ export default function AiAstrologyPrediction() {
             Vedic astrology is old, but the way people use it is changing. Earlier, you had to wait for an astrologer, book a call, or pay a high fee for basic answers. Now AI tools can make chart based guidance easier to access. This does not make astrology less serious. It makes the first step simpler for everyone.
           </p>
           <p className="mb-5 leading-7">
-            If you want to explore this topic deeply, read <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-[#d9277a] hover:text-white">how AI is transforming Vedic astrology</Link>. You can also read <Link to="/blog/ai-astrology-prediction-for-2026" className="text-[#d9277a] hover:text-white">AI astrology prediction for 2026</Link> if you want to see how AI and Vedic timing can be used for yearly guidance.
+            If you want to explore this topic deeply, read <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-[#d9277a] hover:text-white">how AI is transforming Vedic astrology</Link>. You can also read <Link to="/blog/ai-astrology-prediction-for-2026" className="text-[#d9277a] hover:text-white">AI astrology prediction for 2026</Link> if you want to see how AI and Vedic timing can be used for yearly guidance. While platforms like HiAstro limit what you can access for free, Veadicastro keeps all AI astrology predictions accessible — <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">see why we are the better choice</Link>.
           </p>
 
           <h2 className="mb-4 text-2xl font-semibold text-white">How To Use The Prediction In Real Life</h2>
@@ -747,7 +747,7 @@ export default function AiAstrologyPrediction() {
 
           <h2 className="mb-4 text-2xl font-semibold text-white">Why Use Veadicastro</h2>
           <p className="mb-5 leading-7">
-            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>.
+            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>. As a powerful <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">HiAstro alternative</Link>, Veadicastro gives you complete free access to AI predictions without requiring payment for basic features.
           </p>
           <p className="mb-10 leading-7">
             Use this page as a simple first reading. Enter your birth details carefully, generate your predictions, and notice which parts feel close to your current life. Astrology works best when it gives you awareness. It should help you think better, choose better, and move through life with more clarity.

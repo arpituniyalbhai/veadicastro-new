@@ -6,6 +6,7 @@ const linkGroups = [
     links: [
       { name: "AI Astrologer Chat", path: "/free-ai-astrologer-chat" },
       { name: "AI Pandit", path: "/ai-pandit" },
+      { name: "HiAstro Alternative", path: "/hi-astro-alternative" },
       { name: "Marriage Timing AI", path: "/ai-marriage-prediction-by-date-of-birth" },
       { name: "Career Prediction AI", path: "/ai-career-prediction-by-date-of-birth" },
       { name: "AI Kundli Analysis", path: "/ai-kundli-analysis" },

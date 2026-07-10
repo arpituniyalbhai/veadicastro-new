@@ -123,6 +123,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/ai-pandit',
     breadcrumb: 'AI Pandit',
   },
+  '/hi-astro-alternative': {
+    title: 'HiAstro Alternative — Free AI Astrology Chat | Veadicastro',
+    description: 'Looking for HiAstro? Try Veadicastro — free AI astrology chat with real Vedic birth chart analysis, career & marriage predictions. No signup for first 2 questions.',
+    canonical: 'https://veadicastro.in/hi-astro-alternative',
+    breadcrumb: 'HiAstro Alternative',
+  },
   '/ai-kundli-analysis': {
     title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
     description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',

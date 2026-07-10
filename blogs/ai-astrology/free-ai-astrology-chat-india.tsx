@@ -527,7 +527,7 @@ const FreeAiAstrologyChat = () => {
             <section className="bg-gray-900/50 border border-gray-700/50 rounded-xl p-6 mt-4">
               <h3 className="text-lg font-semibold text-white mb-3">A note from Arpit, founder of Veadicastro</h3>
               <p className="text-gray-400 leading-relaxed text-sm mb-4">
-                Arpit Uniyal, founder of Veadicastro, comes from a multi-generational astrology family in Haridwar, Uttarakhand. He built Veadicastro to combine traditional Vedic Jyotish with modern AI, so people can get chart-based guidance without waiting, pressure, or per-minute pricing.
+                Arpit Uniyal, founder of Veadicastro, comes from a multi-generational astrology family in  Uttarakhand. He built Veadicastro to combine traditional Vedic Jyotish with modern AI, so people can get chart-based guidance without waiting, pressure, or per-minute pricing.
               </p>
               <p className="text-gray-400 leading-relaxed text-sm">
                 I built Veadicastro because I was frustrated with how inaccessible real Vedic astrology was. Either you paid a lot for a consultation, or you used apps that gave you the same generic horoscope as everyone else born under your sun sign. Neither felt honest. The free AI chat is our answer to that — a way to give people actual chart-based answers without a paywall in the way. If you try it and find it useful, we would love to hear your feedback. If you have a question the AI did not answer well, reach out — we are constantly improving how Vedika works.

@@ -977,7 +977,7 @@ export default function AiKundliAnalysis() {
             </p>
 
             <p className="text-white/80 leading-7 mb-8">
-              Think of AI as an assistant that can read patterns quickly rather than as a replacement for centuries of astrological knowledge. You can also try our <Link to="/free-kundli-generator" className="text-pink-300 hover:text-pink-200 underline">free kundli generator</Link> for detailed chart calculations.
+              Think of AI as an assistant that can read patterns quickly rather than as a replacement for centuries of astrological knowledge. You can also try our <Link to="/free-kundli-generator" className="text-pink-300 hover:text-pink-200 underline">free kundli generator</Link> for detailed chart calculations. If you are searching for a reliable <Link to="/hi-astro-alternative" className="text-pink-300 hover:text-pink-200 underline">HiAstro alternative</Link> that combines genuine Swiss Ephemeris calculations with AI interpretation, Veadicastro is built for accuracy.
             </p>
 
             <h2 className="text-2xl font-bold text-white mb-6">The Direct Answer</h2>
@@ -1042,7 +1042,7 @@ export default function AiKundliAnalysis() {
             </p>
 
             <p className="text-white/80 leading-7 mb-8">
-              The founders of Veadicastro come from a family background connected to the Haridwar region where Vedic traditions remain part of everyday life, which helped shape the balance between traditional astrology and modern technology within the platform. You can also try our <Link to="/free-ai-astrologer-chat" className="text-pink-300 hover:text-pink-200 underline">free AI astrologer chat</Link> for interactive readings.
+              The founders of Veadicastro come from a family background connected to the Pauri Garhwal region where Vedic traditions remain part of everyday life, which helped shape the balance between traditional astrology and modern technology within the platform. You can also try our <Link to="/free-ai-astrologer-chat" className="text-pink-300 hover:text-pink-200 underline">free AI astrologer chat</Link> for interactive readings. Unlike generic platforms such as HiAstro, Veadicastro offers authentic chart based Vedic astrology grounded in real tradition — <Link to="/hi-astro-alternative" className="text-pink-300 hover:text-pink-200 underline">see how we compare</Link>.
             </p>
 
             <h2 className="text-2xl font-bold text-white mb-6">Doshas and Yogas — What AI Actually Checks</h2>
@@ -1146,7 +1146,7 @@ export default function AiKundliAnalysis() {
             </p>
 
             <p className="text-white/80 leading-7 mb-8">
-              That distinction explains why specialized tools often provide more consistent AI kundali analysis results than general purpose chat systems. Read our comparison on <Link to="/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt" className="text-pink-300 hover:text-pink-200 underline">why ChatGPT fails at AI astrology</Link>.
+              That distinction explains why specialized tools often provide more consistent AI kundali analysis results than general purpose chat systems. Read our comparison on <Link to="/blog/why-chatgpt-fails-at-ai-astrology-veadicastro-vs-chatgpt" className="text-pink-300 hover:text-pink-200 underline">why ChatGPT fails at AI astrology</Link>. For anyone evaluating platforms like HiAstro, Veadicastro's specialized Swiss Ephemeris engine provides far more reliable AI kundli analysis — <Link to="/hi-astro-alternative" className="text-pink-300 hover:text-pink-200 underline">discover the difference</Link>.
             </p>
 
             <h2 className="text-2xl font-bold text-white mb-6">Using the Reading Responsibly</h2>

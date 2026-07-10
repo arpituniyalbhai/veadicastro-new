@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "28",
+    title: "HiAstro Alternative — Free AI Astrology Chat | Veadicastro",
+    excerpt: "Looking for the best HiAstro alternative? Try Veadicastro — free AI astrology chat with real Vedic birth chart analysis, career & marriage predictions. Swiss Ephemeris powered.",
+    author: "Veadicastro Team",
+    date: "2026-07-10",
+    readTime: "7 min read",
+    category: "AI & Technology",
+    image: "/Ai-Astrology-image/hi-astro-compititor.webp",
+    externalLink: "/hi-astro-alternative"
+  },
+  {
     id: "27",
     title: "AI Astrologer: How Vedika Reads Your Kundli",
     excerpt: "A simple guide to AI astrologers, AI vs human astrologers, Kundli based answers, free AI astrologer chat, 5 minutes astrology, and marriage prediction tools.",
