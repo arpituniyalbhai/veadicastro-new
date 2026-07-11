@@ -188,18 +188,22 @@ export default function HiAstroAlternative() {
               Try Free — Better than HiAstro
             </button>
 
-            <div className="mt-8 grid grid-cols-3 gap-6 max-w-lg mx-auto">
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
               <div className="text-center">
-                <Clock className="h-6 w-6 mx-auto mb-2 text-pink-400" />
-                <p className="text-sm text-white/70">24/7 Available</p>
+                <p className="text-lg font-bold text-pink-400">1 Lakh+</p>
+                <p className="text-xs text-white/70">Questions Answered</p>
               </div>
               <div className="text-center">
-                <Shield className="h-6 w-6 mx-auto mb-2 text-pink-400" />
-                <p className="text-sm text-white/70">100% Private</p>
+                <p className="text-lg font-bold text-pink-400">50K+</p>
+                <p className="text-xs text-white/70">Live Guided</p>
               </div>
               <div className="text-center">
-                <Zap className="h-6 w-6 mx-auto mb-2 text-pink-400" />
-                <p className="text-sm text-white/70">Instant Results</p>
+                <p className="text-lg font-bold text-pink-400">3100+</p>
+                <p className="text-xs text-white/70">Daily Predictions</p>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-bold text-pink-400">2 Lakh+</p>
+                <p className="text-xs text-white/70">Kundlis Generated</p>
               </div>
             </div>
 

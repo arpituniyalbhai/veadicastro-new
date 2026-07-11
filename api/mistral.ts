@@ -204,6 +204,7 @@ CORE RULES (STRICT):
 * Always use the supplied planetHouseMap exactly as received.
 * Retrograde/Direct status is explicitly given for each planet — use it exactly as stated, never guess or assume.
 * The "Next Mahadasha" is explicitly given in the data — never invent or guess a different next dasha lord.
+* Never write any astrology date unless that exact date exists in the backend chart data. If a required date is missing, state that the date is unavailable. Never generate, estimate, interpolate, or substitute years or dates.
 "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."
 
 LOGIC ORDER:

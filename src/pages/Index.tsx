@@ -74,10 +74,10 @@ const Index = () => {
           }, 16);
         };
 
-        animateCounter('accurate-answers', 50000, 4000);
-        animateCounter('user-base', 21000, 4000);
-        animateCounter('daily-predictions', 30000, 4000);
-        animateCounter('report-created', 22000, 4000);
+        animateCounter('accurate-answers', 100000, 4000);
+        animateCounter('user-base', 50000, 4000);
+        animateCounter('daily-predictions', 3100, 4000);
+        animateCounter('report-created', 200000, 4000);
       }
     };
 
@@ -213,28 +213,28 @@ const Index = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 text-center">
                 <div className="space-y-2">
                   <div className="flex items-center justify-center gap-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-secondary" id="accurate-answers">20,000 +</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-secondary" id="accurate-answers">1 Lakh +</h3>
                     <Plus className="w-4 h-4 text-secondary" />
                   </div>
                   <p className="text-sm md:text-base text-muted-foreground">Questions Answered</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-center gap-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-primary" id="user-base">10,000 +</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-primary" id="user-base">50K +</h3>
                     <Plus className="w-4 h-4 text-primary" />
                   </div>
-                  <p className="text-sm md:text-base text-muted-foreground">Lives Guided</p>
+                  <p className="text-sm md:text-base text-muted-foreground">Live Guided</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-center gap-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-accent" id="daily-predictions">30,000 +</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-accent" id="daily-predictions">3100 +</h3>
                     <Plus className="w-4 h-4 text-accent" />
                   </div>
                   <p className="text-sm md:text-base text-muted-foreground">Daily Predictions</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-center gap-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-secondary" id="report-created">22,000 +</h3>
+                    <h3 className="text-2xl md:text-3xl font-bold text-secondary" id="report-created">2 Lakh +</h3>
                     <Plus className="w-4 h-4 text-secondary" />
                   </div>
                   <p className="text-sm md:text-base text-muted-foreground">Kundlis Generated</p>

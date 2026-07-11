@@ -457,7 +457,7 @@ const AuthModal = () => {
 
   return (
     <Dialog open={authOpen} onOpenChange={(o) => (o ? setAuthOpen(true) : onClose())}>
-      <DialogContent className="max-w-sm bg-background border border-border shadow-2xl overflow-hidden">
+      <DialogContent className="max-w-sm bg-background border border-border shadow-2xl overflow-hidden rounded-[32px]">
 
         <DialogHeader className="space-y-3 pb-2">
           <DialogTitle className="text-2xl font-bold text-center">
