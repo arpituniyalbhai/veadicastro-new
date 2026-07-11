@@ -73,6 +73,9 @@ const topics = [
 const Free5MinutesAstrology = () => {
   const navigate = useNavigate();
   
+  // Popup state
+  const [showAstrologerPopup, setShowAstrologerPopup] = useState(false);
+  
   // Screen 1: Birth Details Form
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [birthDetails, setBirthDetails] = useState<BirthDetails>({
@@ -319,6 +322,14 @@ KEY INSIGHTS:
       return () => clearInterval(interval);
     }
   }, [isGenerating]);
+
+  // Show astrologer popup after 6 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAstrologerPopup(true);
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
@@ -1176,6 +1187,60 @@ KEY INSIGHTS:
             </div>
           </div>
         </footer>
+
+        {/* Astrologer Popup Modal */}
+        {showAstrologerPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div className="absolute inset-0 bg-black/80" onClick={() => setShowAstrologerPopup(false)} />
+            <div className="relative card-glass rounded-2xl p-8 max-w-md w-full shadow-2xl">
+              <button
+                onClick={() => setShowAstrologerPopup(false)}
+                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <div className="text-center">
+                <img 
+                  src="/amanuniyalastrologe.webp" 
+                  alt="Pandit Aman Uniyal - Gold Medalist Astrologer of Uttarakhand" 
+                  className="mx-auto mb-6 w-32 h-32 rounded-full object-cover shadow-lg border-4 border-orange-500"
+                />
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Talk To Acharya JI -  Gold Medalist Astrologer of Uttrakhand
+                </h3>
+                <p className="text-white/70 mb-6">
+                  Get personalized Vedic astrology guidance from - Acharya JI
+                </p>
+                
+                <div className="flex justify-center gap-6 mb-6 text-sm">
+                  <div className="flex items-center gap-2 text-green-400 font-semibold">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    Unlimited Call
+                  </div>
+                  <div className="flex items-center gap-2 text-blue-400 font-semibold">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    100% Refund if not satisfied
+                  </div>
+                </div>
+                
+                <Link
+                  to="/talk-to-astrologer"
+                  onClick={() => setShowAstrologerPopup(false)}
+                  className="inline-block w-full btn-pink text-white font-semibold py-3 px-6 rounded-xl"
+                >
+                  Talk to Astrologer
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

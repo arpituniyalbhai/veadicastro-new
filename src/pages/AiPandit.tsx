@@ -21,7 +21,7 @@ const PAGE_IMAGE = `${SITE_URL}/optimized/ai-horoscope-by-date-of-birth.webp`;
 const faqs = [
   {
     q: "What is an AI Pandit?",
-    a: "An AI Pandit is an artificial intelligence powered system that provides Vedic astrology guidance based on your birth details. It combines traditional astrological principles with modern AI technology to deliver personalized insights.",
+    a: "An AI Pandit is an artificial intelligence system that provides Vedic astrology guidance, shubh muhurat, graha dosha remedies, puja recommendations, and birth chart analysis — based on your date, time, and place of birth. It combines classical Jyotish knowledge with modern AI to give you instant, personalized Vedic guidance.",
   },
   {
     q: "Is AI Pandit free to use?",
@@ -209,7 +209,7 @@ export default function AiPandit() {
         <title>AI Pandit - Free Online Vedic Astrology Guidance | Veadicastro</title>
         <meta
           name="description"
-          content="Get free AI Pandit consultation online. Discover personalized Vedic astrology insights for career, love, marriage, and life guidance with Vedika AI. Available 24/7."
+          content="Free AI Pandit online — get shubh muhurat, graha dosha remedies, puja guidance, and personalized Vedic astrology based on your birth chart. Powered by Vedika AI, Haridwar."
         />
         <meta
           name="keywords"
@@ -524,6 +524,28 @@ export default function AiPandit() {
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
               Despite these technological advances, the foundation will remain the authentic principles of Vedic astrology. AI serves as a tool to make this ancient wisdom more accessible and applicable to modern life. The synergy between tradition and technology promises an exciting future for astrology. Read more in our <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-purple-400 hover:text-purple-300 underline">AI transforming Vedic astrology</Link> article.
+            </p>
+
+            <h2 className="text-3xl font-black text-white mb-6 mt-12">
+              What Can AI Pandit Help You With?
+            </h2>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              AI Pandit offers comprehensive Vedic astrology guidance for various aspects of life. Whether you need shubh muhurat for important events, remedies for graha doshas, or daily spiritual guidance, our AI system provides authentic solutions based on your birth chart.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              <strong className="text-white">Shubh Muhurat for Marriage, Business, and Travel:</strong> AI Pandit calculates auspicious timing based on planetary positions and your birth chart. It identifies favorable periods for marriage ceremonies, business launches, property purchases, and important travel. The system considers planetary transits, dasha periods, and yogas to recommend the most auspicious dates and times for your important life events.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              <strong className="text-white">Graha Dosha Remedies (Mangal, Shani, Rahu):</strong> If your birth chart shows planetary afflictions like Mangal Dosha, Shani Sade Sati, or Rahu-Ketu effects, AI Pandit provides personalized remedies. These include specific mantras, gemstone recommendations, fasting guidelines, and charitable acts tailored to your chart. The remedies are based on authentic Vedic scriptures and are designed to mitigate the negative effects of planetary doshas.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              <strong className="text-white">Puja Guidance Based on Birth Chart:</strong> AI Pandit recommends specific pujas and rituals based on your planetary positions and current dasha periods. Whether you need Ganesh Puja for removing obstacles, Lakshmi Puja for wealth, or specific planetary pujas for health and prosperity, the guidance is personalized to your astrological needs. The system suggests the right time, method, and materials for performing these pujas.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              <strong className="text-white">Vedic Remedies — Mantra, Gemstone, Charity:</strong> Beyond puja recommendations, AI Pandit provides comprehensive Vedic remedies. This includes specific mantras for different planets and purposes, gemstone recommendations based on your birth chart (including which finger to wear them on), and charitable acts that align with your astrological profile. These remedies are designed to strengthen benefic planets and pacify malefic influences in your chart.
+            </p>
+            <p className="text-base leading-7 text-white/70 mb-6">
+              <strong className="text-white">Nakshatra Based Daily Guidance:</strong> Your nakshatra (birth star) plays a crucial role in Vedic astrology. AI Pandit provides daily guidance based on your nakshatra and current planetary transits. This includes favorable activities for the day, colors to wear, directions to avoid, and general guidance for navigating daily challenges. The nakshatra-based approach ensures that your guidance is uniquely personalized to your cosmic blueprint.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Why Veadicastro AI Pandit (Vedika AI) is Different</h3>
