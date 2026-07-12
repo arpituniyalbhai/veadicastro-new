@@ -81,6 +81,7 @@ const internalLinks = [
   { label: "Free Kundli Generator", href: "/free-kundli-generator" },
   { label: "AI Astrology", href: "/ai-astrology" },
   { label: "Horoscope by Date of Birth", href: "/horoscope-by-date-of-birth" },
+  { label: "KundliGPT Alternative", href: "/kundligpt-alternative" },
 ];
 
 const calculateAge = (day: number, month: number, year: number) => {
@@ -686,7 +687,7 @@ export default function AiAstrologyPrediction() {
             AI Astrology Prediction is a free Vedic astrology tool that reads your birth details and gives you ten personal predictions in clear language. You enter your name, gender, date of birth, time of birth, and birth place. The tool then calculates your birth chart and creates predictions for career, marriage, money, business, health, family, travel, education, love life, and lucky timing.
           </p>
           <p className="mb-5 leading-7">
-            The goal of this page is simple. Many people want astrology answers, but they do not want long reports that feel hard to understand. They want direct guidance that feels useful. This tool is built for that. It gives short, focused predictions based on your Vedic chart, not random daily horoscope text. If you are looking for a quick way to understand your future direction, this page is a good starting point. If you have been searching for a <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">HiAstro alternative</Link> that delivers real chart based predictions without hidden paywalls, you will find everything you need here.
+            The goal of this page is simple. Many people want astrology answers, but they do not want long reports that feel hard to understand. They want direct guidance that feels useful. This tool is built for that. It gives short, focused predictions based on your Vedic chart, not random daily horoscope text. If you are looking for a quick way to understand your future direction, this page is a good starting point. If you have been searching for a <Link to="/kundligpt-alternative" className="text-[#d9277a] hover:text-white">KundliGPT alternative</Link> that delivers real chart based predictions without hidden paywalls, you will find everything you need here.
           </p>
 
           <h2 className="mb-4 text-2xl font-semibold text-white">How This Tool Works</h2>

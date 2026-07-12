@@ -327,6 +327,17 @@ const blogPosts: BlogPost[] = [
     category: "AI & Technology",
     image: "/Ai-Astrology-image/free-ai-astrology-chat-india.webp",
     externalLink: "/blog/free-ai-astrology-chat-india"
+  },
+  {
+    id: "27",
+    title: "KundliGPT Alternative — Free AI Astrology Chat ",
+    excerpt: "Best KundliGPT alternative. Get free AI astrology chat, Vedic kundli analysis, career & marriage predictions — powered by Swiss Ephemeris.",
+    author: "Arpit Uniyal",
+    date: "2026-07-13",
+    readTime: "18 min read",
+    category: "AI & Technology",
+    image: "/blog-images/veadicastro-vs-kundliGPT.webp",
+    externalLink: "/kundligpt-alternative"
   }
 ];
 

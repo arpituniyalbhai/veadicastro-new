@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
-import { Sparkles, X, Star, Clock, Shield, Globe, Zap, CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { Sparkles, X, Star, Clock, Shield, Globe, Zap, CheckCircle2, XCircle, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import InternalLinksSection from "@/components/InternalLinksSection";
 
@@ -52,6 +52,7 @@ export default function HiAstroAlternative() {
   const [popupStep, setPopupStep] = useState(1);
   const [scrollTriggered, setScrollTriggered] = useState(false);
   const [timeTriggered, setTimeTriggered] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -291,7 +292,7 @@ export default function HiAstroAlternative() {
               Veadicastro is not just another AI astrology app. It is a platform built with genuine Vedic astrology knowledge, passed down through 3 generations from Pauri Garhwal, Uttarakhand. While HiAstro uses generic AI models, Vedika AI uses Swiss Ephemeris calculations and authentic Vedic principles to deliver accurate predictions.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              From birth chart analysis to career predictions, marriage timing to daily horoscopes, Veadicastro covers everything HiAstro offers and more. The key difference is that every reading you get on Veadicastro is rooted in real astrological calculations, not just pattern matching from generic language models. You can explore our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">free AI astrologer chat</Link> or get detailed <Link to="/ai-kundli-analysis" className="text-pink-400 hover:text-pink-300 underline">AI Kundli analysis</Link>.
+              From birth chart analysis to career predictions, marriage timing to daily horoscopes, Veadicastro covers everything HiAstro offers and more. The key difference is that every reading you get on Veadicastro is rooted in real astrological calculations, not just pattern matching from generic language models. You can explore our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">free AI astrologer chat</Link> or get detailed <Link to="/ai-kundli-analysis" className="text-pink-400 hover:text-pink-300 underline">AI Kundli analysis</Link>. For more on kundli generation, see our <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> page.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Free AI Astrology Chat — Sign Up in Seconds</h3>
@@ -381,7 +382,7 @@ export default function HiAstroAlternative() {
               Marriage is a sacred institution in Vedic culture, and astrology has always played a central role in matchmaking. Veadicastro offers comprehensive marriage compatibility analysis that goes far beyond what HiAstro provides. We examine guna matching, planetary compatibility, mental and emotional alignment, and long term harmony indicators.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Whether you are wondering about the right time to get married, checking compatibility with a partner, or trying to understand relationship patterns, Vedika AI can help. The analysis is based on authentic Vedic principles and your actual birth chart, not generic relationship advice. Use our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI marriage prediction</Link> tool or check <Link to="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 underline">Kundli matching</Link> for detailed compatibility analysis.
+              Whether you are wondering about the right time to get married, checking compatibility with a partner, or trying to understand relationship patterns, Vedika AI can help. The analysis is based on authentic Vedic principles and your actual birth chart, not generic relationship advice. Use our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI marriage prediction</Link> tool or check <Link to="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 underline">Kundli matching</Link> for detailed compatibility analysis. Learn more about our approach in the <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> comparison.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Make the Switch Today</h3>
@@ -411,35 +412,56 @@ export default function HiAstroAlternative() {
             </div>
 
           </article>
+        </section>
 
           {/* FAQ Section */}
-          <div className="mt-16">
-            <h3 className="text-2xl font-bold text-white mb-6">Frequently Asked Questions</h3>
-            <div className="space-y-4">
+          <div className="mt-16 max-w-3xl mx-auto px-4">
+            <h3 className="text-3xl font-black text-white mb-8 text-center">Frequently Asked Questions</h3>
+            <div className="space-y-3">
               {faqs.map((faq, index) => (
-                <div key={index} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6">
-                  <h4 className="font-bold text-white mb-2">{faq.q}</h4>
-                  <p className="text-sm leading-6 text-white/70">{faq.a}</p>
+                <div
+                  key={index}
+                  className="rounded-xl border border-white/10 bg-white/[0.04] overflow-hidden transition-all duration-300"
+                >
+                  <button
+                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-white/[0.06] transition-colors"
+                  >
+                    <span className="font-semibold text-white text-base sm:text-lg pr-4">{faq.q}</span>
+                    {openFaq === index ? (
+                      <ChevronUp className="h-5 w-5 text-pink-400 flex-shrink-0" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-white/50 flex-shrink-0" />
+                    )}
+                  </button>
+                  {openFaq === index && (
+                    <div className="px-6 pb-4 pt-0">
+                      <p className="text-sm sm:text-base leading-6 text-white/70">{faq.a}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-
-            {/* FAQ CTA */}
-            <div className="mt-8 rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-8 text-center">
-              <h3 className="text-2xl font-black text-white mb-4">Still Comparing?</h3>
-              <p className="text-base leading-7 text-white/70 mb-6">
-                Try Veadicastro yourself and see why users are switching from HiAstro.
-              </p>
-              <button
-                onClick={() => setShowPopup(true)}
-                className="inline-flex items-center gap-2 rounded-2xl btn-pink px-6 py-3 text-base font-black text-white"
-              >
-                <Sparkles className="h-5 w-5" />
-                Try Veadicastro Free
-              </button>
-            </div>
           </div>
-        </section>
+
+          {/* FAQ CTA */}
+          <div className="mt-12 max-w-xl mx-auto rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-6 text-center">
+            <h3 className="text-xl font-black text-white mb-3">Still Comparing?</h3>
+            <p className="text-sm leading-6 text-white/70 mb-5">
+              Try Veadicastro yourself and see why users are switching from HiAstro. You can also see{" "}
+              <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline font-semibold">
+                why Veadicastro is better than KundliGPT
+              </Link>{" "}
+              too.
+            </p>
+            <button
+              onClick={() => setShowPopup(true)}
+              className="inline-flex items-center gap-2 rounded-2xl btn-pink px-5 py-2.5 text-sm font-black text-white"
+            >
+              <Sparkles className="h-4 w-4" />
+              Try Veadicastro Free
+            </button>
+          </div>
 
         {/* Bottom CTA Section */}
         <section className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">

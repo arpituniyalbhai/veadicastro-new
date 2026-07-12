@@ -129,6 +129,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/hi-astro-alternative',
     breadcrumb: 'HiAstro Alternative',
   },
+  '/kundligpt-alternative': {
+    title: 'KundliGPT Alternative — Free AI Astrology Chat | Veadicastro',
+    description: 'Best KundliGPT alternative. Get free AI astrology chat, Vedic kundli analysis, career & marriage predictions — powered by Swiss Ephemeris.',
+    canonical: 'https://veadicastro.in/kundligpt-alternative',
+    breadcrumb: 'KundliGPT Alternative',
+  },
   '/ai-kundli-analysis': {
     title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
     description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',

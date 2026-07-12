@@ -34,6 +34,13 @@ const linkGroups = [
     ],
   },
   {
+    title: "Comparison",
+    links: [
+      { name: "Veadicastro vs HiAstro", path: "/hi-astro-alternative" },
+      { name: "KundliGPT vs Veadicastro", path: "/kundligpt-alternative" },
+    ],
+  },
+  {
     title: "Learn Astrology",
     links: [
       { name: "AI and Vedic Astrology", path: "/blog/how-ai-is-transforming-vedic-astrology" },
