@@ -175,16 +175,7 @@ export default async function handler(req: Request) {
     });
 
     // Always include current date/time in system instruction
-    const dateContext = `TODAY_DATE: ${todayISO}
-CURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)
-
-Use this exact date and time for all age calculations, dasha timing, transit analysis, and future predictions. Never use a different date.
-
-TEMPORAL FRAMING RULE (MANDATORY, CHECK BEFORE STATING ANY DATE):
-Before writing any date (dasha end date, antardasha end date, transit date), first compare it to CURRENT_DATE_TIME_IST above.
-- If that date is BEFORE current date → it is in the PAST. You must phrase it as already completed. Use words like "since [date]", "as of [date], this had already shifted", "this phase ended on [date]". NEVER use "till [date]", "before [date] ends", "before [date]" for a date that has already passed — that phrasing implies it is still upcoming, which is factually wrong.
-- If that date is AFTER current date → it is UPCOMING. Future-tense phrasing ("till [date]", "starting [date]", "ends [date]") is correct here.
-- This check applies to every single date you mention, including dasha end dates and antardasha end dates from the chart data. A date being present in the backend data does not mean it is in the future — always check it against CURRENT_DATE_TIME_IST first.`;
+    const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time for all age calculations, dasha timing, transit analysis, and future predictions. Never use a different date.`;
 
     // Language and formatting rules
     const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
