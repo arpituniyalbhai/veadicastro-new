@@ -332,7 +332,7 @@ export default function AiPandit() {
               AI Pandit complements traditional astrology by making guidance more accessible. It is available 24/7, provides instant results, and is often more affordable. While it may not replace the human touch of a traditional consultation, it offers a convenient alternative for quick insights and regular guidance.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Many users find that AI Pandit serves as an excellent starting point. They can get initial insights quickly and then seek deeper consultation with traditional astrologers if needed. This hybrid approach works well for many people. Learn more about the differences in our <Link to="/blog/ai-astrologer-vs-human-astrologer" className="text-purple-400 hover:text-purple-300 underline">AI astrologer vs human astrologer</Link> article.
+              Many users find that AI Pandit serves as an excellent starting point. They can get initial insights quickly and then seek deeper consultation with traditional astrologers if needed. This hybrid approach works well for many people. Learn more about the differences in our <Link to="/blog/ai-astrologer-vs-human-astrologer" className="text-purple-400 hover:text-purple-300 underline">AI astrologer vs human astrologer</Link> article. Also see how Veadicastro compares with other platforms on our <Link to="/astrosage-alternative" className="text-purple-400 hover:text-purple-300 underline">AstroSage alternative</Link> page.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">AI Pandit Using Date of Birth</h3>
@@ -579,7 +579,7 @@ export default function AiPandit() {
             <div className="mt-8 rounded-2xl border border-purple-500/30 bg-purple-500/10 p-8 text-center">
               <h3 className="text-2xl font-black text-white mb-4">Still Have Questions?</h3>
               <p className="text-base leading-7 text-white/70 mb-6">
-                Consult our AI Pandit for personalized answers to your specific questions.
+                Consult our AI Pandit for personalized answers to your specific questions. Comparing platforms? Check our <Link to="/astrosage-alternative" className="text-purple-400 hover:text-purple-300 underline">AstroSage alternative</Link> page.
               </p>
               <button
                 onClick={() => setShowPopup(true)}

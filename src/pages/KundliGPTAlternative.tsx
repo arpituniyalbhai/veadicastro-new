@@ -183,7 +183,7 @@ export default function KundliGPTAlternative() {
               KundliGPT Alternative — Free AI Astrology Chat
             </h1>
             <p className="text-lg leading-8 text-white/65 mb-8 max-w-2xl mx-auto">
-              Looking for a KundliGPT alternative? Try Vedika AI by Veadicastro with Swiss Ephemeris calculations, free AI astrology chat, and real Vedic birth chart insights.
+Looking for a KundliGPT alternative? Try Vedika AI by Veadicastro with Swiss Ephemeris calculations, free AI astrology chat, and real Vedic birth chart insights. Also visit our <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline">AstroSage alternative</Link> page for a comparison with traditional astrology platforms.
             </p>
 
             <button
@@ -349,7 +349,7 @@ export default function KundliGPTAlternative() {
               Head-to-Head Comparison Table
             </h2>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Below is a detailed comparison between Veadicastro and KundliGPT across key features. While Veadicastro excels in calculation accuracy and Vedic authenticity, we also acknowledge areas where KundliGPT may have different strengths.
+              Below is a detailed comparison between Veadicastro and KundliGPT across key features. While Veadicastro excels in calculation accuracy and Vedic authenticity, we also acknowledge areas where KundliGPT may have different strengths. For a similar comparison with AstroSage, visit our <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline">AstroSage alternative</Link> page.
             </p>
 
             {/* Comparison Table */}
@@ -508,7 +508,7 @@ export default function KundliGPTAlternative() {
             <div className="mt-8 rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-pink-500/5 p-8 text-center">
               <h3 className="text-2xl font-black text-white mb-4">Still Comparing?</h3>
               <p className="text-base leading-7 text-white/70 mb-6">
-                Try Veadicastro yourself and see why users are switching from KundliGPT.
+                Try Veadicastro yourself and see why users are switching from KundliGPT. You can also see why we are a leading <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline">AstroSage alternative</Link>.
               </p>
               <button
                 onClick={() => setShowPopup(true)}

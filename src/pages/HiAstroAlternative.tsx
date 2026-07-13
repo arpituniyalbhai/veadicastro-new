@@ -292,7 +292,7 @@ export default function HiAstroAlternative() {
               Veadicastro is not just another AI astrology app. It is a platform built with genuine Vedic astrology knowledge, passed down through 3 generations from Pauri Garhwal, Uttarakhand. While HiAstro uses generic AI models, Vedika AI uses Swiss Ephemeris calculations and authentic Vedic principles to deliver accurate predictions.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              From birth chart analysis to career predictions, marriage timing to daily horoscopes, Veadicastro covers everything HiAstro offers and more. The key difference is that every reading you get on Veadicastro is rooted in real astrological calculations, not just pattern matching from generic language models. You can explore our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">free AI astrologer chat</Link> or get detailed <Link to="/ai-kundli-analysis" className="text-pink-400 hover:text-pink-300 underline">AI Kundli analysis</Link>. For more on kundli generation, see our <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> page.
+              From birth chart analysis to career predictions, marriage timing to daily horoscopes, Veadicastro covers everything HiAstro offers and more. The key difference is that every reading you get on Veadicastro is rooted in real astrological calculations, not just pattern matching from generic language models. You can explore our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">free AI astrologer chat</Link> or get detailed <Link to="/ai-kundli-analysis" className="text-pink-400 hover:text-pink-300 underline">AI Kundli analysis</Link>. For more on kundli generation, see our <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> and <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline">AstroSage alternative</Link> pages.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Free AI Astrology Chat — Sign Up in Seconds</h3>
@@ -382,7 +382,7 @@ export default function HiAstroAlternative() {
               Marriage is a sacred institution in Vedic culture, and astrology has always played a central role in matchmaking. Veadicastro offers comprehensive marriage compatibility analysis that goes far beyond what HiAstro provides. We examine guna matching, planetary compatibility, mental and emotional alignment, and long term harmony indicators.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Whether you are wondering about the right time to get married, checking compatibility with a partner, or trying to understand relationship patterns, Vedika AI can help. The analysis is based on authentic Vedic principles and your actual birth chart, not generic relationship advice. Use our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI marriage prediction</Link> tool or check <Link to="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 underline">Kundli matching</Link> for detailed compatibility analysis. Learn more about our approach in the <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> comparison.
+              Whether you are wondering about the right time to get married, checking compatibility with a partner, or trying to understand relationship patterns, Vedika AI can help. The analysis is based on authentic Vedic principles and your actual birth chart, not generic relationship advice. Use our <Link to="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline">AI marriage prediction</Link> tool or check <Link to="/free-kundali-matching" className="text-pink-400 hover:text-pink-300 underline">Kundli matching</Link> for detailed compatibility analysis. Learn more about our approach in the <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline">KundliGPT alternative</Link> and <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline">AstroSage alternative</Link> comparisons.
             </p>
 
             <h3 className="text-2xl font-bold text-white mb-4 mt-10">Make the Switch Today</h3>
@@ -452,7 +452,7 @@ export default function HiAstroAlternative() {
               <Link to="/kundligpt-alternative" className="text-pink-400 hover:text-pink-300 underline font-semibold">
                 why Veadicastro is better than KundliGPT
               </Link>{" "}
-              too.
+              and visit our <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline font-semibold">AstroSage alternative</Link> page.
             </p>
             <button
               onClick={() => setShowPopup(true)}

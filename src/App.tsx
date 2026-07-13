@@ -95,6 +95,7 @@ const HoroscopeByDateOfBirth = lazy(() => import("@/pages/HoroscopeByDateOfBirth
 const AiPandit = lazy(() => import("@/pages/AiPandit"));
 const HiAstroAlternative = lazy(() => import("@/pages/HiAstroAlternative"));
 const KundliGPTAlternative = lazy(() => import("@/pages/KundliGPTAlternative"));
+const AstroSageAlternative = lazy(() => import("@/pages/AstroSageAlternative"));
 const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
@@ -206,6 +207,7 @@ const AuthenticatedRoutes = ({
         <Route path="/ai-pandit" element={<Suspense fallback={<PageLoading />}><AiPandit /></Suspense>} />
         <Route path="/hi-astro-alternative" element={<Suspense fallback={<PageLoading />}><HiAstroAlternative /></Suspense>} />
         <Route path="/kundligpt-alternative" element={<Suspense fallback={<PageLoading />}><KundliGPTAlternative /></Suspense>} />
+        <Route path="/astrosage-alternative" element={<Suspense fallback={<PageLoading />}><AstroSageAlternative /></Suspense>} />
 
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />

@@ -38,6 +38,7 @@ const linkGroups = [
     links: [
       { name: "Veadicastro vs HiAstro", path: "/hi-astro-alternative" },
       { name: "KundliGPT vs Veadicastro", path: "/kundligpt-alternative" },
+      { name: "AstroSage vs Veadicastro", path: "/astrosage-alternative" },
     ],
   },
   {

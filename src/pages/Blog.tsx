@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "29",
+    title: "AstroSaga Alternative: Free AI Astrology | Veadicastro",
+    excerpt: "Looking for a reliable AstroSaga alternative? Discover Veadicastro, featuring precise Swiss Ephemeris calculations and personal AI astrology chat.",
+    author: "Veadicastro Team",
+    date: "2026-07-13",
+    readTime: "12 min read",
+    category: "AI & Technology",
+    image: "/blog-images/astrosage-alternative.webp",
+    externalLink: "/astrosage-alternative"
+  },
+  {
     id: "28",
     title: "HiAstro Alternative — Free AI Astrology Chat | Veadicastro",
     excerpt: "Looking for the best HiAstro alternative? Try Veadicastro — free AI astrology chat with real Vedic birth chart analysis, career & marriage predictions. Swiss Ephemeris powered.",
