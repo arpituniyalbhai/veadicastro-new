@@ -398,6 +398,12 @@ export default function AiAstrologyPrediction() {
                 </Link>
               ))}
             </nav>
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="ml-4 rounded-lg bg-[#d9277a] px-4 py-1.5 text-sm font-semibold text-white hover:bg-[#c01e6a] transition-colors"
+            >
+              Try Free AI Astrologer
+            </button>
           </div>
         </header>
 
@@ -748,7 +754,7 @@ export default function AiAstrologyPrediction() {
 
           <h2 className="mb-4 text-2xl font-semibold text-white">Why Use Veadicastro</h2>
           <p className="mb-5 leading-7">
-            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>. As a powerful <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">HiAstro alternative</Link>, Veadicastro gives you complete free access to AI predictions without requiring payment for basic features.
+            Veadicastro is built for people who want astrology that feels clear, practical, and honest. The main <Link to="/" className="text-[#d9277a] hover:text-white">Veadicastro</Link> gives access to more free tools, including Kundli generation, daily horoscope, matching, and AI chat. If you want to ask follow up questions after your ten predictions, you can use our <Link to="/free-ai-astrologer-chat" className="text-[#d9277a] hover:text-white">free AI astrologer chat</Link>. As a powerful <Link to="/hi-astro-alternative" className="text-[#d9277a] hover:text-white">HiAstro alternative</Link> and <Link to="/astrosage-alternative" className="text-[#d9277a] hover:text-white">AstroSage alternative</Link>, Veadicastro gives you complete free access to AI predictions without requiring payment for basic features.
           </p>
           <p className="mb-10 leading-7">
             Use this page as a simple first reading. Enter your birth details carefully, generate your predictions, and notice which parts feel close to your current life. Astrology works best when it gives you awareness. It should help you think better, choose better, and move through life with more clarity.

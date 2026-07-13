@@ -4,10 +4,28 @@ import { Helmet } from "react-helmet-async";
 import { ArrowRight, Target, Star, MessageSquare, CheckCircle2, TrendingUp, Shield, Zap, Calendar, Heart } from "lucide-react";
 import { Card } from "../../src/components/ui/card";
 import AdBanner from "../../src/components/AdBanner";
+import { useAuth } from "../../src/context/AuthContext";
 
 export default function AiAstrology() {
+  const { setAuthOpen } = useAuth();
   return (
     <>
+      {/* Top Header CTA */}
+      <div className="sticky top-0 z-50 border-b border-white/10 bg-[#0a0a0f]/95 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
+          <Link to="/" className="flex items-center gap-3">
+            <img src="/favicon.ico" alt="Veadicastro" className="h-7 w-7 rounded" />
+            <span className="text-sm font-semibold">AI Astrology</span>
+          </Link>
+          <button
+            onClick={() => setAuthOpen(true)}
+            className="rounded-lg bg-[#d9277a] px-4 py-1.5 text-sm font-semibold text-white hover:bg-[#c01e6a] transition-colors"
+          >
+            Try Free AI Astrologer
+          </button>
+        </div>
+      </div>
+
       <Helmet>
         <title>AI Astrology Tools & Free Vedic AI Astrologer – Veadicastro</title>
         <meta name="description" content="AI Astrology by Veadicastro — India's most accurate free Vedic AI astrologer. Get personalized predictions, kundali analysis, and instant answers from authentic Vedic Jyotish combined with AI precision." />
@@ -644,6 +662,19 @@ export default function AiAstrology() {
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* AstroSage Alternative CTA */}
+        <section className="py-8 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <p className="text-white/70 text-lg">
+              Also see how Veadicastro compares with established platforms on our{" "}
+              <Link to="/astrosage-alternative" className="text-pink-400 hover:text-pink-300 underline font-semibold">
+                AstroSage alternative
+              </Link>{" "}
+              page.
+            </p>
           </div>
         </section>
 
