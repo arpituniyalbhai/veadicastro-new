@@ -425,6 +425,24 @@ useEffect(() => {
                   const sel = selectedPlace || storedPlace;
                   // Store DOB as local calendar date (YYYY-MM-DD) to avoid timezone shift
                   const dobLocal = dob ? `${dob.getFullYear()}-${String(dob.getMonth()+1).padStart(2,'0')}-${String(dob.getDate()).padStart(2,'0')}` : "";
+                  
+                  // Calculate current age (years, months, days)
+                  const today = new Date();
+                  const birthDate = dob ? new Date(dobLocal) : new Date();
+                  let ageYears = today.getFullYear() - birthDate.getFullYear();
+                  let ageMonths = today.getMonth() - birthDate.getMonth();
+                  let ageDays = today.getDate() - birthDate.getDate();
+                  
+                  if (ageDays < 0) {
+                    ageMonths--;
+                    const daysInPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                    ageDays += daysInPrevMonth;
+                  }
+                  if (ageMonths < 0) {
+                    ageYears--;
+                    ageMonths += 12;
+                  }
+                  
                   const details = {
                     dob: dobLocal,
                     time: `${String(hour ?? 0).padStart(2,'0')}:${String(minute ?? 0).padStart(2,'0')}`,
@@ -433,6 +451,7 @@ useEffect(() => {
                     lng: sel?.lng ?? null,
                     tzone: (typeof sel?.tzone === 'number' ? sel.tzone : -new Date().getTimezoneOffset()/60),
                     gender,
+                    age: { years: ageYears, months: ageMonths, days: ageDays },
                   };
                   localStorage.setItem('onboarding_details', JSON.stringify(details));
                   setAnimating(true);

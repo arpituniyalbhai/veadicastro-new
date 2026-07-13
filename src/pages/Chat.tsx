@@ -568,7 +568,8 @@ export default function Chat() {
           if (cached) planetsBlock = `Planetary Data:\n${JSON.stringify(cached)}`;
         } catch { /* ignore */ }
       }
-      const detailsBlock = `User Details:\nDate of Birth: ${details.dob}\nGender: ${details.gender || 'N/A'}`;
+      const age = details.age ? `Current Age: ${details.age.years} years, ${details.age.months} months, ${details.age.days} days` : 'Current Age: N/A';
+      const detailsBlock = `User Details:\nDate of Birth: ${details.dob}\n${age}\nGender: ${details.gender || 'N/A'}`;
       
       // SAHI - sirf planetary data + user details bhejo
       const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}`.trim();

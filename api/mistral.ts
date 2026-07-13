@@ -175,7 +175,7 @@ export default async function handler(req: Request) {
     });
 
     // Always include current date/time in system instruction
-    const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time for all age calculations, dasha timing, transit analysis, and future predictions.  Never use a different date Never present a past astrology date as a current event. Always compare every date with today's date before responding..`;
+    const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time for dasha timing, transit analysis, and future predictions.  Never use a different date Never present a past astrology date as a current event. Always compare every date with today's date before responding..`;
 
     // Language and formatting rules
     const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
