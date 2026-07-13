@@ -161,9 +161,7 @@ export default async function handler(req: Request) {
 
     // Get current date/time in IST (Asia/Kolkata)
     const now = new Date();
-    const istDate = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
-    const todayISO = istDate.toISOString();
-    const todayIST = istDate.toLocaleString('en-IN', { 
+    const todayIST = now.toLocaleString('en-IN', { 
       timeZone: 'Asia/Kolkata',
       year: 'numeric',
       month: '2-digit',
@@ -173,6 +171,22 @@ export default async function handler(req: Request) {
       second: '2-digit',
       hour12: false
     });
+    
+    // Format ISO date in IST (not UTC) to preserve correct date
+    const istDateParts = now.toLocaleString('en-CA', { 
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).split('-');
+    const istTimeParts = now.toLocaleString('en-US', { 
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }).split(':');
+    const todayISO = `${istDateParts[0]}-${istDateParts[1]}-${istDateParts[2]}T${istTimeParts[0]}:${istTimeParts[1]}:${istTimeParts[2]}+05:30`;
 
     // Always include current date/time in system instruction
     const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time for dasha timing, transit analysis, and future predictions.  Never use a different date Never present a past astrology date as a current event. Always compare every date with today's date before responding..`;
