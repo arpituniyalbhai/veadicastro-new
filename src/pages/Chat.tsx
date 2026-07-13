@@ -525,6 +525,29 @@ export default function Chat() {
       const userText = userTurn.content;
       // Gather onboarding details for AstrologyAPI
       const details = (() => { try { return JSON.parse(localStorage.getItem('onboarding_details') || 'null'); } catch { return null; } })();
+      
+      // Calculate age if not already stored
+      if (details?.dob && !details.age) {
+        const today = new Date();
+        const birthDate = new Date(details.dob);
+        let ageYears = today.getFullYear() - birthDate.getFullYear();
+        let ageMonths = today.getMonth() - birthDate.getMonth();
+        let ageDays = today.getDate() - birthDate.getDate();
+        
+        if (ageDays < 0) {
+          ageMonths--;
+          const daysInPrevMonth = new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+          ageDays += daysInPrevMonth;
+        }
+        if (ageMonths < 0) {
+          ageYears--;
+          ageMonths += 12;
+        }
+        
+        details.age = { years: ageYears, months: ageMonths, days: ageDays };
+        // Save back to localStorage
+        localStorage.setItem('onboarding_details', JSON.stringify(details));
+      }
       if (!details?.dob || !details?.time || details?.lat == null || details?.lng == null) {
         console.debug('[Chat] Missing birth details, aborting send.', { details });
         setMessages((m) => {
