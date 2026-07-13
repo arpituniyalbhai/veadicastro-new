@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, Menu, Trash2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
@@ -57,7 +58,7 @@ export default function Chat() {
   const location = useLocation() as any;
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const { t, lang } = useI18n();
+  const { t, lang, setLang } = useI18n();
   const { planName, credits, canAccess, canAskMoreQuestions, registerQuestionUsage, useQuickPackQuestion, deductCredit } = usePlan();
   const remainingQuestions = Math.max(credits, 0);
 
@@ -920,20 +921,26 @@ export default function Chat() {
             </div>
           </div>
           <div className="hidden md:block flex-shrink-0 ml-2">
-            <button
-              className="inline-flex items-center gap-2 text-sm px-4 py-2.5 rounded-lg bg-card/40 border border-border/60 hover:bg-accent/10 hover:border-secondary/50 flex-shrink-0 whitespace-nowrap transition-all"
-              onClick={() => navigate("/pricing")}
-            >
-              <Plus className="w-4 h-4" /> <span>Ask More</span>
-            </button>
+            <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
+              <SelectTrigger className="w-[140px] h-9 text-sm bg-card/40 border border-border/60 hover:border-secondary/50">
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="hi">हिंदी (Devanagari)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           <div className="md:hidden">
-            <button
-              className="inline-flex items-center gap-1.5 text-xs px-3 py-2.5 rounded-lg bg-card/40 border border-border/60 hover:bg-accent/10 flex-shrink-0 whitespace-nowrap"
-              onClick={() => navigate("/pricing")}
-            >
-              <Plus className="w-3 h-3" /> <span>Ask More</span>
-            </button>
+            <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
+              <SelectTrigger className="w-[120px] h-8 text-xs bg-card/40 border border-border/60 hover:border-secondary/50">
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="hi">हिंदी</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         
