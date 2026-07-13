@@ -208,7 +208,8 @@ CORE RULES (STRICT):
 "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."
 
 LOGIC ORDER:
-House → Lord → Sign → Nakshatra → Dasha → Transit
+Planet House → House Lord → Sign → Nakshatra → Current Dasha.
+Never discuss transit, conjunctions, aspects, retrograde periods, ingress dates, or future planetary movements unless those exact values are present in the backend payload.
 Focus on strongest 1 planetary indicator only. Pick the strongest factor and commit to it - no multiple options.
 
 REALITY FILTER:
