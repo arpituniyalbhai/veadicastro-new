@@ -78,6 +78,7 @@ export default function Dashboard() {
   const [rateOpen, setRateOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [sending, setSending] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const promoIconUrl = "";
   const [sectionModalOpen, setSectionModalOpen] = useState(false);
   const [sectionName, setSectionName] = useState<"instruction" | "future" | null>(null);
@@ -1458,8 +1459,7 @@ useEffect(() => {
                     key={idx}
                     onClick={() => {
                       if (isLocked) {
-                        // Show upgrade modal or navigate to pricing
-                        navigate("/pricing?referral=daily_prediction");
+                        setShowUpgradeModal(true);
                         return;
                       }
                       setSelectedDate(date);
@@ -1821,11 +1821,42 @@ useEffect(() => {
       )}
 
       
-      {/* Monthly Loading Toast - Left Bottom */}
-      {/* Removed Monthly Loading Toast Popup */}
-
-      
-      {/* Removed Monthly Loading Toast Popup */}
-      </div>
-  );
-}
+      {/* Premium Upgrade Modal */}
+      <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
+        <DialogContent className="sm:max-w-sm rounded-2xl p-6 text-center border-border/60 bg-card/95 backdrop-blur-xl">
+          <div className="flex flex-col items-center gap-4 py-2">
+            <img
+              src="/optimized/vedika.webp"
+              alt="Vedika AI"
+              className="w-20 h-20 rounded-full object-cover border-2 border-secondary/30 shadow-lg"
+            />
+            <div>
+              <DialogTitle className="text-lg font-semibold">
+                Hey {displayName}
+              </DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                This feature is only for premium users. If you want to see this prediction, please upgrade to any plan.
+              </DialogDescription>
+            </div>
+          </div>
+          <div className="flex flex-col gap-2 mt-4">
+            <Button
+              variant="cosmic"
+              className="w-full rounded-xl"
+              onClick={() => {
+                setShowUpgradeModal(false);
+                navigate("/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack");
+              }}
+            >
+              Upgrade Now
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full rounded-xl text-muted-foreground"
+              onClick={() => setShowUpgradeModal(false)}
+            >
+              Maybe Later
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
