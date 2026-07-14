@@ -367,7 +367,10 @@ export default function Chat() {
   }, [initial]);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const id = requestAnimationFrame(() => {
+      endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    });
+    return () => cancelAnimationFrame(id);
   }, [messages]);
 
   // Cleanup old lifetime quota key, but we no longer rely on it
@@ -974,7 +977,7 @@ export default function Chat() {
           <div className="max-w-4xl w-full mx-auto px-1.5 sm:px-4 min-h-[40vh] space-y-4">
             {messages.map((m, idx) => (
               m.role === "assistant" && !m.content?.trim() ? null : (
-                <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-0.5 sm:px-4`}>
+                <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-0.5 sm:px-4 scroll-mt-[110px] sm:scroll-mt-0`}>
                   {m.role === "assistant" && (
                     <div className="mr-2 sm:mr-3 mt-1 shrink-0">
                       <img src="/optimized/vedika.webp" alt="Vedika — AI Vedic astrologer by Veadicastro" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
@@ -1046,7 +1049,7 @@ export default function Chat() {
               </div>
             )}
             <style>{`@keyframes loading {0%{transform:translateX(-100%)}50%{transform:translateX(50%)}100%{transform:translateX(200%)}}`}</style>
-            <div ref={endRef} />
+            <div ref={endRef} className="scroll-mt-[110px] sm:scroll-mt-0" />
           </div>
         </div>
 
