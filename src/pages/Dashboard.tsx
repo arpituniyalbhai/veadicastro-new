@@ -1549,12 +1549,6 @@ useEffect(() => {
               <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
                 <div className="text-center py-6 sm:py-8">
                   <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-secondary mx-auto mb-4" />
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Your prediction for {formatDailyDate(selectedDate)} is ready
-                  </p>
-                  <Button variant="cosmic" size="sm" onClick={() => fetchPredictionForDate(selectedDate)}>
-                    Generate Prediction
-                  </Button>
                 </div>
               </div>
             )}
