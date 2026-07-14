@@ -1466,13 +1466,12 @@ useEffect(() => {
                       setSelectedPrediction(null);
                       fetchPredictionForDate(date);
                     }}
-                    disabled={isLocked}
                     className={cn(
                       "flex flex-col items-center justify-center rounded-xl transition-all duration-200 border relative",
                       isSelected || isToday
                         ? "col-span-2 p-4 bg-gradient-to-br from-secondary/20 to-primary/20 border-secondary/50 shadow-lg shadow-secondary/20"
                         : isLocked
-                        ? "p-3 bg-muted/30 border-dashed border-border/40 opacity-60 cursor-not-allowed"
+                        ? "p-3 bg-muted/30 border-dashed border-border/40 opacity-60 cursor-pointer hover:border-secondary/40"
                         : "p-3 bg-background/50 border-border/60 hover:border-secondary/40 hover:bg-accent/10",
                       isToday && !isSelected && "ring-2 ring-secondary/30"
                     )}
