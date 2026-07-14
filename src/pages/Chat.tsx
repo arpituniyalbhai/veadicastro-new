@@ -1005,7 +1005,7 @@ export default function Chat() {
           {/* Conversation */}
           <div className="max-w-4xl w-full mx-auto px-1.5 sm:px-4 min-h-[40vh] space-y-4">
             {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-[55vh] gap-4">
+              <div className="flex flex-col items-center justify-center h-[35vh] sm:h-[55vh] gap-4 -mt-12 sm:mt-0">
                 <img
                   src="/optimized/vedika.webp"
                   alt="Vedika AI"
