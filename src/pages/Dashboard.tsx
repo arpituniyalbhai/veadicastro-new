@@ -234,6 +234,12 @@ export default function Dashboard() {
 
   const tomorrowUnlocked = true; // Always unlocked - free for everyone
   // Lucky Colour & Number is now free for everyone
+  
+  // Check if user has paid plans (Deep Dive, Power Pack, Quick Ask)
+  const hasPaidPlan = useMemo(() => {
+    const paidPlanKeywords = ["deep dive", "power pack", "quick ask"];
+    return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
+  }, [planName]);
 
   const renderLockedFeatureCard = (title: string, description: string, opts?: { full?: boolean }) => (
     <Card
@@ -346,17 +352,49 @@ export default function Dashboard() {
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const tomorrowDisplayDate = formatDailyDate(tomorrowDate);
 
-  // Generate week dates starting from today
+  // Generate week dates starting from today (auto-sliding 7-day window)
   const weekDates = useMemo(() => {
     const dates: Date[] = [];
-    const today = new Date();
+    const startDate = new Date();
+    
     for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
       dates.push(date);
     }
     return dates;
   }, []);
+
+  // Cleanup: remove past date predictions from localStorage on mount and daily
+  useEffect(() => {
+    const todayKey = getLocalDateKey(new Date());
+    const prefix = `ai_daily_${user?.uid || 'guest'}_`;
+    
+    const removePastPredictions = () => {
+      try {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key?.startsWith(prefix)) {
+            const datePart = key.replace(prefix, '');
+            if (datePart < todayKey) {
+              keysToRemove.push(key);
+            }
+          }
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+        if (keysToRemove.length > 0) {
+          console.log(`[Dashboard] Cleaned up ${keysToRemove.length} past prediction(s)`);
+        }
+      } catch (e) {
+        console.warn('[Dashboard] Failed to cleanup past predictions', e);
+      }
+    };
+
+    removePastPredictions();
+    const interval = setInterval(removePastPredictions, 3600000);
+    return () => clearInterval(interval);
+  }, [user?.uid]);
 
   const fetchTodayPrediction = useCallback(async () => {
     if (todayLoading || typeof window === "undefined") return;
@@ -1413,31 +1451,44 @@ useEffect(() => {
               {weekDates.map((date, idx) => {
                 const isSelected = getLocalDateKey(date) === getLocalDateKey(selectedDate);
                 const isToday = getLocalDateKey(date) === getLocalDateKey(new Date());
+                const isLocked = !hasPaidPlan && !isToday;
+                
                 return (
                   <button
                     key={idx}
                     onClick={() => {
+                      if (isLocked) {
+                        // Show upgrade modal or navigate to pricing
+                        navigate("/pricing?referral=daily_prediction");
+                        return;
+                      }
                       setSelectedDate(date);
                       setSelectedPrediction(null);
                       fetchPredictionForDate(date);
                     }}
+                    disabled={isLocked}
                     className={cn(
-                      "flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 border",
-                      isSelected
-                        ? "bg-gradient-to-br from-secondary/20 to-primary/20 border-secondary/50 shadow-lg shadow-secondary/20"
-                        : "bg-background/50 border-border/60 hover:border-secondary/40 hover:bg-accent/10",
+                      "flex flex-col items-center justify-center rounded-xl transition-all duration-200 border relative",
+                      isSelected || isToday
+                        ? "col-span-2 p-4 bg-gradient-to-br from-secondary/20 to-primary/20 border-secondary/50 shadow-lg shadow-secondary/20"
+                        : isLocked
+                        ? "p-3 bg-muted/30 border-dashed border-border/40 opacity-60 cursor-not-allowed"
+                        : "p-3 bg-background/50 border-border/60 hover:border-secondary/40 hover:bg-accent/10",
                       isToday && !isSelected && "ring-2 ring-secondary/30"
                     )}
                   >
+                    {isLocked && (
+                      <Lock className="absolute top-2 right-2 w-3 h-3 text-muted-foreground" />
+                    )}
                     <span className={cn(
                       "text-xs font-medium mb-1",
-                      isSelected ? "text-secondary" : "text-muted-foreground"
+                      isSelected || isToday ? "text-secondary" : isLocked ? "text-muted-foreground" : "text-muted-foreground"
                     )}>
                       {date.toLocaleDateString('en-US', { weekday: 'short' })}
                     </span>
                     <span className={cn(
                       "text-lg font-bold",
-                      isSelected ? "text-foreground" : "text-foreground/80"
+                      isSelected || isToday ? "text-foreground" : isLocked ? "text-muted-foreground/60" : "text-foreground/80"
                     )}>
                       {date.getDate()}
                     </span>
@@ -1451,7 +1502,7 @@ useEffect(() => {
 
             {/* Selected Date Prediction Display */}
             {selectedDateLoading ? (
-              <div className="p-6 rounded-xl bg-background/50 border border-border/60">
+              <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
@@ -1466,28 +1517,28 @@ useEffect(() => {
                 </div>
               </div>
             ) : selectedPrediction ? (
-              <div className="p-6 rounded-xl bg-gradient-to-br from-background/80 to-accent/5 border border-border/60">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="font-semibold text-lg">{formatDailyDate(selectedDate)}</h3>
+              <div className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-accent/5 border border-border/60">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-base sm:text-lg">Daily prediction - {selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</h3>
                     <p className="text-sm text-muted-foreground mt-1">
                       {selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <Sparkles className="w-5 h-5 text-secondary" />
                   </div>
                 </div>
-                <div className="p-4 rounded-lg bg-background/60 border border-border/40">
+                <div className="p-3 sm:p-4 rounded-lg bg-background/60 border border-border/40">
                   <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
                     {selectedPrediction.text}
                   </p>
                 </div>
               </div>
             ) : (
-              <div className="p-6 rounded-xl bg-background/50 border border-border/60">
-                <div className="text-center py-8">
-                  <Sparkles className="w-12 h-12 text-secondary mx-auto mb-4" />
+              <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
+                <div className="text-center py-6 sm:py-8">
+                  <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-secondary mx-auto mb-4" />
                   <p className="text-sm text-muted-foreground mb-4">
                     Your prediction for {formatDailyDate(selectedDate)} is ready
                   </p>
