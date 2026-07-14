@@ -1012,7 +1012,7 @@ export default function Chat() {
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover opacity-20"
                 />
                 <p className="text-white/20 text-xl sm:text-2xl font-light italic tracking-wide text-center leading-relaxed">
-                  The Answers is Already Written,<br />let's find yours {displayName}
+                  The Answers are Already Written,<br />Let's find yours {displayName}
                 </p>
               </div>
             )}
