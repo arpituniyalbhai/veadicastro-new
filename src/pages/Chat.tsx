@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, Menu, Trash2 } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, Menu, Trash2, ChevronUp } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -13,6 +13,7 @@ import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
 import type { AstroInput } from "@/lib/astroCalc";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
@@ -236,8 +237,36 @@ export default function Chat() {
   const LIFETIME_KEY = "chat_free_used"; // legacy key, kept for backward compatibility
   const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<string>('399');
+  const [selectedPlan, setSelectedPlan] = useState<string>('699');
   const selectedPlanMap: any = {'149':{plan:'Quick Ask',amount:149,type:'pack',qs:5},'399':{plan:'Deep Dive',amount:399,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+
+  const categoryPrompts = [
+    { id: "love", icon: "", labelEn: "Love", labelHi: "प्रेम",
+      promptsEn: ["When will I meet my true love?", "Is my current relationship destined to last?", "What qualities should I look for in a partner?", "Will I find love this year?", "How can I attract the right person into my life?"],
+      promptsHi: ["मुझे सच्चा प्यार कब मिलेगा?", "क्या मेरा वर्तमान रिश्ता टिकाऊ है?", "मुझे अपने साथी में क्या गुण देखने चाहिए?", "क्या मुझे इस वर्ष प्यार मिलेगा?", "मैं सही व्यक्ति को अपने जीवन में कैसे आकर्षित करूं?"] },
+    { id: "career", icon: "", labelEn: "Career", labelHi: "करियर",
+      promptsEn: ["What career path is best suited for me?", "When will I get a promotion or job change?", "Should I start my own business?", "What are my biggest career strengths?", "Will I succeed in my chosen profession?"],
+      promptsHi: ["मेरे लिए सबसे अच्छा करियर मार्ग कौन सा है?", "मुझे पदोन्नति या नौकरी में बदलाव कब मिलेगा?", "क्या मुझे अपना व्यवसाय शुरू करना चाहिए?", "मेरे करियर की सबसे बड़ी ताकतें क्या हैं?", "क्या मैं अपने चुने हुए पेशे में सफल होऊंगा?"] },
+    { id: "money", icon: "", labelEn: "Money", labelHi: "धन",
+      promptsEn: ["When will I achieve financial stability?", "How can I increase my wealth?", "Is this a good time to invest?", "Will I get out of debt soon?", "What does my financial future look like?"],
+      promptsHi: ["मैं वित्तीय स्थिरता कब प्राप्त करूंगा?", "मैं अपनी संपत्ति कैसे बढ़ा सकता हूं?", "क्या यह निवेश करने का अच्छा समय है?", "क्या मैं जल्द ही कर्ज से बाहर निकलूंगा?", "मेरा वित्तीय भविष्य कैसा दिखता है?"] },
+    { id: "marriage", icon: "", labelEn: "Marriage", labelHi: "विवाह",
+      promptsEn: ["When will I get married?", "What will my spouse be like?", "Will my marriage be happy?", "Is arranged marriage better for me?", "How can I improve my married life?"],
+      promptsHi: ["मेरी शादी कब होगी?", "मेरा जीवनसाथी कैसा होगा?", "क्या मेरा विवाह सुखी होगा?", "क्या मेरे लिए अरेंज मैरिज बेहतर है?", "मैं अपने वैवाहिक जीवन को कैसे बेहतर बना सकता हूं?"] },
+    { id: "property", icon: "", labelEn: "Property", labelHi: "संपत्ति",
+      promptsEn: ["Will I buy my own home soon?", "Is property investment good for me?", "When will I move to a new house?", "Will I inherit property?", "Which direction is best for my home?"],
+      promptsHi: ["क्या मैं जल्द ही अपना घर खरीदूंगा?", "क्या मेरे लिए संपत्ति में निवेश अच्छा है?", "मैं नए घर में कब शिफ्ट होऊंगा?", "क्या मुझे संपत्ति विरासत में मिलेगी?", "मेरे घर के लिए कौन सी दिशा सबसे अच्छी है?"] },
+    { id: "spiritual", icon: "", labelEn: "Spiritual", labelHi: "आध्यात्मिक",
+      promptsEn: ["What is my spiritual purpose?", "How can I deepen my meditation practice?", "Am I on the right spiritual path?", "Which spiritual practice suits me best?", "How can I find inner peace?"],
+      promptsHi: ["मेरा आध्यात्मिक उद्देश्य क्या है?", "मैं अपने ध्यान अभ्यास को कैसे गहरा करूं?", "क्या मैं सही आध्यात्मिक मार्ग पर हूं?", "कौन सी आध्यात्मिक प्रैक्टिस मेरे लिए सबसे अच्छी है?", "मैं आंतरिक शांति कैसे पा सकता हूं?"] },
+    { id: "health", icon: "", labelEn: "Health", labelHi: "स्वास्थ्य",
+      promptsEn: ["What health issues should I watch out for?", "How can I improve my overall well-being?", "Will I recover from my health problem?", "Which exercise or diet is best for me?", "How does my mental health look?"],
+      promptsHi: ["मुझे किन स्वास्थ्य समस्याओं का ध्यान रखना चाहिए?", "मैं अपनी समग्र भलाई कैसे सुधारूं?", "क्या मैं अपनी स्वास्थ्य समस्या से उबर जाऊंगा?", "मेरे लिए कौन सा व्यायाम या आहार सबसे अच्छा है?", "मेरा मानसिक स्वास्थ्य कैसा है?"] },
+    { id: "education", icon: "", labelEn: "Education", labelHi: "शिक्षा",
+      promptsEn: ["Which field of study should I pursue?", "Will I succeed in my exams?", "What is the best career after my studies?", "How can I improve my concentration and focus?", "Should I study abroad?"],
+      promptsHi: ["मुझे किस क्षेत्र में अध्ययन करना चाहिए?", "क्या मैं अपनी परीक्षाओं में सफल होऊंगा?", "मेरी पढ़ाई के बाद सबसे अच्छा करियर क्या है?", "मैं अपनी एकाग्रता और फोकस कैसे सुधारूं?", "क्या मुझे विदेश में पढ़ाई करनी चाहिए?"] },
+  ];
 
   const displayName = (() => { 
     try { 
@@ -975,6 +1004,18 @@ export default function Chat() {
 
           {/* Conversation */}
           <div className="max-w-4xl w-full mx-auto px-1.5 sm:px-4 min-h-[40vh] space-y-4">
+            {messages.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-[55vh] gap-4">
+                <img
+                  src="/optimized/vedika.webp"
+                  alt="Vedika AI"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover opacity-20"
+                />
+                <p className="text-white/20 text-xl sm:text-2xl font-light italic tracking-wide text-center leading-relaxed">
+                  The Answers is Already Written,<br />let's find yours {displayName}
+                </p>
+              </div>
+            )}
             {messages.map((m, idx) => (
               m.role === "assistant" && !m.content?.trim() ? null : (
                 <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-0.5 sm:px-4 scroll-mt-[110px] sm:scroll-mt-0`}>
@@ -1062,17 +1103,34 @@ export default function Chat() {
           }}
         >
           <div className="max-w-4xl mx-auto w-full px-2 sm:px-3 md:px-4 lg:px-6 pt-2 sm:pt-3 pb-3 sm:pb-4 pointer-events-auto">
-            {/* Suggestions near input */}
-            {!hasChatted && !hasTyped && suggestions.length > 0 && (
-              <div className="mb-2 flex flex-wrap gap-2">
-                {suggestions.map((q, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => { setMessage(q); setHasChatted(true); focusInput(); }}
-                    className="text-xs sm:text-sm px-3 py-1.5 rounded-full border border-border/60 bg-card/30 hover:border-secondary/60 hover:text-foreground transition"
-                  >
-                    {q}
-                  </button>
+            {/* Category Cards with Drop-up Prompts */}
+            {!hasChatted && !hasTyped && (
+              <div className="mb-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {categoryPrompts.map((cat) => (
+                  <Popover key={cat.id} open={openCategory === cat.id} onOpenChange={(open) => setOpenCategory(open ? cat.id : null)}>
+                    <PopoverTrigger asChild>
+                      <button className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2.5 rounded-xl border border-border/60 bg-card/30 hover:border-secondary/50 hover:bg-card/50 transition-all text-xs sm:text-sm text-foreground/80 backdrop-blur-sm w-full">
+                        <span className="text-base sm:text-lg">{cat.icon}</span>
+                        <span className="truncate">{lang === "hi" ? cat.labelHi : cat.labelEn}</span>
+                        <ChevronUp className="w-3 h-3 ml-auto opacity-40 shrink-0" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent side="top" align="center" sideOffset={8} className="w-64 sm:w-72 p-2 rounded-2xl border border-border/60 bg-card/90 backdrop-blur-xl shadow-xl z-50">
+                      <div className="flex flex-col gap-1">
+                        {(lang === "hi" ? cat.promptsHi : cat.promptsEn).map((prompt, pIdx) => (
+                          <button
+                            key={pIdx}
+                            type="button"
+                            disabled={sending}
+                            onClick={() => { setMessage(prompt); setHasChatted(true); setOpenCategory(null); focusInput(); }}
+                            className="text-left px-3 py-2.5 rounded-xl text-xs sm:text-sm leading-5 text-foreground/80 hover:bg-secondary/10 hover:text-foreground transition border border-transparent hover:border-border/40 disabled:opacity-60"
+                          >
+                            {prompt}
+                          </button>
+                        ))}
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 ))}
               </div>
             )}
@@ -1142,8 +1200,8 @@ export default function Chat() {
 
             {[
               {id:'149',price:149,name:'Starter',qs:5,features:[]},
-              {id:'399',price:399,name:'Popular',qs:15,popular:true,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
-              {id:'699',price:699,name:'Full Reading',qs:30,features:[]},
+              {id:'399',price:399,name:'Popular',qs:15,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
+              {id:'699',price:699,name:'30 Questions for Only ₹699',qs:30,popular:true,features:['All popular features','30 deep-dive questions','Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
             ].map((plan) => {
               const sel = selectedPlan === plan.id;
               return (
@@ -1361,7 +1419,7 @@ async function generateAnswerSuggestions(question: string, answer: string, lang:
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
 
-Create exactly 2 short, curiosity-driven next-question suggestions for an astrology chat, written so the user genuinely feels they NEED to spend a credit to ask them — not generic follow-ups, but questions that create a real itch to know more.
+Create exactly 2 short, curiosity-driven next-question suggestions for an astrology chat, written so the user genuinely feels they NEED to spend a credit to ask them — not generic follow-ups, but questions that create a real itch to know more generate this under 15 word .
 
 RULES:
 - Each question must be 10 to 14 words maximum — concise, sharp, and to the point.

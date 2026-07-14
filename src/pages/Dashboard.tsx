@@ -95,6 +95,9 @@ export default function Dashboard() {
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
   const [monthlyLoading, setMonthlyLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
+  const [selectedDateLoading, setSelectedDateLoading] = useState(false);
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
   const [monthlyLoadingTimer, setMonthlyLoadingTimer] = useState<NodeJS.Timeout | null>(null);
@@ -335,10 +338,25 @@ export default function Dashboard() {
   const formatDailyDate = (date: Date) =>
     date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
+  const formatDayDate = (date: Date) =>
+    date.toLocaleDateString('en-US', { weekday: 'short', day: 'numeric' });
+
   const todayDisplayDate = formatDailyDate(new Date());
   const tomorrowDate = new Date();
   tomorrowDate.setDate(tomorrowDate.getDate() + 1);
   const tomorrowDisplayDate = formatDailyDate(tomorrowDate);
+
+  // Generate week dates starting from today
+  const weekDates = useMemo(() => {
+    const dates: Date[] = [];
+    const today = new Date();
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      dates.push(date);
+    }
+    return dates;
+  }, []);
 
   const fetchTodayPrediction = useCallback(async () => {
     if (todayLoading || typeof window === "undefined") return;
@@ -411,6 +429,77 @@ One flowing paragraph covering love, career, health and wealth for today.`;
       setTodayLoading(false);
     }
   }, [lang, user?.uid, todayLoading]);
+
+  const fetchPredictionForDate = useCallback(async (date: Date) => {
+    if (selectedDateLoading || typeof window === "undefined") return;
+
+    const dateKey = getLocalDateKey(date);
+    const cacheKey = `ai_daily_${user?.uid || 'guest'}_${dateKey}`;
+
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      if (cached?.text && cached?.date === dateKey) {
+        setSelectedPrediction(cached);
+        return;
+      }
+    } catch {}
+
+    let details: any = null;
+    let planets: any = null;
+    try {
+      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
+      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
+    } catch {}
+
+    setSelectedDateLoading(true);
+    try {
+      const dateFormatted = date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+
+      const systemPrompt = `You are an expert Vedic astrologer. The date is ${dateFormatted}. Respond with valid JSON only:
+{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
+STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
+
+      const prompt = `Generate personalized prediction for ${dateFormatted} based on:
+${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
+${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
+
+One flowing paragraph covering love, career, health and wealth for this date.`;
+
+      const response = await Promise.race([
+        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("Timed out")), 25000)
+        ),
+      ]);
+
+      const jsonText = extractJsonBlock(response);
+      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
+      if (!parsed?.text?.trim()) parsed = { text: response };
+
+      const result = {
+        text: cleanText(String(parsed.text)),
+        date: dateKey,
+        love: "",
+        self: "",
+        wealth: "",
+        luckyNumber: 0,
+        luckyColor: "",
+      };
+
+      setSelectedPrediction(result as any);
+      localStorage.setItem(cacheKey, JSON.stringify(result));
+    } catch (error: any) {
+      console.error('Error fetching prediction for date:', error);
+    } finally {
+      setSelectedDateLoading(false);
+    }
+  }, [lang, user?.uid, selectedDateLoading]);
 
   const hydrateDailyPredictionsFromCache = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -519,8 +608,10 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
   useEffect(() => {
     if (typeof window !== "undefined") {
       hydrateDailyPredictionsFromCache();
+      // Auto-load today's prediction on mount
+      fetchPredictionForDate(new Date());
     }
-  }, [hydrateDailyPredictionsFromCache]);
+  }, [hydrateDailyPredictionsFromCache, fetchPredictionForDate]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -1305,121 +1396,106 @@ useEffect(() => {
           </Card>
 
 
-          {/* Predictions with Tabs - Only show if daily predictions are enabled */}
+          {/* Premium Calendar Strip with Daily Predictions */}
           {showDailyTabs && (
-          <Tabs value={normalizedTab} onValueChange={handleTabChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-12 bg-card/40 p-1 rounded-2xl">
-              <TabsTrigger value="today" className="rounded-xl data-[state=active]:bg-secondary/20">
-                {t("today")} ({todayDisplayDate})
-              </TabsTrigger>
-              <TabsTrigger value="tomorrow" className="rounded-xl data-[state=active]:bg-secondary/20 flex items-center justify-center gap-2">
-                {t("tomorrow")} ({tomorrowDisplayDate})
-                {!tomorrowUnlocked && <Lock className="w-3.5 h-3.5 text-muted-foreground" />}
-              </TabsTrigger>
-            </TabsList>
+          <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="font-semibold text-lg">Daily Predictions</h2>
+                <p className="text-sm text-muted-foreground mt-1">Select any date to see your cosmic insights</p>
+              </div>
+            </div>
 
-            <TabsContent value="today" className="mt-4 sm:mt-6 space-y-4">
-              {todayLoading ? (
-                <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
-                      <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
-                      <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
-                      <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
-                      <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
-                    </div>
-                  </div>
-                </Card>
-              ) : (
-                <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div>
-                      <h2 className="font-semibold text-lg">{t("today")}</h2>
-                      <p className="text-sm text-muted-foreground mt-1">{todayDisplayDate}</p>
-                    </div>
-                  </div>
-                  {todayPrediction ? (
-                    <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                      <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {todayMergedText}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                      <div className="text-center py-8">
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Your {todayDisplayDate} prediction is ready
-                        </p>
-                        <Button variant="cosmic" size="sm" onClick={fetchTodayPrediction}>
-                          Generate Today's Prediction
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              )}
-            </TabsContent>
+            {/* Calendar Strip - 7 Days */}
+            <div className="grid grid-cols-7 gap-2 mb-6">
+              {weekDates.map((date, idx) => {
+                const isSelected = getLocalDateKey(date) === getLocalDateKey(selectedDate);
+                const isToday = getLocalDateKey(date) === getLocalDateKey(new Date());
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setSelectedDate(date);
+                      setSelectedPrediction(null);
+                      fetchPredictionForDate(date);
+                    }}
+                    className={cn(
+                      "flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200 border",
+                      isSelected
+                        ? "bg-gradient-to-br from-secondary/20 to-primary/20 border-secondary/50 shadow-lg shadow-secondary/20"
+                        : "bg-background/50 border-border/60 hover:border-secondary/40 hover:bg-accent/10",
+                      isToday && !isSelected && "ring-2 ring-secondary/30"
+                    )}
+                  >
+                    <span className={cn(
+                      "text-xs font-medium mb-1",
+                      isSelected ? "text-secondary" : "text-muted-foreground"
+                    )}>
+                      {date.toLocaleDateString('en-US', { weekday: 'short' })}
+                    </span>
+                    <span className={cn(
+                      "text-lg font-bold",
+                      isSelected ? "text-foreground" : "text-foreground/80"
+                    )}>
+                      {date.getDate()}
+                    </span>
+                    {isToday && (
+                      <span className="mt-1 text-[10px] font-semibold text-secondary">Today</span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
-            <TabsContent value="tomorrow" className="mt-6 space-y-4">
-              {tomorrowUnlocked ? (
-                <>
-                  {tomorrowLoading ? (
-                    <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
-                          <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
-                          <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
-                          <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
-                          <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
-                        </div>
-                      </div>
-                    </Card>
-                  ) : (
-                    <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-                      <div className="flex items-center justify-between gap-3 mb-4">
-                        <div>
-                          <h2 className="font-semibold text-lg">{t("tomorrow")}</h2>
-                          <p className="text-sm text-muted-foreground mt-1">{tomorrowDisplayDate}</p>
-                        </div>
-                      </div>
-                      {tomorrowPrediction ? (
-                        <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                            {tomorrowMergedText}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                          <div className="text-center py-8">
-                            <p className="text-sm text-muted-foreground mb-4">
-                              Your {tomorrowDisplayDate} prediction is ready
-                            </p>
-                            <Button variant="cosmic" size="sm" onClick={fetchTomorrowPrediction}>
-                              Generate Tomorrow's Prediction
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                    </Card>
-                  )}
-                </>
-              ) : (
-                renderLockedFeatureCard(
-                  "Tomorrow's Guidance",
-                  "Upgrade to Basic, Premium, or Elite to unlock tomorrow's predictions and insights.",
-                  { full: true }
-                )
-              )}
-            </TabsContent>
-          </Tabs>
+            {/* Selected Date Prediction Display */}
+            {selectedDateLoading ? (
+              <div className="p-6 rounded-xl bg-background/50 border border-border/60">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
+                    <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
+                    <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
+                    <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
+                    <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+            ) : selectedPrediction ? (
+              <div className="p-6 rounded-xl bg-gradient-to-br from-background/80 to-accent/5 border border-border/60">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-semibold text-lg">{formatDailyDate(selectedDate)}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-secondary" />
+                  </div>
+                </div>
+                <div className="p-4 rounded-lg bg-background/60 border border-border/40">
+                  <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
+                    {selectedPrediction.text}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-6 rounded-xl bg-background/50 border border-border/60">
+                <div className="text-center py-8">
+                  <Sparkles className="w-12 h-12 text-secondary mx-auto mb-4" />
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Your prediction for {formatDailyDate(selectedDate)} is ready
+                  </p>
+                  <Button variant="cosmic" size="sm" onClick={() => fetchPredictionForDate(selectedDate)}>
+                    Generate Prediction
+                  </Button>
+                </div>
+              </div>
+            )}
+          </Card>
           )}
 
           {/* Weekly Predictions removed */}

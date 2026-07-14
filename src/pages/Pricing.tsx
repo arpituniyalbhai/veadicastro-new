@@ -597,7 +597,7 @@ const Pricing = () => {
                 <span className="text-sm bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">LIMITED TIME</span>
                 <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
               </div>
-              <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">Get 15 Questions for just Rs.399!</h3>
+              <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">Get 30 Questions for just Rs 699!</h3>
               <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
             </div>
           </Card>
