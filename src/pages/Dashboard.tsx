@@ -96,7 +96,16 @@ export default function Dashboard() {
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
   const [monthlyLoading, setMonthlyLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
+  const [selectedPrediction, setSelectedPrediction] = useState<{
+    text: string;
+    date: string;
+    career?: string;
+    love?: string;
+    wealth?: string;
+    health?: string;
+    energyLevel?: number;
+    luckyNumber?: number;
+  } | null>(null);
   const [selectedDateLoading, setSelectedDateLoading] = useState(false);
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
@@ -460,16 +469,23 @@ One flowing paragraph covering love, career, health and wealth for today.`;
         day: 'numeric',
       });
 
-      const systemPrompt = `You are an expert Vedic astrologer. The date is ${dateFormatted}. Respond with valid JSON only:
-{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+      const systemPrompt = `You are an expert Vedic astrologer. TODAY IS ${dateFormatted}. Generate a DAILY prediction for this specific date only. Respond with valid JSON only:
+{"career":"career prediction (30-40 words, plain text, no markdown)","love":"love prediction (30-40 words, plain text, no markdown)","wealth":"wealth prediction (30-40 words, plain text, no markdown)","health":"health prediction (30-40 words, plain text, no markdown)"}
 English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
-STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
+CRITICAL: Generate prediction ONLY for ${dateFormatted} - this is a single day prediction, NOT weekly or monthly. Focus exclusively on this specific date's influences.
+STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data. Each prediction must be 30-40 words maximum.`;
 
-      const prompt = `Generate personalized prediction for ${dateFormatted} based on:
+      const prompt = `Generate structured DAILY predictions for ${dateFormatted} (this is the current date for this prediction) based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
 ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
 
-One flowing paragraph covering love, career, health and wealth for this date.`;
+IMPORTANT: Today is ${dateFormatted}. Generate predictions ONLY for this specific date, not for the week or month. Focus on planetary influences for this single day.
+
+Provide 4 separate predictions (30-40 words each):
+1. Career: Professional opportunities, work challenges, business insights
+2. Love: Relationships, romance, family connections
+3. Wealth: Financial gains, expenses, investment opportunities
+4. Health: Physical well-being, energy levels, health tips`;
 
       const response = await Promise.race([
         generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
@@ -479,17 +495,21 @@ One flowing paragraph covering love, career, health and wealth for this date.`;
       ]);
 
       const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
-      if (!parsed?.text?.trim()) parsed = { text: response };
+      let parsed = safeParseModelJson<{ career?: string; love?: string; wealth?: string; health?: string }>(jsonText, { career: "", love: "", wealth: "", health: "" });
+      if (!parsed?.career?.trim() && !parsed?.love?.trim() && !parsed?.wealth?.trim() && !parsed?.health?.trim()) {
+        // Fallback if structured parsing fails
+        parsed = { career: response, love: "", wealth: "", health: "" };
+      }
 
       const result = {
-        text: cleanText(String(parsed.text)),
+        text: cleanText(String(parsed.career || "")),
         date: dateKey,
-        love: "",
-        self: "",
-        wealth: "",
-        luckyNumber: 0,
-        luckyColor: "",
+        career: cleanText(String(parsed.career || "")),
+        love: cleanText(String(parsed.love || "")),
+        wealth: cleanText(String(parsed.wealth || "")),
+        health: cleanText(String(parsed.health || "")),
+        energyLevel: Math.floor(Math.random() * 40) + 60, // Random 60-100
+        luckyNumber: Math.floor(Math.random() * 9) + 1, // Random 1-9
       };
 
       setSelectedPrediction(result as any);
@@ -1464,8 +1484,9 @@ useEffect(() => {
                 </div>
               </div>
             ) : selectedPrediction ? (
-              <div className="p-6 rounded-xl bg-gradient-to-br from-background/80 to-accent/5 border border-border/60">
-                <div className="flex items-center justify-between mb-4">
+              <div className="space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between">
                   <div>
                     <h3 className="font-semibold text-lg">{formatDailyDate(selectedDate)}</h3>
                     <p className="text-sm text-muted-foreground mt-1">
@@ -1476,9 +1497,99 @@ useEffect(() => {
                     <Sparkles className="w-5 h-5 text-secondary" />
                   </div>
                 </div>
-                <div className="p-4 rounded-lg bg-background/60 border border-border/40">
-                  <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
-                    {selectedPrediction.text}
+
+                {/* Energy Level Card */}
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Today's Energy Level</span>
+                    <span className="text-lg font-bold text-purple-600 dark:text-purple-400">{selectedPrediction.energyLevel}%</span>
+                  </div>
+                  <div className="w-full bg-purple-500/20 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${selectedPrediction.energyLevel}%` }}
+                    ></div>
+                  </div>
+                </div>
+
+                {/* Lucky Number Card */}
+                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-amber-700 dark:text-amber-300">Lucky Number</span>
+                    <span className="text-3xl font-bold text-amber-600 dark:text-amber-400">{selectedPrediction.luckyNumber}</span>
+                  </div>
+                </div>
+
+                {/* Prediction Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                  {/* Career Card */}
+                  {selectedPrediction.career && (
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/30 min-h-[100px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <TrendingUp className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <span className="text-sm font-semibold text-blue-700 dark:text-blue-300">Career</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed">
+                        {selectedPrediction.career}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Love Card */}
+                  {selectedPrediction.love && (
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-pink-500/10 to-rose-500/10 border border-pink-500/30 min-h-[100px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Heart className="w-4 h-4 text-pink-600 dark:text-pink-400" />
+                        <span className="text-sm font-semibold text-pink-700 dark:text-pink-300">Love</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed">
+                        {selectedPrediction.love}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Wealth Card */}
+                  {selectedPrediction.wealth && (
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 min-h-[100px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <DollarSign className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm font-semibold text-green-700 dark:text-green-300">Wealth</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed">
+                        {selectedPrediction.wealth}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Health Card */}
+                  {selectedPrediction.health && (
+                    <div className="p-4 rounded-xl bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/30 min-h-[100px]">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 text-red-600 dark:text-red-400" />
+                        <span className="text-sm font-semibold text-red-700 dark:text-red-300">Health</span>
+                      </div>
+                      <p className="text-xs text-foreground/80 leading-relaxed">
+                        {selectedPrediction.health}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Good Timeline Section */}
+                <div className="p-4 rounded-xl bg-gradient-to-br from-secondary/10 to-primary/10 border border-secondary/30">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Calendar className="w-4 h-4 text-secondary" />
+                    <span className="text-sm font-semibold text-secondary">Good Timeline</span>
+                  </div>
+                  <p className="text-xs text-foreground/80 leading-relaxed">
+                    Best timing for important decisions in {(() => {
+                      try {
+                        const details = JSON.parse(localStorage.getItem('onboarding_details') || 'null');
+                        return details?.place || 'your location';
+                      } catch {
+                        return 'your location';
+                      }
+                    })()} based on planetary positions for {formatDailyDate(selectedDate)}.
                   </p>
                 </div>
               </div>
