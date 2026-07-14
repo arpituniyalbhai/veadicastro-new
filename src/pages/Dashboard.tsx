@@ -659,6 +659,9 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
     if (typeof window !== "undefined") {
       hydrateDailyPredictionsFromCache();
       // Auto-load today's prediction on mount
+      const todayKey = getLocalDateKey(new Date());
+      pendingDateRef.current = todayKey;
+      setSelectedDateLoading(true);
       fetchPredictionForDate(new Date());
     }
   }, [hydrateDailyPredictionsFromCache, fetchPredictionForDate]);
