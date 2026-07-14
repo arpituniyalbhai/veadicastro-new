@@ -1364,6 +1364,7 @@ async function generateAnswerSuggestions(question: string, answer: string, lang:
 Create exactly 2 short, curiosity-driven next-question suggestions for an astrology chat, written so the user genuinely feels they NEED to spend a credit to ask them — not generic follow-ups, but questions that create a real itch to know more.
 
 RULES:
+- Each question must be 10 to 14 words maximum — concise, sharp, and to the point.
 - Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
 - Questions should sound like what a normal person would naturally ask next — never robotic or templated.
 - Each question must open a curiosity gap: it should imply there's something specific and personal still unrevealed, connected directly to what was just answered. Do not restate or generically continue — it must feel like the next layer the user is dying to know.
