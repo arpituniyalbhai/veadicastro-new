@@ -102,6 +102,7 @@ export default function Dashboard() {
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
   const [monthlyLoadingTimer, setMonthlyLoadingTimer] = useState<NodeJS.Timeout | null>(null);
+  const pendingDateRef = useRef<string | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
   const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
   const [timeRemaining, setTimeRemaining] = useState(() => {
@@ -470,7 +471,7 @@ One flowing paragraph covering love, career, health and wealth for today.`;
   }, [lang, user?.uid, todayLoading]);
 
   const fetchPredictionForDate = useCallback(async (date: Date) => {
-    if (selectedDateLoading || typeof window === "undefined") return;
+    if (typeof window === "undefined") return;
 
     const dateKey = getLocalDateKey(date);
     const cacheKey = `ai_daily_${user?.uid || 'guest'}_${dateKey}`;
@@ -478,7 +479,11 @@ One flowing paragraph covering love, career, health and wealth for today.`;
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
       if (cached?.text && cached?.date === dateKey) {
-        setSelectedPrediction(cached);
+        if (pendingDateRef.current === dateKey) {
+          setSelectedPrediction(cached);
+          setSelectedDateLoading(false);
+          pendingDateRef.current = null;
+        }
         return;
       }
     } catch {}
@@ -490,7 +495,6 @@ One flowing paragraph covering love, career, health and wealth for today.`;
       planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
     } catch {}
 
-    setSelectedDateLoading(true);
     try {
       const dateFormatted = date.toLocaleDateString('en-US', {
         weekday: 'long',
@@ -519,6 +523,8 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
         ),
       ]);
 
+      if (pendingDateRef.current !== dateKey) return;
+
       const jsonText = extractJsonBlock(response);
       let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
       if (!parsed?.text?.trim()) parsed = { text: response };
@@ -538,9 +544,12 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
     } catch (error: any) {
       console.error('Error fetching prediction for date:', error);
     } finally {
-      setSelectedDateLoading(false);
+      if (pendingDateRef.current === dateKey) {
+        setSelectedDateLoading(false);
+        pendingDateRef.current = null;
+      }
     }
-  }, [lang, user?.uid, selectedDateLoading]);
+  }, [lang, user?.uid]);
 
   const hydrateDailyPredictionsFromCache = useCallback(() => {
     if (typeof window === "undefined") return;
@@ -1464,6 +1473,8 @@ useEffect(() => {
                       }
                       setSelectedDate(date);
                       setSelectedPrediction(null);
+                      setSelectedDateLoading(true);
+                      pendingDateRef.current = getLocalDateKey(date);
                       fetchPredictionForDate(date);
                     }}
                     className={cn(
