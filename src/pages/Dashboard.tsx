@@ -46,6 +46,7 @@ import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { generateGemini, VAANI_SYSTEM_PROMPT } from "@/lib/gemini";
 import { getNakshatraLord, getYoni } from "@/lib/astroCalc";
+import { EnergyGauge } from "@/components/EnergyGauge";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -90,14 +91,14 @@ export default function Dashboard() {
     place: "Not set",
   });
   const [assistantOpen, setAssistantOpen] = useState(false);
-  const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
-  const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
+  const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
+  const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [monthlyPrediction, setMonthlyPrediction] = useState<{ text: string; month: number; year: number } | null>(null);
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
   const [monthlyLoading, setMonthlyLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string } | null>(null);
+  const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [selectedDateLoading, setSelectedDateLoading] = useState(false);
   const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
   const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
@@ -430,7 +431,8 @@ export default function Dashboard() {
       });
 
       const systemPrompt = `You are an expert Vedic astrologer. Today is ${todayFormatted}. Respond with valid JSON only:
-{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
+enerngy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
 English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
 STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
 
@@ -438,7 +440,7 @@ STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base 
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
 ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
 
-One flowing paragraph covering love, career, health and wealth for today.`;
+One flowing paragraph covering love, career, health and wealth for today. Also provide a 2-3 word mood label and energy score 0-100.`;
 
       const response = await Promise.race([
         generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
@@ -448,8 +450,8 @@ One flowing paragraph covering love, career, health and wealth for today.`;
       ]);
 
       const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
-      if (!parsed?.text?.trim()) parsed = { text: response };
+      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
+      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
 
       const result = {
         text: cleanText(String(parsed.text)),
@@ -459,6 +461,8 @@ One flowing paragraph covering love, career, health and wealth for today.`;
         wealth: "",
         luckyNumber: 0,
         luckyColor: "",
+        mood: parsed?.mood || "Balanced Day",
+        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
       };
 
       setTodayPrediction(result as any);
@@ -504,7 +508,8 @@ One flowing paragraph covering love, career, health and wealth for today.`;
       });
 
       const systemPrompt = `You are an expert Vedic astrologer. TODAY IS ${dateFormatted}. Generate a DAILY prediction for this specific date only. Respond with valid JSON only:
-{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
+energy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
 English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
 CRITICAL: Generate prediction ONLY for ${dateFormatted} - this is a single day prediction, NOT weekly or monthly. Focus exclusively on this specific date's influences.
 STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
@@ -514,7 +519,7 @@ ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'Genera
 ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
 
 IMPORTANT: Today is ${dateFormatted}. Generate prediction ONLY for this specific date, not for the week or month. Focus on planetary influences for this single day.
-One flowing paragraph covering love, career, health and wealth for ${dateFormatted}.`;
+One flowing paragraph covering love, career, health and wealth for ${dateFormatted}. Also provide a 2-3 word mood label and energy score 0-100.`;
 
       const response = await Promise.race([
         generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
@@ -526,8 +531,8 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
       if (pendingDateRef.current !== dateKey) return;
 
       const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
-      if (!parsed?.text?.trim()) parsed = { text: response };
+      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
+      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
 
       const result = {
         text: cleanText(String(parsed.text)),
@@ -537,6 +542,8 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
         wealth: "",
         luckyNumber: 0,
         luckyColor: "",
+        mood: parsed?.mood || "Balanced Day",
+        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
       };
 
       setSelectedPrediction(result as any);
@@ -614,7 +621,8 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
       });
 
       const systemPrompt = `You are an expert Vedic astrologer. Tomorrow's date is ${tomorrowFormatted}. Respond with valid JSON only:
-{"text":"prediction here (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)"}
+{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
+energy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
 English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
 STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
 
@@ -622,7 +630,7 @@ STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base 
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
 ${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
 
-One flowing paragraph covering love, career, health and wealth for tomorrow.`;
+One flowing paragraph covering love, career, health and wealth for tomorrow. Also provide a 2-3 word mood label and energy score 0-100.`;
 
       const response = await Promise.race([
         generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
@@ -632,8 +640,8 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
       ]);
 
       const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
-      if (!parsed?.text?.trim()) parsed = { text: response };
+      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
+      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
 
       const result = {
         text: cleanText(String(parsed.text)),
@@ -643,6 +651,8 @@ One flowing paragraph covering love, career, health and wealth for tomorrow.`;
         wealth: "",
         luckyNumber: 0,
         luckyColor: "",
+        mood: parsed?.mood || "Balanced Day",
+        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
       };
 
       setTomorrowPrediction(result as any);
@@ -1515,38 +1525,49 @@ useEffect(() => {
 
             {/* Selected Date Prediction Display */}
             {selectedDateLoading ? (
-              <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
-                <div className="space-y-4">
-                  <div className="space-y-2">
+              <div className="p-5 sm:p-6 rounded-xl bg-background/50 border border-border/60">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex-1 space-y-2">
                     <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
-                    <div className="h-3 bg-muted rounded w-24 animate-pulse"></div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="h-3 bg-muted rounded w-full animate-pulse"></div>
-                    <div className="h-3 bg-muted rounded w-5/6 animate-pulse"></div>
+                    <div className="h-5 bg-muted rounded w-2/3 animate-pulse"></div>
                     <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
-                    <div className="h-3 bg-muted rounded w-3/4 animate-pulse"></div>
                   </div>
+                  <div className="w-[72px] h-[72px] rounded-full bg-muted animate-pulse shrink-0" />
                 </div>
+                <div className="h-10 bg-muted rounded-lg w-full animate-pulse" />
               </div>
             ) : selectedPrediction ? (
-              <div className="p-4 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-accent/5 border border-border/60">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-card/60 border border-border/60">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <div className="text-sm font-medium text-foreground">{selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}
+                      <span className="text-muted-foreground mx-1">·</span>
+                      <span className="text-muted-foreground">{selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}</span>
+                    </div>
+                  </div>
+                  <Sparkles className="w-4 h-4 text-secondary" />
+                </div>
+                <div className="flex items-start gap-4 mb-4">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-base sm:text-lg">Daily prediction - {selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}
+                    <p className="text-lg font-bold text-foreground leading-tight mb-2">
+                      {lang === "hi" ? "आज आपका" : "Today is your"} <span className="text-secondary">{selectedPrediction.mood || "Balanced Day"}</span>
+                    </p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {selectedPrediction.text.length > 100
+                        ? selectedPrediction.text.slice(0, 100) + "..."
+                        : selectedPrediction.text}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <Sparkles className="w-5 h-5 text-secondary" />
-                  </div>
+                  <EnergyGauge value={selectedPrediction.energy ?? 70} size={72} strokeWidth={5} className="shrink-0 mt-1" />
                 </div>
-                <div className="p-3 sm:p-4 rounded-lg bg-background/60 border border-border/40">
-                  <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line">
-                    {selectedPrediction.text}
-                  </p>
-                </div>
+                <Button
+                  variant="cosmic"
+                  className="w-full h-10 rounded-lg text-sm font-semibold"
+                  onClick={() => navigate(`/daily-prediction?date=${selectedPrediction.date}&referral=dashboard`)}
+                >
+                  Read Full Prediction
+                  <ArrowRight className="w-4 h-4 ml-1.5" />
+                </Button>
               </div>
             ) : (
               <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
