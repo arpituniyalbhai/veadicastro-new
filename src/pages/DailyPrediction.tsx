@@ -57,6 +57,27 @@ function getTimeLabel(uid: string, dateKey: string) {
   return (["Best time","Good window","Favorable hours","Golden hour","Right time","Ideal window"])[Math.floor(rng() * 6)];
 }
 
+function sanitizeModelJson(raw: string): string {
+  let cleaned = raw
+    .replace(/[\u0000-\u001f]+/g, " ")
+    .replace(/[\u0966-\u096F]/g, (d) => "0123456789"["\u0966\u0967\u0968\u0969\u096A\u096B\u096C\u096D\u096E\u096F".indexOf(d)])
+    .replace(/[\u3001]/g, ",")
+    .replace(/[""'']/g, '"')
+    .replace(/[`]/g, "'");
+  cleaned = cleaned.replace(/"([^"\\]*(?:\\.[^"\\]*)*)"/g, (match) => {
+    const inner = match.slice(1, -1).replace(/\r?\n/g, "\\n");
+    return `"${inner}"`;
+  });
+  return cleaned;
+}
+
+function extractField(text: string, field: string): string {
+  const regex = new RegExp(`"${field}"\\s*:\\s*"([^"]*(?:\\\\.[^"]*)*)"`, "i");
+  const match = text.match(regex);
+  if (!match) return "";
+  return match[1].replace(/\\n/g, " ").replace(/\\"/g, '"').trim();
+}
+
 const colorMap: Record<string, string> = {
   Purple: "bg-purple-500", Gold: "bg-yellow-500", Blue: "bg-blue-500",
   Emerald: "bg-emerald-500", Rose: "bg-rose-500", Amber: "bg-amber-500",
@@ -157,7 +178,7 @@ Wealth — what is coming in money and finances:`;
 
     try {
       const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
+        generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
         new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timed out")), 25000)),
       ]);
 
@@ -166,13 +187,17 @@ Wealth — what is coming in money and finances:`;
       let parsed: Record<string, string> = { love: "", career: "", health: "", wealth: "" };
 
       if (start !== -1 && end > start) {
+        const block = response.slice(start, end + 1);
+        const cleaned = sanitizeModelJson(block);
         try {
-          parsed = JSON.parse(response.slice(start, end + 1));
+          parsed = JSON.parse(cleaned);
         } catch {
-          const cleaned = response.slice(start, end + 1)
-            .replace(/[\u0000-\u001f]+/g, " ")
-            .replace(/[""'']/g, '"');
-          try { parsed = JSON.parse(cleaned); } catch {}
+          parsed = {
+            love: extractField(block, "love"),
+            career: extractField(block, "career"),
+            health: extractField(block, "health"),
+            wealth: extractField(block, "wealth"),
+          };
         }
       }
 
@@ -182,8 +207,9 @@ Wealth — what is coming in money and finances:`;
       parsed.wealth = parsed.wealth?.trim() || "";
 
       if (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth) {
-        const text = response.replace(/```/g, "").trim();
-        parsed = { love: text, career: text, health: text, wealth: text };
+        setSectionsError(true);
+        setSectionsLoading(false);
+        return;
       }
 
       setSections(parsed);
@@ -212,10 +238,10 @@ Wealth — what is coming in money and finances:`;
   };
 
   const sectionConfig = [
-    { key: "love", icon: Heart, label: "Love", gradient: "from-pink-500/10 to-rose-500/5", border: "border-pink-500/20" },
-    { key: "career", icon: Briefcase, label: "Career", gradient: "from-blue-500/10 to-cyan-500/5", border: "border-blue-500/20" },
-    { key: "health", icon: Activity, label: "Health", gradient: "from-emerald-500/10 to-green-500/5", border: "border-emerald-500/20" },
-    { key: "wealth", icon: Wallet, label: "Wealth", gradient: "from-amber-500/10 to-yellow-500/5", border: "border-amber-500/20" },
+    { key: "love", icon: Heart, label: "Love" },
+    { key: "career", icon: Briefcase, label: "Career" },
+    { key: "health", icon: Activity, label: "Health" },
+    { key: "wealth", icon: Wallet, label: "Wealth" },
   ];
 
   return (
@@ -239,7 +265,7 @@ Wealth — what is coming in money and finances:`;
         </div>
 
         {/* Calendar Strip */}
-        <Card className="p-4 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+        <Card className="p-4 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
             {weekDates.map((date, idx) => {
               const isSelected = getLocalDateKey(date) === dateKey;
@@ -277,44 +303,44 @@ Wealth — what is coming in money and finances:`;
         </Card>
 
         {/* Energy + Lucky Colour + Lucky Number */}
-        <Card className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <div className="flex items-center gap-6 sm:gap-10">
             <EnergyGauge value={luckyData.energy} size={80} strokeWidth={5} />
             <div className="flex gap-4 sm:gap-6">
               <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1.5">WEAR</p>
-                <div className={cn("w-10 h-10 rounded-full mx-auto mb-1 ring-2 ring-border/40", colorMap[luckyData.luckyColor] || "bg-purple-500")} />
-                <p className="text-sm font-semibold text-foreground">{luckyData.luckyColor}</p>
+                <p className="text-[10px] tracking-wide text-white/40 mb-1.5 font-medium">WEAR</p>
+                <div className={cn("w-10 h-10 rounded-full mx-auto mb-1 ring-2 ring-white/10", colorMap[luckyData.luckyColor] || "bg-purple-500")} />
+                <p className="text-sm font-semibold text-white/90">{luckyData.luckyColor}</p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1.5">MANIFEST</p>
-                <div className="w-10 h-10 rounded-full mx-auto mb-1 bg-gradient-to-br from-secondary to-accent flex items-center justify-center ring-2 ring-border/40">
+                <p className="text-[10px] tracking-wide text-white/40 mb-1.5 font-medium">MANIFEST</p>
+                <div className="w-10 h-10 rounded-full mx-auto mb-1 bg-white/[0.08] border border-white/10 flex items-center justify-center">
                   <span className="text-lg font-bold text-white">{luckyData.luckyNumber}</span>
                 </div>
-                <p className="text-sm font-semibold text-foreground">Number {luckyData.luckyNumber}</p>
+                <p className="text-sm font-semibold text-white/90">Number {luckyData.luckyNumber}</p>
               </div>
             </div>
           </div>
         </Card>
 
         {/* Right Time */}
-        <Card className="p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
+        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-foreground">{timeLabel}</h3>
-            <span className="text-xs text-muted-foreground">{place}</span>
+            <h3 className="text-sm font-semibold text-white/90">{timeLabel}</h3>
+            <span className="text-xs text-white/40">{place}</span>
           </div>
-          <div className="relative h-6 rounded-full bg-background/60 border border-border/60 overflow-hidden">
+          <div className="relative h-6 rounded-full bg-white/[0.04] border border-white/[0.06] overflow-hidden">
             <div
-              className="absolute inset-y-0 rounded-full bg-gradient-to-r from-secondary to-accent opacity-80"
+              className="absolute inset-y-0 rounded-full bg-white/20"
               style={{
                 left: `${((parseInt(timeWindow.start) % 12) / 12) * 100}%`,
                 width: "16%",
               }}
             />
           </div>
-          <div className="flex justify-between mt-2 text-xs text-muted-foreground">
+          <div className="flex justify-between mt-2 text-xs text-white/40">
             <span>{timeWindow.start}</span>
-            <span className="font-medium text-foreground">{timeWindow.start} – {timeWindow.end}</span>
+            <span className="font-medium text-white/80">{timeWindow.start} – {timeWindow.end}</span>
             <span>{timeWindow.end}</span>
           </div>
         </Card>
@@ -323,37 +349,37 @@ Wealth — what is coming in money and finances:`;
         {sectionsLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[1, 2, 3, 4].map((i) => (
-              <Card key={i} className="p-5 bg-card/40 border-border/60 rounded-2xl">
+              <Card key={i} className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-muted animate-pulse" />
-                  <div className="h-4 bg-muted rounded w-16 animate-pulse" />
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.06] animate-pulse" />
+                  <div className="h-4 bg-white/10 rounded w-16 animate-pulse" />
                 </div>
                 <div className="space-y-2">
-                  <div className="h-3 bg-muted rounded w-full animate-pulse" />
-                  <div className="h-3 bg-muted rounded w-5/6 animate-pulse" />
-                  <div className="h-3 bg-muted rounded w-4/5 animate-pulse" />
+                  <div className="h-3 bg-white/10 rounded w-full animate-pulse" />
+                  <div className="h-3 bg-white/10 rounded w-5/6 animate-pulse" />
+                  <div className="h-3 bg-white/10 rounded w-4/5 animate-pulse" />
                 </div>
               </Card>
             ))}
           </div>
         ) : sectionsError ? (
-          <Card className="p-6 bg-card/40 border-border/60 rounded-2xl text-center">
-            <p className="text-sm text-muted-foreground mb-3">Could not load predictions. Please try again.</p>
+          <Card className="p-6 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl text-center">
+            <p className="text-sm text-white/50 mb-3">Could not load predictions. Please try again.</p>
             <Button variant="cosmic" size="sm" onClick={() => { setSectionsError(false); fetchSections(selectedDate, dateKey); }}>
               Retry
             </Button>
           </Card>
         ) : sections ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {sectionConfig.map(({ key, icon: Icon, label, gradient, border }) => (
-              <Card key={key} className={cn("p-5 bg-gradient-to-br border rounded-2xl", gradient, border)}>
+            {sectionConfig.map(({ key, icon: Icon, label }) => (
+              <Card key={key} className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl hover:border-white/[0.12] transition-colors">
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-8 h-8 rounded-lg bg-background/60 flex items-center justify-center">
-                    <Icon className="w-4 h-4 text-foreground" />
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center">
+                    <Icon className="w-4 h-4 text-white/70" />
                   </div>
-                  <h3 className="font-semibold text-foreground">{label}</h3>
+                  <h3 className="font-semibold text-white/90">{label}</h3>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{sections[key]}</p>
+                <p className="text-sm text-white/50 leading-relaxed">{sections[key]}</p>
               </Card>
             ))}
           </div>
