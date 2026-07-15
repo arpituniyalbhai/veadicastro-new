@@ -97,6 +97,7 @@ const HiAstroAlternative = lazy(() => import("@/pages/HiAstroAlternative"));
 const KundliGPTAlternative = lazy(() => import("@/pages/KundliGPTAlternative"));
 const AstroSageAlternative = lazy(() => import("@/pages/AstroSageAlternative"));
 const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
+const DailyPrediction = lazy(() => import("@/pages/DailyPrediction"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
@@ -252,6 +253,7 @@ const AuthenticatedRoutes = ({
         <Route path="/welcome" element={protectedPage(<Welcome />)} />
         <Route path="/onboarding" element={protectedPage(<Onboarding />)} />
         <Route path="/dashboard" element={protectedPage(<Dashboard />)} />
+        <Route path="/daily-prediction" element={protectedPage(<DailyPrediction />)} />
         <Route path="/reports" element={protectedPage(<Reports />)} />
         <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
         <Route path="/pricing" element={protectedPage(<Pricing />)} />
