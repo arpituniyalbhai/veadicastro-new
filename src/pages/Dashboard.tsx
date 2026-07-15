@@ -47,6 +47,7 @@ import { cn } from "@/lib/utils";
 import { generateGemini, VAANI_SYSTEM_PROMPT } from "@/lib/gemini";
 import { getNakshatraLord, getYoni } from "@/lib/astroCalc";
 import { EnergyGauge } from "@/components/EnergyGauge";
+import { getDailyLuckyData } from "@/lib/dailyInsights";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -1536,7 +1537,9 @@ useEffect(() => {
                 </div>
                 <div className="h-10 bg-muted rounded-lg w-full animate-pulse" />
               </div>
-            ) : selectedPrediction ? (
+            ) : selectedPrediction ? (() => {
+              const ld = getDailyLuckyData(user?.uid || "guest", selectedPrediction.date);
+              return (
               <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-card/60 border border-border/60">
                 <div className="flex items-center justify-between mb-4">
                   <div>
@@ -1558,7 +1561,7 @@ useEffect(() => {
                         : selectedPrediction.text}
                     </p>
                   </div>
-                  <EnergyGauge value={selectedPrediction.energy ?? 70} size={72} strokeWidth={5} className="shrink-0 mt-1" />
+                  <EnergyGauge value={ld.energy} size={72} strokeWidth={5} className="shrink-0 mt-1" />
                 </div>
                 <Button
                   variant="cosmic"
@@ -1569,7 +1572,8 @@ useEffect(() => {
                   <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Button>
               </div>
-            ) : (
+              );
+            })() : (
               <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
                 <div className="text-center py-6 sm:py-8">
                   <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-secondary mx-auto mb-4" />

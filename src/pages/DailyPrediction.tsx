@@ -9,53 +9,8 @@ import { Heart, Briefcase, Activity, Wallet, ArrowLeft, Lock, MessageCircle } fr
 import { cn } from "@/lib/utils";
 import { generateGemini } from "@/lib/gemini";
 import SEO from "@/components/SEO";
-
-function hashString(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
-
-function mulberry32(seed: number): () => number {
-  let t = seed;
-  return function () {
-    t += 0x6D2B79F5;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-function getDailyLuckyData(uid: string, dateKey: string) {
-  const seed = hashString(`${uid}_${dateKey}`);
-  const rng = mulberry32(seed);
-  return {
-    energy: 40 + Math.floor(rng() * 56),
-    luckyColor: (["Purple","Gold","Blue","Emerald","Rose","Amber","Jade","Sapphire","Turquoise","Coral"])[Math.floor(rng() * 10)],
-    luckyNumber: 1 + Math.floor(rng() * 9),
-  };
-}
-
-function getAuspiciousWindow(uid: string, dateKey: string, place: string) {
-  const seed = hashString(`${uid}_${dateKey}_${place}_time`);
-  const rng = mulberry32(seed);
-  const startHour = 6 + Math.floor(rng() * 10);
-  const duration = 1 + Math.floor(rng() * 2);
-  const fmt = (h: number) => {
-    const p = h >= 12 ? "PM" : "AM";
-    return `${h % 12 || 12}:00 ${p}`;
-  };
-  return { start: fmt(startHour), end: fmt(startHour + duration) };
-}
-
-function getTimeLabel(uid: string, dateKey: string) {
-  const seed = hashString(`${uid}_${dateKey}_label`);
-  const rng = mulberry32(seed);
-  return (["Best time","Good window","Favorable hours","Golden hour","Right time","Ideal window"])[Math.floor(rng() * 6)];
-}
+import { getDailyLuckyData, getAuspiciousWindow, getTimeLabel, colorMap } from "@/lib/dailyInsights";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 function sanitizeModelJson(raw: string): string {
   let cleaned = raw
@@ -77,13 +32,6 @@ function extractField(text: string, field: string): string {
   if (!match) return "";
   return match[1].replace(/\\n/g, " ").replace(/\\"/g, '"').trim();
 }
-
-const colorMap: Record<string, string> = {
-  Purple: "bg-purple-500", Gold: "bg-yellow-500", Blue: "bg-blue-500",
-  Emerald: "bg-emerald-500", Rose: "bg-rose-500", Amber: "bg-amber-500",
-  Jade: "bg-green-600", Sapphire: "bg-indigo-600", Turquoise: "bg-cyan-500",
-  Coral: "bg-orange-400",
-};
 
 const getLocalDateKey = (date: Date) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
@@ -108,6 +56,7 @@ const DailyPrediction = () => {
   const [sections, setSections] = useState<Record<string, string> | null>(null);
   const [sectionsLoading, setSectionsLoading] = useState(false);
   const [sectionsError, setSectionsError] = useState(false);
+  const [lockedDateModal, setLockedDateModal] = useState<Date | null>(null);
   const hasFetchedRef = useRef<string | null>(null);
 
   const dateKey = useMemo(() => getLocalDateKey(selectedDate), [selectedDate]);
@@ -275,7 +224,7 @@ Wealth — what is coming in money and finances:`;
                 <button
                   key={idx}
                   onClick={() => {
-                    if (isLocked) { navigate("/pricing?referral=daily-prediction"); return; }
+                    if (isLocked) { setLockedDateModal(date); return; }
                     handleDateClick(date);
                   }}
                   className={cn(
@@ -303,39 +252,33 @@ Wealth — what is coming in money and finances:`;
         </Card>
 
         {/* Energy + Lucky Colour + Lucky Number */}
-        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <div className="flex items-center gap-6 sm:gap-10">
-            <EnergyGauge value={luckyData.energy} size={80} strokeWidth={5} />
-            <div className="flex gap-4 sm:gap-6">
-              <div className="text-center">
-                <p className="text-[10px] tracking-wide text-white/40 mb-1.5 font-medium">WEAR</p>
-                <div className={cn("w-10 h-10 rounded-full mx-auto mb-1 ring-2 ring-white/10", colorMap[luckyData.luckyColor] || "bg-purple-500")} />
-                <p className="text-sm font-semibold text-white/90">{luckyData.luckyColor}</p>
+        <Card className="p-6 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+          <div className="flex justify-center mb-5">
+            <EnergyGauge value={luckyData.energy} size={140} strokeWidth={8} />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col items-center gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+              <div className={cn("w-8 h-8 rounded-full ring-2 ring-white/10", colorMap[luckyData.luckyColor] || "bg-purple-500")} />
+              <p className="text-sm font-semibold text-white/90 mt-1">{luckyData.luckyColor}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY COLOUR</p>
+            </div>
+            <div className="flex flex-col items-center gap-1.5 p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+              <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-white/10 flex items-center justify-center">
+                <span className="text-base font-bold text-white">{luckyData.luckyNumber}</span>
               </div>
-              <div className="text-center">
-                <p className="text-[10px] tracking-wide text-white/40 mb-1.5 font-medium">MANIFEST</p>
-                <div className="w-10 h-10 rounded-full mx-auto mb-1 bg-white/[0.08] border border-white/10 flex items-center justify-center">
-                  <span className="text-lg font-bold text-white">{luckyData.luckyNumber}</span>
-                </div>
-                <p className="text-sm font-semibold text-white/90">Number {luckyData.luckyNumber}</p>
-              </div>
+              <p className="text-sm font-semibold text-white/90 mt-1">{luckyData.luckyNumber}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY NUMBER</p>
             </div>
           </div>
         </Card>
 
         {/* Right Time */}
         <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-white/90">{timeLabel}</h3>
-            <span className="text-xs text-white/40">{place}</span>
-          </div>
+          <h3 className="text-sm font-semibold text-white/90 mb-3">{timeLabel}</h3>
           <div className="relative h-6 rounded-full bg-white/[0.04] border border-white/[0.06] overflow-hidden">
             <div
               className="absolute inset-y-0 rounded-full bg-white/20"
-              style={{
-                left: `${((parseInt(timeWindow.start) % 12) / 12) * 100}%`,
-                width: "16%",
-              }}
+              style={{ left: `${((parseInt(timeWindow.start) % 12) / 12) * 100}%`, width: "16%" }}
             />
           </div>
           <div className="flex justify-between mt-2 text-xs text-white/40">
@@ -343,6 +286,9 @@ Wealth — what is coming in money and finances:`;
             <span className="font-medium text-white/80">{timeWindow.start} – {timeWindow.end}</span>
             <span>{timeWindow.end}</span>
           </div>
+          <p className="text-xs text-white/50 mt-3 text-center">
+            Good time in <span className="text-white/80 font-medium">{place}</span>
+          </p>
         </Card>
 
         {/* 4 AI Cards */}
@@ -395,6 +341,28 @@ Wealth — what is coming in money and finances:`;
           Ask your question
         </Button>
       </div>
+
+      <Dialog open={!!lockedDateModal} onOpenChange={(open) => !open && setLockedDateModal(null)}>
+        <DialogContent className="sm:max-w-sm rounded-2xl p-6 text-center bg-[#0c0c0e] border border-white/[0.08]">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-white/90">
+              Your {lockedDateModal?.toLocaleDateString("en-US", { month: "long", day: "numeric" })} predictions are ready
+            </DialogTitle>
+            <DialogDescription className="text-sm text-white/50 mt-2 leading-relaxed">
+              But you're on the free plan. Please upgrade to any plan to see your{" "}
+              {lockedDateModal?.toLocaleDateString("en-US", { month: "long", day: "numeric" })} predictions.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2 mt-4">
+            <Button variant="cosmic" className="w-full rounded-xl" onClick={() => navigate("/pricing?referral=daily-prediction")}>
+              Upgrade Now
+            </Button>
+            <Button variant="ghost" className="w-full rounded-xl text-white/50" onClick={() => setLockedDateModal(null)}>
+              Maybe Later
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
