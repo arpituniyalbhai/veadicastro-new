@@ -9,7 +9,7 @@ import { Heart, Briefcase, Activity, Wallet, ArrowLeft, Lock, MessageCircle } fr
 import { cn } from "@/lib/utils";
 import { generateGemini } from "@/lib/gemini";
 import SEO from "@/components/SEO";
-import { getDailyLuckyData, getAuspiciousWindow, getTimeInfo, colorMap } from "@/lib/dailyInsights";
+import { getDailyLuckyData, getAuspiciousWindow, colorMap } from "@/lib/dailyInsights";
 import { usePlan } from "@/context/PlanContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
@@ -72,22 +72,8 @@ const DailyPrediction = () => {
     planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
   } catch {}
 
-  const [currentTime, setCurrentTime] = useState(() => {
-    const n = new Date();
-    return { h: n.getHours(), m: n.getMinutes() };
-  });
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      const n = new Date();
-      setCurrentTime({ h: n.getHours(), m: n.getMinutes() });
-    }, 60000);
-    return () => clearInterval(id);
-  }, []);
-
   const place = details?.place?.split(",")[0] || "your location";
   const timeWindow = useMemo(() => getAuspiciousWindow(uid, dateKey, place), [uid, dateKey, place]);
-  const timeInfo = useMemo(() => getTimeInfo(uid, dateKey), [uid, dateKey]);
   const displayName = user?.displayName || user?.email?.split("@")[0] || "User";
   const isFree = !planName || planName === "Free";
 
@@ -287,27 +273,13 @@ Wealth — what is coming in money and finances:`;
         {/* Right Time */}
         <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <h3 className="text-sm font-semibold text-white/90 mb-3">
-            {timeInfo.isBad ? "Bad timing" : "Subh time"} in <span className="text-white/70">{place}</span>
+            Subh Timeline for <span className="text-white/70">{place}</span>
           </h3>
-          <div className="relative h-6 rounded-full bg-white/[0.04] border border-white/[0.06] overflow-hidden">
-            <div
-              className={cn("absolute inset-y-0 rounded-full transition-all", timeInfo.isBad ? "bg-red-500/40" : "bg-white/20")}
-              style={{ left: `${(timeWindow.startHour / 24) * 100}%`, width: `${((timeWindow.endHour - timeWindow.startHour) / 24) * 100}%` }}
-            />
-            <div
-              className="absolute top-0 bottom-0 w-0.5 bg-white/80"
-              style={{ left: `${(currentTime.h + currentTime.m / 60) / 24 * 100}%` }}
-            />
-          </div>
-          <div className="flex justify-between mt-2 text-xs text-white/40">
-            <span>{timeWindow.start}</span>
-            <span className="font-medium text-white/80">{String(currentTime.h).padStart(2,"0")}:{String(currentTime.m).padStart(2,"0")}</span>
-            <span>{timeWindow.end}</span>
-          </div>
-          <p className={cn("text-xs mt-3 text-center", timeInfo.isBad ? "text-red-400/70" : "text-white/50")}>
-            {timeInfo.isBad
-              ? `${timeInfo.label} — ${displayName}, consider waiting for a clearer window`
-              : `${timeInfo.label} — best window for ${displayName}`}
+          <p className="text-2xl font-bold text-white mb-1">
+            {timeWindow.start} – {timeWindow.end}
+          </p>
+          <p className="text-xs text-white/40">
+            Subh time according to {selectedDate.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })} for {place}
           </p>
         </Card>
 
