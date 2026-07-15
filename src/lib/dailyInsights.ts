@@ -30,19 +30,25 @@ export function getDailyLuckyData(uid: string, dateKey: string) {
 export function getAuspiciousWindow(uid: string, dateKey: string, place: string) {
   const seed = hashString(`${uid}_${dateKey}_${place}_time`);
   const rng = mulberry32(seed);
-  const startHour = 6 + Math.floor(rng() * 10);
-  const duration = 1 + Math.floor(rng() * 2);
+  const startHour = 4 + Math.floor(rng() * 18);
+  const duration = 1 + Math.floor(rng() * 4);
   const fmt = (h: number) => {
     const p = h >= 12 ? "PM" : "AM";
     return `${h % 12 || 12}:00 ${p}`;
   };
-  return { start: fmt(startHour), end: fmt(startHour + duration) };
+  return { start: fmt(startHour), end: fmt(startHour + duration), startHour, endHour: startHour + duration };
 }
 
-export function getTimeLabel(uid: string, dateKey: string) {
-  const seed = hashString(`${uid}_${dateKey}_label`);
+export function getTimeInfo(uid: string, dateKey: string) {
+  const seed = hashString(`${uid}_${dateKey}_time_info`);
   const rng = mulberry32(seed);
-  return (["Best time","Good window","Favorable hours","Golden hour","Right time","Ideal window"])[Math.floor(rng() * 6)];
+  const isBad = rng() > 0.5;
+  if (isBad) {
+    const labels = ["Bad timing", "Kaal", "Inauspicious", "Avoid this time", "Not favorable"];
+    return { label: labels[Math.floor(rng() * labels.length)], isBad: true };
+  }
+  const labels = ["Subh timing", "Good time", "Best time", "Favorable hours", "Golden hour", "Right time"];
+  return { label: labels[Math.floor(rng() * labels.length)], isBad: false };
 }
 
 export const colorMap: Record<string, string> = {
