@@ -524,9 +524,9 @@ export default function Chat() {
     if (user?.email) {
       import("firebase/firestore").then(({ collection, addDoc }) => {
         getDbInstance().then((db) => {
-          addDoc(collection(db, "users", user.email, "questions"), { question: outgoingMessage }).catch(() => {});
-        }).catch(() => {});
-      }).catch(() => {});
+          addDoc(collection(db, "users", user.email.toLowerCase().trim(), "questions"), { question: outgoingMessage }).catch(console.error);
+        }).catch(console.error);
+      }).catch(console.error);
     }
     setHasChatted(true);
     setSending(true);
