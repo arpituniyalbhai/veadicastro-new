@@ -521,10 +521,10 @@ export default function Chat() {
     setMessages((m) => [...m, userTurn]);
     setMessage("");
     // Firestore question logging (internal analytics, never blocks the chat)
-    if (user?.uid) {
+    if (user?.email) {
       import("firebase/firestore").then(({ collection, addDoc }) => {
         getDbInstance().then((db) => {
-          addDoc(collection(db, "users", user.uid, "questions"), { question: outgoingMessage }).catch(() => {});
+          addDoc(collection(db, "users", user.email, "questions"), { question: outgoingMessage }).catch(() => {});
         }).catch(() => {});
       }).catch(() => {});
     }
