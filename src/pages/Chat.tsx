@@ -11,6 +11,7 @@ import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
+import { getDbInstance } from "@/lib/firebase";
 import type { AstroInput } from "@/lib/astroCalc";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -519,6 +520,14 @@ export default function Chat() {
     const userTurn: ChatTurn = { role: "user", content: outgoingMessage };
     setMessages((m) => [...m, userTurn]);
     setMessage("");
+    // Firestore question logging (internal analytics, never blocks the chat)
+    if (user?.uid) {
+      import("firebase/firestore").then(({ collection, addDoc }) => {
+        getDbInstance().then((db) => {
+          addDoc(collection(db, "users", user.uid, "questions"), { question: outgoingMessage }).catch(() => {});
+        }).catch(() => {});
+      }).catch(() => {});
+    }
     setHasChatted(true);
     setSending(true);
     setIsTyping(true);
