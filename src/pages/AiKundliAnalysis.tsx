@@ -240,7 +240,7 @@ export default function AiKundliAnalysis() {
     }
     setIsSearchingLocation(true);
     try {
-      const key = "d52e8cb97dd44516b5e66f634b8a3c93";
+      const key = "91ab8792290d414b92590c9d4cc0793c";
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${key}&limit=5&no_annotations=1`;
       const res = await fetch(url);
       const data = await res.json();

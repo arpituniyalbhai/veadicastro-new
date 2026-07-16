@@ -181,7 +181,7 @@ export default function AiLoveAstrologyByDateOfBirth() {
 
     setIsSearchingLocation(true);
     try {
-      const key = "356f9d89bec841a397460acfcba7b5c7";
+      const key = "e6856ce2163d420dbae7d5adb0a104ec";
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${key}&limit=5&no_annotations=1`;
       const res = await fetch(url);
       const data = await res.json();

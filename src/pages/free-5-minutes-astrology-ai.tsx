@@ -117,7 +117,7 @@ const Free5MinutesAstrology = () => {
     }
     setIsSearchingLocation(true);
     try {
-      const key = "91ab8792290d414b92590c9d4cc0793c";
+      const key = "7d6d8d82a2e34df8ad34cad9897dc460";
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${key}&limit=5&no_annotations=1`;
       const res = await fetch(url);
       const data = await res.json();
