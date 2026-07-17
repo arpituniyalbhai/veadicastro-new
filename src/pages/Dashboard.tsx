@@ -821,7 +821,7 @@ Fill every field in the schema. Keep the tone grounded and specific to this user
       if (start === -1 || end <= start) throw new Error("No JSON found");
       const block = response.slice(start, end + 1);
       const cleaned = sanitizeModelJson(block);
-      const parsed = JSON.parse(cleaned);
+      const parsed = safeParseModelJson<any>(cleaned, { theme: "" });
 
       if (!parsed?.theme) throw new Error("Invalid structure");
 
@@ -1561,35 +1561,32 @@ Fill every field in the schema. Keep the tone grounded and specific to this user
                     <div className="h-3 bg-white/10 rounded w-full animate-pulse" />
                   </div>
                 </div>
-              ) : monthlySummary ? (() => {
-                const uid = user?.uid || "guest";
-                const monthKey = getMonthKey(new Date());
-                const scores = getLifeScores(uid, monthKey);
-                const overall = getOverallScore(scores);
-                const oLabel = overallLabel(overall);
-                return (
-                  <>
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-16 h-16 rounded-full border-4 border-white/10 flex flex-col items-center justify-center shrink-0"
-                           style={{ borderColor: `rgba(255,255,255,${0.1 + (overall/100)*0.3})` }}>
-                        <span className="text-lg font-bold text-white">{overall}%</span>
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-white/90 mb-1">{oLabel}</p>
-                        <p className="text-xs text-white/50 leading-relaxed line-clamp-2">{monthlySummary.ai.theme}</p>
-                      </div>
-                    </div>
+              ) : monthlySummary ? (
+                <div className="flex items-center gap-4">
+                  <img 
+                    src="/deep-reports-image/karma-chakra-horoscope.png" 
+                    alt="Karma Chakra Horoscope" 
+                    className="w-20 h-20 rounded-lg object-cover shrink-0"
+                  />
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-white/90 mb-1">
+                      {displayName} - your {new Date().toLocaleDateString("en-US", { month: "long" })} predictions are ready
+                    </p>
+                    <p className="text-xs text-white/50 leading-relaxed mb-3">
+                      Click button to see your full monthly report
+                    </p>
                     <Button
                       variant="cosmic"
-                      className="w-full h-10 rounded-lg text-sm font-semibold"
+                      size="sm"
+                      className="h-9 rounded-lg text-sm font-semibold"
                       onClick={() => navigate(`/monthly-prediction?referral=dashboard`)}
                     >
-                      Read Full Report
+                      Read More
                       <ArrowRight className="w-4 h-4 ml-1.5" />
                     </Button>
-                  </>
-                );
-              })() : (
+                  </div>
+                </div>
+              ) : (
                 <Button variant="cosmic" size="sm" onClick={fetchMonthlySummary} className="w-full">
                   Generate Monthly Prediction
                 </Button>
