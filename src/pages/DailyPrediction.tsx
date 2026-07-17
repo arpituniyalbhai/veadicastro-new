@@ -150,8 +150,15 @@ Wealth — what is coming in money and finances:`;
           console.log("Fallback parsed:", parsed);
         }
       } else {
-        console.error("No JSON found in response - response might be empty or malformed");
-        console.error("Response preview:", response.substring(0, 200));
+        console.error("No complete JSON found - response might be truncated, using extractField on full response");
+        // Try to extract fields from the incomplete response
+        parsed = {
+          love: extractField(response, "love"),
+          career: extractField(response, "career"),
+          health: extractField(response, "health"),
+          wealth: extractField(response, "wealth"),
+        };
+        console.log("Extracted from incomplete response:", parsed);
       }
 
       parsed.love = parsed.love?.trim() || "";
