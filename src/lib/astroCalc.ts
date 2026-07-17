@@ -490,9 +490,9 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
 
 export async function getTransitPositions(date: Date): Promise<AstroPayload> {
   return getPlanetaryData({
-    year: date.getUTCFullYear(),
-    month: date.getUTCMonth() + 1,
-    day: date.getUTCDate(),
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
     hour: 12,
     min: 0,
     sec: 0,

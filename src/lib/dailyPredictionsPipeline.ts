@@ -167,13 +167,14 @@ export async function generatePredictionSections(
   const ascendantSign = details?.ascendant || details?.ascendantSign || "Aries";
   const transitSummary = getTransitToNatalSummary(transitPlanets, natalPlanets, ascendantSign);
 
-  const systemPrompt = `You are a life prediction expert. Respond with valid JSON only:
+  const systemPrompt = `You are a life prediction expert analyzing the user's specific astrology chart for the exact date provided. Respond with valid JSON only:
 {"love":"30-40 word prediction","career":"30-40 word prediction","health":"30-40 word prediction","wealth":"30-40 word prediction"}
-STRICT: Do NOT mention astrology, planets, houses, dasha, transits, zodiac signs, or any Vedic terms in the output text.
-STRICT: Never use these overused phrases: "new connection", "spark", "unexpected opportunity", "trust your instincts", "open your heart", "positive energy".
-Base every prediction on the SPECIFIC influences given below — vary sentence structure and vocabulary each time, do not default to template phrasing.
-Write as pure life predictions — natural, direct, practical statements about what is coming.
-Each field exactly 30-40 words. Plain text, no markdown, no asterisks, no bold.
+STRICT RULES:
+1. Do NOT mention astrology, planets, houses, dasha, transits, zodiac signs, or any Vedic terms in the output text.
+2. NO GENERIC ADVICE. Uniquely and properly analyze the user's specific astrological transit data for this exact date (${dateFormatted}). Ensure the predictions reflect the real astrological shifts happening at 12 AM today.
+3. Never use generic or overused phrases: "new connection", "spark", "unexpected opportunity", "trust your instincts", "open your heart", "positive energy", "focus on".
+4. Give specific, real-world, practical statements about what is coming based on the transits, rather than vague template phrasing. Vary vocabulary and sentence structure.
+5. Each field exactly 30-40 words. Plain text, no markdown, no asterisks, no bold.
 English only.`;
 
   const prompt = `Return ONLY the JSON object.
