@@ -488,5 +488,19 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   };
 };
 
+export async function getTransitPositions(date: Date): Promise<AstroPayload> {
+  return getPlanetaryData({
+    year: date.getUTCFullYear(),
+    month: date.getUTCMonth() + 1,
+    day: date.getUTCDate(),
+    hour: 12,
+    min: 0,
+    sec: 0,
+    lat: 0,
+    lon: 0,
+    tzone: 0,
+  });
+}
+
 // Export helper functions for external use
 export { getNakshatraLord, getYoni };

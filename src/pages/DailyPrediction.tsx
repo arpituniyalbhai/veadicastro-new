@@ -12,6 +12,7 @@ import SEO from "@/components/SEO";
 import { getDailyLuckyData, getAuspiciousWindow, colorMap, sanitizeModelJson, extractField } from "@/lib/dailyInsights";
 import { usePlan } from "@/context/PlanContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { generatePredictionSections } from "@/lib/dailyPredictionsPipeline";
 
 // sanitizeModelJson and extractField are imported from @/lib/dailyInsights
 
@@ -72,7 +73,7 @@ const DailyPrediction = () => {
     return dates;
   }, []);
 
-  const fetchSections = useCallback(async (dt: Date, key: string) => {
+  const fetchSections = useCallback(async (dt: Date, key: string, isRetry = false) => {
     console.log("fetchSections called - key:", key, "uid:", uid);
     if (inFlightRef.current === key) return; // Already fetching this date, ignore duplicate
     inFlightRef.current = key;
@@ -85,7 +86,7 @@ const DailyPrediction = () => {
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
       console.log("Cached data found:", cached);
-      if (cached?.love && cached?.career && cached?.health && cached?.wealth) {
+      if (cached?.love && cached?.career && cached?.health && cached?.wealth && cached?._dateKey === key) {
         console.log("Using cached data");
         setSections(cached);
         setSectionsLoading(false);
@@ -97,97 +98,25 @@ const DailyPrediction = () => {
       console.error("Cache read error:", e);
     }
 
-    const dateFormatted = dt.toLocaleDateString("en-US", {
-      weekday: "long", year: "numeric", month: "long", day: "numeric",
-    });
-
-    const systemPrompt = `You are a life prediction expert. Respond with valid JSON only:
-{"love":"30-40 word prediction","career":"30-40 word prediction","health":"30-40 word prediction","wealth":"30-40 word prediction"}
-STRICT: Do NOT mention astrology, planets, houses, dasha, transits, zodiac signs, or any Vedic terms.
-Write as pure life predictions — natural, direct, practical statements about what is coming.
-Each field exactly 30-40 words. Plain text, no markdown, no asterisks, no bold.
-English only.`;
-
-    const prompt = `Generate 4 short predictions for ${dateFormatted} based on:
-${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : "General chart"}
-${planets ? `Key planetary influences: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign}`).join(", ")}` : ""}
-
-Love — what is coming in love and relationships:
-Career — what is coming in career and work:
-Health — what is coming in health and wellness:
-Wealth — what is coming in money and finances:`;
-
     try {
-      console.log("Calling AI API...");
-      const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
-        new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timed out")), 25000)),
-      ]);
-      console.log("AI API response received, length:", response.length);
-      console.log("Full response:", response);
-
-      const start = response.indexOf("{");
-      const end = response.lastIndexOf("}");
-      console.log("JSON search - start:", start, "end:", end);
-      
-      let parsed: Record<string, string> = { love: "", career: "", health: "", wealth: "" };
-
-      if (start !== -1 && end > start) {
-        const block = response.slice(start, end + 1);
-        const cleaned = sanitizeModelJson(block);
-        console.log("Cleaned JSON block:", cleaned);
-        try {
-          parsed = JSON.parse(cleaned);
-          console.log("Parsed JSON:", parsed);
-        } catch {
-          console.log("JSON parse failed, using extractField fallback");
-          parsed = {
-            love: extractField(block, "love"),
-            career: extractField(block, "career"),
-            health: extractField(block, "health"),
-            wealth: extractField(block, "wealth"),
-          };
-          console.log("Fallback parsed:", parsed);
-        }
-      } else {
-        console.error("No complete JSON found - response might be truncated, using extractField on full response");
-        // Try to extract fields from the incomplete response
-        parsed = {
-          love: extractField(response, "love"),
-          career: extractField(response, "career"),
-          health: extractField(response, "health"),
-          wealth: extractField(response, "wealth"),
-        };
-        console.log("Extracted from incomplete response:", parsed);
-      }
-
-      parsed.love = parsed.love?.trim() || "";
-      parsed.career = parsed.career?.trim() || "";
-      parsed.health = parsed.health?.trim() || "";
-      parsed.wealth = parsed.wealth?.trim() || "";
-
-      if (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth) {
-        console.error("AI returned empty data - check response parsing");
+      console.log("Calling unified daily predictions pipeline...");
+      const result = await generatePredictionSections(dt, key, details, planets, lang, isRetry);
+      if (!result) {
+        console.error("Unified pipeline returned empty data or failed validation.");
         setSectionsError(true);
         setSectionsLoading(false);
         if (inFlightRef.current === key) inFlightRef.current = null;
         return;
       }
 
-      console.log("Saving predictions to localStorage - cacheKey:", cacheKey, "parsed:", parsed);
-      
-      // Save to localStorage FIRST, then update state
+      console.log("Saving predictions to localStorage - cacheKey:", cacheKey, "result:", result);
       try {
-        localStorage.setItem(cacheKey, JSON.stringify(parsed));
-        console.log("Successfully saved to localStorage");
-        // Verify save
-        const saved = localStorage.getItem(cacheKey);
-        console.log("Verification - saved data:", saved);
+        localStorage.setItem(cacheKey, JSON.stringify(result));
       } catch (e) {
         console.error("Failed to save to localStorage:", e);
       }
       
-      setSections(parsed);
+      setSections(result as any);
       hasFetchedRef.current = key;
     } catch (err) {
       console.error("Failed to fetch daily sections:", err);

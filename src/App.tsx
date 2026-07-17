@@ -4,10 +4,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Suspense, lazy, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, type ReactNode } from "react";
 import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/context/AuthContext";
 import { I18nProvider } from "@/context/I18nContext";
+import { cleanupOldCache } from "@/lib/dailyPredictionsPipeline";
 import Footer from "@/components/Footer";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
@@ -283,21 +284,31 @@ const AuthenticatedRoutes = ({
   );
 };
 
-const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <CookieConsent />
-        <I18nProvider>
-          <BrowserRouter>
-            <RouterShell />
-          </BrowserRouter>
-        </I18nProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
-);
+const App = () => {
+  useEffect(() => {
+    try {
+      cleanupOldCache();
+    } catch (e) {
+      console.warn("Cleanup old cache failed on load:", e);
+    }
+  }, []);
+
+  return (
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <CookieConsent />
+          <I18nProvider>
+            <BrowserRouter>
+              <RouterShell />
+            </BrowserRouter>
+          </I18nProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  );
+};
 
 export default App;

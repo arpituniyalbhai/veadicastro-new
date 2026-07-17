@@ -49,6 +49,7 @@ import { getNakshatraLord, getYoni } from "@/lib/astroCalc";
 import { EnergyGauge } from "@/components/EnergyGauge";
 import { getDailyLuckyData, sanitizeModelJson } from "@/lib/dailyInsights";
 import { getLifeScores, getOverallScore, overallLabel, getMonthKey, scoreLabel } from "@/lib/monthlyInsights";
+import { generateDashboardPrediction } from "@/lib/dailyPredictionsPipeline";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -404,7 +405,7 @@ export default function Dashboard() {
 
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === todayKey) {
+      if (cached?.text && cached?.date === todayKey && cached?._dateKey === todayKey) {
         setTodayPrediction(cached);
         return;
       }
@@ -419,50 +420,12 @@ export default function Dashboard() {
 
     setTodayLoading(true);
     try {
-      const todayFormatted = now.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-
-      const systemPrompt = `You are an expert Vedic astrologer. Today is ${todayFormatted}. Respond with valid JSON only:
-{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
-enerngy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
-English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
-STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
-
-      const prompt = `Generate personalized prediction for TODAY (${todayFormatted}) based on:
-${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
-${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
-
-One flowing paragraph covering love, career, health and wealth for today. Also provide a 2-3 word mood label and energy score 0-100.`;
-
-      const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
-        new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Timed out")), 25000)
-        ),
-      ]);
-
-      const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
-      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
-
-      const result = {
-        text: cleanText(String(parsed.text)),
-        date: todayKey,
-        love: "",
-        self: "",
-        wealth: "",
-        luckyNumber: 0,
-        luckyColor: "",
-        mood: parsed?.mood || "Balanced Day",
-        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
-      };
-
-      setTodayPrediction(result as any);
-      localStorage.setItem(cacheKey, JSON.stringify(result));
+      console.log("[Dashboard] Fetching today prediction using pipeline...");
+      const result = await generateDashboardPrediction(now, todayKey, details, planets || [], lang);
+      if (result) {
+        setTodayPrediction(result as any);
+        localStorage.setItem(cacheKey, JSON.stringify(result));
+      }
     } catch (error: any) {
       console.error('Error fetching today prediction:', error);
     } finally {
@@ -478,7 +441,7 @@ One flowing paragraph covering love, career, health and wealth for today. Also p
 
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === dateKey) {
+      if (cached?.text && cached?.date === dateKey && cached?._dateKey === dateKey) {
         if (pendingDateRef.current === dateKey) {
           setSelectedPrediction(cached);
           setSelectedDateLoading(false);
@@ -496,54 +459,15 @@ One flowing paragraph covering love, career, health and wealth for today. Also p
     } catch {}
 
     try {
-      const dateFormatted = date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-
-      const systemPrompt = `You are an expert Vedic astrologer. TODAY IS ${dateFormatted}. Generate a DAILY prediction for this specific date only. Respond with valid JSON only:
-{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
-energy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
-English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
-CRITICAL: Generate prediction ONLY for ${dateFormatted} - this is a single day prediction, NOT weekly or monthly. Focus exclusively on this specific date's influences.
-STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
-
-      const prompt = `Generate a DAILY prediction for ${dateFormatted} (this is the current date for this prediction) based on:
-${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
-${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
-
-IMPORTANT: Today is ${dateFormatted}. Generate prediction ONLY for this specific date, not for the week or month. Focus on planetary influences for this single day.
-One flowing paragraph covering love, career, health and wealth for ${dateFormatted}. Also provide a 2-3 word mood label and energy score 0-100.`;
-
-      const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
-        new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Timed out")), 25000)
-        ),
-      ]);
+      console.log("[Dashboard] Fetching prediction for date using pipeline...");
+      const result = await generateDashboardPrediction(date, dateKey, details, planets || [], lang);
 
       if (pendingDateRef.current !== dateKey) return;
 
-      const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
-      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
-
-      const result = {
-        text: cleanText(String(parsed.text)),
-        date: dateKey,
-        love: "",
-        self: "",
-        wealth: "",
-        luckyNumber: 0,
-        luckyColor: "",
-        mood: parsed?.mood || "Balanced Day",
-        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
-      };
-
-      setSelectedPrediction(result as any);
-      localStorage.setItem(cacheKey, JSON.stringify(result));
+      if (result) {
+        setSelectedPrediction(result as any);
+        localStorage.setItem(cacheKey, JSON.stringify(result));
+      }
     } catch (error: any) {
       console.error('Error fetching prediction for date:', error);
     } finally {
@@ -568,14 +492,14 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
 
       try {
         const cachedToday = JSON.parse(localStorage.getItem(todayCacheKey) || "null");
-        setTodayPrediction(cachedToday?.text && cachedToday?.date === todayKey ? cachedToday : null);
+        setTodayPrediction(cachedToday?.text && cachedToday?.date === todayKey && cachedToday?._dateKey === todayKey ? cachedToday : null);
       } catch {
         setTodayPrediction(null);
       }
 
       try {
         const cachedTomorrow = JSON.parse(localStorage.getItem(tomorrowCacheKey) || "null");
-        setTomorrowPrediction(cachedTomorrow?.text && cachedTomorrow?.date === tomorrowKey ? cachedTomorrow : null);
+        setTomorrowPrediction(cachedTomorrow?.text && cachedTomorrow?.date === tomorrowKey && cachedTomorrow?._dateKey === tomorrowKey ? cachedTomorrow : null);
       } catch {
         setTomorrowPrediction(null);
       }
@@ -594,7 +518,7 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
 
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === tomorrowKey) {
+      if (cached?.text && cached?.date === tomorrowKey && cached?._dateKey === tomorrowKey) {
         setTomorrowPrediction(cached);
         return;
       }
@@ -609,50 +533,12 @@ One flowing paragraph covering love, career, health and wealth for ${dateFormatt
 
     setTomorrowLoading(true);
     try {
-      const tomorrowFormatted = tomorrowDate.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
-
-      const systemPrompt = `You are an expert Vedic astrologer. Tomorrow's date is ${tomorrowFormatted}. Respond with valid JSON only:
-{"text":"full paragraph (40-80 words, plain text, no markdown, no bullets, cover love, career, health and wealth naturally in one flowing paragraph)","mood":"2-3 word label like 'Growth Day' or 'Uncertain Day' based on planetary transits","energy":0}
-energy is a number 0-100 representing the day's energy level. mood is a concise 2-3 word label describing the day's tone.
-English only. No asterisks, no bold, no section labels. Do not ask follow-up questions.
-STRICT: Never mention "startup", "entrepreneur", or assume any profession. Base prediction only on provided planetary data.`;
-
-      const prompt = `Generate personalized prediction for TOMORROW (${tomorrowFormatted}) based on:
-${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'General chart'}
-${planets ? `Key Planets: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign} H${p.house || ''}`).join(', ')}` : ''}
-
-One flowing paragraph covering love, career, health and wealth for tomorrow. Also provide a 2-3 word mood label and energy score 0-100.`;
-
-      const response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
-        new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Timed out")), 25000)
-        ),
-      ]);
-
-      const jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string; mood?: string; energy?: number }>(jsonText, { text: "", mood: "Balanced Day", energy: 70 });
-      if (!parsed?.text?.trim()) parsed = { text: response, mood: "Balanced Day", energy: 70 };
-
-      const result = {
-        text: cleanText(String(parsed.text)),
-        date: tomorrowKey,
-        love: "",
-        self: "",
-        wealth: "",
-        luckyNumber: 0,
-        luckyColor: "",
-        mood: parsed?.mood || "Balanced Day",
-        energy: typeof parsed?.energy === "number" ? parsed.energy : 70,
-      };
-
-      setTomorrowPrediction(result as any);
-      localStorage.setItem(cacheKey, JSON.stringify(result));
+      console.log("[Dashboard] Fetching tomorrow prediction using pipeline...");
+      const result = await generateDashboardPrediction(tomorrowDate, tomorrowKey, details, planets || [], lang);
+      if (result) {
+        setTomorrowPrediction(result as any);
+        localStorage.setItem(cacheKey, JSON.stringify(result));
+      }
     } catch (error: any) {
       console.error('Error fetching tomorrow prediction:', error);
     } finally {
