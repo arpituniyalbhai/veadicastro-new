@@ -95,6 +95,8 @@ export default function Dashboard() {
   });
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [dayVibe, setDayVibe] = useState<Record<string, string>>({}); // dateKey -> vibe string
+  const [dayVibeLoading, setDayVibeLoading] = useState<Record<string, boolean>>({}); // dateKey -> bool
   // monthlySummaryLoading declared above; old monthly state removed
   const pendingDateRef = useRef<string | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
@@ -391,6 +393,45 @@ export default function Dashboard() {
   }, [user?.uid]);
 
 // Monthly prediction is now a static UI - no cache or fetch needed
+
+  // ─── Day Vibe: short AI headline per date ───────────────────────────────────
+  const fetchDayVibe = useCallback(async (date: Date, key: string) => {
+    const cacheKey = `day_vibe_${user?.uid || 'guest'}_${key}`;
+    // Check cache first
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) { setDayVibe(prev => ({ ...prev, [key]: cached })); return; }
+    } catch {}
+
+    setDayVibeLoading(prev => ({ ...prev, [key]: true }));
+    const dateFormatted = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    let details: any = null;
+    try { details = JSON.parse(localStorage.getItem('onboarding_details') || 'null'); } catch {}
+
+    try {
+      const prompt = `For ${dateFormatted}, given birth: ${details?.dob || 'unknown'}, ${details?.time || 'unknown'}, ${details?.place || 'unknown'} — describe this day in EXACTLY 4-6 words as a headline. Examples: "Today is a Bright Day", "A Challenging but Rewarding Day", "Day of Hidden Opportunities", "A Calm and Peaceful Day". Return ONLY the 4-6 word phrase, no punctuation, no quotes.`;
+      const resp = await Promise.race([
+        generateGemini(prompt, [], 'Return only the 4-6 word day description. No JSON, no explanation, no quotes.', 'en', undefined, 'secondary'),
+        new Promise<string>((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000)),
+      ]);
+      const vibe = resp.trim().replace(/^["']+|["']+$/g, '').replace(/\.$/, '').trim();
+      if (vibe.split(' ').length >= 3) {
+        setDayVibe(prev => ({ ...prev, [key]: vibe }));
+        try { localStorage.setItem(cacheKey, vibe); } catch {}
+      }
+    } catch (e) {
+      console.warn('[DayVibe] failed:', e);
+    } finally {
+      setDayVibeLoading(prev => ({ ...prev, [key]: false }));
+    }
+  }, [user?.uid]);
+
+  // Trigger day vibe fetch when date changes
+  useEffect(() => {
+    const key = getLocalDateKey(selectedDate);
+    if (!dayVibe[key]) fetchDayVibe(selectedDate, key);
+  }, [selectedDate, dayVibe, fetchDayVibe]);
+
 
   const colorMap: Record<string, string> = {
     "purple": "bg-purple-500",
@@ -998,38 +1039,84 @@ export default function Dashboard() {
             </div>
 
             {/* Selected Date Prediction Display */}
-            <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-card/60 border border-border/60">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="text-sm font-medium text-foreground">{selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}
-                    <span className="text-muted-foreground mx-1">·</span>
-                    <span className="text-muted-foreground">{selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}</span>
+            {(() => {
+              const dateKey = getLocalDateKey(selectedDate);
+              const ld = getDailyLuckyData(user?.uid || 'guest', dateKey);
+              const vibe = dayVibe[dateKey];
+              const vibeLoading = dayVibeLoading[dateKey];
+              const isToday = dateKey === getLocalDateKey(new Date());
+              return (
+                <div className="relative overflow-hidden rounded-2xl border border-secondary/20 bg-gradient-to-br from-[#0e0e18] via-[#12121f] to-[#0a0a14] shadow-xl shadow-secondary/5">
+                  {/* Ambient glow */}
+                  <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-secondary/10 blur-3xl" />
+                    <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full bg-primary/10 blur-3xl" />
+                  </div>
+
+                  <div className="relative p-5 sm:p-6">
+                    {/* Date header */}
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                        <span className="text-xs font-semibold text-secondary/80 uppercase tracking-widest">
+                          {isToday ? 'Today' : selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          · {selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </span>
+                      </div>
+                      <Sparkles className="w-4 h-4 text-secondary/60" />
+                    </div>
+
+                    {/* Energy + Vibe row */}
+                    <div className="flex items-start gap-4 mb-5">
+                      <EnergyGauge value={ld.energy} size={76} strokeWidth={6} className="shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs text-muted-foreground mb-1">{lang === 'hi' ? `नमस्ते` : 'Hey'} <span className="font-semibold text-foreground">{displayName}</span> 👋</p>
+                        {vibeLoading ? (
+                          <div className="h-7 bg-white/5 rounded-lg animate-pulse w-4/5 mb-1" />
+                        ) : vibe ? (
+                          <p className="text-xl font-bold text-foreground leading-tight tracking-tight">{vibe}</p>
+                        ) : (
+                          <p className="text-xl font-bold text-foreground leading-tight">
+                            {lang === 'hi' ? 'आपका दिन तैयार है' : 'Your Day Awaits'}
+                          </p>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-1.5">
+                          {lang === 'hi'
+                            ? `आपकी ${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} की भविष्यवाणियां तैयार हैं।`
+                            : `${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} predictions are ready.`}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Lucky pills */}
+                    <div className="flex items-center gap-2 mb-5 flex-wrap">
+                      <span className="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">
+                        <span className={cn('w-3 h-3 rounded-full inline-block flex-shrink-0', getColorClass(ld.luckyColor))} />
+                        {ld.luckyColor}
+                      </span>
+                      <span className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">
+                        🔢 {ld.luckyNumber}
+                      </span>
+                      <span className="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/70">
+                        ⚡ Energy {ld.energy}%
+                      </span>
+                    </div>
+
+                    {/* CTA */}
+                    <Button
+                      variant="cosmic"
+                      className="w-full h-10 rounded-xl text-sm font-semibold"
+                      onClick={() => navigate(`/daily-prediction?date=${dateKey}&referral=dashboard`)}
+                    >
+                      {lang === 'hi' ? 'पूरी भविष्यवाणी पढ़ें' : 'View Full Prediction'}
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Button>
                   </div>
                 </div>
-                <Sparkles className="w-4 h-4 text-secondary" />
-              </div>
-              <div className="flex items-start gap-4 mb-4">
-                <div className="flex-1">
-                  <p className="text-lg font-bold text-foreground leading-tight mb-2">
-                    {lang === "hi" ? `नमस्ते ${displayName},` : `Hey ${displayName},`}
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {lang === "hi" 
-                      ? `आपकी ${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} की भविष्यवाणियां तैयार हैं।` 
-                      : `your ${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} predictions are ready.`}
-                  </p>
-                </div>
-                <EnergyGauge value={getDailyLuckyData(user?.uid || "guest", getLocalDateKey(selectedDate)).energy} size={72} strokeWidth={5} className="shrink-0 mt-1" />
-              </div>
-              <Button
-                variant="cosmic"
-                className="w-full h-10 rounded-lg text-sm font-semibold"
-                onClick={() => navigate(`/daily-prediction?date=${getLocalDateKey(selectedDate)}&referral=dashboard`)}
-              >
-                {lang === "hi" ? "और पढ़ें" : "Read More"}
-                <ArrowRight className="w-4 h-4 ml-1.5" />
-              </Button>
-            </div>
+              );
+            })()}
           </Card>
           )}
 
