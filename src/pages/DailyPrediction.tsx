@@ -144,26 +144,33 @@ Wealth — what is coming in money and finances:`;
       if (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth) {
         setSectionsError(true);
         setSectionsLoading(false);
+        if (inFlightRef.current === key) inFlightRef.current = null;
         return;
       }
 
+      // Save to localStorage FIRST, then update state
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify(parsed));
+      } catch (e) {
+        console.error("Failed to save to localStorage:", e);
+      }
+      
       setSections(parsed);
       hasFetchedRef.current = key;
-      try { localStorage.setItem(cacheKey, JSON.stringify(parsed)); } catch {}
     } catch (err) {
       console.error("Failed to fetch daily sections:", err);
       setSectionsError(true);
     } finally {
       setSectionsLoading(false);
+      if (inFlightRef.current === key) inFlightRef.current = null;
     }
   }, [uid, details, planets, lang]);
 
   useEffect(() => {
-    if (hasFetchedRef.current !== dateKey && !sectionsLoading) {
-      hasFetchedRef.current = dateKey;
+    if (hasFetchedRef.current !== dateKey) {
       fetchSections(selectedDate, dateKey);
     }
-  }, [dateKey, selectedDate, fetchSections, sectionsLoading]);
+  }, [dateKey, selectedDate, fetchSections]);
 
   const handleDateClick = (date: Date) => {
     const key = getLocalDateKey(date);
