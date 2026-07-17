@@ -192,6 +192,7 @@ Wealth — what is coming in money and finances:`;
       new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timed out")), 25000)),
     ]);
 
+    console.log("[Pipeline] Raw response:", response);
     const start = response.indexOf("{");
     const end = response.lastIndexOf("}");
     let parsed: any = null;
@@ -199,12 +200,20 @@ Wealth — what is coming in money and finances:`;
     if (start !== -1 && end > start) {
       const block = response.slice(start, end + 1);
       try {
-        parsed = JSON.parse(block);
-      } catch {
+        // Strip markdown backticks if inside the block
+        const cleanBlock = block.replace(/```json/g, "").replace(/```/g, "").trim();
+        parsed = JSON.parse(cleanBlock);
+      } catch (e) {
+        console.warn("[Pipeline] JSON Parse failed, trying regex...", e, "\\nBlock:", block);
         // Simple manual regex extraction
         const extractField = (f: string) => {
-          const match = block.match(new RegExp(`"${f}"\\s*:\\s*"([^"]+)"`, "i"));
-          return match ? match[1] : "";
+          // match capturing group across multiple lines
+          const match = block.match(new RegExp(`"${f}"\\s*:\\s*"([\\s\\S]*?)"(?:\\s*,\\s*"|\\s*})`, "i"));
+          if (match) return match[1].replace(/\\n/g, ' ').replace(/\\"/g, '"').trim();
+          
+          // fallback if keys are unquoted or single quoted
+          const match2 = block.match(new RegExp(`${f}\\s*:\\s*["']([\\s\\S]*?)["'](?:\\s*,|\\s*})`, "i"));
+          return match2 ? match2[1].trim() : "";
         };
         parsed = {
           love: extractField("love"),
@@ -216,6 +225,7 @@ Wealth — what is coming in money and finances:`;
     }
 
     if (!parsed || (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth)) {
+      console.error("[Pipeline] Parsed object empty or missing keys:", parsed);
       throw new Error("Invalid response format");
     }
 
