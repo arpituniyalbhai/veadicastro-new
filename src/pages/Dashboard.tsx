@@ -94,13 +94,7 @@ export default function Dashboard() {
     place: "Not set",
   });
   const [assistantOpen, setAssistantOpen] = useState(false);
-  const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
-  const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
-  const [todayLoading, setTodayLoading] = useState(false);
-  const [tomorrowLoading, setTomorrowLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
-  const [selectedDateLoading, setSelectedDateLoading] = useState(false);
   // monthlySummaryLoading declared above; old monthly state removed
   const pendingDateRef = useRef<string | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
@@ -396,207 +390,7 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, [user?.uid]);
 
-  const fetchTodayPrediction = useCallback(async () => {
-    if (todayLoading || typeof window === "undefined") return;
-
-    const now = new Date();
-    const todayKey = getLocalDateKey(now);
-    const cacheKey = `ai_daily_today_${user?.uid || 'guest'}_${todayKey}`;
-
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === todayKey && cached?._dateKey === todayKey) {
-        setTodayPrediction(cached);
-        return;
-      }
-    } catch {}
-
-    let details: any = null;
-    let planets: any = null;
-    try {
-      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
-      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
-    } catch {}
-
-    setTodayLoading(true);
-    try {
-      console.log("[Dashboard] Fetching today prediction using pipeline...");
-      const result = await generateDashboardPrediction(now, todayKey, details, planets || [], lang);
-      if (result) {
-        setTodayPrediction(result as any);
-        localStorage.setItem(cacheKey, JSON.stringify(result));
-      }
-    } catch (error: any) {
-      console.error('Error fetching today prediction:', error);
-    } finally {
-      setTodayLoading(false);
-    }
-  }, [lang, user?.uid, todayLoading]);
-
-  const fetchPredictionForDate = useCallback(async (date: Date) => {
-    if (typeof window === "undefined") return;
-
-    const dateKey = getLocalDateKey(date);
-    const cacheKey = `ai_daily_${user?.uid || 'guest'}_${dateKey}`;
-
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === dateKey && cached?._dateKey === dateKey) {
-        if (pendingDateRef.current === dateKey) {
-          setSelectedPrediction(cached);
-          setSelectedDateLoading(false);
-          pendingDateRef.current = null;
-        }
-        return;
-      }
-    } catch {}
-
-    let details: any = null;
-    let planets: any = null;
-    try {
-      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
-      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
-    } catch {}
-
-    try {
-      console.log("[Dashboard] Fetching prediction for date using pipeline...");
-      const result = await generateDashboardPrediction(date, dateKey, details, planets || [], lang);
-
-      if (pendingDateRef.current !== dateKey) return;
-
-      if (result) {
-        setSelectedPrediction(result as any);
-        localStorage.setItem(cacheKey, JSON.stringify(result));
-      }
-    } catch (error: any) {
-      console.error('Error fetching prediction for date:', error);
-    } finally {
-      if (pendingDateRef.current === dateKey) {
-        setSelectedDateLoading(false);
-        pendingDateRef.current = null;
-      }
-    }
-  }, [lang, user?.uid]);
-
-  const hydrateDailyPredictionsFromCache = useCallback(() => {
-    if (typeof window === "undefined") return;
-
-    try {
-      const todayKey = getLocalDateKey(new Date());
-      const tomorrowDate = new Date();
-      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-      const tomorrowKey = getLocalDateKey(tomorrowDate);
-
-      const todayCacheKey = `ai_daily_today_${user?.uid || 'guest'}_${todayKey}`;
-      const tomorrowCacheKey = `ai_daily_tomorrow_${user?.uid || 'guest'}_${tomorrowKey}`;
-
-      try {
-        const cachedToday = JSON.parse(localStorage.getItem(todayCacheKey) || "null");
-        setTodayPrediction(cachedToday?.text && cachedToday?.date === todayKey && cachedToday?._dateKey === todayKey ? cachedToday : null);
-      } catch {
-        setTodayPrediction(null);
-      }
-
-      try {
-        const cachedTomorrow = JSON.parse(localStorage.getItem(tomorrowCacheKey) || "null");
-        setTomorrowPrediction(cachedTomorrow?.text && cachedTomorrow?.date === tomorrowKey && cachedTomorrow?._dateKey === tomorrowKey ? cachedTomorrow : null);
-      } catch {
-        setTomorrowPrediction(null);
-      }
-    } catch (error) {
-      console.warn('Failed to hydrate daily predictions from cache:', error);
-    }
-  }, [user?.uid]);
-
-  const fetchTomorrowPrediction = useCallback(async () => {
-    if (tomorrowLoading || typeof window === "undefined") return;
-
-    const tomorrowDate = new Date();
-    tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-    const tomorrowKey = getLocalDateKey(tomorrowDate);
-    const cacheKey = `ai_daily_tomorrow_${user?.uid || 'guest'}_${tomorrowKey}`;
-
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.text && cached?.date === tomorrowKey && cached?._dateKey === tomorrowKey) {
-        setTomorrowPrediction(cached);
-        return;
-      }
-    } catch {}
-
-    let details: any = null;
-    let planets: any = null;
-    try {
-      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
-      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
-    } catch {}
-
-    setTomorrowLoading(true);
-    try {
-      console.log("[Dashboard] Fetching tomorrow prediction using pipeline...");
-      const result = await generateDashboardPrediction(tomorrowDate, tomorrowKey, details, planets || [], lang);
-      if (result) {
-        setTomorrowPrediction(result as any);
-        localStorage.setItem(cacheKey, JSON.stringify(result));
-      }
-    } catch (error: any) {
-      console.error('Error fetching tomorrow prediction:', error);
-    } finally {
-      setTomorrowLoading(false);
-    }
-  }, [lang, user?.uid, tomorrowLoading]);
-
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      hydrateDailyPredictionsFromCache();
-      // Auto-load today's prediction on mount
-      const todayKey = getLocalDateKey(new Date());
-      pendingDateRef.current = todayKey;
-      setSelectedDateLoading(true);
-      fetchPredictionForDate(new Date());
-    }
-  }, [hydrateDailyPredictionsFromCache, fetchPredictionForDate]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const scheduleMidnightRefresh = () => {
-      const nextMidnight = new Date();
-      nextMidnight.setHours(24, 0, 0, 0);
-      const delay = Math.max(1000, nextMidnight.getTime() - Date.now() + 1000);
-
-      return window.setTimeout(() => {
-        hydrateDailyPredictionsFromCache();
-        const nextTimer = scheduleMidnightRefresh();
-        midnightTimerRef.current = nextTimer;
-      }, delay);
-    };
-
-    const initialTimer = scheduleMidnightRefresh();
-    midnightTimerRef.current = initialTimer;
-
-    return () => {
-      if (midnightTimerRef.current) {
-        window.clearTimeout(midnightTimerRef.current);
-      }
-    };
-  }, [hydrateDailyPredictionsFromCache]);
-
-  // Manual refresh function for testing
-  const refreshPredictions = () => {
-    fetchTodayPrediction();
-    if (tomorrowUnlocked) {
-      fetchTomorrowPrediction();
-    }
-  };
-
 // Monthly prediction is now a static UI - no cache or fetch needed
-
-  const luckyToday = todayPrediction?.luckyNumber;
-  const luckyTomorrow = tomorrowPrediction?.luckyNumber;
-  const colorToday = todayPrediction?.luckyColor;
-  const colorTomorrow = tomorrowPrediction?.luckyColor;
 
   const colorMap: Record<string, string> = {
     "purple": "bg-purple-500",
@@ -645,9 +439,7 @@ export default function Dashboard() {
     return colorMap[key] || "bg-purple-500";
   };
 
-  const todayMergedText = todayPrediction?.text || "";
 
-  const tomorrowMergedText = tomorrowPrediction?.text || "";
 
   const showDailyTabs = showDailyPredictions;
   const normalizedTab = useMemo(() => {
@@ -1171,10 +963,6 @@ export default function Dashboard() {
                         return;
                       }
                       setSelectedDate(date);
-                      setSelectedPrediction(null);
-                      setSelectedDateLoading(true);
-                      pendingDateRef.current = getLocalDateKey(date);
-                      fetchPredictionForDate(date);
                     }}
                     className={cn(
                       "flex flex-col items-center justify-center rounded-xl transition-all duration-200 border relative",
@@ -1210,61 +998,38 @@ export default function Dashboard() {
             </div>
 
             {/* Selected Date Prediction Display */}
-            {selectedDateLoading ? (
-              <div className="p-5 sm:p-6 rounded-xl bg-background/50 border border-border/60">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-muted rounded w-1/3 animate-pulse"></div>
-                    <div className="h-5 bg-muted rounded w-2/3 animate-pulse"></div>
-                    <div className="h-3 bg-muted rounded w-4/5 animate-pulse"></div>
+            <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-card/60 border border-border/60">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="text-sm font-medium text-foreground">{selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}
+                    <span className="text-muted-foreground mx-1">·</span>
+                    <span className="text-muted-foreground">{selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}</span>
                   </div>
-                  <div className="w-[72px] h-[72px] rounded-full bg-muted animate-pulse shrink-0" />
                 </div>
-                <div className="h-10 bg-muted rounded-lg w-full animate-pulse" />
+                <Sparkles className="w-4 h-4 text-secondary" />
               </div>
-            ) : selectedPrediction ? (() => {
-              const ld = getDailyLuckyData(user?.uid || "guest", selectedPrediction.date);
-              return (
-              <div className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-background/80 to-card/60 border border-border/60">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <div className="text-sm font-medium text-foreground">{selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}
-                      <span className="text-muted-foreground mx-1">·</span>
-                      <span className="text-muted-foreground">{selectedDate.toLocaleDateString('en-US', { weekday: 'long' })}</span>
-                    </div>
-                  </div>
-                  <Sparkles className="w-4 h-4 text-secondary" />
+              <div className="flex items-start gap-4 mb-4">
+                <div className="flex-1">
+                  <p className="text-lg font-bold text-foreground leading-tight mb-2">
+                    {lang === "hi" ? `नमस्ते ${displayName},` : `Hey ${displayName},`}
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {lang === "hi" 
+                      ? `आपकी ${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} की भविष्यवाणियां तैयार हैं।` 
+                      : `your ${selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} predictions are ready.`}
+                  </p>
                 </div>
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-1">
-                    <p className="text-lg font-bold text-foreground leading-tight mb-2">
-                      {lang === "hi" ? "आज आपका" : "Today is your"} <span className="text-secondary">{selectedPrediction.mood || "Balanced Day"}</span>
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedPrediction.text.length > 100
-                        ? selectedPrediction.text.slice(0, 100) + "..."
-                        : selectedPrediction.text}
-                    </p>
-                  </div>
-                  <EnergyGauge value={ld.energy} size={72} strokeWidth={5} className="shrink-0 mt-1" />
-                </div>
-                <Button
-                  variant="cosmic"
-                  className="w-full h-10 rounded-lg text-sm font-semibold"
-                  onClick={() => navigate(`/daily-prediction?date=${selectedPrediction.date}&referral=dashboard`)}
-                >
-                  Read Full Prediction
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
-                </Button>
+                <EnergyGauge value={getDailyLuckyData(user?.uid || "guest", getLocalDateKey(selectedDate)).energy} size={72} strokeWidth={5} className="shrink-0 mt-1" />
               </div>
-              );
-            })() : (
-              <div className="p-4 sm:p-6 rounded-xl bg-background/50 border border-border/60">
-                <div className="text-center py-6 sm:py-8">
-                  <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 text-secondary mx-auto mb-4" />
-                </div>
-              </div>
-            )}
+              <Button
+                variant="cosmic"
+                className="w-full h-10 rounded-lg text-sm font-semibold"
+                onClick={() => navigate(`/daily-prediction?date=${getLocalDateKey(selectedDate)}&referral=dashboard`)}
+              >
+                {lang === "hi" ? "और पढ़ें" : "Read More"}
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Button>
+            </div>
           </Card>
           )}
 
