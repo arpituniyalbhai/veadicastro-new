@@ -281,7 +281,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Wealth Potential') ||
       prompt.includes('Your Romantic Style') ||
       prompt.includes('Year Overview');
-    const isMonthly = prompt.includes('Generate monthly predictions');
+    const isMonthly = prompt.includes('Generate monthly prediction') || prompt.includes('monthly prediction for');
     const isJsonRequest = 
       prompt.includes('Return ONLY the JSON object') || 
       prompt.includes('"luckyNumber"') ||
@@ -290,7 +290,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
-    const maxTokens = isReport ? 8000 : isJsonRequest ? 800 : isMonthly ? 600 : isCompatibility ? 2000 : 350;
+    const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
     const model = isMonthly ? 'ministral-8b-latest' : 'mistral-small-latest';
