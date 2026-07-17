@@ -1,11 +1,11 @@
-﻿import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { usePlan } from '@/context/PlanContext';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { EnergyGauge } from '@/components/EnergyGauge';
-import { ArrowLeft, Lock, MessageCircle, Heart, Briefcase, Wallet, Activity, Users, Sprout } from 'lucide-react';
+import { ArrowLeft, Lock, MessageCircle, X, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { generateGemini } from '@/lib/gemini';
 import SEO from '@/components/SEO';
@@ -19,61 +19,69 @@ import {
 
 // ─── AI schema types ──────────────────────────────────────────────────────────
 interface SectionAI { prediction: string; [key: string]: string; }
-interface MonthlyAI {
-  theme: string;
-  sections: {
-    love:          SectionAI & { bestWeek: string; focus: string; energy: string };
-    career:        SectionAI & { opportunityLevel: string; promotion: string; business: string };
-    wealth:        SectionAI & { income: string; expenses: string; savings: string };
-    health:        SectionAI & { physical: string; mental: string; stress: string };
-    relationships: SectionAI & { family: string; friends: string; communication: string };
-    luck:          SectionAI & { luckyPeriod: string; unexpectedOpportunity: string };
-    growth:        SectionAI & { confidence: string; learning: string; discipline: string };
-  };
-  bestDates: { date: number; tags: string[] }[];
-  cautionDates: { date: number; tags: string[] }[];
-  planetaryExplanation: string;
-  actionPlan: string[];
-  monthSummaryText: string;
+interface SectionResult {
+  prediction: string;
+  meta: Record<string, string>;
 }
-interface MonthlyCacheEntry { ai: MonthlyAI; generatedAt: string; }
+type SectionKey = 'love' | 'career' | 'wealth' | 'health' | 'relationships' | 'luck' | 'growth';
+type SectionsState = Partial<Record<SectionKey, SectionResult>>;
+type SectionsLoading = Partial<Record<SectionKey, boolean>>;
+type SectionsError = Partial<Record<SectionKey, boolean>>;
 
 // ─── Section config ───────────────────────────────────────────────────────────
-type SectionKey = 'love'|'career'|'wealth'|'health'|'relationships'|'luck'|'growth';
 const sectionConfig: {
   key: SectionKey; label: string; emoji: string;
   gradFrom: string; gradTo: string; borderColor: string;
   badgeBg: string; badgeText: string;
   metaKeys: string[];
+  metaLabels: Record<string, string>;
 }[] = [
-  { key:'love',          label:'Love',            emoji:'❤️',  gradFrom:'from-rose-500/20',   gradTo:'to-pink-500/10',    borderColor:'border-rose-500/20',   badgeBg:'bg-rose-500/20',   badgeText:'text-rose-300',    metaKeys:['bestWeek','focus','energy'] },
-  { key:'career',        label:'Career',          emoji:'💼',  gradFrom:'from-blue-500/20',   gradTo:'to-indigo-500/10',  borderColor:'border-blue-500/20',   badgeBg:'bg-blue-500/20',   badgeText:'text-blue-300',    metaKeys:['opportunityLevel','promotion','business'] },
-  { key:'wealth',        label:'Wealth',          emoji:'💰',  gradFrom:'from-yellow-500/20', gradTo:'to-amber-500/10',   borderColor:'border-yellow-500/20', badgeBg:'bg-yellow-500/20', badgeText:'text-yellow-300',  metaKeys:['income','expenses','savings'] },
-  { key:'health',        label:'Health',          emoji:'💪',  gradFrom:'from-green-500/20',  gradTo:'to-emerald-500/10', borderColor:'border-green-500/20',  badgeBg:'bg-green-500/20',  badgeText:'text-green-300',   metaKeys:['physical','mental','stress'] },
-  { key:'relationships', label:'Relationships',   emoji:'👨‍👩‍👧', gradFrom:'from-purple-500/20', gradTo:'to-violet-500/10',  borderColor:'border-purple-500/20', badgeBg:'bg-purple-500/20', badgeText:'text-purple-300',  metaKeys:['family','friends','communication'] },
-  { key:'luck',          label:'Luck',            emoji:'🍀',  gradFrom:'from-teal-500/20',   gradTo:'to-cyan-500/10',    borderColor:'border-teal-500/20',   badgeBg:'bg-teal-500/20',   badgeText:'text-teal-300',    metaKeys:['luckyPeriod','unexpectedOpportunity'] },
-  { key:'growth',        label:'Personal Growth', emoji:'🌱',  gradFrom:'from-lime-500/20',   gradTo:'to-green-500/10',   borderColor:'border-lime-500/20',   badgeBg:'bg-lime-500/20',   badgeText:'text-lime-300',    metaKeys:['confidence','learning','discipline'] },
+  { key: 'love', label: 'Love', emoji: '❤️', gradFrom: 'from-rose-500/20', gradTo: 'to-pink-500/10', borderColor: 'border-rose-500/20', badgeBg: 'bg-rose-500/20', badgeText: 'text-rose-300', metaKeys: ['bestWeek', 'focus', 'energy'], metaLabels: { bestWeek: 'Best Week', focus: 'Focus', energy: 'Energy' } },
+  { key: 'career', label: 'Career', emoji: '💼', gradFrom: 'from-blue-500/20', gradTo: 'to-indigo-500/10', borderColor: 'border-blue-500/20', badgeBg: 'bg-blue-500/20', badgeText: 'text-blue-300', metaKeys: ['opportunityLevel', 'promotion', 'business'], metaLabels: { opportunityLevel: 'Opportunity', promotion: 'Promotion', business: 'Business' } },
+  { key: 'wealth', label: 'Wealth', emoji: '💰', gradFrom: 'from-yellow-500/20', gradTo: 'to-amber-500/10', borderColor: 'border-yellow-500/20', badgeBg: 'bg-yellow-500/20', badgeText: 'text-yellow-300', metaKeys: ['income', 'expenses', 'savings'], metaLabels: { income: 'Income', expenses: 'Expenses', savings: 'Savings' } },
+  { key: 'health', label: 'Health', emoji: '💪', gradFrom: 'from-green-500/20', gradTo: 'to-emerald-500/10', borderColor: 'border-green-500/20', badgeBg: 'bg-green-500/20', badgeText: 'text-green-300', metaKeys: ['physical', 'mental', 'stress'], metaLabels: { physical: 'Physical', mental: 'Mental', stress: 'Stress' } },
+  { key: 'relationships', label: 'Relationships', emoji: '👨‍👩‍👧', gradFrom: 'from-purple-500/20', gradTo: 'to-violet-500/10', borderColor: 'border-purple-500/20', badgeBg: 'bg-purple-500/20', badgeText: 'text-purple-300', metaKeys: ['family', 'friends', 'communication'], metaLabels: { family: 'Family', friends: 'Friends', communication: 'Communication' } },
+  { key: 'luck', label: 'Luck', emoji: '🍀', gradFrom: 'from-teal-500/20', gradTo: 'to-cyan-500/10', borderColor: 'border-teal-500/20', badgeBg: 'bg-teal-500/20', badgeText: 'text-teal-300', metaKeys: ['luckyPeriod', 'opportunity'], metaLabels: { luckyPeriod: 'Lucky Period', opportunity: 'Key Opportunity' } },
+  { key: 'growth', label: 'Personal Growth', emoji: '🌱', gradFrom: 'from-lime-500/20', gradTo: 'to-green-500/10', borderColor: 'border-lime-500/20', badgeBg: 'bg-lime-500/20', badgeText: 'text-lime-300', metaKeys: ['confidence', 'learning', 'discipline'], metaLabels: { confidence: 'Confidence', learning: 'Learning', discipline: 'Discipline' } },
 ];
-const metaLabels: Record<string,string> = {
-  bestWeek:'Best Week', focus:'Focus', energy:'Energy',
-  opportunityLevel:'Opportunity', promotion:'Promotion', business:'Business',
-  income:'Income', expenses:'Expenses', savings:'Savings',
-  physical:'Physical', mental:'Mental', stress:'Stress',
-  family:'Family', friends:'Friends', communication:'Communication',
-  luckyPeriod:'Lucky Period', unexpectedOpportunity:'Opportunity',
-  confidence:'Confidence', learning:'Learning', discipline:'Discipline',
-};
 
-function SkeletonCard({ lines = 4 }: { lines?: number }) {
+function SkeletonCard() {
   return (
     <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-      <div className="h-4 bg-white/10 rounded w-1/3 animate-pulse mb-4" />
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-6 h-6 bg-white/10 rounded animate-pulse" />
+        <div className="h-4 bg-white/10 rounded w-24 animate-pulse" />
+      </div>
       <div className="space-y-2">
-        {Array.from({ length: lines }).map((_, i) => (
-          <div key={i} className={cn('h-3 bg-white/10 rounded animate-pulse', i === lines - 1 ? 'w-2/3' : 'w-full')} />
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className={cn('h-3 bg-white/10 rounded animate-pulse', i === 4 ? 'w-2/3' : 'w-full')} />
         ))}
       </div>
     </Card>
+  );
+}
+
+// ─── Vedika Popup ─────────────────────────────────────────────────────────────
+function VedikaPopup({ name, onClose }: { name: string; onClose: () => void }) {
+  return (
+    <div className="fixed bottom-6 right-4 z-50 max-w-[280px] animate-in slide-in-from-bottom-4 fade-in duration-500">
+      <div className="bg-[#1a1a2e] border border-secondary/30 rounded-2xl p-4 shadow-2xl shadow-secondary/10">
+        <button onClick={onClose} className="absolute top-3 right-3 text-white/40 hover:text-white/70 transition-colors">
+          <X className="w-4 h-4" />
+        </button>
+        <div className="flex items-start gap-3">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center shrink-0 mt-0.5">
+            <Sparkles className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-secondary mb-1">Vedika AI</p>
+            <p className="text-sm text-white/80 leading-relaxed">
+              Hey {name}! 🌙 Your monthly report is being prepared section by section — this may take a moment, but it's worth it!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -94,100 +102,134 @@ const MonthlyPrediction = () => {
   })();
 
   // Local deterministic data
-  const scores   = useMemo(() => getLifeScores(uid, monthKey), [uid, monthKey]);
-  const overall  = useMemo(() => getOverallScore(scores), [scores]);
-  const oLabel   = useMemo(() => overallLabel(overall), [overall]);
-  const lucky    = useMemo(() => getLuckyElements(uid, monthKey), [uid, monthKey]);
+  const scores = useMemo(() => getLifeScores(uid, monthKey), [uid, monthKey]);
+  const overall = useMemo(() => getOverallScore(scores), [scores]);
+  const oLabel = useMemo(() => overallLabel(overall), [overall]);
+  const lucky = useMemo(() => getLuckyElements(uid, monthKey), [uid, monthKey]);
   const timeline = useMemo(() => getWeeklyTimeline(uid, monthKey), [uid, monthKey]);
-  const planets  = useMemo(() => getPlanetaryInfluence(uid, monthKey), [uid, monthKey]);
+  const planets = useMemo(() => getPlanetaryInfluence(uid, monthKey), [uid, monthKey]);
 
-  // AI state
-  const [aiData,  setAiData]  = useState<MonthlyCacheEntry | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState(false);
+  // Per-section AI state
+  const [sections, setSections] = useState<SectionsState>({});
+  const [loadingMap, setLoadingMap] = useState<SectionsLoading>({});
+  const [errorMap, setErrorMap] = useState<SectionsError>({});
+  const [showPopup, setShowPopup] = useState(false);
   const hasFetchedRef = useRef(false);
-  const cacheKey = `ai_monthly_full_${uid}_${monthKey}`;
+  const cacheKey = `ai_monthly_sections_v2_${uid}_${monthKey}`;
 
-  // Birth data for prompt
+  // Birth data
   let details: any = null;
   let planetsData: any = null;
   try {
-    details     = JSON.parse(localStorage.getItem('onboarding_details') || 'null');
-    planetsData = JSON.parse(localStorage.getItem('astrology_planets')  || 'null');
+    details = JSON.parse(localStorage.getItem('onboarding_details') || 'null');
+    planetsData = JSON.parse(localStorage.getItem('astrology_planets') || 'null');
   } catch {}
 
-  const fetchMonthlyAI = useCallback(async () => {
-    setLoading(true);
-    setError(false);
-    const scoreCtx = [
-      `Overall: ${overall}/100 (${oLabel})`,
-      `Love: ${scores.love}/100 (${scoreLabel(scores.love)})`,
-      `Career: ${scores.career}/100 (${scoreLabel(scores.career)})`,
-      `Wealth: ${scores.wealth}/100 (${scoreLabel(scores.wealth)})`,
-      `Health: ${scores.health}/100 (${scoreLabel(scores.health)})`,
-      `Relationships: ${scores.relationships}/100 (${scoreLabel(scores.relationships)})`,
-      `Luck: ${scores.luck}/100 (${scoreLabel(scores.luck)})`,
-      `Personal Growth: ${scores.growth}/100 (${scoreLabel(scores.growth)})`,
-    ].join('\n');
+  const birthCtx = `Birth: ${details?.dob || 'unknown'}, ${details?.time || 'unknown'}, ${details?.place || 'unknown'}`;
+  const planetsCtx = planetsData ? `Planets: ${planetsData.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign}`).join(', ')}` : '';
 
-    const systemPrompt = `You are a life prediction expert. Respond with valid JSON only matching this schema exactly:
-{"theme":"string","sections":{"love":{"prediction":"150-200 words","bestWeek":"string","focus":"string","energy":"string"},"career":{"prediction":"150-200 words","opportunityLevel":"string","promotion":"string","business":"string"},"wealth":{"prediction":"150-200 words","income":"string","expenses":"string","savings":"string"},"health":{"prediction":"150-200 words","physical":"string","mental":"string","stress":"string"},"relationships":{"prediction":"150-200 words","family":"string","friends":"string","communication":"string"},"luck":{"prediction":"150-200 words","luckyPeriod":"string","unexpectedOpportunity":"string"},"growth":{"prediction":"150-200 words","confidence":"string","learning":"string","discipline":"string"}},"bestDates":[{"date":5,"tags":["Career"]}],"cautionDates":[{"date":9,"tags":["Avoid Arguments"]}],"planetaryExplanation":"string","actionPlan":["string","string","string","string"],"monthSummaryText":"string"}
-STRICT: Scores below are FINAL—never output numeric scores yourself. Write predictions matching the given tone. No astrology terms except in planetaryExplanation. Plain text only, no markdown.`;
+  const fetchSection = useCallback(async (key: SectionKey, cfg: typeof sectionConfig[0]) => {
+    setLoadingMap(prev => ({ ...prev, [key]: true }));
+    setErrorMap(prev => ({ ...prev, [key]: false }));
 
-    const userPrompt = `Generate monthly prediction for ${monthName}.
-Birth: ${details?.dob || 'unknown'}, ${details?.time || 'unknown'}, ${details?.place || 'unknown'}
-${planetsData ? `Planets: ${planetsData.slice(0,7).map((p: any) => `${p.name||p.planet} in ${p.sign}`).join(', ')}` : ''}
-Fixed scores (match these, do not invent):
-${scoreCtx}`;
+    const score = scores[key];
+    const metaKeysList = cfg.metaKeys.join('", "');
+    const systemPrompt = `You are a life prediction expert. Respond with valid JSON only.
+Schema: {"prediction":"60-80 word prediction for ${key}","${cfg.metaKeys[0]}":"3-5 word value","${cfg.metaKeys[1] || cfg.metaKeys[0]}":"3-5 word value","${cfg.metaKeys[2] || cfg.metaKeys[0]}":"3-5 word value"}
+Rules:
+- prediction must be 60-80 words, specific and practical, no astrology terms in prediction text
+- meta fields must be short (3-5 words max each)
+- plain text only, no markdown`;
+
+    const userPrompt = `Generate monthly ${monthName} prediction for ${key} area only.
+${birthCtx}
+${planetsCtx}
+Score context: ${key} score is ${score}/100 (${scoreLabel(score)}) — match this tone.
+Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKeys.join('", "')}"`;
 
     try {
       const response = await Promise.race([
         generateGemini(userPrompt, [], systemPrompt, 'en', undefined, 'secondary'),
-        new Promise<string>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 25000)),
+        new Promise<string>((_, reject) => setTimeout(() => reject(new Error('Timeout')), 20000)),
       ]);
+
       const start = response.indexOf('{');
-      const end   = response.lastIndexOf('}');
+      const end = response.lastIndexOf('}');
       if (start === -1 || end <= start) throw new Error('No JSON');
+
       const block = response.slice(start, end + 1);
-      let parsed: MonthlyAI;
-      try { parsed = JSON.parse(sanitizeModelJson(block)) as MonthlyAI; }
-      catch { throw new Error('JSON parse failed'); }
-      if (!parsed?.theme || !parsed?.sections?.love?.prediction) throw new Error('Incomplete');
-      const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-      const clamp = (arr: { date: number; tags: string[] }[]) =>
-        (arr || []).map(d => ({ ...d, date: Math.max(1, Math.min(d.date ?? 1, daysInMonth)) }));
-      parsed.bestDates    = clamp(parsed.bestDates);
-      parsed.cautionDates = clamp(parsed.cautionDates);
-      const entry: MonthlyCacheEntry = { ai: parsed, generatedAt: new Date().toISOString() };
-      setAiData(entry);
-      try { localStorage.setItem(cacheKey, JSON.stringify(entry)); } catch {}
+      let parsed: any;
+      try { parsed = JSON.parse(sanitizeModelJson(block)); }
+      catch { throw new Error('Parse failed'); }
+
+      if (!parsed?.prediction) throw new Error('Missing prediction');
+
+      const meta: Record<string, string> = {};
+      cfg.metaKeys.forEach(mk => { if (parsed[mk]) meta[mk] = parsed[mk]; });
+
+      const result: SectionResult = { prediction: parsed.prediction, meta };
+
+      setSections(prev => ({ ...prev, [key]: result }));
+
+      // Update cache
+      const cached = (() => { try { return JSON.parse(localStorage.getItem(cacheKey) || '{}'); } catch { return {}; } })();
+      cached[key] = result;
+      cached._generatedAt = new Date().toISOString();
+      try { localStorage.setItem(cacheKey, JSON.stringify(cached)); } catch {}
+
     } catch (err) {
-      console.error('[MonthlyPrediction] fetch failed:', err);
-      setError(true);
-    } finally { setLoading(false); }
-  }, [cacheKey, overall, oLabel, scores, monthName, today, details, planetsData]);
+      console.error(`[Monthly] ${key} failed:`, err);
+      setErrorMap(prev => ({ ...prev, [key]: true }));
+    } finally {
+      setLoadingMap(prev => ({ ...prev, [key]: false }));
+    }
+  }, [scores, monthName, birthCtx, planetsCtx, cacheKey]);
 
   useEffect(() => {
-    if (hasFetchedRef.current) return;
+    if (hasFetchedRef.current || isFree) return;
     hasFetchedRef.current = true;
-    if (isFree) return;
+
+    // Try loading from cache first
     try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || 'null') as MonthlyCacheEntry | null;
-      if (cached?.ai?.theme) { setAiData(cached); return; }
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+      const cachedSections: SectionsState = {};
+      let allCached = true;
+      sectionConfig.forEach(cfg => {
+        if (cached[cfg.key]?.prediction) {
+          cachedSections[cfg.key] = cached[cfg.key];
+        } else {
+          allCached = false;
+        }
+      });
+      if (Object.keys(cachedSections).length > 0) {
+        setSections(cachedSections);
+        if (allCached) return; // All cached, no need to fetch
+      }
     } catch {}
-    fetchMonthlyAI();
-  }, [cacheKey, isFree, fetchMonthlyAI]);
 
-  const scrollToSection = (key: string) => {
-    const el = document.getElementById(`section-${key}`);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+    // Show Vedika popup
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 6000);
 
-  const generatedOn = aiData?.generatedAt
-    ? new Date(aiData.generatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-    : null;
+    // Fire all 7 section calls in parallel
+    sectionConfig.forEach(cfg => {
+      // Skip if already cached
+      try {
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+        if (cached[cfg.key]?.prediction) return;
+      } catch {}
+      fetchSection(cfg.key, cfg);
+    });
+  }, [isFree, fetchSection, cacheKey]);
 
-  // ─── RENDER ───────────────────────────────────────────────────────────────
+  const anyLoading = sectionConfig.some(cfg => loadingMap[cfg.key]);
+  const generatedAt = (() => {
+    try {
+      const cached = JSON.parse(localStorage.getItem(cacheKey) || '{}');
+      return cached._generatedAt ? new Date(cached._generatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : null;
+    } catch { return null; }
+  })();
+
   return (
     <div className="min-h-screen bg-background px-3 sm:px-4 py-6 sm:py-10">
       <SEO
@@ -195,6 +237,9 @@ ${scoreCtx}`;
         description={`Personalized monthly life prediction for ${displayName}. Love, career, wealth, health and more for ${monthName}.`}
         url="https://veadicastro.in/monthly-prediction"
       />
+
+      {showPopup && <VedikaPopup name={displayName} onClose={() => setShowPopup(false)} />}
+
       <div className="max-w-4xl mx-auto space-y-5">
 
         {/* 1. Header */}
@@ -206,7 +251,7 @@ ${scoreCtx}`;
             <h1 className="text-xl sm:text-2xl font-bold text-foreground">🌙 Monthly Prediction</h1>
             <p className="text-sm text-muted-foreground">
               {monthName} · Personalized using your birth chart
-              {generatedOn && <span className="ml-2 opacity-60">· Generated {generatedOn}</span>}
+              {generatedAt && <span className="ml-2 opacity-60">· Generated {generatedAt}</span>}
             </p>
           </div>
         </div>
@@ -218,8 +263,7 @@ ${scoreCtx}`;
             <EnergyGauge value={overall} size={140} strokeWidth={10} />
             <div className="text-center">
               <p className="text-xl font-bold text-white/90">{oLabel}</p>
-              {loading && !aiData && <div className="h-4 bg-white/10 rounded w-48 animate-pulse mt-2 mx-auto" />}
-              {aiData?.ai.theme && <p className="text-sm text-white/50 mt-2 leading-relaxed max-w-sm mx-auto">{aiData.ai.theme}</p>}
+              <p className="text-sm text-white/50 mt-2">{monthName}</p>
             </div>
           </div>
         </Card>
@@ -231,7 +275,7 @@ ${scoreCtx}`;
             {sectionConfig.map(({ key, label, emoji }) => {
               const score = scores[key];
               return (
-                <button key={key} onClick={() => !isFree && scrollToSection(key)} className="w-full flex items-center gap-3 group">
+                <button key={key} className="w-full flex items-center gap-3 group">
                   <span className="text-base w-6 shrink-0">{emoji}</span>
                   <span className="text-sm text-white/70 w-28 text-left shrink-0 group-hover:text-white/90 transition-colors">{label}</span>
                   <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
@@ -245,103 +289,91 @@ ${scoreCtx}`;
           </div>
         </Card>
 
-        {/* Free gate / Loading / Error / Full content */}
+        {/* Free gate */}
         {isFree ? (
           <Card className="p-8 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl text-center">
             <Lock className="w-10 h-10 text-secondary mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-white/90 mb-2">Your full {monthName} report is ready</h3>
             <p className="text-sm text-white/50 mb-6 leading-relaxed max-w-xs mx-auto">
-              Upgrade to unlock all 16 sections — love, career, wealth, health, lucky elements, action plan and more.
+              Upgrade to unlock all 7 sections — love, career, wealth, health, relationships, luck, and personal growth.
             </p>
             <Button variant="cosmic" className="w-full max-w-xs mx-auto rounded-xl"
               onClick={() => navigate('/pricing?referral=monthly-prediction')}>
               Unlock Full Report
             </Button>
           </Card>
-        ) : loading ? (
-          <div className="space-y-4">
-            {[6,5,5,5,5,4,4,3,3,3,3,3].map((lines, i) => <SkeletonCard key={i} lines={lines} />)}
-          </div>
-        ) : error ? (
-          <Card className="p-6 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl text-center">
-            <p className="text-sm text-white/50 mb-4">Could not load your monthly predictions. Please try again.</p>
-            <Button variant="cosmic" size="sm" onClick={() => { setError(false); fetchMonthlyAI(); }}>Retry</Button>
-          </Card>
-        ) : aiData ? (
+        ) : (
           <>
-            {/* 4-10. Section detail cards */}
-            {sectionConfig.map(({ key, label, emoji, gradFrom, gradTo, badgeBg, badgeText, metaKeys }) => {
+            {/* 7 Section Cards - show as they load */}
+            {sectionConfig.map(({ key, label, emoji, gradFrom, gradTo, badgeBg, badgeText, metaKeys, metaLabels }) => {
               const score = scores[key];
-              const secAI = (aiData.ai.sections as any)[key] as SectionAI;
-              const lbl   = scoreLabel(score);
+              const lbl = scoreLabel(score);
+              const secData = sections[key];
+              const isLoading = loadingMap[key];
+              const hasError = errorMap[key];
+
               return (
-                <Card key={key} id={`section-${key}`}
-                  className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl scroll-mt-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{emoji}</span>
-                      <h3 className="font-semibold text-white/90">{label}</h3>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', badgeBg, badgeText)}>{lbl}</span>
-                      <span className="text-sm font-bold text-white/90">{score}%</span>
-                    </div>
-                  </div>
-                  <div className="h-1 rounded-full mb-4 bg-white/[0.04] overflow-hidden">
-                    <div className={cn('h-full rounded-full bg-gradient-to-r', gradFrom, gradTo)}
-                      style={{ width: `${score}%` }} />
-                  </div>
-                  <p className="text-sm text-white/60 leading-relaxed mb-4">{secAI?.prediction}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {metaKeys.map((mk) => secAI?.[mk] ? (
-                      <span key={mk} className="text-xs px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.04] text-white/60">
-                        {metaLabels[mk]}: <span className="text-white/80">{secAI[mk]}</span>
-                      </span>
-                    ) : null)}
-                  </div>
-                </Card>
+                <div key={key} id={`section-${key}`} className="scroll-mt-6">
+                  {isLoading && !secData ? (
+                    <SkeletonCard />
+                  ) : hasError && !secData ? (
+                    <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{emoji}</span>
+                          <h3 className="font-semibold text-white/90">{label}</h3>
+                        </div>
+                        <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', badgeBg, badgeText)}>{lbl}</span>
+                      </div>
+                      <p className="text-xs text-white/40 mb-3">Could not load this section.</p>
+                      <Button variant="outline" size="sm" className="text-xs"
+                        onClick={() => fetchSection(key, sectionConfig.find(c => c.key === key)!)}>
+                        Retry
+                      </Button>
+                    </Card>
+                  ) : (
+                    <Card className={cn(
+                      'p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl',
+                      secData ? 'animate-in fade-in duration-500' : 'opacity-40'
+                    )}>
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{emoji}</span>
+                          <h3 className="font-semibold text-white/90">{label}</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', badgeBg, badgeText)}>{lbl}</span>
+                          <span className="text-sm font-bold text-white/90">{score}%</span>
+                        </div>
+                      </div>
+                      <div className="h-1 rounded-full mb-4 bg-white/[0.04] overflow-hidden">
+                        <div className={cn('h-full rounded-full bg-gradient-to-r', gradFrom, gradTo)} style={{ width: `${score}%` }} />
+                      </div>
+                      {secData ? (
+                        <>
+                          <p className="text-sm text-white/60 leading-relaxed mb-4">{secData.prediction}</p>
+                          <div className="flex flex-wrap gap-2">
+                            {metaKeys.map(mk => secData.meta[mk] ? (
+                              <span key={mk} className="text-xs px-2.5 py-1 rounded-full border border-white/[0.08] bg-white/[0.04] text-white/60">
+                                {metaLabels[mk]}: <span className="text-white/80">{secData.meta[mk]}</span>
+                              </span>
+                            ) : null)}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="space-y-2">
+                          <div className="h-3 bg-white/10 rounded animate-pulse w-full" />
+                          <div className="h-3 bg-white/10 rounded animate-pulse w-5/6" />
+                          <div className="h-3 bg-white/10 rounded animate-pulse w-4/6" />
+                        </div>
+                      )}
+                    </Card>
+                  )}
+                </div>
               );
             })}
 
-            {/* 11. Best Dates */}
-            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-              <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">✨ Best Dates</h3>
-              <div className="flex flex-wrap gap-3">
-                {(aiData.ai.bestDates || []).map(({ date, tags }, i) => (
-                  <div key={i} className="flex flex-col items-center gap-1.5">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/20 to-accent/20 border border-secondary/30 flex items-center justify-center">
-                      <span className="text-lg font-bold text-white">{date}</span>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {tags.map((t, j) => (
-                        <span key={j} className="text-[10px] px-1.5 py-0.5 rounded-full bg-secondary/10 text-secondary/80 border border-secondary/20">{t}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            {/* 12. Caution Dates */}
-            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-              <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">⚠️ Caution Dates</h3>
-              <div className="flex flex-wrap gap-3">
-                {(aiData.ai.cautionDates || []).map(({ date, tags }, i) => (
-                  <div key={i} className="flex flex-col items-center gap-1.5">
-                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                      <span className="text-lg font-bold text-amber-300">{date}</span>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-1">
-                      {tags.map((t, j) => (
-                        <span key={j} className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300/80 border border-amber-500/20">{t}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-            {/* 13. Monthly Timeline */}
+            {/* Monthly Timeline - local, always visible */}
             <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
               <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📅 Monthly Timeline</h3>
               <div className="space-y-1">
@@ -357,10 +389,10 @@ ${scoreCtx}`;
               </div>
             </Card>
 
-            {/* 14. Planetary Influence */}
+            {/* Planetary Influence - local */}
             <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
               <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🪐 Planetary Influence</h3>
-              <div className="space-y-1 mb-4">
+              <div className="space-y-1">
                 {planets.map(({ planet, stars, effect }) => (
                   <div key={planet} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
                     <span className="text-sm text-white/70">{planet}</span>
@@ -368,33 +400,15 @@ ${scoreCtx}`;
                       <span className="text-amber-400 tracking-widest text-sm">{renderStars(stars)}</span>
                       <span className={cn('text-xs px-2 py-0.5 rounded-full',
                         effect === 'Favourable' ? 'bg-green-500/10 text-green-400' :
-                        effect === 'Challenging' ? 'bg-red-500/10 text-red-400' :
-                        'bg-white/[0.06] text-white/40')}>{effect}</span>
+                          effect === 'Challenging' ? 'bg-red-500/10 text-red-400' :
+                            'bg-white/[0.06] text-white/40')}>{effect}</span>
                     </div>
-                  </div>
-                ))}
-              </div>
-              {aiData.ai.planetaryExplanation && (
-                <p className="text-xs text-white/40 leading-relaxed italic border-t border-white/[0.04] pt-3">{aiData.ai.planetaryExplanation}</p>
-              )}
-            </Card>
-
-            {/* 15. Monthly Action Plan */}
-            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-              <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">✅ Monthly Action Plan</h3>
-              <div className="space-y-3">
-                {(aiData.ai.actionPlan || []).map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-secondary/20 border border-secondary/30 flex items-center justify-center shrink-0">
-                      <span className="text-secondary text-xs font-bold">{i + 1}</span>
-                    </div>
-                    <p className="text-sm text-white/70">{item}</p>
                   </div>
                 ))}
               </div>
             </Card>
 
-            {/* 16. Lucky Elements */}
+            {/* Lucky Elements - local */}
             <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
               <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🍀 Lucky Elements</h3>
               <div className="grid grid-cols-2 gap-3">
@@ -412,7 +426,7 @@ ${scoreCtx}`;
                 </div>
                 <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary/30 to-accent/20 border border-white/10 flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">{lucky.luckyDay.slice(0,3).toUpperCase()}</span>
+                    <span className="text-xs font-bold text-white">{lucky.luckyDay.slice(0, 3).toUpperCase()}</span>
                   </div>
                   <p className="text-sm font-semibold text-white/90">{lucky.luckyDay}</p>
                   <p className="text-[10px] text-white/40 tracking-wide">LUCKY DAY</p>
@@ -427,7 +441,7 @@ ${scoreCtx}`;
               </div>
             </Card>
 
-            {/* 17. Month Summary */}
+            {/* Month Summary */}
             <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
               <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📊 Month Summary</h3>
               <div className="flex items-center gap-4 mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
@@ -440,8 +454,8 @@ ${scoreCtx}`;
                   <p className="text-xs text-white/40 mt-0.5">{monthName}</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {(['love','career','wealth','health','relationships','growth'] as SectionKey[]).map((k) => {
+              <div className="grid grid-cols-2 gap-2">
+                {(['love', 'career', 'wealth', 'health', 'relationships', 'growth'] as SectionKey[]).map(k => {
                   const cfg = sectionConfig.find(s => s.key === k)!;
                   return (
                     <div key={k} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.04]">
@@ -451,12 +465,9 @@ ${scoreCtx}`;
                   );
                 })}
               </div>
-              {aiData.ai.monthSummaryText && (
-                <p className="text-sm text-white/60 leading-relaxed">{aiData.ai.monthSummaryText}</p>
-              )}
             </Card>
           </>
-        ) : null}
+        )}
 
         {/* CTA */}
         <Button variant="cosmic" className="w-full h-12 rounded-xl text-base font-semibold"
