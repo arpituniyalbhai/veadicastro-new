@@ -73,6 +73,7 @@ const DailyPrediction = () => {
   }, []);
 
   const fetchSections = useCallback(async (dt: Date, key: string) => {
+    console.log("fetchSections called - key:", key, "uid:", uid);
     if (inFlightRef.current === key) return; // Already fetching this date, ignore duplicate
     inFlightRef.current = key;
 
@@ -80,16 +81,21 @@ const DailyPrediction = () => {
     setSectionsError(false);
 
     const cacheKey = `ai_daily_sections_${uid}_${key}`;
+    console.log("Cache key:", cacheKey);
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+      console.log("Cached data found:", cached);
       if (cached?.love && cached?.career && cached?.health && cached?.wealth) {
+        console.log("Using cached data");
         setSections(cached);
         setSectionsLoading(false);
         hasFetchedRef.current = key;
         inFlightRef.current = null;
         return;
       }
-    } catch {}
+    } catch (e) {
+      console.error("Cache read error:", e);
+    }
 
     const dateFormatted = dt.toLocaleDateString("en-US", {
       weekday: "long", year: "numeric", month: "long", day: "numeric",
@@ -112,10 +118,12 @@ Health — what is coming in health and wellness:
 Wealth — what is coming in money and finances:`;
 
     try {
+      console.log("Calling AI API...");
       const response = await Promise.race([
         generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
         new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timed out")), 25000)),
       ]);
+      console.log("AI API response received:", response);
 
       const start = response.indexOf("{");
       const end = response.lastIndexOf("}");
@@ -124,16 +132,22 @@ Wealth — what is coming in money and finances:`;
       if (start !== -1 && end > start) {
         const block = response.slice(start, end + 1);
         const cleaned = sanitizeModelJson(block);
+        console.log("Cleaned JSON block:", cleaned);
         try {
           parsed = JSON.parse(cleaned);
+          console.log("Parsed JSON:", parsed);
         } catch {
+          console.log("JSON parse failed, using extractField fallback");
           parsed = {
             love: extractField(block, "love"),
             career: extractField(block, "career"),
             health: extractField(block, "health"),
             wealth: extractField(block, "wealth"),
           };
+          console.log("Fallback parsed:", parsed);
         }
+      } else {
+        console.error("No JSON found in response - start:", start, "end:", end);
       }
 
       parsed.love = parsed.love?.trim() || "";
@@ -142,15 +156,22 @@ Wealth — what is coming in money and finances:`;
       parsed.wealth = parsed.wealth?.trim() || "";
 
       if (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth) {
+        console.error("No valid predictions found in parsed data:", parsed);
         setSectionsError(true);
         setSectionsLoading(false);
         if (inFlightRef.current === key) inFlightRef.current = null;
         return;
       }
 
+      console.log("Saving predictions to localStorage - cacheKey:", cacheKey, "parsed:", parsed);
+      
       // Save to localStorage FIRST, then update state
       try {
         localStorage.setItem(cacheKey, JSON.stringify(parsed));
+        console.log("Successfully saved to localStorage");
+        // Verify save
+        const saved = localStorage.getItem(cacheKey);
+        console.log("Verification - saved data:", saved);
       } catch (e) {
         console.error("Failed to save to localStorage:", e);
       }
