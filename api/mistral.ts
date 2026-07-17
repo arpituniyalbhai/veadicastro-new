@@ -306,7 +306,7 @@ Wrong format = rewrite before sending.`;
     const messagesWithReminder = isJsonRequest ? [
       {
         role: 'system',
-        content: `${dateContext}\n\nYou must respond with valid JSON only. No prose, no markdown, no explanation. Just the raw JSON object.` 
+        content: `${dateContext}\n\nYou must respond with valid JSON only. No prose, no markdown, no explanation. Just the raw JSON object.\n\n${systemExtra || ''}` 
       },
       { role: 'user', content: prompt }
     ] : isMonthly ? [
