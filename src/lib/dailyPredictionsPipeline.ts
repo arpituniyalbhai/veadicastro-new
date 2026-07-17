@@ -131,17 +131,9 @@ export const BANNED_PHRASES: Record<string, string[]> = {
   ],
 };
 
-export function isValidPrediction(text: string, lang: string = "en"): boolean {
-  if (!text) return false;
-  const wordCount = text.trim().split(/\s+/).length;
-  // Lenient word count: 15 to 60 words
-  if (wordCount < 15 || wordCount > 60) return false;
-
-  const lower = text.toLowerCase();
-  const phrases = BANNED_PHRASES[lang] || BANNED_PHRASES.en;
-  if (phrases.some((p) => lower.includes(p.toLowerCase()))) return false;
-
-  return true;
+export function isValidPrediction(text: string, _lang: string = "en"): boolean {
+  // Only require a non-empty string — let the AI be creative without hard rejections
+  return typeof text === "string" && text.trim().length > 10;
 }
 
 export interface PredictionPayload {
@@ -241,17 +233,11 @@ Use EXACTLY these keys:
       _dateKey: dateKey,
     };
 
+    // Validate that all 4 keys have non-empty content
     const keys: (keyof PredictionPayload)[] = ["love", "career", "health", "wealth"];
-    const allValid = keys.every((k) => isValidPrediction(result[k] as string, lang));
-
-    if (!allValid) {
-      if (!isRetry) {
-        console.warn("[Validation] Output invalid. Retrying once...");
-        return generatePredictionSections(date, dateKey, details, natalPlanets, lang, true);
-      } else {
-        console.error("[Validation] Output still invalid after retry.");
-        return null;
-      }
+    const missingKeys = keys.filter((k) => !isValidPrediction(result[k] as string, lang));
+    if (missingKeys.length > 0) {
+      console.warn("[Pipeline] Missing/empty keys:", missingKeys, "— still returning partial result.");
     }
 
     return result;
