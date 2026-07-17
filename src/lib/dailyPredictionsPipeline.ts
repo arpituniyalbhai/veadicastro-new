@@ -176,7 +176,8 @@ Write as pure life predictions — natural, direct, practical statements about w
 Each field exactly 30-40 words. Plain text, no markdown, no asterisks, no bold.
 English only.`;
 
-  const prompt = `Generate 4 short predictions for ${dateFormatted} based on:
+  const prompt = `Return ONLY the JSON object.
+Generate 4 short predictions for ${dateFormatted} based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : "General chart"}
 Today's key influences:
 ${transitSummary}
