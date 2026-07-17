@@ -312,7 +312,7 @@ Wrong format = rewrite before sending.`;
     ] : isMonthly ? [
       {
         role: 'system',
-        content: `You are a Vedic astrologer. Today: ${todayIST}. Respond with valid JSON only: {"text":"prediction here"}. Plain text, no markdown, 150 words max.` 
+        content: `${dateContext}\n\nYou must respond with valid JSON only. No prose, no markdown, no explanation. Just the raw JSON object.\n\n${systemExtra || 'Respond with valid JSON only.'}` 
       },
       { role: 'user', content: prompt }
     ] : isReport ? [
