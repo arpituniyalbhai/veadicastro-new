@@ -40,6 +40,8 @@ const DailyPrediction = () => {
   const [sectionsLoading, setSectionsLoading] = useState(false);
   const [sectionsError, setSectionsError] = useState(false);
   const [lockedDateModal, setLockedDateModal] = useState<Date | null>(null);
+  const [details, setDetails] = useState<any>(null);
+  const [planets, setPlanets] = useState<any>(null);
   const hasFetchedRef = useRef<string | null>(null);
   const inFlightRef = useRef<string | null>(null);
 
@@ -47,12 +49,12 @@ const DailyPrediction = () => {
   const uid = user?.uid || "guest";
   const luckyData = useMemo(() => getDailyLuckyData(uid, dateKey), [uid, dateKey]);
 
-  let details: any = null;
-  let planets: any = null;
-  try {
-    details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
-    planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
-  } catch {}
+  useEffect(() => {
+    try {
+      setDetails(JSON.parse(localStorage.getItem("onboarding_details") || "null"));
+      setPlanets(JSON.parse(localStorage.getItem("astrology_planets") || "null"));
+    } catch {}
+  }, []);
 
   const place = details?.place?.split(",")[0] || "your location";
   const timeWindow = useMemo(() => getAuspiciousWindow(uid, dateKey, place), [uid, dateKey, place]);
