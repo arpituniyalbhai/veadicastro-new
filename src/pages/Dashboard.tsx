@@ -47,7 +47,8 @@ import { cn } from "@/lib/utils";
 import { generateGemini, VAANI_SYSTEM_PROMPT } from "@/lib/gemini";
 import { getNakshatraLord, getYoni } from "@/lib/astroCalc";
 import { EnergyGauge } from "@/components/EnergyGauge";
-import { getDailyLuckyData } from "@/lib/dailyInsights";
+import { getDailyLuckyData, sanitizeModelJson } from "@/lib/dailyInsights";
+import { getLifeScores, getOverallScore, overallLabel, getMonthKey, scoreLabel } from "@/lib/monthlyInsights";
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
@@ -94,16 +95,14 @@ export default function Dashboard() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
-  const [monthlyPrediction, setMonthlyPrediction] = useState<{ text: string; month: number; year: number } | null>(null);
+  const [monthlySummary, setMonthlySummary] = useState<{ ai: { theme: string } } | null>(null);
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
-  const [monthlyLoading, setMonthlyLoading] = useState(false);
+  const [monthlySummaryLoading, setMonthlySummaryLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [selectedDateLoading, setSelectedDateLoading] = useState(false);
-  const [monthlyGenerationFailed, setMonthlyGenerationFailed] = useState(false);
-  const [showMonthlyLoadingPopup, setShowMonthlyLoadingPopup] = useState(false);
-  const [monthlyLoadingTimer, setMonthlyLoadingTimer] = useState<NodeJS.Timeout | null>(null);
+  // monthlySummaryLoading declared above; old monthly state removed
   const pendingDateRef = useRef<string | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
   const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
@@ -336,10 +335,8 @@ export default function Dashboard() {
   };
 
   const getMonthlyCacheKey = () => {
-    const now = new Date();
-    const month = now.getMonth() + 1; // 1-12
-    const year = now.getFullYear();
-    return `ai_monthly_${user?.uid || 'guest'}_${year}_${month}`;
+    const monthKey = getMonthKey(new Date());
+    return `ai_monthly_full_${user?.uid || 'guest'}_${monthKey}`;
   };
 
   const getLocalDateKey = (date: Date) =>
@@ -710,22 +707,16 @@ One flowing paragraph covering love, career, health and wealth for tomorrow. Als
     }
   };
 
-  const fetchMonthlyPrediction = useCallback(async () => {
-    if (monthlyLoading || typeof window === "undefined") return;
+  const fetchMonthlySummary = useCallback(async () => {
+    if (monthlySummaryLoading || typeof window === "undefined") return;
     const cacheKey = getMonthlyCacheKey();
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const currentYear = now.getFullYear();
     
     // Check cache first
     try {
       const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      console.log('Monthly cache check:', { cacheKey, cached, currentMonth, currentYear });
-      if (cached && cached.month === currentMonth && cached.year === currentYear && cached.text) {
-        console.log('Using cached monthly prediction');
-        setMonthlyPrediction(cached);
-        setMonthlyLoading(false);
-        setMonthlyGenerationFailed(false); // Reset failed state on success
+      if (cached?.ai?.theme) {
+        setMonthlySummary(cached);
+        setMonthlySummaryLoading(false);
         return;
       }
     } catch (e) {
@@ -739,172 +730,139 @@ One flowing paragraph covering love, career, health and wealth for tomorrow. Als
       planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
     } catch {}
 
-    // If no birth details, set a helpful message
+    // If no birth details, set a fallback theme
     if (!details?.dob || !details?.time || !details?.place) {
-      const incompleteText = cleanText(lang === "hi" 
-        ? "कृपया अपना जन्म विवरण पूरा करें (जन्म तिथि, समय और स्थान) मासिक भविष्यवाणी प्राप्त करने के लिए।"
-        : "Please complete your birth details (date, time, and place) to get monthly predictions.");
+      const incompleteText = lang === "hi" 
+        ? "कृपया अपना जन्म विवरण पूरा करें मासिक भविष्यवाणी प्राप्त करने के लिए।"
+        : "Please complete your birth details to get monthly predictions.";
       const result = {
-        text: incompleteText,
-        month: currentMonth,
-        year: currentYear,
+        ai: {
+          theme: incompleteText
+        },
+        generatedAt: new Date().toISOString()
       };
-      setMonthlyPrediction(result);
-      setMonthlyLoading(false);
-      setMonthlyGenerationFailed(false); // Reset failed state
+      setMonthlySummary(result);
+      setMonthlySummaryLoading(false);
       return;
     }
 
-    setMonthlyLoading(true);
-    setMonthlyGenerationFailed(false); // Reset failed state when trying again
-    
-    // Set a timer to show popup if loading takes more than 3 seconds
-    const timer = setTimeout(() => {
-      setShowMonthlyLoadingPopup(true);
-    }, 3000);
-    setMonthlyLoadingTimer(timer);
+    setMonthlySummaryLoading(true);
     
     try {
+      const now = new Date();
       const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      const monthName = monthNames[currentMonth - 1];
+      const monthName = monthNames[now.getMonth()];
+      const currentYear = now.getFullYear();
 
-      const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (0123456789).";
-      const languageDirective = `Respond in English only. ${numeralRule}`;
-      
-      const systemPrompt = `You are a Vedic astrology expert. Respond with valid JSON only:
-{"text": "monthly prediction here (100-150 words, plain text, no markdown)"}
-Cover: love, career, health, finance. Based on birth chart and current transits. English only. No asterisks, no bold. Do not ask follow-up questions.
-STRICT: Never assume profession, business type, or life stage. Only use planetary data provided.`;
-
-      const prompt = `Generate monthly predictions for ${monthName} ${currentYear} based on:
-${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : 'Basic chart'}
-${planets ? `Key Planets: ${planets.slice(0,7).map((p: any) => 
-  `${p.name||p.planet} in ${p.sign} H${p.house||''}` 
-).join(', ')}` : ''}
-Current Date: ${now.toISOString()}
-
-Provide comprehensive monthly guidance covering all life areas for ${monthName} ${currentYear}.`;
-
-      // NO RETRIES - Direct API call to prevent double billing
-      let response = "";
-      
-      try {
-        response = await Promise.race([
-          generateGemini(prompt, [], systemPrompt, lang, undefined, "secondary"),
-          new Promise<string>((_, reject) =>
-            setTimeout(
-              () => reject(new Error("Monthly prediction request timed out")),
-              25000
-            )
-          ),
-        ]);
-      } catch (err) {
-        console.warn('Monthly prediction failed:', err);
-        throw err;
-      }
-      let jsonText = extractJsonBlock(response);
-      let parsed = safeParseModelJson<{ text?: string }>(jsonText, { text: "" });
-      
-      // If JSON parsing failed or no text, try to use the raw response
-      if (!parsed?.text || parsed.text.trim() === "") {
-        console.warn("Monthly prediction JSON parsing failed, using raw response");
-        parsed = { text: response };
-      }
-      
-      // Clean markdown formatting from text
-      let cleanedMonthlyText = cleanText(String(parsed?.text || (lang === "hi" ? "इस महीने की भविष्यवाणी उत्पन्न करने में असमर्थ।" : "Unable to generate monthly prediction.")));
-      const result = {
-        text: cleanedMonthlyText,
-        month: currentMonth,
-        year: currentYear,
+      const uid = user?.uid || 'guest';
+      const monthKey = getMonthKey(now);
+      const scores = getLifeScores(uid, monthKey);
+      const overall = getOverallScore(scores);
+      const oLabel = overallLabel(overall);
+      const labels = {
+        love: scoreLabel(scores.love),
+        career: scoreLabel(scores.career),
+        wealth: scoreLabel(scores.wealth),
+        health: scoreLabel(scores.health),
+        relationships: scoreLabel(scores.relationships),
+        luck: scoreLabel(scores.luck),
+        growth: scoreLabel(scores.growth),
       };
-      setMonthlyPrediction(result);
-      setMonthlyGenerationFailed(false); // Reset failed state on success
+
+      const scoreContext = `Overall: ${overall}/100 (${oLabel})
+Love: ${scores.love}/100 (${labels.love})
+Career: ${scores.career}/100 (${labels.career})
+Wealth: ${scores.wealth}/100 (${labels.wealth})
+Health: ${scores.health}/100 (${labels.health})
+Relationships: ${scores.relationships}/100 (${labels.relationships})
+Luck: ${scores.luck}/100 (${labels.luck})
+Personal Growth: ${scores.growth}/100 (${labels.growth})`;
+
+      const systemPrompt = `You are a life prediction expert generating a monthly personal insights report.
+Respond with valid JSON only, matching this exact schema:
+{
+  "theme": "string — one sentence theme for the month",
+  "sections": {
+    "love":          { "prediction": "150-200 word prediction", "bestWeek": "Week N", "focus": "string", "energy": "string" },
+    "career":        { "prediction": "150-200 words", "opportunityLevel": "string", "promotion": "string", "business": "string" },
+    "wealth":        { "prediction": "150-200 words", "income": "string", "expenses": "string", "savings": "string" },
+    "health":        { "prediction": "150-200 words", "physical": "string", "mental": "string", "stress": "string" },
+    "relationships": { "prediction": "150-200 words", "family": "string", "friends": "string", "communication": "string" },
+    "luck":          { "prediction": "150-200 words", "luckyPeriod": "string", "unexpectedOpportunity": "string" },
+    "growth":        { "prediction": "150-200 words", "confidence": "string", "learning": "string", "discipline": "string" }
+  },
+  "bestDates":    [ { "date": 5, "tags": ["Career"] } ],
+  "cautionDates": [ { "date": 9, "tags": ["Avoid Arguments"] } ],
+  "planetaryExplanation": "string",
+  "actionPlan":   ["string", "string", "string", "string"],
+  "monthSummaryText": "string"
+}
+STRICT: Scores below are FINAL—never output numeric scores yourself. Write predictions matching the given tone. No astrology terms except in planetaryExplanation. Plain text only, no markdown.`;
+
+      const prompt = `Generate a complete monthly prediction report for ${monthName} ${currentYear} for this user based on:
+Birth: ${details.dob}, ${details.time}, ${details.place}
+${planets ? `Key planetary influences: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign}`).join(", ")}` : ""}
+Current date context: ${now.toISOString()}
+
+The following scores are FIXED and already calculated — write content that matches them, do not invent your own numbers:
+${scoreContext}
+
+Fill every field in the schema. Keep the tone grounded and specific to this user's birth data, and consistent with the fixed scores above.`;
+
+      let response = await Promise.race([
+        generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
+        new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error("Monthly prediction request timed out")), 25000)
+        ),
+      ]);
+
+      const start = response.indexOf("{");
+      const end = response.lastIndexOf("}");
+      if (start === -1 || end <= start) throw new Error("No JSON found");
+      const block = response.slice(start, end + 1);
+      const cleaned = sanitizeModelJson(block);
+      const parsed = JSON.parse(cleaned);
+
+      if (!parsed?.theme) throw new Error("Invalid structure");
+
+      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+      const clamp = (arr: any[]) =>
+        (arr || []).map(d => ({ ...d, date: Math.max(1, Math.min(d.date ?? 1, daysInMonth)) }));
+      parsed.bestDates = clamp(parsed.bestDates);
+      parsed.cautionDates = clamp(parsed.cautionDates);
+
+      const result = {
+        ai: parsed,
+        generatedAt: new Date().toISOString()
+      };
+      
+      setMonthlySummary(result);
       try {
-        console.log('Saving monthly prediction to cache:', { cacheKey, result });
         localStorage.setItem(cacheKey, JSON.stringify(result));
-        console.log('Monthly prediction saved successfully');
       } catch (e) {
-        console.warn("Failed to cache monthly prediction", e);
+        console.warn("Failed to cache monthly summary", e);
       }
     } catch (err: any) {
-      console.error("Error fetching monthly prediction:", err);
-      setMonthlyGenerationFailed(true); // Set failed state
+      console.error("Error fetching monthly summary:", err);
     } finally {
-      setMonthlyLoading(false);
-      // Clear the timer and popup
-      if (monthlyLoadingTimer) {
-        clearTimeout(monthlyLoadingTimer);
-      }
-      setShowMonthlyLoadingPopup(false);
-      setMonthlyLoadingTimer(null);
+      setMonthlySummaryLoading(false);
     }
   }, [lang, user?.uid]);
 
+  // Load monthly summary on mount if exists
   useEffect(() => {
-    const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
-    const timer = setInterval(() => {
-      const diff = Math.max(0, OFFER_END_DATE - Date.now());
-      setTimeRemaining({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((diff % (1000 * 60)) / 1000),
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Scroll detection for bottom of page
-  useEffect(() => {
-    const handleScroll = () => {
-      if (monthlyLoading && !showMonthlyLoadingPopup) {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
-        
-        // Check if user is at bottom (within 100px)
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-          setShowMonthlyLoadingPopup(true);
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [monthlyLoading, showMonthlyLoadingPopup]);
-
-  // Cache se monthly prediction load karo on mount
-useEffect(() => {
-  if (!showMonthlyPredictions) return;
-  
-  // User load hone ka wait karo
-  const loadFromCache = () => {
-    const now = new Date();
-    const currentMonth = now.getMonth() + 1;
-    const currentYear = now.getFullYear();
-    
-    // Dono keys try karo — guest aur uid wali
-    const keys = [
-      `ai_monthly_${user?.uid || 'guest'}_${currentYear}_${currentMonth}`,
-      `ai_monthly_guest_${currentYear}_${currentMonth}`,
-    ];
-    
-    for (const key of keys) {
+    if (!showMonthlyPredictions) return;
+    const loadFromCache = () => {
+      const cacheKey = getMonthlyCacheKey();
       try {
-        const cached = JSON.parse(localStorage.getItem(key) || "null");
-        if (cached && cached.month === currentMonth && cached.year === currentYear && cached.text) {
-          console.log('Found cached monthly prediction with key:', key);
-          setMonthlyPrediction(cached);
-          setMonthlyGenerationFailed(false);
-          return;
+        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
+        if (cached?.ai?.theme) {
+          setMonthlySummary(cached);
         }
       } catch {}
-    }
-  };
-  
-  loadFromCache();
-}, [showMonthlyPredictions, user?.uid]); // user?.uid dependency — jab uid aaye tab dobara check karo
+    };
+    loadFromCache();
+  }, [showMonthlyPredictions, user?.uid]); // user?.uid dependency — jab uid aaye tab dobara check karo
 
 // Remove automatic monthly prediction fetch - now requires user action
 
@@ -1587,87 +1545,56 @@ useEffect(() => {
 
           {/* Monthly Predictions - Only show if monthly predictions are enabled */}
           {showMonthlyPredictions && (
-          <Card className="p-6 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-lg">{t("monthlyPredictions")}</h2>
-            </div>
-            {/* Show skeleton loading while fetching */}
-            {monthlyLoading ? (
-              <div className="space-y-4">
-                {/* Skeleton for header */}
-                <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-5 h-5 bg-gray-600 rounded animate-pulse"></div>
-                    <div className="h-5 bg-gray-600 rounded w-32 animate-pulse"></div>
+            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-semibold text-white/90">Monthly Prediction</h2>
+                <span className="text-xs text-white/40">
+                  {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                </span>
+              </div>
+
+              {monthlySummaryLoading ? (
+                <div className="flex items-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-white/10 animate-pulse shrink-0" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-white/10 rounded w-2/3 animate-pulse" />
+                    <div className="h-3 bg-white/10 rounded w-full animate-pulse" />
                   </div>
                 </div>
-                
-                {/* Skeleton for content */}
-                <div className="space-y-3">
-                  <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-5/6 animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-4/5 animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-3/4 animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-5/6 animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-600 rounded w-4/5 animate-pulse"></div>
-                </div>
-              </div>
-            ) : monthlyPrediction ? (
-              <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="w-5 h-5 text-secondary" />
-                  <h3 className="font-semibold">
-                    {(() => {
-                      const monthNames = lang === "hi" 
-                        ? ["जनवरी", "फरवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"]
-                        : ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                      return `${monthNames[monthlyPrediction.month - 1]} ${monthlyPrediction.year}`;
-                    })()}
-                  </h3>
-                </div>
-                <div className="text-sm text-muted-foreground leading-relaxed">
-                  {monthlyPrediction.text.split('\n').map((line, idx) => {
-                    const trimmed = line.trim();
-                    if (!trimmed) return <br key={idx} />;
-                    // Check if line looks like a heading (starts with common Hindi/English section words)
-                    const isHeading = /^(प्यार|करियर|स्वास्थ्य|वित्त|आध्यात्मिक|Love|Career|Health|Finance|Spiritual)/i.test(trimmed);
-                    if (isHeading) {
-                      return (
-                        <div key={idx} className="mt-4 mb-2 first:mt-0">
-                          <p className="font-semibold text-foreground">{trimmed}</p>
-                        </div>
-                      );
-                    }
-                    return (
-                      <p key={idx} className="mb-2">{trimmed}</p>
-                    );
-                  })}
-                </div>
-              </div>
-            ) : !monthlyGenerationFailed ? (
-              <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                <div className="text-center py-8">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Your personalized {new Date().toLocaleString('default', { month: 'long' })} prediction is ready
-                  </p>
-                  <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction}>
-                    Generate Monthly Prediction
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 rounded-xl bg-background/50 border border-border/60">
-                <div className="text-center py-8">
-                  <p className="text-sm text-muted-foreground mb-4">Unable to generate monthly predictions. Please try again.</p>
-                  <Button variant="cosmic" size="sm" onClick={fetchMonthlyPrediction}>
-                    Generate Monthly Prediction
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Card>
+              ) : monthlySummary ? (() => {
+                const uid = user?.uid || "guest";
+                const monthKey = getMonthKey(new Date());
+                const scores = getLifeScores(uid, monthKey);
+                const overall = getOverallScore(scores);
+                const oLabel = overallLabel(overall);
+                return (
+                  <>
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-full border-4 border-white/10 flex flex-col items-center justify-center shrink-0"
+                           style={{ borderColor: `rgba(255,255,255,${0.1 + (overall/100)*0.3})` }}>
+                        <span className="text-lg font-bold text-white">{overall}%</span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-white/90 mb-1">{oLabel}</p>
+                        <p className="text-xs text-white/50 leading-relaxed line-clamp-2">{monthlySummary.ai.theme}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="cosmic"
+                      className="w-full h-10 rounded-lg text-sm font-semibold"
+                      onClick={() => navigate(`/monthly-prediction?referral=dashboard`)}
+                    >
+                      Read Full Report
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Button>
+                  </>
+                );
+              })() : (
+                <Button variant="cosmic" size="sm" onClick={fetchMonthlySummary} className="w-full">
+                  Generate Monthly Prediction
+                </Button>
+              )}
+            </Card>
           )}
 
           {/* AI Prediction Section */}

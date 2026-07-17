@@ -57,3 +57,34 @@ export const colorMap: Record<string, string> = {
   Jade: "bg-green-600", Sapphire: "bg-indigo-600", Turquoise: "bg-cyan-500",
   Coral: "bg-orange-400",
 };
+
+// ─── Shared AI JSON helpers ───────────────────────────────────────────────────
+
+/**
+ * Sanitize raw LLM output before JSON.parse — handles control chars,
+ * Devanagari digits, smart-quotes, and raw newlines inside strings.
+ */
+export function sanitizeModelJson(raw: string): string {
+  let cleaned = raw
+    .replace(/[\u0000-\u001f]+/g, " ")
+    .replace(/[\u0966-\u096F]/g, (d) => "0123456789"["\u0966\u0967\u0968\u0969\u096A\u096B\u096C\u096D\u096E\u096F".indexOf(d)])
+    .replace(/[\u3001]/g, ",")
+    .replace(/[""'']/g, '"')
+    .replace(/[`]/g, "'");
+  cleaned = cleaned.replace(/"([^"\\]*(?:\\.[^"\\]*)*)"/g, (match) => {
+    const inner = match.slice(1, -1).replace(/\r?\n/g, "\\n");
+    return `"${inner}"`;
+  });
+  return cleaned;
+}
+
+/**
+ * Regex fallback to extract a single top-level string field from raw JSON text.
+ * Only use for flat (non-nested) fields — not reliable on nested JSON.
+ */
+export function extractField(text: string, field: string): string {
+  const regex = new RegExp(`"${field}"\\s*:\\s*"([^"]*(?:\\\\.[^"]*)*)"`, "i");
+  const match = text.match(regex);
+  if (!match) return "";
+  return match[1].replace(/\\n/g, " ").replace(/\\"/g, '"').trim();
+}

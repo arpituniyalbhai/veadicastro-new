@@ -98,6 +98,7 @@ const KundliGPTAlternative = lazy(() => import("@/pages/KundliGPTAlternative"));
 const AstroSageAlternative = lazy(() => import("@/pages/AstroSageAlternative"));
 const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
 const DailyPrediction = lazy(() => import("@/pages/DailyPrediction"));
+const MonthlyPrediction = lazy(() => import("@/pages/MonthlyPrediction"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
@@ -129,6 +130,7 @@ const RouterShell = () => {
     "/chat",
     "/compatibility",
     "/compatibility/result",
+    "/monthly-prediction",
   ];
   
   const hideFooter =
@@ -254,6 +256,7 @@ const AuthenticatedRoutes = ({
         <Route path="/onboarding" element={protectedPage(<Onboarding />)} />
         <Route path="/dashboard" element={protectedPage(<Dashboard />)} />
         <Route path="/daily-prediction" element={protectedPage(<DailyPrediction />)} />
+        <Route path="/monthly-prediction" element={protectedPage(<MonthlyPrediction />)} />
         <Route path="/reports" element={protectedPage(<Reports />)} />
         <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
         <Route path="/pricing" element={protectedPage(<Pricing />)} />
