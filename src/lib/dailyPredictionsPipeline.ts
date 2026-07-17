@@ -95,7 +95,7 @@ export function getTransitToNatalSummary(
   const keyTransitKeys = ["moon", "sun", "venus", "mars", "jupiter", "saturn"];
 
   keyTransitKeys.forEach((key) => {
-    const tp = transitPlanets.find((p) => p.key === key);
+    const tp = (transitPlanets || []).find((p) => p.key === key);
     if (!tp) return;
 
     const transitSignIdx = SIGN_NAMES.indexOf(tp.sign);
@@ -108,8 +108,8 @@ export function getTransitToNatalSummary(
   });
 
   // 2) Conjunctions in same sign
-  transitPlanets.forEach((tp) => {
-    natalPlanets.forEach((np) => {
+  (transitPlanets || []).forEach((tp) => {
+    (natalPlanets || []).forEach((np) => {
       if (tp.sign === np.sign && tp.key !== np.key && ["sun", "moon", "venus", "mars", "jupiter", "saturn"].includes(tp.key)) {
         bullets.push(`${tp.name} conjunct natal ${np.name} in ${tp.sign}`);
       }
@@ -134,7 +134,8 @@ export const BANNED_PHRASES: Record<string, string[]> = {
 export function isValidPrediction(text: string, lang: string = "en"): boolean {
   if (!text) return false;
   const wordCount = text.trim().split(/\s+/).length;
-  if (wordCount < 25 || wordCount > 45) return false;
+  // Lenient word count: 15 to 60 words
+  if (wordCount < 15 || wordCount > 60) return false;
 
   const lower = text.toLowerCase();
   const phrases = BANNED_PHRASES[lang] || BANNED_PHRASES.en;
@@ -177,16 +178,17 @@ STRICT RULES:
 5. Each field exactly 30-40 words. Plain text, no markdown, no asterisks, no bold.
 English only.`;
 
-  const prompt = `Return ONLY the JSON object.
+  const prompt = `Return ONLY the JSON object with EXACTLY these four keys: "love", "career", "health", "wealth".
 Generate 4 short predictions for ${dateFormatted} based on:
 ${details ? `Birth: ${details.dob}, ${details.time}, ${details.place}` : "General chart"}
 Today's key influences:
 ${transitSummary}
 
-Love — what is coming in love and relationships:
-Career — what is coming in career and work:
-Health — what is coming in health and wellness:
-Wealth — what is coming in money and finances:`;
+Use EXACTLY these keys:
+- "love"
+- "career"
+- "health"
+- "wealth"`;
 
   try {
     const response = await Promise.race([
