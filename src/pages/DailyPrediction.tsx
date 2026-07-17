@@ -41,6 +41,7 @@ const DailyPrediction = () => {
   const [sectionsError, setSectionsError] = useState(false);
   const [lockedDateModal, setLockedDateModal] = useState<Date | null>(null);
   const hasFetchedRef = useRef<string | null>(null);
+  const inFlightRef = useRef<string | null>(null);
 
   const dateKey = useMemo(() => getLocalDateKey(selectedDate), [selectedDate]);
   const uid = user?.uid || "guest";
@@ -70,6 +71,9 @@ const DailyPrediction = () => {
   }, []);
 
   const fetchSections = useCallback(async (dt: Date, key: string) => {
+    if (inFlightRef.current === key) return; // Already fetching this date, ignore duplicate
+    inFlightRef.current = key;
+
     setSectionsLoading(true);
     setSectionsError(false);
 
@@ -80,6 +84,7 @@ const DailyPrediction = () => {
         setSections(cached);
         setSectionsLoading(false);
         hasFetchedRef.current = key;
+        inFlightRef.current = null;
         return;
       }
     } catch {}
