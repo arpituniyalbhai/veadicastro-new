@@ -123,10 +123,13 @@ Wealth — what is coming in money and finances:`;
         generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
         new Promise<string>((_, reject) => setTimeout(() => reject(new Error("Timed out")), 25000)),
       ]);
-      console.log("AI API response received:", response);
+      console.log("AI API response received, length:", response.length);
+      console.log("Full response:", response);
 
       const start = response.indexOf("{");
       const end = response.lastIndexOf("}");
+      console.log("JSON search - start:", start, "end:", end);
+      
       let parsed: Record<string, string> = { love: "", career: "", health: "", wealth: "" };
 
       if (start !== -1 && end > start) {
@@ -147,7 +150,8 @@ Wealth — what is coming in money and finances:`;
           console.log("Fallback parsed:", parsed);
         }
       } else {
-        console.error("No JSON found in response - start:", start, "end:", end);
+        console.error("No JSON found in response - response might be empty or malformed");
+        console.error("Response preview:", response.substring(0, 200));
       }
 
       parsed.love = parsed.love?.trim() || "";
@@ -156,7 +160,7 @@ Wealth — what is coming in money and finances:`;
       parsed.wealth = parsed.wealth?.trim() || "";
 
       if (!parsed.love && !parsed.career && !parsed.health && !parsed.wealth) {
-        console.error("No valid predictions found in parsed data:", parsed);
+        console.error("AI returned empty data - check response parsing");
         setSectionsError(true);
         setSectionsLoading(false);
         if (inFlightRef.current === key) inFlightRef.current = null;
