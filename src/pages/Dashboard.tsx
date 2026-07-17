@@ -95,10 +95,8 @@ export default function Dashboard() {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [todayPrediction, setTodayPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [tomorrowPrediction, setTomorrowPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
-  const [monthlySummary, setMonthlySummary] = useState<{ ai: { theme: string } } | null>(null);
   const [todayLoading, setTodayLoading] = useState(false);
   const [tomorrowLoading, setTomorrowLoading] = useState(false);
-  const [monthlySummaryLoading, setMonthlySummaryLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedPrediction, setSelectedPrediction] = useState<{ text: string; date: string; love?: string; self?: string; wealth?: string; luckyNumber?: number; luckyColor?: string; mood?: string; energy?: number } | null>(null);
   const [selectedDateLoading, setSelectedDateLoading] = useState(false);
@@ -707,164 +705,7 @@ One flowing paragraph covering love, career, health and wealth for tomorrow. Als
     }
   };
 
-  const fetchMonthlySummary = useCallback(async () => {
-    if (monthlySummaryLoading || typeof window === "undefined") return;
-    const cacheKey = getMonthlyCacheKey();
-    
-    // Check cache first
-    try {
-      const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-      if (cached?.ai?.theme) {
-        setMonthlySummary(cached);
-        setMonthlySummaryLoading(false);
-        return;
-      }
-    } catch (e) {
-      console.error('Cache check error:', e);
-    }
-
-    let details: any = null;
-    let planets: any = null;
-    try {
-      details = JSON.parse(localStorage.getItem("onboarding_details") || "null");
-      planets = JSON.parse(localStorage.getItem("astrology_planets") || "null");
-    } catch {}
-
-    // If no birth details, set a fallback theme
-    if (!details?.dob || !details?.time || !details?.place) {
-      const incompleteText = lang === "hi" 
-        ? "कृपया अपना जन्म विवरण पूरा करें मासिक भविष्यवाणी प्राप्त करने के लिए।"
-        : "Please complete your birth details to get monthly predictions.";
-      const result = {
-        ai: {
-          theme: incompleteText
-        },
-        generatedAt: new Date().toISOString()
-      };
-      setMonthlySummary(result);
-      setMonthlySummaryLoading(false);
-      return;
-    }
-
-    setMonthlySummaryLoading(true);
-    
-    try {
-      const now = new Date();
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      const monthName = monthNames[now.getMonth()];
-      const currentYear = now.getFullYear();
-
-      const uid = user?.uid || 'guest';
-      const monthKey = getMonthKey(now);
-      const scores = getLifeScores(uid, monthKey);
-      const overall = getOverallScore(scores);
-      const oLabel = overallLabel(overall);
-      const labels = {
-        love: scoreLabel(scores.love),
-        career: scoreLabel(scores.career),
-        wealth: scoreLabel(scores.wealth),
-        health: scoreLabel(scores.health),
-        relationships: scoreLabel(scores.relationships),
-        luck: scoreLabel(scores.luck),
-        growth: scoreLabel(scores.growth),
-      };
-
-      const scoreContext = `Overall: ${overall}/100 (${oLabel})
-Love: ${scores.love}/100 (${labels.love})
-Career: ${scores.career}/100 (${labels.career})
-Wealth: ${scores.wealth}/100 (${labels.wealth})
-Health: ${scores.health}/100 (${labels.health})
-Relationships: ${scores.relationships}/100 (${labels.relationships})
-Luck: ${scores.luck}/100 (${labels.luck})
-Personal Growth: ${scores.growth}/100 (${labels.growth})`;
-
-      const systemPrompt = `You are a life prediction expert generating a monthly personal insights report.
-Respond with valid JSON only, matching this exact schema:
-{
-  "theme": "string — one sentence theme for the month",
-  "sections": {
-    "love":          { "prediction": "150-200 word prediction", "bestWeek": "Week N", "focus": "string", "energy": "string" },
-    "career":        { "prediction": "150-200 words", "opportunityLevel": "string", "promotion": "string", "business": "string" },
-    "wealth":        { "prediction": "150-200 words", "income": "string", "expenses": "string", "savings": "string" },
-    "health":        { "prediction": "150-200 words", "physical": "string", "mental": "string", "stress": "string" },
-    "relationships": { "prediction": "150-200 words", "family": "string", "friends": "string", "communication": "string" },
-    "luck":          { "prediction": "150-200 words", "luckyPeriod": "string", "unexpectedOpportunity": "string" },
-    "growth":        { "prediction": "150-200 words", "confidence": "string", "learning": "string", "discipline": "string" }
-  },
-  "bestDates":    [ { "date": 5, "tags": ["Career"] } ],
-  "cautionDates": [ { "date": 9, "tags": ["Avoid Arguments"] } ],
-  "planetaryExplanation": "string",
-  "actionPlan":   ["string", "string", "string", "string"],
-  "monthSummaryText": "string"
-}
-STRICT: Scores below are FINAL—never output numeric scores yourself. Write predictions matching the given tone. No astrology terms except in planetaryExplanation. Plain text only, no markdown.`;
-
-      const prompt = `Generate a complete monthly prediction report for ${monthName} ${currentYear} for this user based on:
-Birth: ${details.dob}, ${details.time}, ${details.place}
-${planets ? `Key planetary influences: ${planets.slice(0, 7).map((p: any) => `${p.name || p.planet} in ${p.sign}`).join(", ")}` : ""}
-Current date context: ${now.toISOString()}
-
-The following scores are FIXED and already calculated — write content that matches them, do not invent your own numbers:
-${scoreContext}
-
-Fill every field in the schema. Keep the tone grounded and specific to this user's birth data, and consistent with the fixed scores above.`;
-
-      let response = await Promise.race([
-        generateGemini(prompt, [], systemPrompt, "en", undefined, "secondary"),
-        new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error("Monthly prediction request timed out")), 25000)
-        ),
-      ]);
-
-      const start = response.indexOf("{");
-      const end = response.lastIndexOf("}");
-      if (start === -1 || end <= start) throw new Error("No JSON found");
-      const block = response.slice(start, end + 1);
-      const cleaned = sanitizeModelJson(block);
-      const parsed = safeParseModelJson<any>(cleaned, { theme: "" });
-
-      if (!parsed?.theme) throw new Error("Invalid structure");
-
-      const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-      const clamp = (arr: any[]) =>
-        (arr || []).map(d => ({ ...d, date: Math.max(1, Math.min(d.date ?? 1, daysInMonth)) }));
-      parsed.bestDates = clamp(parsed.bestDates);
-      parsed.cautionDates = clamp(parsed.cautionDates);
-
-      const result = {
-        ai: parsed,
-        generatedAt: new Date().toISOString()
-      };
-      
-      setMonthlySummary(result);
-      try {
-        localStorage.setItem(cacheKey, JSON.stringify(result));
-      } catch (e) {
-        console.warn("Failed to cache monthly summary", e);
-      }
-    } catch (err: any) {
-      console.error("Error fetching monthly summary:", err);
-    } finally {
-      setMonthlySummaryLoading(false);
-    }
-  }, [lang, user?.uid]);
-
-  // Load monthly summary on mount if exists
-  useEffect(() => {
-    if (!showMonthlyPredictions) return;
-    const loadFromCache = () => {
-      const cacheKey = getMonthlyCacheKey();
-      try {
-        const cached = JSON.parse(localStorage.getItem(cacheKey) || "null");
-        if (cached?.ai?.theme) {
-          setMonthlySummary(cached);
-        }
-      } catch {}
-    };
-    loadFromCache();
-  }, [showMonthlyPredictions, user?.uid]); // user?.uid dependency — jab uid aaye tab dobara check karo
-
-// Remove automatic monthly prediction fetch - now requires user action
+// Monthly prediction is now a static UI - no cache or fetch needed
 
   const luckyToday = todayPrediction?.luckyNumber;
   const luckyTomorrow = tomorrowPrediction?.luckyNumber;
@@ -1553,44 +1394,30 @@ Fill every field in the schema. Keep the tone grounded and specific to this user
                 </span>
               </div>
 
-              {monthlySummaryLoading ? (
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-white/10 animate-pulse shrink-0" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-white/10 rounded w-2/3 animate-pulse" />
-                    <div className="h-3 bg-white/10 rounded w-full animate-pulse" />
-                  </div>
+              <div className="flex items-center gap-4">
+                <img 
+                  src="/deep-reports-image/karma-chakra-horoscope.png" 
+                  alt="Karma Chakra Horoscope" 
+                  className="w-20 h-20 rounded-lg object-cover shrink-0"
+                />
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-white/90 mb-1">
+                    {displayName} - your {new Date().toLocaleDateString("en-US", { month: "long" })} predictions are ready
+                  </p>
+                  <p className="text-xs text-white/50 leading-relaxed mb-3">
+                    Click button to see your full monthly report
+                  </p>
+                  <Button
+                    variant="cosmic"
+                    size="sm"
+                    className="h-9 rounded-lg text-sm font-semibold"
+                    onClick={() => navigate(`/monthly-prediction?referral=dashboard`)}
+                  >
+                    Read More
+                    <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
                 </div>
-              ) : monthlySummary ? (
-                <div className="flex items-center gap-4">
-                  <img 
-                    src="/deep-reports-image/karma-chakra-horoscope.png" 
-                    alt="Karma Chakra Horoscope" 
-                    className="w-20 h-20 rounded-lg object-cover shrink-0"
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-white/90 mb-1">
-                      {displayName} - your {new Date().toLocaleDateString("en-US", { month: "long" })} predictions are ready
-                    </p>
-                    <p className="text-xs text-white/50 leading-relaxed mb-3">
-                      Click button to see your full monthly report
-                    </p>
-                    <Button
-                      variant="cosmic"
-                      size="sm"
-                      className="h-9 rounded-lg text-sm font-semibold"
-                      onClick={() => navigate(`/monthly-prediction?referral=dashboard`)}
-                    >
-                      Read More
-                      <ArrowRight className="w-4 h-4 ml-1.5" />
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <Button variant="cosmic" size="sm" onClick={fetchMonthlySummary} className="w-full">
-                  Generate Monthly Prediction
-                </Button>
-              )}
+              </div>
             </Card>
           )}
 
