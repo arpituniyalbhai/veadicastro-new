@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, Menu, Trash2, ChevronUp } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -112,9 +112,11 @@ export default function Chat() {
   const [sessions, setSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string>("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesRef = useRef<ChatTurn[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
+  const [userScrolledUp, setUserScrolledUp] = useState(false);
   // Show suggestions the first time until typing or first message is sent
   const [hasChatted, setHasChatted] = useState<boolean>(false);
   const [hasTyped, setHasTyped] = useState<boolean>(false);
@@ -397,12 +399,38 @@ export default function Chat() {
     }
   }, [initial]);
 
+  // Smart auto-scroll: only if user hasn't scrolled up
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-    });
-    return () => cancelAnimationFrame(id);
-  }, [messages]);
+    if (!userScrolledUp) {
+      requestAnimationFrame(() => {
+        endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+      });
+    }
+  }, [messages, userScrolledUp]);
+
+  // Reset userScrolledUp when user starts a new message or AI finishes
+  useEffect(() => {
+    if (!isTyping) {
+      setUserScrolledUp(false);
+    }
+  }, [isTyping]);
+
+  // Track user scroll position on the main container
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = el;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+      if (!isNearBottom && isTyping) {
+        setUserScrolledUp(true);
+      } else if (isNearBottom) {
+        setUserScrolledUp(false);
+      }
+    };
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, [isTyping]);
 
   // Cleanup old lifetime quota key, but we no longer rely on it
   useEffect(() => {
@@ -944,7 +972,7 @@ export default function Chat() {
       </aside>
 
       {/* Main Chat Area */}
-      <main className={`flex-1 min-w-0 flex flex-col ${sidebarExpanded ? 'md:ml-64' : 'md:ml-20'} overflow-y-auto`} style={{ height: '-webkit-fill-available', maxHeight: '100vh', WebkitOverflowScrolling: 'touch' }}>
+      <main ref={scrollContainerRef} className={`flex-1 min-w-0 flex flex-col ${sidebarExpanded ? 'md:ml-64' : 'md:ml-20'} overflow-y-auto`} style={{ height: '-webkit-fill-available', maxHeight: '100vh', WebkitOverflowScrolling: 'touch' }}>
         {/* Top Section: User Row + Mobile Menu - Fixed on mobile, sticky on desktop */}
         <div className="flex items-center gap-2 sm:gap-2 md:gap-3 mb-0 sm:mb-3 md:mb-6 fixed md:sticky top-0 left-0 right-0 md:relative z-[45] md:z-10 bg-background md:bg-background/80 backdrop-blur-md md:backdrop-blur supports-[backdrop-filter]:bg-background/98 md:supports-[backdrop-filter]:bg-background/60 border-b-2 md:border-b border-border/60 shadow-sm md:shadow-none pl-2 sm:pl-2 md:pl-6 pr-6 sm:pr-4 md:pr-6 py-5 sm:py-3.5 md:py-4 md:rounded-t-xl min-h-[84px] md:min-h-[72px]">
           {/* Mobile Menu Toggle */}
@@ -1103,6 +1131,20 @@ export default function Chat() {
             <div ref={endRef} className="scroll-mt-[110px] sm:scroll-mt-0" />
           </div>
         </div>
+
+        {/* Scroll-to-bottom FAB */}
+        {userScrolledUp && isTyping && (
+          <button
+            onClick={() => {
+              setUserScrolledUp(false);
+              endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+            }}
+            className="fixed z-30 bottom-24 right-8 w-10 h-10 rounded-full bg-pink-500 text-white shadow-lg shadow-pink-500/30 flex items-center justify-center hover:bg-pink-600 transition-all animate-bounce"
+            aria-label="Scroll to bottom"
+          >
+            <ChevronDown className="w-5 h-5" />
+          </button>
+        )}
 
         {/* Suggestions + Bottom Input Bar */}
         <div 
