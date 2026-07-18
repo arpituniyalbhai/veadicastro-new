@@ -158,7 +158,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       ]);
       const userDocRef = doc(db, "users", user.email);
       
-      unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+      unsubscribe = onSnapshot(userDocRef, async (docSnapshot) => {
         console.log("🔥 Firestore snapshot received:", {
           exists: docSnapshot.exists,
           metadata: docSnapshot.metadata,
@@ -173,18 +173,55 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
           const newPlanName = data.planName ?? "Free";
           const newUnlimitedExpiry = data.unlimitedExpiry?.toDate() || null;
           
+          // Check if subscription is cancelled and expiry has passed
+          const subscriptionStatus = data.subscriptionStatus;
+          const subscriptionExpiresAt = data.subscriptionExpiresAt?.toDate() || null;
+          
+          let finalPlanName = newPlanName;
+          let finalCredits = newCredits;
+          let finalIsPremium = data.isPremium ?? false;
+          
+          if (subscriptionStatus === 'cancelled' && subscriptionExpiresAt) {
+            const now = new Date();
+            if (now > subscriptionExpiresAt) {
+              // Subscription expired after cancellation - downgrade to Free
+              console.log("🔥 Subscription expired after cancellation, downgrading to Free:", {
+                subscriptionExpiresAt: subscriptionExpiresAt.toISOString(),
+                now: now.toISOString(),
+              });
+              finalPlanName = "Free";
+              finalCredits = 0;
+              finalIsPremium = false;
+              
+              // Update Firestore to reflect the downgrade
+              const [{ updateDoc }, db] = await Promise.all([
+                import("firebase/firestore"),
+                getDataDbInstance(),
+              ]);
+              await updateDoc(userDocRef, {
+                planName: "Free",
+                credits: 0,
+                isPremium: false,
+                subscriptionStatus: 'expired',
+                updatedAt: new Date(),
+              });
+            }
+          }
+          
           console.log("🔥 Updating UI state from Firestore:", {
-            credits: newCredits,
+            credits: finalCredits,
             reportCredits: newReportCredits,
             compatibilityCredits: newCompatibilityCredits,
-            planName: newPlanName,
+            planName: finalPlanName,
             unlimitedExpiry: newUnlimitedExpiry?.toISOString(),
-            purchasedReports: data.purchasedReports || []
+            purchasedReports: data.purchasedReports || [],
+            subscriptionStatus,
+            subscriptionExpiresAt: subscriptionExpiresAt?.toISOString(),
           });
           
           // Force update state with latest Firestore data
-          setPlanName(newPlanName);
-          setCredits(newCredits);
+          setPlanName(finalPlanName);
+          setCredits(finalCredits);
           setUnlimitedExpiry(newUnlimitedExpiry);
           setPurchasedReports(data.purchasedReports || []);
           setReportCredits(newReportCredits);

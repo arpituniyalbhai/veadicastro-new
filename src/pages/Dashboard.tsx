@@ -1360,7 +1360,7 @@ export default function Dashboard() {
               className="w-full rounded-xl"
               onClick={() => {
                 setShowUpgradeModal(false);
-                navigate("/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack");
+                navigate("/pricing?referral=upgrade");
               }}
             >
               Upgrade Now

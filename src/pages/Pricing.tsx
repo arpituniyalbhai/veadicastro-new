@@ -1,7 +1,27 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, Star, Sparkles, Crown, Zap, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { 
+  Check, 
+  Star, 
+  Sparkles, 
+  Crown, 
+  Zap, 
+  ArrowLeft, 
+  CheckCircle2,
+  Unlock,
+  Moon,
+  Compass,
+  TrendingUp,
+  Heart,
+  Briefcase,
+  Coins,
+  Brain,
+  Sun,
+  FileText,
+  Award,
+  XCircle
+} from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuthInstance, savePremiumUserToFirestore } from "@/lib/firebase";
@@ -76,6 +96,7 @@ const Pricing = () => {
   const [expandedFeatures, setExpandedFeatures] = useState<{[key: string]: boolean}>({});
   const [expandedBenefits, setExpandedBenefits] = useState<{[key: string]: boolean}>({});
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 48, minutes: 0, seconds: 0 });
+  const [activeTab, setActiveTab] = useState<'monthly' | 'onetime'>('monthly');
   const navigate = useNavigate();
   const { user } = useAuth();
   const location = useLocation();
@@ -588,31 +609,10 @@ const Pricing = () => {
           </Button>
         </div>
         
-        {/* Offer Banner - Limited Time Deal */}
-          <Card className="relative overflow-hidden px-3 py-1.5 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30 rounded-xl mb-3 max-w-2xl mx-auto">
-            <div className="absolute inset-0 opacity-20" style={{background:
-              'radial-gradient(circle at 15% 20%, rgba(251,146,60,0.3) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(239,68,68,0.3) 0%, transparent 45%)'}} />
-            <div className="relative text-center">
-              <div className="flex items-center justify-center gap-1 mb-0.5">
-                <span className="text-sm bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">LIMITED TIME</span>
-                <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
-              </div>
-              <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">Get 30 Questions for just Rs 699!</h3>
-              <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
-            </div>
-          </Card>
-
-        {/* Header Section */}
+        {/* Offer Banner - Lim        {/* Header Section */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Choose Your Question Pack
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Unlock deeper answers — choose a question pack made for your life's biggest decisions.
-          </p>
-
           {/* Infinity Loop Reviews Section - Small Boxes */}
-          <div className="relative w-full overflow-hidden py-6">
+          <div className="relative w-full overflow-hidden py-4">
             <div className="flex animate-scroll-right">
               <div className="flex gap-4 px-2">
                 {[...Array(10)].map((_, index) => {
@@ -650,118 +650,440 @@ const Pricing = () => {
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* Pricing Cards */}
-        <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
-          {plans.map((plan) => {
-            const isDeepDive = plan.name === 'Deep Dive';
-            const visibleBenefits = expandedBenefits[plan.name] ? plan.benefits.slice(1) : plan.benefits.slice(1, 6);
-            
-            return (
+        {/* Tabs Selector */}
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex p-1.5 bg-[#0c0c0e]/80 border border-white/[0.08] rounded-full">
+            <button
+              onClick={() => setActiveTab('monthly')}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                activeTab === 'monthly'
+                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'text-white/60 hover:text-white/90'
+              }`}
+            >
+              Monthly Membership
+            </button>
+            <button
+              onClick={() => setActiveTab('onetime')}
+              className={`px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+                activeTab === 'onetime'
+                  ? 'bg-pink-500 text-white shadow-lg shadow-pink-500/20'
+                  : 'text-white/60 hover:text-white/90'
+              }`}
+            >
+              One-Time Questions
+            </button>
+          </div>
+        </div>
+
+        {/* Tab Contents */}
+        {activeTab === 'monthly' ? (
+          <div className="space-y-8">
+            {/* Personalized Offer */}
+            <div className="max-w-[500px] mx-auto w-full">
+              <div className="flex items-center gap-4 rounded-2xl border border-pink-500/20 bg-black/60 p-5">
+                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-pink-500/30 shrink-0">
+                  <img
+                    src="/optimized/vedika.webp"
+                    alt="Vedika"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-left">
+                  <p className="text-sm text-muted-foreground">
+                    Exclusive Membership Offer for <span className="font-semibold text-white">{user?.displayName || user?.email?.split('@')[0] || "you"}</span>
+                  </p>
+                  <p className="text-sm font-semibold text-pink-300 mt-1">
+                    Unlock premium astrology worth <span className="text-green-400">₹1,999+</span> for only <span className="text-white">₹499/month</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Monthly Membership Card */}
+            <div className="max-w-[500px] mx-auto w-full my-8">
               <Card
-                key={plan.name}
-                className={`group relative flex min-h-[670px] w-full cursor-pointer flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 ${
-                  isDeepDive
-                    ? 'border border-pink-500/60 bg-pink-950/20 shadow-[0_0_40px_rgba(236,72,153,0.12)]'
-                    : 'border border-border/60 bg-card/40'
-                }`}
-                onClick={(e) => {
-                  // Prevent navigation if clicking on benefits toggle
-                  if ((e.target as HTMLElement).closest('button')) {
-                    return;
-                  }
-                  navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
-                }}
+                className="group relative flex w-full cursor-pointer flex-col rounded-2xl p-0 transition-all duration-300 hover:-translate-y-1 border border-pink-500/60 bg-pink-950/20 shadow-[0_0_40px_rgba(236,72,153,0.12)]"
+                onClick={() => handlePayment("Premium")}
               >
-                {isDeepDive && (
-                  <div className="absolute -top-3 left-6 z-10">
-                    <span className="rounded-full border border-pink-500/40 bg-pink-500 px-4 py-1 text-xs font-bold text-white shadow-lg shadow-pink-500/20">
-                      🔥687 people bought in 24 hour - best seller
-                    </span>
-                  </div>
-                )}
-                {plan.name === "Quick Ask" && (
-                  <div className="absolute -top-3 left-6 z-10">
-                    <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
-                      🔥 {plan.recentBuyers} bought in 24h
-                    </span>
-                  </div>
-                )}
-                {plan.name === "The Power Pack" && (
-                  <div className="absolute -top-3 left-6 z-10">
-                    <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
-                      🔥 213 people bought in 24h
-                    </span>
-                  </div>
-                )}
-                
+                {/* Badge */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+                  <span className="rounded-full border border-pink-500/40 bg-pink-500 px-5 py-1.5 text-xs font-bold text-white shadow-lg shadow-pink-500/20 uppercase tracking-wider">
+                    MOST POPULAR
+                  </span>
+                </div>
+
                 {/* Header */}
-                <div className="mb-5 pt-3">
-                  <h2 className="mb-5 text-xl font-bold leading-tight text-white">{plan.name}</h2>
-                  <div className="mb-3 flex items-baseline gap-2">
-                    <span className="text-4xl font-extrabold leading-none text-pink-500">
-                      ₹{plan.price}
+                <div className="p-7 pb-0 text-left">
+                  <h2 className="mb-4 text-xl font-bold text-white">Vedika Premium</h2>
+                  <div className="mb-2 flex items-baseline gap-2">
+                    <span className="text-4xl font-extrabold leading-none text-pink-500">₹499</span>
+                    <span className="text-sm text-muted-foreground">/ month</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mb-3 leading-relaxed max-w-sm">
+                    Everything you need for daily guidance and monthly astrology insights — all in one membership.
+                  </p>
+                  <div className="mb-3 space-y-0.5">
+                    <span className="inline-block rounded-full border border-green-500/30 bg-green-500/10 px-3 py-0.5 text-xs font-semibold text-green-400">
+                      Worth ₹1,999+ every month
                     </span>
-                    <span className="text-sm text-muted-foreground">/ {plan.period}</span>
+                    <p className="text-xs text-muted-foreground">You pay only ₹499/month</p>
                   </div>
-                  <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
-                    <span>{plan.questions} Questions</span>
-                    <span>·</span>
-                    <span>{plan.period}</span>
-                  </div>
-                  <p className="min-h-[52px] text-sm leading-6 text-muted-foreground">{plan.description}</p>
+                  <p className="text-sm text-muted-foreground mb-5">
+                    Cancel anytime. Complete daily guidance, monthly predictions & premium reports.
+                  </p>
                 </div>
 
-                <div className="mb-4 rounded-lg border border-green-500/25 bg-green-500/10 px-4 py-3">
-                  <div className="flex items-start gap-2 text-xs font-medium leading-5 text-green-400">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-                    <span>{plan.benefits[0]}</span>
-                  </div>
-                </div>
-
-                {/* Benefits */}
-                <div className="mb-5 flex-1 rounded-xl border border-border/60 bg-background/40 p-4">
-                  <h3 className="mb-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">What you get:</h3>
-                  <ul className="space-y-3">
-                    {visibleBenefits.map((benefit, index) => (
-                      <li key={index} className="flex items-start gap-2 text-sm leading-5 text-foreground">
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
-                        <span>{benefit}</span>
+                {/* Features List */}
+                <div className="px-7 pb-7 space-y-6">
+                  {/* 20 AI Chats */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>20 AI Astrology Chats / Month</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Personalized answers based on your birth chart</span>
                       </li>
-                    ))}
-                  </ul>
-                  {plan.benefits.length > 6 && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setExpandedBenefits(prev => ({ ...prev, [plan.name]: !prev[plan.name] }));
-                      }}
-                      className="mt-4 w-full text-center text-xs font-medium text-foreground/70 transition-colors hover:text-foreground"
-                    >
-                      {expandedBenefits[plan.name] ? 'Show less' : `Show ${plan.benefits.length - 6} more benefits`}
-                    </button>
-                  )}
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Ask about love, career, money, health & marriage</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Unlimited Daily Predictions */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>Unlimited Daily Predictions</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Full daily insights — Love, Career, Wealth, Health</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Lucky Number, Lucky Colour, Lucky Time</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Energy Score & Timeline</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Full Monthly Predictions */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>Full Monthly Predictions</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Unlock all premium monthly sections</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Planetary Influence, Monthly Timeline, Lucky Elements</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Personal Growth & Month Summary</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Premium Report */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>10–12 Page Personalized Astrology Report</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="shrink-0">&#x2705;</span>
+                        <span>Delivered to your email every month</span>
+                      </li>
+                    </ul>
+                    <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1">
+                      {["Career Analysis", "Love & Marriage", "Finance", "Health", "Lucky Periods", "Planetary Guidance", "Remedies", "Important Dates"].map((item) => (
+                        <div key={item} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <CheckCircle2 className="w-3 h-3 shrink-0 text-green-400" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Acharya Discount */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>30% OFF Acharya Consultation</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-0.5 text-muted-foreground shrink-0">·</span>
+                        <span>Exclusive member pricing on astrology consultations</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Everything Unlocked */}
+                  <div className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-4">
+                    <h3 className="text-sm font-bold text-white mb-3">Everything Unlocked</h3>
+                    <div className="grid grid-cols-2 gap-y-2 gap-x-2">
+                      {[
+                        "Daily Predictions",
+                        "Monthly Predictions",
+                        "Lucky Elements",
+                        "Planetary Influence",
+                        "Timeline",
+                        "Premium Reports",
+                      ].map((item) => (
+                        <div key={item} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <span className="text-green-400 shrink-0">&#x1f513;</span>
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Premium Benefits */}
+                  <div>
+                    <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
+                      <span>Premium Benefits</span>
+                    </h3>
+                    <ul className="space-y-1.5">
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-0.5 text-muted-foreground shrink-0">·</span>
+                        <span>Priority AI responses</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-0.5 text-muted-foreground shrink-0">·</span>
+                        <span>Premium member badge</span>
+                      </li>
+                      <li className="flex items-start gap-2 text-xs text-muted-foreground">
+                        <span className="mt-0.5 text-muted-foreground shrink-0">·</span>
+                        <span>Early access to new features</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Urgency */}
+                <div className="px-7 pb-2">
+                  <div className="rounded-lg border border-pink-500/25 bg-pink-500/10 px-4 py-3 text-center">
+                    <p className="text-xs font-semibold text-pink-300">
+                      First monthly report included immediately after joining
+                    </p>
+                  </div>
                 </div>
 
                 {/* CTA Button */}
-                <div className="mt-auto pt-1">
+                <div className="px-7 pb-3 pt-1">
                   <Button
                     variant="default"
                     className="h-12 w-full rounded-lg border border-pink-500/60 bg-pink-500 text-base font-bold text-white shadow-sm shadow-pink-500/20 hover:bg-pink-600 hover:text-white"
                     onClick={(e) => {
                       e.stopPropagation();
+                      handlePayment("Premium");
+                    }}
+                  >
+                    Start Premium Membership
+                  </Button>
+                </div>
+
+                {/* Guarantee */}
+                <div className="px-7 pb-7">
+                  <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                      Cancel Anytime
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                      Secure Payments
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                      Instant Access
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Free vs Premium Comparison Table */}
+            <div className="mt-12 max-w-4xl mx-auto px-2">
+              <h3 className="text-xl font-bold text-center text-white mb-6">Free vs Premium Comparison</h3>
+              <div className="overflow-hidden border border-white/[0.06] rounded-2xl bg-[#0c0c0e]/80 backdrop-blur-sm">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/[0.06] bg-white/[0.02]">
+                      <th className="p-4 text-sm font-bold text-white/70">Feature</th>
+                      <th className="p-4 text-sm font-bold text-white/40 text-center">Free</th>
+                      <th className="p-4 text-sm font-bold text-[#E91E63] text-center bg-pink-500/5">Premium</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.04]">
+                    {[
+                      { feature: "AI Questions", free: "2 AI Questions", premium: "20 AI Questions / Month" },
+                      { feature: "Daily Prediction", free: "Daily Preview", premium: "Full Daily Prediction (Any day, any time)" },
+                      { feature: "Monthly Prediction", free: "Monthly Locked", premium: "Full Monthly Prediction" },
+                      { feature: "Astrology Reports", free: "No Reports", premium: "1 Premium Report / Month" },
+                      { feature: "Acharya Consultation", free: "No Discount", premium: "30% Acharya Discount" },
+                      { feature: "Premium Experience", free: "Basic Experience", premium: "Premium Experience" }
+                    ].map((row, idx) => (
+                      <tr key={idx} className="hover:bg-white/[0.01] transition-colors">
+                        <td className="p-4 text-sm font-medium text-white/80">{row.feature}</td>
+                        <td className="p-4 text-sm text-white/40 text-center">
+                          <span className="inline-flex items-center gap-1.5 text-white/40">
+                            <XCircle className="w-4 h-4 text-white/30 shrink-0" />
+                            {row.free}
+                          </span>
+                        </td>
+                        <td className="p-4 text-sm text-white/80 text-center bg-pink-500/5 font-semibold">
+                          <span className="inline-flex items-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                            {row.premium}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {/* Offer Banner - Limited Time Deal */}
+            <Card className="relative overflow-hidden px-3 py-1.5 bg-gradient-to-r from-orange-500/10 to-red-500/10 border-orange-500/30 rounded-xl mb-6 max-w-2xl mx-auto animate-pulse">
+              <div className="absolute inset-0 opacity-20" style={{background:
+                'radial-gradient(circle at 15% 20%, rgba(251,146,60,0.3) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(239,68,68,0.3) 0%, transparent 45%)'}} />
+              <div className="relative text-center">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <span className="text-sm bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">LIMITED TIME</span>
+                  <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
+                </div>
+                <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">Get 30 Questions for just Rs 699!</h3>
+                <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
+              </div>
+            </Card>
+
+            <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
+              {plans.map((plan) => {
+                const isDeepDive = plan.name === 'Deep Dive';
+                const visibleBenefits = expandedBenefits[plan.name] ? plan.benefits.slice(1) : plan.benefits.slice(1, 6);
+                
+                return (
+                  <Card
+                    key={plan.name}
+                    className={`group relative flex min-h-[670px] w-full cursor-pointer flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 ${
+                      isDeepDive
+                        ? 'border border-pink-500/60 bg-pink-950/20 shadow-[0_0_40px_rgba(236,72,153,0.12)]'
+                        : 'border border-border/60 bg-card/40'
+                    }`}
+                    onClick={(e) => {
+                      // Prevent navigation if clicking on benefits toggle
+                      if ((e.target as HTMLElement).closest('button')) {
+                        return;
+                      }
                       navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
                     }}
                   >
-                    Get Started
-                  </Button>
-                </div>
-              </Card>
-            );
-          })}
-        </div>
+                    {isDeepDive && (
+                      <div className="absolute -top-3 left-6 z-10">
+                        <span className="rounded-full border border-pink-500/40 bg-pink-500 px-4 py-1 text-xs font-bold text-white shadow-lg shadow-pink-500/20">
+                          🔥687 people bought in 24 hour - best seller
+                        </span>
+                      </div>
+                    )}
+                    {plan.name === "Quick Ask" && (
+                      <div className="absolute -top-3 left-6 z-10">
+                        <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
+                          🔥 {plan.recentBuyers} bought in 24h
+                        </span>
+                      </div>
+                    )}
+                    {plan.name === "The Power Pack" && (
+                      <div className="absolute -top-3 left-6 z-10">
+                        <span className="rounded-full border border-green-500/40 bg-green-500/10 px-4 py-1 text-xs font-bold text-green-300">
+                          🔥 213 people bought in 24h
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Header */}
+                    <div className="mb-5 pt-3">
+                      <h2 className="mb-5 text-xl font-bold leading-tight text-white">{plan.name}</h2>
+                      <div className="mb-3 flex items-baseline gap-2">
+                        <span className="text-4xl font-extrabold leading-none text-pink-500">
+                          ₹{plan.price}
+                        </span>
+                        <span className="text-sm text-muted-foreground">/ {plan.period}</span>
+                      </div>
+                      <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
+                        <span>{plan.questions} Questions</span>
+                        <span>·</span>
+                        <span>{plan.period}</span>
+                      </div>
+                      <p className="min-h-[52px] text-sm leading-6 text-muted-foreground">{plan.description}</p>
+                    </div>
+
+                    <div className="mb-4 rounded-lg border border-green-500/25 bg-green-500/10 px-4 py-3">
+                      <div className="flex items-start gap-2 text-xs font-medium leading-5 text-green-400">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                        <span>{plan.benefits[0]}</span>
+                      </div>
+                    </div>
+
+                    {/* Benefits */}
+                    <div className="mb-5 flex-1 rounded-xl border border-border/60 bg-background/40 p-4">
+                      <h3 className="mb-4 text-xs font-bold uppercase tracking-wide text-muted-foreground">What you get:</h3>
+                      <ul className="space-y-3">
+                        {visibleBenefits.map((benefit, index) => (
+                          <li key={index} className="flex items-start gap-2 text-sm leading-5 text-foreground">
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-400" />
+                            <span>{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      {plan.benefits.length > 6 && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpandedBenefits(prev => ({ ...prev, [plan.name]: !prev[plan.name] }));
+                          }}
+                          className="mt-4 w-full text-center text-xs font-medium text-foreground/70 transition-colors hover:text-foreground"
+                        >
+                          {expandedBenefits[plan.name] ? 'Show less' : `Show ${plan.benefits.length - 6} more benefits`}
+                        </button>
+                      )}
+                    </div>
+
+                    {/* CTA Button */}
+                    <div className="mt-auto pt-1">
+                      <Button
+                        variant="default"
+                        className="h-12 w-full rounded-lg border border-pink-500/60 bg-pink-500 text-base font-bold text-white shadow-sm shadow-pink-500/20 hover:bg-pink-600 hover:text-white"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
+                        }}
+                      >
+                        Get Started
+                      </Button>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Report Pricing Section */}
         <div className="mb-12">
@@ -924,6 +1246,17 @@ const Pricing = () => {
               </Card>
             ))}
           </div>
+        </div>
+
+        {/* Trust Section */}
+        <div className="text-center my-16 max-w-xl mx-auto p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+          <div className="flex justify-center gap-1 mb-2">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
+          <p className="text-lg font-bold text-white">Trusted by 20,000+ users</p>
+          <p className="text-sm text-[#E91E63] font-semibold mt-1">Average Rating 4.9/5</p>
         </div>
 
         {/* FAQ Section */}

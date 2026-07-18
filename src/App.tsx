@@ -27,6 +27,7 @@ const ReportPage = lazy(() => import("@/pages/ReportDetail"));
 const LanguageSettings = lazy(() => import("@/pages/LanguageSettings"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 const PricingOnboarding = lazy(() => import("@/pages/PricingOnboarding"));
+const SubscriptionOnboarding = lazy(() => import("@/pages/SubscriptionOnboarding"));
 const Chat = lazy(() => import("@/pages/Chat"));
 const Terms = lazy(() => import("@/pages/Terms"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
@@ -262,6 +263,7 @@ const AuthenticatedRoutes = ({
         <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
         <Route path="/pricing" element={protectedPage(<Pricing />)} />
         <Route path="/pricing/onboarding" element={protectedPage(<PricingOnboarding />)} />
+        <Route path="/subscription/onboarding" element={protectedPage(<SubscriptionOnboarding />)} />
         <Route path="/chat" element={protectedPage(<Chat />)} />
         <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
