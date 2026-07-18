@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
+import { generateConversionMessage } from "@/services/conversionService";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
 import { getDbInstance } from "@/lib/firebase";
@@ -238,7 +239,7 @@ export default function Chat() {
   const LIFETIME_KEY = "chat_free_used"; // legacy key, kept for backward compatibility
   const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<string>('699');
+  const [selectedPlan, setSelectedPlan] = useState<string>('399');
   const selectedPlanMap: any = {'149':{plan:'Quick Ask',amount:149,type:'pack',qs:5},'399':{plan:'Deep Dive',amount:399,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
@@ -1197,13 +1198,13 @@ export default function Chat() {
               </span>
             </div>
 
-            <div style={{textAlign:'center',marginBottom:16}}>
+              <div style={{textAlign:'center',marginBottom:16}}>
               <img src="/optimized/vedika.webp" alt="Vedika" style={{width:62,height:62,borderRadius:'50%',border:'2px solid #d9277a',margin:'0 auto 14px',display:'block',objectFit:'cover'}}/>
               <div style={{fontSize:17,fontWeight:600,color:'#fff',marginBottom:6,lineHeight:1.4,fontFamily:'Georgia,serif'}}>
-                Vedika has more to reveal...
+                🔒 {(() => { try { return localStorage.getItem('profile_name') || user?.displayName || 'there'; } catch { return 'there'; } })()}, Your AI Credits Are Over
               </div>
               <div style={{fontSize:12,color:'#666',lineHeight:1.6}}>
-                Your free reading is over. But your kundali holds a secret Vedika hasn't told you yet.
+                You've used all of your free AI astrology credits.
               </div>
             </div>
 
@@ -1259,7 +1260,7 @@ export default function Chat() {
             </button>
 
             <button
-              onClick={() => {
+              onClick={async () => {
                 setShowLimitWarning(false);
                 const streamAssistantMessage = (text: string) => {
                   const words = text.split(' ');
@@ -1291,13 +1292,18 @@ export default function Chat() {
                   }, 75);
                 };
 
+                const name = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || ''; } catch { return ''; } })();
+                const lastQuestion = [...messages].reverse().find(m => m.role === 'user')?.content || '';
+                const lastAnswer = [...messages].reverse().find(m => m.role === 'assistant')?.content || '';
+                const msg = await generateConversionMessage({
+                  userName: name,
+                  lastQuestion,
+                  lastAnswer,
+                  recentMessages: messages,
+                  language: lang,
+                });
                 setTimeout(() => {
-                  const name = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || ''; } catch { return ''; } })();
-                  const greeting = name ? `${name}, before` : 'Before';
-                  streamAssistantMessage(`${greeting} you go — okay! Whenever you're ready, I'm here. Just remember — your chart has some important dasha periods coming up that are worth discussing. Whenever you feel like it, upgrade and let's talk.`);
-                  setTimeout(() => {
-                    streamAssistantMessage("The window I saw... it's tied to the next 90 days. After that, the planetary shift changes everything. Just so you know.");
-                  }, 2200);
+                  streamAssistantMessage(msg);
                 }, 400);
               }}
               style={{display:'block',width:'100%',textAlign:'center',fontSize:12,color:'#444',background:'transparent',border:'none',cursor:'pointer',padding:'4px'}}
