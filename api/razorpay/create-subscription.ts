@@ -65,18 +65,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       notes: {
         email: email,
         displayName: displayName || null,
+        customerName: customerName || null,
+        customerEmail: customerEmail || email,
         timestamp: new Date().toISOString(),
       },
     };
-
-    // Add customer details if provided
-    if (customerName || customerContact || customerEmail) {
-      subscriptionData.customer = {
-        name: customerName || displayName || email.split('@')[0],
-        email: customerEmail || email,
-        contact: customerContact || undefined,
-      };
-    }
 
     const authString = Buffer.from(`${razorpayKeyId}:${razorpayKeySecret}`).toString('base64');
     
