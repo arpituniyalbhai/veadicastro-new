@@ -236,7 +236,7 @@ const SubscriptionOnboarding = () => {
 
 
   return (
-    <div className="min-h-screen bg-background px-4 lg:px-6 py-8">
+    <div className="min-h-screen bg-background px-4 lg:px-6 pt-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6 space-y-4">
           <Button variant="outline" size="sm" className="gap-2" onClick={() => navigate("/pricing")}>

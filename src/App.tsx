@@ -140,6 +140,7 @@ const RouterShell = () => {
     p.startsWith("/report/") ||
     p === "/welcome" ||
     p === "/onboarding" ||
+    p === "/subscription/onboarding" ||
     p === "/chatgpt-astrology" ||
     p === "/ai-astrology-prediction" ||
     p === "/about" ||
