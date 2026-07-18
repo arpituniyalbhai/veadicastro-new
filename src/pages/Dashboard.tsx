@@ -1046,13 +1046,7 @@ export default function Dashboard() {
               const vibeLoading = dayVibeLoading[dateKey];
               const isToday = dateKey === getLocalDateKey(new Date());
               return (
-                <div className="relative overflow-hidden rounded-2xl border border-secondary/20 bg-gradient-to-br from-[#0e0e18] via-[#12121f] to-[#0a0a14] shadow-xl shadow-secondary/5">
-                  {/* Ambient glow */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-secondary/10 blur-3xl" />
-                    <div className="absolute -bottom-8 -left-8 w-36 h-36 rounded-full bg-primary/10 blur-3xl" />
-                  </div>
-
+                <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-[#0c0c0e]">
                   <div className="relative p-5 sm:p-6">
                     {/* Date header */}
                     <div className="flex items-center justify-between mb-5">
