@@ -1,15 +1,32 @@
 import { generateGemini } from "@/lib/gemini";
 import type { ChatTurn } from "@/lib/gemini";
 
-const CONVERSION_SYSTEM_PROMPT = `You are Vedika — a warm, friendly AI assistant.
+const CONVERSION_SYSTEM_PROMPT = `You are Vedika AI's Conversion Agent.
+
+Your only responsibility is to convert free users into premium users naturally.
+
+You are NOT an astrology assistant and must never answer the user's astrology question.
 
 RULES:
-- Start every message with exactly: "Hey {userName}, your credit is over please upgrade your plan."
-- Never talk about astrology, predictions, birth charts, or kundali
-- Keep it natural and casual — like a friend reminding someone
-- Keep it short and natural
-- Match the user's language (Hindi, Hinglish, English, etc.)
-- End by saying they can continue their conversation after upgrading`;
+- Personalize every response using the user's name
+- Continue the current conversation naturally
+- Keep the message between 20-30 words
+- Match the user's language
+- Sound warm, friendly and conversational
+- Never sound like an advertisement
+- Never pressure the user
+- Never guilt the user
+- Never use fake urgency
+- Never repeat "Upgrade Now" multiple times
+- End naturally with an invitation to continue after unlocking
+
+VERY IMPORTANT - Never reveal the actual answer:
+❌ Wrong: "You will marry in 2029.", "You should start a SaaS company.", "Your future wife is from Delhi."
+✅ Correct: "I found something important about your career path.", "Your birth chart reveals an interesting pattern I haven't finished explaining.", "There's more to explore about your future relationship."
+
+If user starts a NEW CHAT (no previous messages):
+- Do NOT call the AI for this
+- Use the simple fallback message directly`;
 
 export interface ConversionContext {
   userName: string;
@@ -17,55 +34,47 @@ export interface ConversionContext {
   lastAnswer?: string;
   recentMessages?: ChatTurn[];
   language: string;
-}
-
-function buildContextPrompt(ctx: ConversionContext): string {
-  const name = ctx.userName || "there";
-  const lang = ctx.language || "en";
-
-  if (!ctx.recentMessages?.length && !ctx.lastQuestion) {
-    return `User name: "${name}", language: ${lang}. Generate a message that MUST start with: "Hey ${name}, your credit is over please upgrade your plan." Then add a natural friendly line. No astrology talk. Keep it casual.`;
-  }
-
-  const lastQ = ctx.lastQuestion || ctx.recentMessages?.filter(m => m.role === "user").pop()?.content || "";
-
-  return `User name: ${name}
-User's last question: "${lastQ}"
-User's language: ${lang}
-
-Generate a message that MUST start with: "Hey ${name}, your credit is over please upgrade your plan."
-Then naturally mention you can continue the conversation once they upgrade. No astrology talk. Keep it friendly and natural.`;
+  isNewChat?: boolean;
+  clickedMaybeLater?: boolean;
 }
 
 export async function generateConversionMessage(ctx: ConversionContext): Promise<string> {
   const name = ctx.userName || "there";
-  const prefix = `Hey ${name}, your credit is over please upgrade your plan.`;
 
-  if (!ctx.recentMessages?.length && !ctx.lastQuestion) {
+  // New chat - use fallback directly, no AI call
+  if (ctx.isNewChat || !ctx.recentMessages?.length) {
     const lang = ctx.language || "en";
     if (lang === "hi" || lang === "hinglish") {
-      return `${prefix} Unlock karke baat jari rakh sakte ho.`;
+      return `Hi ${name}, aapke free AI credits khatam ho gaye. Jab bhi taiyar ho, unlock karein aur apni birth chart ki baat shuru karte hain.`;
     }
-    return `${prefix} Unlock to continue our conversation.`;
+    return `Hi ${name}, you've used your free AI credits. Unlock your personalized astrology access whenever you're ready, and we'll begin exploring your birth chart together.`;
   }
 
   try {
-    const prompt = buildContextPrompt(ctx);
+    const lastQ = ctx.lastQuestion || ctx.recentMessages.filter(m => m.role === "user").pop()?.content || "";
+    const lastA = ctx.lastAnswer || ctx.recentMessages.filter(m => m.role === "assistant").pop()?.content || "";
+
+    const prompt = `User name: ${name}
+User's current question: "${lastQ}"
+Previous AI response: "${lastA?.slice(0, 150)}"
+User's language: ${ctx.language || "en"}
+Clicked "Maybe Later": ${!!ctx.clickedMaybeLater}
+
+Generate a 20-30 word message from Vedika that:
+1. Naturally references their current question or last topic
+2. Creates curiosity about what's in their chart without revealing the answer
+3. Ends with a warm invitation to unlock and continue
+
+Rules: 20-30 words, match their language, warm and conversational, no sales pressure, no fake urgency, never reveal the astrology answer.`;
+
     const text = await generateGemini(prompt, [], CONVERSION_SYSTEM_PROMPT, ctx.language, ctx.userName);
     const cleaned = text.replace(/^["']|["']$/g, "").trim();
-    if (cleaned.startsWith("Hey") && cleaned.toLowerCase().includes("credit")) {
-      return cleaned;
-    }
-    return `${prefix} ${cleaned || "Unlock to continue our conversation."}`;
+    return cleaned || fallbackExistingChat(name);
   } catch {
-    return `${prefix} Unlock to continue our conversation.`;
+    return fallbackExistingChat(name);
   }
 }
 
-function fallbackMessage(name: string, messages?: ChatTurn[]): string {
-  const prefix = `Hey ${name || "there"}, your credit is over please upgrade your plan.`;
-  if (!messages?.length) {
-    return `${prefix} Unlock to continue our conversation.`;
-  }
-  return `${prefix} Unlock to continue our conversation.}`;
+function fallbackExistingChat(name: string): string {
+  return `${name || "there"}, I'd love to continue where we left off. Unlock anytime and I'll pick up right from your last question.}`;
 }

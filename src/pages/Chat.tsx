@@ -114,9 +114,10 @@ export default function Chat() {
   const endRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesRef = useRef<ChatTurn[]>([]);
+  const userScrolledUp = useRef(false);
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
-  const [userScrolledUp, setUserScrolledUp] = useState(false);
+  const [showScrollFab, setShowScrollFab] = useState(false);
   // Show suggestions the first time until typing or first message is sent
   const [hasChatted, setHasChatted] = useState<boolean>(false);
   const [hasTyped, setHasTyped] = useState<boolean>(false);
@@ -401,17 +402,18 @@ export default function Chat() {
 
   // Smart auto-scroll: only if user hasn't scrolled up
   useEffect(() => {
-    if (!userScrolledUp) {
+    if (!userScrolledUp.current) {
       requestAnimationFrame(() => {
         endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
       });
     }
-  }, [messages, userScrolledUp]);
+  }, [messages]);
 
-  // Reset userScrolledUp when user starts a new message or AI finishes
+  // Reset userScrolledUp when AI finishes
   useEffect(() => {
     if (!isTyping) {
-      setUserScrolledUp(false);
+      userScrolledUp.current = false;
+      setShowScrollFab(false);
     }
   }, [isTyping]);
 
@@ -423,9 +425,11 @@ export default function Chat() {
       const { scrollTop, scrollHeight, clientHeight } = el;
       const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
       if (!isNearBottom && isTyping) {
-        setUserScrolledUp(true);
+        userScrolledUp.current = true;
+        setShowScrollFab(true);
       } else if (isNearBottom) {
-        setUserScrolledUp(false);
+        userScrolledUp.current = false;
+        setShowScrollFab(false);
       }
     };
     el.addEventListener("scroll", handleScroll, { passive: true });
@@ -699,29 +703,37 @@ export default function Chat() {
       };
 
       let firstChunkReceived = false;
+      let streamBuffer = "";
+      let rafId: number | null = null;
+      const flushBuffer = () => {
+        if (!streamBuffer) return;
+        const chunk = streamBuffer;
+        streamBuffer = "";
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            const next = (copy[lastIndex].content || "") + chunk;
+            copy[lastIndex] = { role: "assistant", content: sanitize(next) };
+          }
+          return copy;
+        });
+      };
       await generateGeminiStream(promptText, messages.slice(-10), (delta) => {
         streamedAnswer += delta;
         if (sanitize(streamedAnswer).trim()) {
           aiAnswerCompleted = true;
         }
-        // Hide thinking indicator on first chunk
         if (!firstChunkReceived) {
           firstChunkReceived = true;
           setIsTyping(false);
         }
-        
-        // Append chunks directly so UI updates immediately
-        setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            const next = (copy[lastIndex].content || "") + delta;
-            copy[lastIndex] = { role: "assistant", content: sanitize(next) };
-          }
-          return copy;
-        });
+        streamBuffer += delta;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(flushBuffer);
         deltaCount++;
       }, systemExtra, lang, displayName);
+      if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
         const final = await generateGemini(promptText, messages.slice(-10), systemExtra, lang, displayName);
@@ -1133,10 +1145,11 @@ export default function Chat() {
         </div>
 
         {/* Scroll-to-bottom FAB */}
-        {userScrolledUp && isTyping && (
+        {showScrollFab && isTyping && (
           <button
             onClick={() => {
-              setUserScrolledUp(false);
+              userScrolledUp.current = false;
+              setShowScrollFab(false);
               endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
             }}
             className="fixed z-30 bottom-24 right-8 w-10 h-10 rounded-full bg-pink-500 text-white shadow-lg shadow-pink-500/30 flex items-center justify-center hover:bg-pink-600 transition-all animate-bounce"
@@ -1343,6 +1356,8 @@ export default function Chat() {
                   lastAnswer,
                   recentMessages: messages,
                   language: lang,
+                  isNewChat: messages.length === 0,
+                  clickedMaybeLater: true,
                 });
                 setTimeout(() => {
                   streamAssistantMessage(msg);
