@@ -889,7 +889,7 @@ const Pricing = () => {
                     className="h-12 w-full rounded-lg border border-pink-500/60 bg-pink-500 text-base font-bold text-white shadow-sm shadow-pink-500/20 hover:bg-pink-600 hover:text-white"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handlePayment("Premium");
+                      navigate("/subscription/onboarding");
                     }}
                   >
                     Start Premium Membership
