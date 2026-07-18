@@ -706,7 +706,7 @@ const Pricing = () => {
             <div className="max-w-[500px] mx-auto w-full my-8">
               <Card
                 className="group relative flex w-full cursor-pointer flex-col rounded-2xl p-0 transition-all duration-300 hover:-translate-y-1 border border-pink-500/60 bg-pink-950/20 shadow-[0_0_40px_rgba(236,72,153,0.12)]"
-                onClick={() => handlePayment("Premium")}
+                onClick={() => navigate("/subscription/onboarding")}
               >
                 {/* Badge */}
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
