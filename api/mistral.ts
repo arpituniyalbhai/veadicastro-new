@@ -293,7 +293,7 @@ Wrong format = rewrite before sending.`;
     const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
-    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-small-latest';
+    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
