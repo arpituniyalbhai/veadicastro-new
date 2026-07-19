@@ -265,17 +265,32 @@ const DailyPrediction = () => {
           </Card>
         ) : sections ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {sectionConfig.map(({ key, icon: Icon, label }) => (
-              <Card key={key} className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl hover:border-white/[0.12] transition-colors">
-                <div className="flex items-center gap-2.5 mb-3">
-                  <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center">
-                    <Icon className="w-4 h-4 text-white/70" />
+            {sectionConfig.map(({ key, icon: Icon, label }) => {
+              const isLocked = isFree && (key === "love" || key === "health");
+              return (
+                <Card
+                  key={key}
+                  className={`p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl transition-colors ${isLocked ? 'relative overflow-hidden cursor-pointer hover:border-white/[0.12]' : ''}`}
+                  onClick={isLocked ? () => navigate("/pricing?referral=daily-prediction") : undefined}
+                >
+                  <div className={`flex items-center gap-2.5 mb-3 ${isLocked ? 'relative z-10' : ''}`}>
+                    <div className="w-9 h-9 rounded-lg bg-white/[0.06] flex items-center justify-center">
+                      <Icon className="w-4 h-4 text-white/70" />
+                    </div>
+                    <h3 className="font-semibold text-white/90">{label}</h3>
                   </div>
-                  <h3 className="font-semibold text-white/90">{label}</h3>
-                </div>
-                <p className="text-sm text-white/50 leading-relaxed">{sections[key]}</p>
-              </Card>
-            ))}
+                  <p className={`text-sm leading-relaxed ${isLocked ? 'text-white/50 blur-sm select-none relative z-10' : 'text-white/50'}`}>
+                    {sections[key]}
+                  </p>
+                  {isLocked && (
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center z-20 rounded-2xl">
+                      <Lock className="w-6 h-6 text-pink-400 mb-2" />
+                      <p className="text-xs font-semibold text-pink-300">Upgrade to Unlock</p>
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
           </div>
         ) : null}
 
