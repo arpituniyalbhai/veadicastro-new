@@ -339,7 +339,8 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
           </div>
         </Card>
 
-        {/* 5. Monthly Timeline - always visible */}
+        {/* 5. Monthly Timeline - paid users only */}
+        {!isFree && (
         <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📅 Monthly Timeline</h3>
           <div className="space-y-1">
@@ -354,6 +355,7 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
             ))}
           </div>
         </Card>
+        )}
 
         {/* 6. Paid content: AI Sections + Planetary + Summary / Free: Personalized Paywall */}
         {isFree ? (
@@ -493,13 +495,6 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
             </Card>
           </>
         )}
-
-        {/* CTA */}
-        <Button variant="cosmic" className="w-full h-12 rounded-xl text-base font-semibold"
-          onClick={() => navigate('/chat?referral=monthly-prediction')}>
-          <MessageCircle className="w-5 h-5 mr-2" />
-          Ask your question
-        </Button>
 
       </div>
     </div>
