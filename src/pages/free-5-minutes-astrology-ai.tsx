@@ -117,7 +117,7 @@ const Free5MinutesAstrology = () => {
     }
     setIsSearchingLocation(true);
     try {
-      const key = "7d6d8d82a2e34df8ad34cad9897dc460";
+      const key = "91ab8792290d414b92590c9d4cc0793c";
       const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${key}&limit=5&no_annotations=1`;
       const res = await fetch(url);
       const data = await res.json();
@@ -262,9 +262,28 @@ KEY INSIGHTS:
         throw new Error('Invalid response from server: missing report data');
       }
 
+      // Strip markdown from AI response before displaying
+      const stripMarkdown = (text: string) => {
+        let cleaned = text
+          .replace(/\*\*(.*?)\*\*/g, '$1')       // bold **text**
+          .replace(/\*(.*?)\*/g, '$1')            // italic *text*
+          .replace(/_(.*?)_/g, '$1')              // italic _text_
+          .replace(/`(.*?)`/g, '$1')              // inline code
+          .replace(/#{1,6}\s+/g, '')              // headings
+          .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links [text](url)
+          .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1') // images
+          .replace(/^\s*[-*+]\s+/gm, '')          // bullet lists
+          .replace(/^\s*\d+\.\s+/gm, '')          // numbered lists
+          .replace(/\|/g, '')                      // table separators
+          .replace(/\n{3,}/g, '\n\n')             // extra newlines
+          .trim();
+        return cleaned;
+      };
+
       // Parse response to extract report and insights
       const reportMatch = reportText.match(/REPORT:\n([\s\S]*?)\n\nKEY INSIGHTS:/);
-      const reportSection = reportMatch ? reportMatch[1].trim() : reportText.replace('REPORT:', '').trim();
+      let reportSection = reportMatch ? reportMatch[1].trim() : reportText.replace('REPORT:', '').trim();
+      reportSection = stripMarkdown(reportSection);
       const insightsMatch = reportText.match(/KEY INSIGHTS:\n([\s\S]*)/);
       const keyInsights = insightsMatch 
         ? insightsMatch[1]
