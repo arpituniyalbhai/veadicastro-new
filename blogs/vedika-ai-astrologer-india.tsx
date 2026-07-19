@@ -626,6 +626,9 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
                 <Link to="/blog/is-ai-astrology-accurate" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Is AI Astrology Accurate? We Tested It
                 </Link>
+                <Link to="/astrology-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Astrology by Date of Birth — Free AI Vedic Astrology Reading
+                </Link>
               </div>
             </section>
 

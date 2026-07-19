@@ -732,11 +732,11 @@ export default function Chat() {
         if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(flushBuffer);
         deltaCount++;
-      }, systemExtra, lang, displayName);
+      }, systemExtra, lang, displayName, "primary", "mistral-large-latest");
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-10), systemExtra, lang, displayName);
+        const final = await generateGemini(promptText, messages.slice(-10), systemExtra, lang, displayName, "primary", "mistral-large-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
@@ -1521,13 +1521,14 @@ ${answer.slice(0, 1200)}`;
     const response = await fetch(`${API_BASE}/api/mistral`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        prompt,
-        history: [],
-        systemExtra: "Return valid JSON only. Do not include markdown fences.",
-        lang,
-        apiKeySlot: "secondary",
-      }),
+        body: JSON.stringify({
+          prompt,
+          history: [],
+          systemExtra: "Return valid JSON only. Do not include markdown fences.",
+          lang,
+          apiKeySlot: "secondary",
+          model: "mistral-large-latest",
+        }),
       signal: controller.signal,
     });
 

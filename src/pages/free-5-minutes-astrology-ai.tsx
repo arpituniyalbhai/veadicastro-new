@@ -243,7 +243,8 @@ KEY INSIGHTS:
           userName: birthDetails.name,
           stream: false,  // report ke liye streaming nahi chahiye
           lang: "en",
-          apiKeySlot: "secondary"
+          apiKeySlot: "secondary",
+          model: "ministral-8b-latest"
         })
       });
 

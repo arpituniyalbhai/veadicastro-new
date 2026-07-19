@@ -523,6 +523,12 @@ const OnlineJyotishiVsAIAstrologer = () => {
               >
                 Generate Your <strong>free kundli by date of birth</strong>
               </Link>
+              <Link
+                to="/astrology-by-date-of-birth"
+                className="px-8 py-3 bg-white/10 text-white font-semibold rounded-xl hover:bg-white/20 transition-colors border border-white/20"
+              >
+                Astrology by Date of Birth
+              </Link>
             </div>
             
             <p className="text-pink-400 font-bold text-lg mt-6">

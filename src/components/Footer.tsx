@@ -54,6 +54,9 @@ const Footer = () => {
             <Link to="/horoscope-by-date-of-birth" className="text-white/80 hover:text-white transition-colors">
               Horoscope by Date of Birth
             </Link>
+            <Link to="/astrology-by-date-of-birth" className="text-white/80 hover:text-white transition-colors">
+              Astrology by Date of Birth
+            </Link>
             <Link to="/free-kundli-generator" className="text-white/80 hover:text-white transition-colors">
               Kundli Generator
             </Link>

@@ -264,7 +264,8 @@ export default function AiLoveAstrologyByDateOfBirth() {
         buildLoveSystemPrompt(chart),
         "en",
         birthDetails.name || undefined,
-        "secondary"
+        "secondary",
+        "ministral-8b-latest"
       );
 
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);

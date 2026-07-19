@@ -404,20 +404,19 @@ export default function Dashboard() {
     } catch {}
 
     setDayVibeLoading(prev => ({ ...prev, [key]: true }));
-    const dateFormatted = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-    let details: any = null;
-    try { details = JSON.parse(localStorage.getItem('onboarding_details') || 'null'); } catch {}
+    const dateFormatted = date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
     try {
-      const prompt = `For ${dateFormatted}, given birth: ${details?.dob || 'unknown'}, ${details?.time || 'unknown'}, ${details?.place || 'unknown'} — describe this day in EXACTLY 4-6 words as a headline. Examples: "Today is a Bright Day", "A Challenging but Rewarding Day", "Day of Hidden Opportunities", "A Calm and Peaceful Day". Return ONLY the 4-6 word phrase, no punctuation, no quotes.`;
+      const prompt = `Date: ${dateFormatted}\nRespond with exactly 4-5 words describing this date. Output ONLY those words, no quotes, no punctuation, no explanation.`;
       const resp = await Promise.race([
-        generateGemini(prompt, [], 'Return only the 4-6 word day description. No JSON, no explanation, no quotes.', 'en', undefined, 'secondary'),
+        generateGemini(prompt, [], 'STRICT: Return exactly 4-5 words. NO punctuation, NO quotes, NO explanation, NO JSON. Only the short phrase.', 'en', undefined, 'secondary'),
         new Promise<string>((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000)),
       ]);
-      const vibe = resp.trim().replace(/^["']+|["']+$/g, '').replace(/\.$/, '').trim();
-      if (vibe.split(' ').length >= 3) {
-        setDayVibe(prev => ({ ...prev, [key]: vibe }));
-        try { localStorage.setItem(cacheKey, vibe); } catch {}
+      const words = resp.trim().replace(/^["']+|["']+$/g, '').replace(/[.,!?]+$/g, '').trim().split(/\s+/).filter(Boolean);
+      const truncated = words.slice(0, 5).join(' ');
+      if (truncated.length > 0) {
+        setDayVibe(prev => ({ ...prev, [key]: truncated }));
+        try { localStorage.setItem(cacheKey, truncated); } catch {}
       }
     } catch (e) {
       console.warn('[DayVibe] failed:', e);

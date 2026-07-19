@@ -135,6 +135,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/kundligpt-alternative',
     breadcrumb: 'KundliGPT Alternative',
   },
+  '/astrology-by-date-of-birth': {
+    title: 'Astrology by Date of Birth – Free AI Vedic Astrology Reading',
+    description: 'Get a free AI-powered Vedic astrology reading by date of birth. Enter your birth date, time, place, ask your astrology question, and receive personalized insights from Vedika AI.',
+    canonical: 'https://veadicastro.in/astrology-by-date-of-birth',
+    breadcrumb: 'Astrology by Date of Birth',
+  },
   '/ai-kundli-analysis': {
     title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
     description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',

@@ -137,7 +137,7 @@ export default async function handler(req: Request) {
       );
     }
     
-    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary" } = body || {};
+    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary", model: modelOverride } = body || {};
     if (!prompt || typeof prompt !== 'string') return new Response(
       JSON.stringify({ error: 'Missing or invalid prompt' }),
       { status: 422, headers: { 'Content-Type': 'application/json' } }
@@ -295,7 +295,7 @@ Wrong format = rewrite before sending.`;
     const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
-    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
+    const model = modelOverride || (isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest');
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),

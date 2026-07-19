@@ -422,6 +422,9 @@ const AiAstrologyRealOrFake = () => {
                 <Link to="/blog/online-jyotishi-vs-ai-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Online Jyotishi vs AI Astrologer - Complete Comparison
                 </Link>
+                <Link to="/astrology-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Astrology by Date of Birth — Free AI Vedic Astrology Reading
+                </Link>
               </div>
             </section>
 

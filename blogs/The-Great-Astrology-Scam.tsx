@@ -460,6 +460,9 @@ const TheGreatAstrologyScam = () => {
                 <Link to="/blog/ai-astrologer-vs-human-astrologer" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   AI Astrologer vs Human Astrologer - Which is Better?
                 </Link>
+                <Link to="/astrology-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  Astrology by Date of Birth — Free AI Vedic Astrology Reading
+                </Link>
               </div>
             </section>
 

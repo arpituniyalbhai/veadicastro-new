@@ -298,7 +298,8 @@ export default function AiCareerPredictionByDateOfBirth() {
         buildCareerSystemPrompt(chart),
         "en",
         birthDetails.name || undefined,
-        "secondary"
+        "secondary",
+        "ministral-8b-latest"
       );
 
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);
