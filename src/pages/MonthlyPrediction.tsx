@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { generateGemini } from '@/lib/gemini';
 import SEO from '@/components/SEO';
 import { sanitizeModelJson } from '@/lib/dailyInsights';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   getMonthKey, getLifeScores, getOverallScore, scoreLabel, overallLabel,
   starsFromScore, renderStars, getLuckyElements, getWeeklyTimeline,
@@ -114,6 +115,7 @@ const MonthlyPrediction = () => {
   const [loadingMap, setLoadingMap] = useState<SectionsLoading>({});
   const [errorMap, setErrorMap] = useState<SectionsError>({});
   const [showPopup, setShowPopup] = useState(false);
+  const [upgradePopupKey, setUpgradePopupKey] = useState<SectionKey | null>(null);
   const hasFetchedRef = useRef(false);
   const cacheKey = `ai_monthly_sections_v2_${uid}_${monthKey}`;
 
@@ -240,6 +242,41 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
 
       {showPopup && <VedikaPopup name={displayName} onClose={() => setShowPopup(false)} />}
 
+      {/* Upgrade popup for free users */}
+      <Dialog open={!!upgradePopupKey} onOpenChange={(open) => { if (!open) setUpgradePopupKey(null); }}>
+        <DialogContent className="max-w-sm bg-[#0c0c0e] border border-pink-500/20 rounded-[36px] p-6">
+          <div className="flex justify-center mb-2">
+            <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500/30">
+              <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" />
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-white/90 text-center">
+              🌙 Upgrade to Continue
+            </DialogTitle>
+            <DialogDescription className="text-sm text-white/60 text-center leading-relaxed pt-2">
+              Hey {displayName}, I know you want to see your{' '}
+              <span className="text-secondary font-semibold">
+                {upgradePopupKey ? sectionConfig.find(c => c.key === upgradePopupKey)?.label.toLowerCase() : ''}
+              </span>{' '}
+              prediction, but you are on the <span className="text-pink-400 font-semibold">Free Plan</span>.
+              <br /><br />
+              Please upgrade to unlock all 7 detailed sections.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col gap-2 mt-2">
+            <Button variant="cosmic" className="w-full rounded-xl"
+              onClick={() => { setUpgradePopupKey(null); navigate('/pricing?referral=monthly-prediction'); }}>
+              Upgrade Now
+            </Button>
+            <Button variant="ghost" className="w-full rounded-xl text-white/40 hover:text-white/70"
+              onClick={() => setUpgradePopupKey(null)}>
+              Maybe Later
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="max-w-4xl mx-auto space-y-5">
 
         {/* 1. Header */}
@@ -307,32 +344,26 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
           <div className="space-y-3">
             {sectionConfig.map(({ key, label, emoji }) => {
               const score = scores[key];
-              const locked = isFree && (key === 'love' || key === 'career' || key === 'luck' || key === 'health');
-              return locked ? (
-                <div key={key} className="relative overflow-hidden rounded-lg cursor-pointer group" onClick={() => navigate('/pricing?referral=monthly-prediction')}>
-                  <div className="flex items-center gap-3 p-2 rounded-lg bg-white/[0.03] border border-white/[0.04] blur-[3px] select-none">
-                    <span className="text-base w-6 shrink-0">{emoji}</span>
-                    <span className="text-sm text-white/70 w-28 text-left shrink-0">{label}</span>
-                    <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-secondary to-accent transition-all duration-700" style={{ width: `${score}%` }} />
-                    </div>
-                    <span className="text-sm font-semibold text-white/90 w-10 text-right shrink-0">{score}%</span>
-                    <span className="text-xs text-white/40 w-20 text-right shrink-0 hidden sm:block">{scoreLabel(score)}</span>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-lg z-10">
-                    <Lock className="w-4 h-4 text-pink-400 mr-1.5" />
-                    <span className="text-xs font-semibold text-pink-300">Unlock</span>
-                  </div>
-                </div>
-              ) : (
+              return (
                 <div key={key} className="flex items-center gap-3 group">
                   <span className="text-base w-6 shrink-0">{emoji}</span>
-                  <span className="text-sm text-white/70 w-28 text-left shrink-0 group-hover:text-white/90 transition-colors">{label}</span>
+                  <span className="text-sm text-white/70 w-20 text-left shrink-0 group-hover:text-white/90 transition-colors">{label}</span>
                   <div className="flex-1 h-2 rounded-full bg-white/[0.06] overflow-hidden">
                     <div className="h-full rounded-full bg-gradient-to-r from-secondary to-accent transition-all duration-700" style={{ width: `${score}%` }} />
                   </div>
-                  <span className="text-sm font-semibold text-white/90 w-10 text-right shrink-0">{score}%</span>
-                  <span className="text-xs text-white/40 w-20 text-right shrink-0 hidden sm:block">{scoreLabel(score)}</span>
+                  <span className="text-sm font-semibold text-white/90 w-8 text-right shrink-0">{score}%</span>
+                  <button
+                    onClick={() => {
+                      if (isFree) {
+                        setUpgradePopupKey(key);
+                      } else {
+                        document.getElementById(`section-${key}`)?.scrollIntoView({ behavior: "smooth" });
+                      }
+                    }}
+                    className="text-xs font-medium text-secondary hover:text-secondary/80 transition-colors shrink-0 px-2 py-1 rounded-lg hover:bg-secondary/10"
+                  >
+                    Read more
+                  </button>
                 </div>
               );
             })}
