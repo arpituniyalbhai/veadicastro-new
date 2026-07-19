@@ -268,7 +268,40 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
           </div>
         </Card>
 
-        {/* 3. Life Score Dashboard */}
+        {/* 3. Lucky Elements - always visible */}
+        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🍀 Lucky Elements</h3>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
+              <div className={cn('w-8 h-8 rounded-full ring-2 ring-white/10', monthlyColorMap[lucky.luckyColor] || 'bg-purple-500')} />
+              <p className="text-sm font-semibold text-white/90">{lucky.luckyColor}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY COLOUR</p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-white/10 flex items-center justify-center">
+                <span className="text-base font-bold text-white">{lucky.luckyNumber}</span>
+              </div>
+              <p className="text-sm font-semibold text-white/90">{lucky.luckyNumber}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY NUMBER</p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary/30 to-accent/20 border border-white/10 flex items-center justify-center">
+                <span className="text-xs font-bold text-white">{lucky.luckyDay.slice(0, 3).toUpperCase()}</span>
+              </div>
+              <p className="text-sm font-semibold text-white/90">{lucky.luckyDay}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY DAY</p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500/20 to-cyan-500/20 border border-white/10 flex items-center justify-center">
+                <span className="text-sm font-bold text-teal-300">↑</span>
+              </div>
+              <p className="text-sm font-semibold text-white/90">{lucky.luckyDirection}</p>
+              <p className="text-[10px] text-white/40 tracking-wide">LUCKY DIRECTION</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* 4. Life Score Dashboard */}
         <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
           <h2 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">Life Score Dashboard</h2>
           <div className="space-y-3">
@@ -306,22 +339,46 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
           </div>
         </Card>
 
-        {/* AI Section Cards - hidden for free users */}
+        {/* 5. Monthly Timeline - always visible */}
+        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📅 Monthly Timeline</h3>
+          <div className="space-y-1">
+            {timeline.map(({ week, stars, label: wLabel }) => (
+              <div key={week} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
+                <span className="text-sm text-white/70">{week}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-amber-400 tracking-widest text-sm">{renderStars(stars)}</span>
+                  <span className="text-xs text-white/40 w-16 text-right">{wLabel}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* 6. Paid content: AI Sections + Planetary + Summary / Free: Personalized Paywall */}
         {isFree ? (
-          <Card className="p-8 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl text-center">
-            <Lock className="w-10 h-10 text-secondary mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-white/90 mb-2">Your full {monthName} report is ready</h3>
-            <p className="text-sm text-white/50 mb-6 leading-relaxed max-w-xs mx-auto">
-              Upgrade to unlock all 7 detailed sections — love, career, wealth, health, relationships, luck, and personal growth.
-            </p>
-            <Button variant="cosmic" className="w-full max-w-xs mx-auto rounded-xl"
-              onClick={() => navigate('/pricing?referral=monthly-prediction')}>
-              Unlock Full Report
-            </Button>
+          <Card className="p-6 bg-[#0c0c0e] border border-pink-500/20 rounded-2xl text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-pink-500/30">
+                <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-white/90 mb-1">
+                  Hey {displayName}, your full {monthName} report is ready
+                </h3>
+                <p className="text-sm text-white/50 leading-relaxed max-w-xs mx-auto">
+                  Upgrade to unlock all 7 detailed sections — love, career, wealth, health, relationships, luck, and personal growth.
+                </p>
+              </div>
+              <Button variant="cosmic" className="w-full max-w-xs mx-auto rounded-xl"
+                onClick={() => navigate('/pricing?referral=monthly-prediction')}>
+                Unlock Full Report
+              </Button>
+            </div>
           </Card>
         ) : (
           <>
-            {/* 7 Section Cards - show as they load */}
+            {/* 7 Section Cards */}
             {sectionConfig.map(({ key, label, emoji, gradFrom, gradTo, badgeBg, badgeText, metaKeys, metaLabels }) => {
               const score = scores[key];
               const lbl = scoreLabel(score);
@@ -389,102 +446,53 @@ Return ONLY the JSON object with EXACTLY these keys: "prediction", "${cfg.metaKe
                 </div>
               );
             })}
+
+            {/* Planetary Influence */}
+            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+              <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🪐 Planetary Influence</h3>
+              <div className="space-y-1">
+                {planets.map(({ planet, stars, effect }) => (
+                  <div key={planet} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
+                    <span className="text-sm text-white/70">{planet}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-amber-400 tracking-widest text-sm">{renderStars(stars)}</span>
+                      <span className={cn('text-xs px-2 py-0.5 rounded-full',
+                        effect === 'Favourable' ? 'bg-green-500/10 text-green-400' :
+                          effect === 'Challenging' ? 'bg-red-500/10 text-red-400' :
+                            'bg-white/[0.06] text-white/40')}>{effect}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Month Summary */}
+            <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
+              <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📊 Month Summary</h3>
+              <div className="flex items-center gap-4 mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                <div className="w-16 h-16 rounded-full border-4 flex flex-col items-center justify-center shrink-0"
+                  style={{ borderColor: `rgba(255,255,255,${0.1 + (overall / 100) * 0.3})` }}>
+                  <span className="text-xl font-bold text-white">{overall}%</span>
+                </div>
+                <div>
+                  <p className="font-semibold text-white/90">{oLabel}</p>
+                  <p className="text-xs text-white/40 mt-0.5">{monthName}</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(['love', 'career', 'wealth', 'health', 'relationships', 'growth'] as SectionKey[]).map(k => {
+                  const cfg = sectionConfig.find(s => s.key === k)!;
+                  return (
+                    <div key={k} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.04]">
+                      <span className="text-xs text-white/60">{cfg.emoji} {cfg.label}</span>
+                      <span className="text-amber-400 text-xs">{renderStars(starsFromScore(scores[k]))}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
           </>
         )}
-
-        {/* Monthly Timeline - local, always visible */}
-        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📅 Monthly Timeline</h3>
-          <div className="space-y-1">
-            {timeline.map(({ week, stars, label: wLabel }) => (
-              <div key={week} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
-                <span className="text-sm text-white/70">{week}</span>
-                <div className="flex items-center gap-3">
-                  <span className="text-amber-400 tracking-widest text-sm">{renderStars(stars)}</span>
-                  <span className="text-xs text-white/40 w-16 text-right">{wLabel}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Planetary Influence - local */}
-        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🪐 Planetary Influence</h3>
-          <div className="space-y-1">
-            {planets.map(({ planet, stars, effect }) => (
-              <div key={planet} className="flex items-center justify-between py-2.5 border-b border-white/[0.04] last:border-0">
-                <span className="text-sm text-white/70">{planet}</span>
-                <div className="flex items-center gap-3">
-                  <span className="text-amber-400 tracking-widest text-sm">{renderStars(stars)}</span>
-                  <span className={cn('text-xs px-2 py-0.5 rounded-full',
-                    effect === 'Favourable' ? 'bg-green-500/10 text-green-400' :
-                      effect === 'Challenging' ? 'bg-red-500/10 text-red-400' :
-                        'bg-white/[0.06] text-white/40')}>{effect}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-
-        {/* Lucky Elements - local */}
-        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">🍀 Lucky Elements</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
-              <div className={cn('w-8 h-8 rounded-full ring-2 ring-white/10', monthlyColorMap[lucky.luckyColor] || 'bg-purple-500')} />
-              <p className="text-sm font-semibold text-white/90">{lucky.luckyColor}</p>
-              <p className="text-[10px] text-white/40 tracking-wide">LUCKY COLOUR</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-white/10 flex items-center justify-center">
-                <span className="text-base font-bold text-white">{lucky.luckyNumber}</span>
-              </div>
-              <p className="text-sm font-semibold text-white/90">{lucky.luckyNumber}</p>
-              <p className="text-[10px] text-white/40 tracking-wide">LUCKY NUMBER</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-secondary/30 to-accent/20 border border-white/10 flex items-center justify-center">
-                <span className="text-xs font-bold text-white">{lucky.luckyDay.slice(0, 3).toUpperCase()}</span>
-              </div>
-              <p className="text-sm font-semibold text-white/90">{lucky.luckyDay}</p>
-              <p className="text-[10px] text-white/40 tracking-wide">LUCKY DAY</p>
-            </div>
-            <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] flex flex-col items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-teal-500/20 to-cyan-500/20 border border-white/10 flex items-center justify-center">
-                <span className="text-sm font-bold text-teal-300">↑</span>
-              </div>
-              <p className="text-sm font-semibold text-white/90">{lucky.luckyDirection}</p>
-              <p className="text-[10px] text-white/40 tracking-wide">LUCKY DIRECTION</p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Month Summary */}
-        <Card className="p-5 bg-[#0c0c0e] border border-white/[0.06] rounded-2xl">
-          <h3 className="text-sm font-semibold text-white/50 uppercase tracking-widest mb-4">📊 Month Summary</h3>
-          <div className="flex items-center gap-4 mb-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <div className="w-16 h-16 rounded-full border-4 flex flex-col items-center justify-center shrink-0"
-              style={{ borderColor: `rgba(255,255,255,${0.1 + (overall / 100) * 0.3})` }}>
-              <span className="text-xl font-bold text-white">{overall}%</span>
-            </div>
-            <div>
-              <p className="font-semibold text-white/90">{oLabel}</p>
-              <p className="text-xs text-white/40 mt-0.5">{monthName}</p>
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {(['love', 'career', 'wealth', 'health', 'relationships', 'growth'] as SectionKey[]).map(k => {
-              const cfg = sectionConfig.find(s => s.key === k)!;
-              return (
-                <div key={k} className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.04]">
-                  <span className="text-xs text-white/60">{cfg.emoji} {cfg.label}</span>
-                  <span className="text-amber-400 text-xs">{renderStars(starsFromScore(scores[k]))}</span>
-                </div>
-              );
-            })}
-          </div>
-        </Card>
 
         {/* CTA */}
         <Button variant="cosmic" className="w-full h-12 rounded-xl text-base font-semibold"
