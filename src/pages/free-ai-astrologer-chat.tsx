@@ -128,6 +128,7 @@ export default function FreeAiAstrologyChat() {
   const [savedKundlis, setSavedKundlis] = useState<SavedKundli[]>([]);
   const [messageCount, setMessageCount] = useState(0);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [hasUsedFreeChat, setHasUsedFreeChat] = useState(false);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatTurn[]>([]);
@@ -145,6 +146,12 @@ export default function FreeAiAstrologyChat() {
       const saved = localStorage.getItem("saved_kundlis");
       if (saved) setSavedKundlis(JSON.parse(saved));
     } catch { /* ignore */ }
+
+    // Check if user has already used free chat
+    const hasUsed = localStorage.getItem("free_ai_chat_used");
+    if (hasUsed === "true") {
+      setHasUsedFreeChat(true);
+    }
   }, []);
 
   // Scroll to bottom of chat
@@ -241,7 +248,13 @@ export default function FreeAiAstrologyChat() {
 
   const sendMessage = async () => {
     if (!message.trim() || isTyping) return;
-    
+
+    // Check if user has already used free chat
+    if (hasUsedFreeChat && !showSignupModal) {
+      alert("You have already used this feature. Each user can ask only one question.");
+      return;
+    }
+
     // Check if this is the second message (after first free question)
     if (messageCount >= 2 && !showSignupModal) {
       setShowSignupModal(true);
@@ -276,6 +289,7 @@ export default function FreeAiAstrologyChat() {
     if (messages.length > 0) {
       localStorage.setItem('free_ai_chat_used', 'true');
       localStorage.setItem('free_ai_chat_timestamp', new Date().toISOString());
+      setHasUsedFreeChat(true);
     }
   };
 

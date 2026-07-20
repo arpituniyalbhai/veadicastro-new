@@ -201,9 +201,16 @@ export default function AiCareerPredictionByDateOfBirth() {
   const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const [hasUsedFeature, setHasUsedFeature] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Check if user has already used the feature
+    const hasUsed = localStorage.getItem("ai_career_prediction_used");
+    if (hasUsed === "true") {
+      setHasUsedFeature(true);
+    }
   }, []);
 
   const searchLocation = useCallback(async (query: string) => {
@@ -259,6 +266,12 @@ export default function AiCareerPredictionByDateOfBirth() {
       return;
     }
 
+    // Check if user has already used the feature
+    if (hasUsedFeature) {
+      alert("You have already used this feature. Each user can generate only one career prediction.");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
     setResult(customQuestion ? result : "");
@@ -304,6 +317,10 @@ export default function AiCareerPredictionByDateOfBirth() {
 
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);
       setStatus("");
+
+      // Mark user as having used the feature
+      localStorage.setItem("ai_career_prediction_used", "true");
+      setHasUsedFeature(true);
     } catch {
       setError("Something went wrong while preparing the career prediction. Please try again.");
       setStatus("");

@@ -242,8 +242,8 @@ export default function Chat() {
   const LIFETIME_KEY = "chat_free_used"; // legacy key, kept for backward compatibility
   const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<string>('399');
-  const selectedPlanMap: any = {'149':{plan:'Quick Ask',amount:149,type:'pack',qs:5},'399':{plan:'Deep Dive',amount:399,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
+  const [selectedPlan, setSelectedPlan] = useState<string>('389');
+  const selectedPlanMap: any = {'99':{plan:'Quick Ask',amount:99,type:'pack',qs:5},'389':{plan:'Deep Dive',amount:389,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
   const categoryPrompts = [
@@ -1264,8 +1264,8 @@ export default function Chat() {
             </div>
 
             {[
-              {id:'149',price:149,name:'Starter',qs:5,features:[]},
-              {id:'399',price:399,name:'Popular',qs:15,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
+              {id:'99',price:99,name:'Starter',qs:5,features:[]},
+              {id:'389',price:389,name:'Popular',qs:15,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
               {id:'699',price:699,name:'30 Questions for Only ₹699',qs:30,popular:true,features:['All popular features','30 deep-dive questions','Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
             ].map((plan) => {
               const sel = selectedPlan === plan.id;
@@ -1421,13 +1421,13 @@ export default function Chat() {
             {/* Upgrade button */}
             <button
               onClick={() => {
-                navigate('/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack');
+                navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack');
                 setShowLimitWarning(false);
               }}
               className="w-full py-3 rounded-xl text-white text-sm font-medium mb-3 transition-opacity hover:opacity-90"
               style={{ background: '#e91e8c', border: 'none' }}
             >
-              Upgrade — Only ₹399
+              Upgrade — Only ₹389
             </button>
 
             <button

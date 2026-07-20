@@ -167,9 +167,16 @@ export default function AiLoveAstrologyByDateOfBirth() {
   const [locationSuggestions, setLocationSuggestions] = useState<LocationSuggestion[]>([]);
   const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const [hasUsedFeature, setHasUsedFeature] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Check if user has already used the feature
+    const hasUsed = localStorage.getItem("ai_love_astrology_used");
+    if (hasUsed === "true") {
+      setHasUsedFeature(true);
+    }
   }, []);
 
   const searchLocation = useCallback(async (query: string) => {
@@ -225,6 +232,12 @@ export default function AiLoveAstrologyByDateOfBirth() {
       return;
     }
 
+    // Check if user has already used the feature
+    if (hasUsedFeature) {
+      alert("You have already used this feature. Each user can generate only one love prediction.");
+      return;
+    }
+
     setIsLoading(true);
     setError("");
     setResult(customQuestion ? result : "");
@@ -270,6 +283,10 @@ export default function AiLoveAstrologyByDateOfBirth() {
 
       setMessages([...nextMessages, { role: "assistant", content: streamed }]);
       setStatus("");
+
+      // Mark user as having used the feature
+      localStorage.setItem("ai_love_astrology_used", "true");
+      setHasUsedFeature(true);
     } catch {
       setError("Something went wrong while preparing the love prediction. Please try again.");
       setStatus("");

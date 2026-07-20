@@ -75,7 +75,10 @@ const Free5MinutesAstrology = () => {
   
   // Popup state
   const [showAstrologerPopup, setShowAstrologerPopup] = useState(false);
-  
+
+  // Spam prevention state
+  const [hasUsedFeature, setHasUsedFeature] = useState(false);
+
   // Screen 1: Birth Details Form
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [birthDetails, setBirthDetails] = useState<BirthDetails>({
@@ -212,6 +215,12 @@ KEY INSIGHTS:
       return;
     }
 
+    // Check if user has already used the feature
+    if (hasUsedFeature) {
+      alert("You have already used this feature. Each user can generate only one report.");
+      return;
+    }
+
     setIsGenerating(true);
     setLoadingStage(0);
     setCurrentLoadingText(loadingTexts[0]);
@@ -299,6 +308,10 @@ KEY INSIGHTS:
         report: reportSection,
         keyInsights
       });
+
+      // Mark user as having used the feature
+      localStorage.setItem("free_5_minutes_astrology_used", "true");
+      setHasUsedFeature(true);
     } catch (error) {
       console.error('Error generating report:', error);
       clearInterval(loadingInterval);
@@ -342,6 +355,14 @@ KEY INSIGHTS:
       return () => clearInterval(interval);
     }
   }, [isGenerating]);
+
+  // Check if user has already used the feature
+  useEffect(() => {
+    const hasUsed = localStorage.getItem("free_5_minutes_astrology_used");
+    if (hasUsed === "true") {
+      setHasUsedFeature(true);
+    }
+  }, []);
 
   // Show astrologer popup after 6 seconds
   useEffect(() => {
