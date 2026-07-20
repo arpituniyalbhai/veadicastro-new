@@ -15,6 +15,7 @@ import NotFound from "@/pages/NotFound";
 import RedirectComponent from "@/components/RedirectComponent";
 import { PageLoading } from "@/components/PageLoading";
 import CookieConsent from "@/components/CookieConsent";
+import { Analytics } from "@vercel/analytics/react";
 
 // Lazy load heavy components to reduce initial bundle size
 const Welcome = lazy(() => import("@/pages/Welcome"));
@@ -307,6 +308,7 @@ const App = () => {
           <Toaster />
           <Sonner />
           <CookieConsent />
+          <Analytics />
           <I18nProvider>
             <BrowserRouter>
               <RouterShell />

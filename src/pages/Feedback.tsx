@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
-import { getDataDbInstance } from "@/lib/firebase";
+import { getDbInstance } from "@/lib/firebase";
 import { ArrowLeft, Star, Sparkles, Gift, CheckCircle2, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -72,7 +72,7 @@ const Feedback = () => {
     if (!feedback.trim() || rating === 0) return;
     setIsSubmitting(true);
     try {
-      const db = await getDataDbInstance();
+      const db = await getDbInstance();
       const { collection, addDoc } = await import("firebase/firestore");
       await addDoc(collection(db, "Feedback"), {
         email: user?.email || "unknown",
