@@ -61,6 +61,7 @@ const dict: Dict = {
   novemberLabel: { en: "November 2025", hi: "नवंबर 2025" },
   decemberLabel: { en: "December 2025", hi: "दिसंबर 2025" },
   footerText: { en: " Veadicastro", hi: " वेआडिकास्टरो" },
+  feedback: { en: "Feedback", hi: "प्रतिक्रिया" },
   reviewsHeading: { en: "What Our Users Say (World-Wide)", hi: "हमारे उपयोगकर्ताओं की राय (दुनिया भर से)" },
   review1: { en: "Veadicastro has been incredibly accurate with my daily predictions. Highly recommended!", hi: "वेआडिकास्टरो की दैनिक भविष्यवाणियाँ बेहद सटीक हैं। अत्यधिक अनुशंसित!" },
   review2: { en: "The AI responses are thoughtful and insightful. Best astrology app I've used.", hi: "एआई के उत्तर विचारशील और ज्ञानवर्धक होते हैं। यह अब तक का सबसे अच्छा ज्योतिष ऐप है।" },

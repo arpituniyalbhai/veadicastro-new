@@ -129,6 +129,7 @@ export default function FreeAiAstrologyChat() {
   const [messageCount, setMessageCount] = useState(0);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [hasUsedFreeChat, setHasUsedFreeChat] = useState(false);
+  const [showVedikaMessage, setShowVedikaMessage] = useState(false);
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<ChatTurn[]>([]);
@@ -251,7 +252,7 @@ export default function FreeAiAstrologyChat() {
 
     // Check if user has already used free chat
     if (hasUsedFreeChat && !showSignupModal) {
-      alert("You have already used this feature. Each user can ask only one question.");
+      setShowVedikaMessage(true);
       return;
     }
 
@@ -1347,6 +1348,63 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <p className="text-xs text-white/40 mt-3">
           Free signup • No payment required
         </p>
+      </div>
+    </div>
+  </div>
+)}
+
+      {/* Vedika Limit Message Modal */}
+{showVedikaMessage && (
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="card-glass rounded-3xl p-8 max-w-md w-full">
+      <div className="text-center">
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-pink-500/30">
+          <img
+            src="/optimized/vedika.webp"
+            alt="Vedika AI Astrologer"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <h3 className="text-2xl font-bold text-white mb-2">
+          Hey, I know you love this platform 💜
+        </h3>
+
+        <p className="text-pink-400 font-medium mb-4">
+          Your AI-powered Vedic astrologer.
+        </p>
+
+        <p className="text-white/70 text-sm leading-6 mb-6">
+          I can see you want your astrology insights. Please sign up to get your <span className="text-pink-400 font-semibold">free questions</span> and <span className="text-pink-400 font-semibold">deeper readings</span> right here.
+          <br /><br />
+          Your birth chart holds the answers you're looking for.
+        </p>
+
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 mb-6">
+          <p className="text-pink-400 font-semibold text-lg">
+            🎁 FREE Questions & Deep Readings
+          </p>
+          <p className="text-white/60 text-sm mt-2">
+            Sign up now to unlock personalized astrology guidance based on your exact birth details.
+          </p>
+        </div>
+
+        <button
+          onClick={() => {
+            setShowVedikaMessage(false);
+            setAuthOpen(true);
+          }}
+          className="w-full btn-pink text-white font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity"
+        >
+          Sign Up for Free
+        </button>
+
+        <button
+          onClick={() => setShowVedikaMessage(false)}
+          className="w-full mt-3 text-white/40 text-sm hover:text-white/60 transition-colors"
+        >
+          Maybe later
+        </button>
       </div>
     </div>
   </div>

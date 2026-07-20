@@ -102,6 +102,7 @@ const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
 const DailyPrediction = lazy(() => import("@/pages/DailyPrediction"));
 const MonthlyPrediction = lazy(() => import("@/pages/MonthlyPrediction"));
 const AstrologyByDateOfBirth = lazy(() => import("@/pages/AstrologyByDateOfBirth"));
+const Feedback = lazy(() => import("@/pages/Feedback"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
@@ -272,6 +273,7 @@ const AuthenticatedRoutes = ({
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
         <Route path="/settings/language" element={protectedPage(<LanguageSettings />)} />
         <Route path="/profile" element={protectedPage(<Profile />)} />
+        <Route path="/feedback" element={protectedPage(<Feedback />)} />
         <Route path="/compatibility" element={protectedPage(<Compatibility />)} />
         <Route path="/compatibility/result" element={protectedPage(<CompatibilityResult />)} />
         <Route path="/talk-to-astrologer" element={<Suspense fallback={<PageLoading />}><TalkToAstrologer /></Suspense>} />

@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { VedikaAssistantPanel } from "@/components/QuestionsFab";
+
 import PersonalizedWelcomePopup from "@/components/ComparisonPopup";
 import ReviewsSection from "@/components/ReviewsSection";
 import {
@@ -93,7 +93,6 @@ export default function Dashboard() {
     time: "Not set",
     place: "Not set",
   });
-  const [assistantOpen, setAssistantOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [dayVibe, setDayVibe] = useState<Record<string, string>>({}); // dateKey -> vibe string
   const [dayVibeLoading, setDayVibeLoading] = useState<Record<string, boolean>>({}); // dateKey -> bool
@@ -228,6 +227,7 @@ export default function Dashboard() {
     { id: "language", label: "Switch Language", icon: Globe },
     { id: "notifications", label: "Notification Settings", icon: Bell },
     { id: "contact", label: "Contact", icon: Send },
+    { id: "feedback", label: "Feedback", icon: Star },
   ];
 
   const tomorrowUnlocked = true; // Always unlocked - free for everyone
@@ -266,6 +266,8 @@ export default function Dashboard() {
         return t("reportMenu");
       case "Pricing":
         return t("pricing");
+      case "feedback":
+        return "Feedback";
       default:
         return fallback;
     }
@@ -308,6 +310,9 @@ export default function Dashboard() {
         break;
       case "rate":
         setRateOpen(true);
+        break;
+      case "feedback":
+        navigate(`/feedback?referral=dashboard`);
         break;
       default:
         setActiveSection(id);
@@ -829,37 +834,18 @@ export default function Dashboard() {
                       )}
                     >
                       <Icon className={cn(sidebarCollapsed ? "w-5 h-5" : "w-5 h-5")} />
-                      {!sidebarCollapsed && <span className="flex-1 text-left text-sm">{labelFor(item.id, item.label)}</span>}
-                      {!sidebarCollapsed && <ChevronRight className="w-5 h-5" />}
+                      {!sidebarCollapsed && (
+                        <span className="flex-1 text-left text-sm">{labelFor(item.id, item.label)}</span>
+                      )}
+                      {!sidebarCollapsed && item.id === "feedback" && (
+                        <span className="text-[10px] font-semibold text-secondary bg-secondary/10 px-2 py-0.5 rounded-full mr-1 leading-tight">Win 2 free</span>
+                      )}
+                      {!sidebarCollapsed && item.id !== "feedback" && <ChevronRight className="w-5 h-5" />}
                     </button>
                   );
                 })}
               </div>
-              <div className="mt-4">
-                {!sidebarCollapsed ? (
-                  <button
-                    onClick={() => setAssistantOpen(true)}
-                    className="w-full flex items-center gap-3 p-3 rounded-2xl border border-border/60 bg-secondary/10 hover:border-secondary/40 transition-colors"
-                  >
-                    <span className="inline-flex items-center justify-center w-10 h-10 rounded-full overflow-hidden ring-1 ring-border/40">
-                      <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" loading="lazy" />
-                    </span>
-                    <div className="flex-1 text-left">
-                      <p className="text-sm font-semibold text-foreground">Vedika Assistant</p>
-                      <p className="text-xs text-muted-foreground">Instant help & onboarding</p>
-                    </div>
-                    <ArrowRight className="w-4 h-4 text-secondary" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setAssistantOpen(true)}
-                    className="w-full flex justify-center items-center h-12 rounded-2xl border border-border/60 bg-secondary/10"
-                    aria-label="Open Vedika Assistant"
-                  >
-                    <img src="/optimized/vedika.webp" alt="Vedika" className="w-8 h-8 rounded-full object-cover" loading="lazy" />
-                  </button>
-                )}
-              </div>
+
             </div>
           </nav>
 
@@ -1223,17 +1209,6 @@ export default function Dashboard() {
           
         </div>
       </main>
-
-      {/* Vedika Assistant Modal */}
-      <Dialog open={assistantOpen} onOpenChange={setAssistantOpen}>
-        <DialogContent className="sm:max-w-sm bg-transparent border-none shadow-none p-0">
-          <VedikaAssistantPanel
-            onClose={() => setAssistantOpen(false)}
-            className="w-full sm:w-[24rem]"
-            hideCloseButton
-          />
-        </DialogContent>
-      </Dialog>
 
       {/* Notification Settings Modal */}
       <Dialog open={notificationsOpen} onOpenChange={setNotificationsOpen}>
