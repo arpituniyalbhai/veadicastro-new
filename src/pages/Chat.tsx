@@ -137,7 +137,7 @@ export default function Chat() {
     "Investigating your planetary positions...",
     "Studying your birth Kundali...",
     "Mapping your life timeline...",
-    "Calculating dasha and Nakshatra..",
+    "Calculating dashas and Nakshatra..",
     "Studying current planet movements...",
     "Preparing your astrological outcome..."
   ];
