@@ -114,6 +114,12 @@ export default function Chat() {
   const endRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const messagesRef = useRef<ChatTurn[]>([]);
+
+  const scrollToBottom = useCallback((smooth = false) => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+  }, []);
   const userScrolledUp = useRef(false);
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
@@ -400,14 +406,12 @@ export default function Chat() {
     }
   }, [initial]);
 
-  // Smart auto-scroll: only if user hasn't scrolled up
+  // Auto-scroll: new message aate hi bottom pe le jao
   useEffect(() => {
     if (!userScrolledUp.current) {
-      requestAnimationFrame(() => {
-        endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
-      });
+      requestAnimationFrame(() => scrollToBottom(false));
     }
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   // Reset userScrolledUp when AI finishes
   useEffect(() => {
@@ -553,6 +557,10 @@ export default function Chat() {
     const userTurn: ChatTurn = { role: "user", content: outgoingMessage };
     setMessages((m) => [...m, userTurn]);
     setMessage("");
+    // User ne message bheja — force scroll to bottom (userScrolledUp reset karo)
+    userScrolledUp.current = false;
+    setShowScrollFab(false);
+    requestAnimationFrame(() => scrollToBottom(false));
     // Firestore question logging (internal analytics, never blocks the chat)
     if (user?.email) {
       import("firebase/firestore").then(({ collection, addDoc }) => {
@@ -1150,7 +1158,7 @@ export default function Chat() {
             onClick={() => {
               userScrolledUp.current = false;
               setShowScrollFab(false);
-              endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+              scrollToBottom(true);
             }}
             className="fixed z-30 bottom-24 right-8 w-10 h-10 rounded-full bg-pink-500 text-white shadow-lg shadow-pink-500/30 flex items-center justify-center hover:bg-pink-600 transition-all animate-bounce"
             aria-label="Scroll to bottom"
