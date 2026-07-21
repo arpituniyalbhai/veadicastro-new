@@ -1126,61 +1126,61 @@ export default function Chat() {
                     )}
                     {m.isConversion && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
-                        <div className="rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-4 space-y-3">
-                          <div className="text-center">
-                            <p className="text-sm font-medium text-white mb-1">Upgrade to Continue</p>
-                            <p className="text-xs text-muted-foreground">Get unlimited AI astrology readings</p>
+                        <div className="rounded-2xl border border-white/10 bg-card/90 p-4 space-y-3">
+                          <div className="text-center pb-3 border-b border-white/10">
+                            <p className="text-sm font-semibold text-white mb-1">✨ Upgrade to Continue</p>
+                            <p className="text-xs text-muted-foreground">Unlock premium Vedic astrology insights</p>
                           </div>
                           <div className="space-y-2">
-                            <button
+                            <div
                               onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=99&type=pack')}
-                              className="w-full rounded-xl bg-card/80 border border-border/60 px-4 py-3 text-left hover:border-pink-500/50 transition-colors"
+                              className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
                             >
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-medium text-white">Quick Ask</div>
                                   <div className="text-xs text-muted-foreground">5 questions</div>
                                 </div>
-                                <div className="text-lg font-bold text-pink-500">₹99</div>
+                                <div className="text-base font-semibold text-white">₹99</div>
                               </div>
-                            </button>
-                            <button
+                            </div>
+                            <div
                               onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack')}
-                              className="w-full rounded-xl bg-card/80 border-2 border-pink-500/50 px-4 py-3 text-left relative"
+                              className="w-full rounded-xl bg-pink-500/10 border-2 border-pink-500/50 px-4 py-3 cursor-pointer relative"
                             >
-                              <span className="absolute -top-2 right-2 bg-pink-500 text-white text-[10px] px-2 py-0.5 rounded-full">Popular</span>
+                              <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">Popular</span>
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-medium text-white">Deep Dive</div>
                                   <div className="text-xs text-muted-foreground">15 questions</div>
                                 </div>
-                                <div className="text-lg font-bold text-pink-500">₹389</div>
+                                <div className="text-base font-semibold text-pink-400">₹389</div>
                               </div>
-                            </button>
-                            <button
+                            </div>
+                            <div
                               onClick={() => navigate('/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack')}
-                              className="w-full rounded-xl bg-card/80 border border-border/60 px-4 py-3 text-left hover:border-pink-500/50 transition-colors"
+                              className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
                             >
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-medium text-white">Power Pack</div>
                                   <div className="text-xs text-muted-foreground">30 questions</div>
                                 </div>
-                                <div className="text-lg font-bold text-pink-500">₹699</div>
+                                <div className="text-base font-semibold text-white">₹699</div>
                               </div>
-                            </button>
-                            <button
-                              onClick={() => navigate('/pricing/onboarding?plan=Monthly&amount=499&type=subscription')}
-                              className="w-full rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 px-4 py-3 text-left hover:border-purple-500/50 transition-colors"
+                            </div>
+                            <div
+                              onClick={() => window.open('https://veadicastro.in/subscription/onboarding', '_blank')}
+                              className="w-full rounded-xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50 px-4 py-3 cursor-pointer transition-colors"
                             >
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-medium text-white">Monthly Pro</div>
-                                  <div className="text-xs text-muted-foreground">Unlimited questions</div>
+                                  <div className="text-xs text-muted-foreground">Advance astrology featured</div>
                                 </div>
-                                <div className="text-lg font-bold text-purple-400">₹499/mo</div>
+                                <div className="text-base font-semibold text-purple-400">₹499/mo</div>
                               </div>
-                            </button>
+                            </div>
                           </div>
                         </div>
                       </div>
