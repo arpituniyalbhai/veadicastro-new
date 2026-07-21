@@ -257,7 +257,7 @@ END:
 
     const contents = [
       // Include last 10 messages for conversation context
-      ...(Array.isArray(history) ? history.slice(-10) : []).map((h: any) => ({
+      ...(Array.isArray(history) ? history.slice(-20) : []).map((h: any) => ({
         role: h?.role === 'user' ? 'user' : 'assistant',
         content: String(h?.content || ''),
       })),

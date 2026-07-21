@@ -724,7 +724,7 @@ export default function Chat() {
           return copy;
         });
       };
-      await generateGeminiStream(promptText, messages.slice(-10), (delta) => {
+      await generateGeminiStream(promptText, messages.slice(-20), (delta) => {
         streamedAnswer += delta;
         if (sanitize(streamedAnswer).trim()) {
           aiAnswerCompleted = true;
@@ -741,7 +741,7 @@ export default function Chat() {
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-10), systemExtra, lang, displayName, "primary", "mistral-large-latest");
+        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-large-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
