@@ -247,6 +247,9 @@ export default function Chat() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
+  // Check if any conversion message is shown to disable input
+  const hasConversionMessage = messages.some(m => m.isConversion);
+
   const categoryPrompts = [
     { id: "love", icon: "", labelEn: "Love", labelHi: "प्रेम",
       promptsEn: ["When will I meet my true love?", "Is my current relationship destined to last?", "What qualities should I look for in a partner?", "Will I find love this year?", "How can I attract the right person into my life?"],
@@ -1281,7 +1284,7 @@ export default function Chat() {
                   <Input
                     ref={inputRef}
                     id="chat-input"
-                    placeholder={t("askPlaceholder")}
+                    placeholder={hasConversionMessage ? "Please upgrade to continue" : t("askPlaceholder")}
                     value={message}
                     onChange={(e) => {
                       const v = e.target.value;
@@ -1294,13 +1297,15 @@ export default function Chat() {
                         send();
                       }
                     }}
-                    className="h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm"
+                    disabled={hasConversionMessage}
+                    className="h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <Button
                     variant="cosmic"
                     size="icon"
                     className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full"
                     onClick={() => send()}
+                    disabled={hasConversionMessage}
                     aria-label="Send"
                   >
                     <Send className="w-3.5 sm:w-4 h-3.5 sm:h-4" />

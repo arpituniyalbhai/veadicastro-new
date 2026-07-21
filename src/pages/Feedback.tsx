@@ -9,14 +9,6 @@ import { getDbInstance } from "@/lib/firebase";
 import { ArrowLeft, Star, Sparkles, Gift, CheckCircle2, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const PROMPT_CHIPS = [
-  "The predictions were surprisingly accurate",
-  "UI is clean and easy to use",
-  "Love the AI astrologer feature",
-  "Kundli insights helped me a lot",
-  "Would love more detailed reports",
-];
-
 const MOOD_OPTIONS = [
   { emoji: "😐", label: "Okay", value: 2 },
   { emoji: "🙂", label: "Good", value: 3 },
@@ -34,8 +26,6 @@ const Feedback = () => {
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [charCount, setCharCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showChips, setShowChips] = useState(true);
-
   const MAX_CHARS = 500;
 
   const displayName = (() => {
@@ -52,15 +42,6 @@ const Feedback = () => {
       setFeedback(val);
       setCharCount(val.length);
     }
-  };
-
-  const appendChip = (chip: string) => {
-    const newText = feedback ? `${feedback} ${chip}` : chip;
-    if (newText.length <= MAX_CHARS) {
-      setFeedback(newText);
-      setCharCount(newText.length);
-    }
-    setShowChips(false);
   };
 
   const handleMoodSelect = (value: number) => {
