@@ -244,12 +244,7 @@ export default function Chat() {
     }
   }, []);
 
-  // Lifetime quota: 1 free question ever
-  const LIFETIME_KEY = "chat_free_used"; // legacy key, kept for backward compatibility
-  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<string>('389');
-  const selectedPlanMap: any = {'99':{plan:'Quick Ask',amount:99,type:'pack',qs:5},'389':{plan:'Deep Dive',amount:389,type:'pack',qs:15},'699':{plan:'The Power Pack',amount:699,type:'pack',qs:30}};
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
   const categoryPrompts = [
@@ -440,14 +435,6 @@ export default function Chat() {
     return () => el.removeEventListener("scroll", handleScroll);
   }, [isTyping]);
 
-  // Cleanup old lifetime quota key, but we no longer rely on it
-  useEffect(() => {
-    try {
-      localStorage.removeItem(LIFETIME_KEY);
-    } catch {
-      /* ignore */
-    }
-  }, []);
 
   // Personalized question suggestions based on age (same as Dashboard)
   useEffect(() => {
@@ -774,15 +761,22 @@ export default function Chat() {
 
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
+        // Generate conversion message instead of showing modal
+        const conversionMsg = await generateConversionMessage({
+          userName: displayName,
+          lastQuestion: outgoingMessage,
+          recentMessages: messages,
+          language: lang,
+          isNewChat: false
+        });
         setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: "Your credits are over. Please upgrade to keep asking Vedika AI." };
+            copy[lastIndex] = { role: "assistant", content: conversionMsg, isConversion: true };
           }
           return copy;
         });
-        setShowLimitWarning(true);
         return;
       }
 
@@ -1317,206 +1311,6 @@ export default function Chat() {
           </div>
         </div>
       </main>
-      {/* Limit Warning Alert */}
-      {showLimitWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.92)'}}>
-          <div id="vp-paywall" className="[&::-webkit-scrollbar]:hidden" style={{background:'#000',border:'1px solid #1c1c1c',borderRadius:20,width:'100%',maxWidth:380,padding:'24px 20px 20px',maxHeight:'95vh',overflowY:'auto',scrollbarWidth:'none'}}>
-            
-            <div style={{textAlign:'center',marginBottom:18}}>
-              <span style={{display:'inline-flex',alignItems:'center',gap:6,background:'rgba(217,39,122,0.1)',border:'1px solid rgba(217,39,122,0.2)',borderRadius:100,padding:'4px 14px',fontSize:11,color:'#d9277a',fontWeight:500}}>
-                <span style={{width:6,height:6,borderRadius:'50%',background:'#d9277a',display:'inline-block'}}/>
-                687 people upgraded today
-              </span>
-            </div>
-
-              <div style={{textAlign:'center',marginBottom:16}}>
-              <img src="/optimized/vedika.webp" alt="Vedika" style={{width:62,height:62,borderRadius:'50%',border:'2px solid #d9277a',margin:'0 auto 14px',display:'block',objectFit:'cover'}}/>
-              <div style={{fontSize:17,fontWeight:600,color:'#fff',marginBottom:6,lineHeight:1.4,fontFamily:'Georgia,serif'}}>
-                🔒 {(() => { try { return localStorage.getItem('profile_name') || user?.displayName || 'there'; } catch { return 'there'; } })()}, Your AI Credits Are Over
-              </div>
-              <div style={{fontSize:12,color:'#666',lineHeight:1.6}}>
-                You've used all of your free AI astrology credits.
-              </div>
-            </div>
-
-            {[
-              {id:'99',price:99,name:'Starter',qs:5,features:[]},
-              {id:'389',price:389,name:'Popular',qs:15,features:['Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
-              {id:'699',price:699,name:'30 Questions for Only ₹699',qs:30,popular:true,features:['All popular features','30 deep-dive questions','Dasha & transit predictions','Full birth chart analysis','Compatibility & relationship insights']},
-            ].map((plan) => {
-              const sel = selectedPlan === plan.id;
-              return (
-                <div key={plan.id}
-                  onClick={() => setSelectedPlan(plan.id)}
-                  style={{border: sel ? '2px solid #d9277a' : '1px solid #1e1e1e',borderRadius:12,padding:'11px 14px',cursor:'pointer',background: sel ? 'rgba(217,39,122,0.06)' : '#0a0a0a',position:'relative',marginBottom:8,transition:'border 0.1s,background 0.1s',willChange:'border,background'}}
-                >
-                  {plan.popular && <span style={{position:'absolute',top:-9,left:12,background:'#d9277a',color:'#fff',fontSize:10,fontWeight:500,padding:'2px 10px',borderRadius:100}}>Most popular</span>}
-                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
-                    <div style={{display:'flex',alignItems:'center',gap:10}}>
-                      <div style={{width:15,height:15,borderRadius:'50%',border:`2px solid ${sel?'#d9277a':'#333'}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-                        {sel && <div style={{width:7,height:7,borderRadius:'50%',background:'#d9277a'}}/>}
-                      </div>
-                      <div>
-                        <div style={{fontSize:13,fontWeight:500,color:'#fff'}}>{plan.name}</div>
-                        <div style={{fontSize:11,color:'#555'}}>{plan.qs} questions</div>
-                      </div>
-                    </div>
-                    <div style={{fontSize:15,fontWeight:600,color:'#fff'}}>₹{plan.price}</div>
-                  </div>
-                  {sel && plan.features.length > 0 && (
-                    <div style={{borderTop:'1px solid #2a0018',marginTop:10,paddingTop:10,display:'flex',flexDirection:'column',gap:5}}>
-                      {plan.features.map(f => (
-                        <div key={f} style={{display:'flex',alignItems:'center',gap:7,fontSize:11,color:'#999'}}>
-                          <span style={{color:'#d9277a'}}>✓</span> {f}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            <button
-              id="vp-cta"
-              onClick={() => {
-                const p = selectedPlanMap[selectedPlan];
-                if (p) {
-                  navigate(`/pricing/onboarding?plan=${p.plan}&amount=${p.amount}&type=${p.type}`);
-                }
-                setShowLimitWarning(false);
-              }}
-              style={{width:'100%',background:'#d9277a',border:'none',borderRadius:12,padding:14,fontSize:14,fontWeight:600,color:'#fff',cursor:'pointer',marginBottom:10,fontFamily:'Georgia,serif'}}
-            >
-              Unlock {selectedPlanMap[selectedPlan]?.qs} Questions — ₹{selectedPlanMap[selectedPlan]?.amount}
-            </button>
-
-            <button
-              onClick={async () => {
-                setShowLimitWarning(false);
-                const streamAssistantMessage = (text: string) => {
-                  const words = text.split(' ');
-                  if (!words.length) return;
-                  const messageIndexRef = { current: -1 };
-                  setMessages(m => {
-                    messageIndexRef.current = m.length;
-                    return [...m, { role: 'assistant', content: '' }];
-                  });
-
-                  let wordIndex = 0;
-                  const interval = window.setInterval(() => {
-                    setMessages(m => {
-                      const copy = [...m];
-                      const messageIndex = messageIndexRef.current;
-                      if (messageIndex >= 0 && copy[messageIndex]?.role === 'assistant') {
-                        const nextWord = words[wordIndex];
-                        copy[messageIndex] = {
-                          role: 'assistant',
-                          content: `${copy[messageIndex]?.content || ''}${copy[messageIndex]?.content ? ' ' : ''}${nextWord ?? ''}`
-                        };
-                      }
-                      return copy;
-                    });
-                    wordIndex += 1;
-                    if (wordIndex >= words.length) {
-                      window.clearInterval(interval);
-                    }
-                  }, 75);
-                };
-
-                const name = (() => { try { return localStorage.getItem('profile_name') || user?.displayName || ''; } catch { return ''; } })();
-                const lastQuestion = [...messages].reverse().find(m => m.role === 'user')?.content || '';
-                const lastAnswer = [...messages].reverse().find(m => m.role === 'assistant')?.content || '';
-                const msg = await generateConversionMessage({
-                  userName: name,
-                  lastQuestion,
-                  lastAnswer,
-                  recentMessages: messages,
-                  language: lang,
-                  isNewChat: messages.length === 0,
-                  clickedMaybeLater: true,
-                });
-                setTimeout(() => {
-                  streamAssistantMessage(msg);
-                }, 400);
-              }}
-              style={{display:'block',width:'100%',textAlign:'center',fontSize:12,color:'#444',background:'transparent',border:'none',cursor:'pointer',padding:'4px'}}
-            >
-              Maybe later
-            </button>
-
-          </div>
-        </div>
-      )}
-      {false && showLimitWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.85)' }}>
-          <div className="rounded-2xl p-6 md:p-8 max-w-sm w-full text-center" style={{ background: '#0d0d0d', border: '0.5px solid #222' }}>
-            {/* Social proof badge */}
-            <div
-              className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-5"
-              style={{ background: '#0a1f0a', border: '0.5px solid #1a4d1a' }}
-            >
-              <span className="flex-shrink-0 rounded-full" style={{ width: 7, height: 7, background: '#22c55e', display: 'inline-block' }} />
-              <span className="text-xs font-medium" style={{ color: '#22c55e' }}>
-                687 people upgraded in last 24 hours
-              </span>
-            </div>
-
-            {/* Avatar */}
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4 overflow-hidden border-2"
-              style={{ borderColor: '#e91e8c' }}
-            >
-              <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" />
-            </div>
-
-            {/* Heading */}
-            <h2 className="text-lg font-medium text-white mb-2">
-              Your credits are over
-            </h2>
-            <p className="text-sm leading-relaxed mb-6" style={{ color: '#888' }}>
-              Upgrade to keep asking Vedika AI — unlimited questions, Dasha predictions & full birth chart insights.
-            </p>
-
-            {/* Benefits */}
-            <div className="rounded-xl p-4 mb-6 text-left" style={{ background: '#111' }}>
-              <p className="text-xs font-medium uppercase tracking-wider mb-3" style={{ color: '#555' }}>
-                What you unlock
-              </p>
-              {[
-                '15 questions to Vedika AI',
-                'Dasha & transit predictions',
-                'Full birth chart analysis',
-                'Compatibility & relationship insights',
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2 text-sm mb-2" style={{ color: '#ccc' }}>
-                  <span style={{ color: '#e91e8c' }}>✓</span> {item}
-                </div>
-              ))}
-            </div>
-
-            {/* Upgrade button */}
-            <button
-              onClick={() => {
-                navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack');
-                setShowLimitWarning(false);
-              }}
-              className="w-full py-3 rounded-xl text-white text-sm font-medium mb-3 transition-opacity hover:opacity-90"
-              style={{ background: '#e91e8c', border: 'none' }}
-            >
-              Upgrade — Only ₹389
-            </button>
-
-            <button
-              onClick={() => setShowLimitWarning(false)}
-              className="w-full py-2 text-sm transition-colors"
-              style={{ color: '#555', background: 'transparent', border: 'none' }}
-            >
-              Maybe later
-            </button>
-
-          </div>
-        </div>
-      )}
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
