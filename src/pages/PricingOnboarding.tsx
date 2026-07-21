@@ -20,7 +20,7 @@ const PricingOnboarding = () => {
   const planAmount = parseFloat(searchParams.get("amount") || "0");
   const planType = searchParams.get("type") || "";
   
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState(user?.email || "");
   const [company, setCompany] = useState("");
@@ -55,7 +55,7 @@ const PricingOnboarding = () => {
     });
   }, []);
 
-  // Set email from user on mount
+  // Auto-fetch email and name from user on mount
   useEffect(() => {
     if (user?.email) {
       setEmail(user.email);
@@ -68,6 +68,17 @@ const PricingOnboarding = () => {
         /* ignore stored email errors */
       }
     }
+    // Auto-fetch name from user or localStorage
+    if (user?.displayName) {
+      setFullName(user.displayName);
+    } else {
+      try {
+        const storedName = localStorage.getItem('profile_name');
+        if (storedName) setFullName(storedName);
+      } catch {
+        /* ignore stored name errors */
+      }
+    }
   }, [user]);
 
   useEffect(() => {
@@ -76,22 +87,26 @@ const PricingOnboarding = () => {
 
   // Razorpay script will be loaded only when payment is initiated
 
-  const next = () => setStep(2); // Always go to final review page
-  const back = () => setStep((s) => Math.max(1, s - 1));
-
-  // Validation for step 1 (only name and email required)
-  const step1Filled = useMemo(() => {
-    return !!fullName.trim() && !!email.trim();
-  }, [fullName, email]);
+  const back = () => setStep((s) => Math.max(2, s - 1));
 
   // Calculate final price
   const finalPrice = useMemo(() => {
     return planAmount;
   }, [planAmount]);
 
-  const discount = useMemo(() => {
-    return 0;
-  }, [planAmount]);
+  // Calculate pricing breakdown with GST
+  const calculatePricing = (total: number) => {
+    // Work backwards from total to show realistic breakdown
+    // Total = Subtotal + GST (18%)
+    // Subtotal = Total / 1.18
+    const subtotal = Math.round(total / 1.18);
+    const gst = total - subtotal;
+    const originalPrice = Math.round(subtotal * 1.5); // Show higher original price
+    const discount = originalPrice - subtotal;
+    return { originalPrice, discount, subtotal, gst, total };
+  };
+
+  const pricing = calculatePricing(planAmount);
 
   const normalizePlanTier = (name: string): PlanName => {
     const normalized = name.toLowerCase();
@@ -447,19 +462,31 @@ const PricingOnboarding = () => {
                 <h3 className="font-semibold mb-3">Payment Summary</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{planName}</span>
-                    <span>₹{planAmount}</span>
+                    <span className="text-muted-foreground">Plan:</span>
+                    <span>{planName}</span>
                   </div>
-                  {(discount > 0) && (
+                  <div className="border-t border-border/60 pt-2 mt-2 space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-green-500">Discount</span>
-                      <span className="text-green-500">-₹{discount}</span>
+                      <span className="text-muted-foreground">Original Price:</span>
+                      <span>₹{pricing.originalPrice}</span>
                     </div>
-                  )}
-                  <div className="border-t border-border/60 pt-2 mt-2">
-                    <div className="flex justify-between font-semibold text-lg">
-                      <span>Total Amount</span>
-                      <span className="text-secondary">₹{finalPrice}</span>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Discount:</span>
+                      <span className="text-green-500">-₹{pricing.discount}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Subtotal:</span>
+                      <span>₹{pricing.subtotal}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">GST (18%):</span>
+                      <span>₹{pricing.gst}</span>
+                    </div>
+                    <div className="border-t border-border/60 pt-2 mt-2">
+                      <div className="flex justify-between font-semibold text-lg">
+                        <span>Total</span>
+                        <span className="text-secondary">₹{pricing.total}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -475,31 +502,21 @@ const PricingOnboarding = () => {
           </div>
 
           <div className="flex justify-between mt-8">
-            <Button variant="ghost" onClick={back} disabled={step === 1}>Back</Button>
-            {step === 1 ? (
-              <Button 
-                variant="cosmic" 
-                onClick={next}
-                disabled={!step1Filled}
-              >
-                Next
-              </Button>
-            ) : (
-              <Button 
-                variant="cosmic" 
-                onClick={handleComplete}
-                disabled={isProcessingPayment}
-              >
-                {isProcessingPayment ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Opening Razorpay...
-                  </>
-                ) : (
-                  "Proceed to Payment"
-                )}
-              </Button>
-            )}
+            <Button variant="ghost" onClick={back} disabled={true}>Back</Button>
+            <Button 
+              variant="cosmic" 
+              onClick={handleComplete}
+              disabled={isProcessingPayment}
+            >
+              {isProcessingPayment ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Opening Razorpay...
+                </>
+              ) : (
+                "Proceed to Payment"
+              )}
+            </Button>
           </div>
         </Card>
       </div>

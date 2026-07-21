@@ -1038,28 +1038,41 @@ export default function Chat() {
               )}
             </div>
           </div>
-          <div className="hidden md:block flex-shrink-0 ml-2">
-            <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
-              <SelectTrigger className="w-[140px] h-9 text-sm bg-card/40 border border-border/60 hover:border-secondary/50">
-                <SelectValue placeholder="Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="hi">हिंदी (Devanagari)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="md:hidden">
-            <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
-              <SelectTrigger className="w-[120px] h-8 text-xs bg-card/40 border border-border/60 hover:border-secondary/50">
-                <SelectValue placeholder="Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="hi">हिंदी</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {credits > 0 ? (
+            <>
+              <div className="hidden md:block flex-shrink-0 ml-2">
+                <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
+                  <SelectTrigger className="w-[140px] h-9 text-sm bg-card/40 border border-border/60 hover:border-secondary/50">
+                    <SelectValue placeholder="Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="hi">हिंदी (Devanagari)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="md:hidden">
+                <Select value={lang} onValueChange={(value) => setLang(value as "en" | "hi")}>
+                  <SelectTrigger className="w-[120px] h-8 text-xs bg-card/40 border border-border/60 hover:border-secondary/50">
+                    <SelectValue placeholder="Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="hi">हिंदी</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
+          ) : (
+            <Button
+              variant="cosmic"
+              size="sm"
+              className="gap-1.5 text-xs h-9 px-4"
+              onClick={() => window.open("http://localhost:8080/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack", "_self")}
+            >
+              Upgrade
+            </Button>
+          )}
         </div>
         
         <div className="max-w-6xl mx-auto w-full px-1 sm:px-4 lg:px-6 pt-[96px] sm:pt-4 md:pt-4 pb-44 sm:pb-48 flex flex-col flex-1">
