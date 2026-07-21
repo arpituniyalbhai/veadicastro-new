@@ -6,6 +6,7 @@ import admin from 'firebase-admin';
 
 // CRITICAL: Server-side price source of truth
 const VALID_PLAN_PRICES: Record<string, number> = {
+  'First Ask': 3900,      // ₹39 in paise
   'Quick Ask': 9900,      // ₹99 in paise
   'Deep Dive': 38900,     // ₹389 in paise
   'The Power Pack': 64900, // ₹499 in paise
@@ -504,7 +505,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             const expiresAt = new Date();
             let unlimitedExpiry = null;
             
-            if (planName === 'Quick Ask') {
+            if (planName === 'First Ask') {
+              expiresAt.setDate(expiresAt.getDate() + 30);
+            } else if (planName === 'Quick Ask') {
               expiresAt.setDate(expiresAt.getDate() + 30);
             } else if (planName === 'Deep Dive') {
               expiresAt.setDate(expiresAt.getDate() + 60);
@@ -532,12 +535,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               email: email || null,
               displayName: displayName || null,
               planName,
-              isPremium: !['Free', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName),
-              premiumSince: !['Free', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName) ? admin.firestore.FieldValue.serverTimestamp() : existingUserData?.premiumSince || null,
+              isPremium: !['Free', 'First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName),
+              premiumSince: !['Free', 'First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName) ? admin.firestore.FieldValue.serverTimestamp() : existingUserData?.premiumSince || null,
               subscriptionExpiresAt: admin.firestore.Timestamp.fromDate(expiresAt),
               unlimitedExpiry: unlimitedExpiry ? admin.firestore.Timestamp.fromDate(unlimitedExpiry) : null,
               // Add credits based on plan
-              credits: planName === 'Quick Ask' ? 5 : 
+              credits: planName === 'First Ask' ? 2 :
+                       planName === 'Quick Ask' ? 5 : 
                        planName === 'Deep Dive' ? 15 : 
                        planName === 'The Power Pack' ? 24 : 
                        planName === 'Day Pass' ? 999 : // Unlimited represented as 999
@@ -562,7 +566,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             console.log('[Verify Payment] Plan purchase completed', {
               userId,
               planName,
-              credits: planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 24 : planName === 'Day Pass' ? 999 : existingUserData?.credits || 0,
+              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 24 : planName === 'Day Pass' ? 999 : existingUserData?.credits || 0,
               compatibilityCredits: planName === 'Standard' ? 5 : planName === 'Premium' ? 10 : existingUserData?.compatibilitycredits || 0,
               paymentId: razorpay_payment_id,
             });
@@ -586,7 +590,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           console.log('[Verify Payment] Plan and credits allocated successfully:', {
             planName,
-            credits: planName === 'Quick Ask' ? 5 : 
+            credits: planName === 'First Ask' ? 2 : 
+                     planName === 'Quick Ask' ? 5 : 
                      planName === 'Deep Dive' ? 15 : 
                      planName === 'The Power Pack' ? 24 : 
                      planName === 'Day Pass' ? 999 : 0,

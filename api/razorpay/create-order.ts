@@ -3,6 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // CRITICAL: Server-side price source of truth
 // Frontend CANNOT override these prices
 const VALID_PLAN_PRICES: Record<string, number> = {
+  'First Ask': 3900,      // ₹39 in paise
   'Quick Ask': 9900,      // ₹99 in paise
   'Deep Dive': 38900,     // ₹389 in paise
   'The Power Pack': 69900, // ₹199 in paise

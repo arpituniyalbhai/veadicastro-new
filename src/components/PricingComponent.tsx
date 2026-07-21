@@ -6,6 +6,23 @@ import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
+    name: "First Ask",
+    price: 39,
+    period: "one-time",
+    questions: 2,
+    description: "Try Vedika AI with your first question - low risk, high clarity",
+    buyers: 245,
+    recentBuyers: 156,
+    benefits: [
+      "2 Personalized Questions",
+      "Perfect starter pack",
+      "Instant Vedika AI responses",
+      "Powered by your exact birth chart",
+      "Never expire - use anytime",
+      "Best value for beginners",
+    ],
+  },
+  {
     name: "Quick Ask",
     price: 149,
     period: "one-time",
@@ -81,7 +98,7 @@ const PricingComponent = () => {
           </h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
+        <div className="grid gap-5 md:grid-cols-4 max-w-7xl mx-auto mb-12">
           {plans.map((plan) => {
             const isDeepDive = plan.name === "Deep Dive";
             const visibleBenefits = expandedBenefits[plan.name]

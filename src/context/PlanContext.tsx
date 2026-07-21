@@ -25,6 +25,7 @@ export type PlanName =
   | "Free"
   | "Standard"
   | "Premium"
+  | "First Ask"
   | "Quick Ask"
   | "Deep Dive"
   | "The Power Pack"
@@ -65,6 +66,7 @@ const PLAN_CREDITS: Record<PlanName, number> = {
   Free: 2,
   Standard: 10,
   Premium: 15,
+  "First Ask": 2,
   "Quick Ask": 5,
   "Deep Dive": 15,
   "The Power Pack": 30,

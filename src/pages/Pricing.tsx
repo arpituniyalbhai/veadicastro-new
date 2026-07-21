@@ -33,6 +33,23 @@ import SEO from "@/components/SEO";
 
 const plans = [
   {
+    name: "First Ask",
+    price: 39,
+    period: "one-time",
+    questions: 2,
+    description: "Try Vedika AI with your first question — low risk, high clarity",
+    buyers: 245,
+    recentBuyers: 156,
+    benefits: [
+      "2 Personalized Questions",
+      "Perfect starter pack",
+      "Instant Vedika AI responses",
+      "Powered by your exact birth chart",
+      "Never expire — use anytime",
+      "Best value for beginners"
+    ]
+  },
+  {
     name: "Quick Ask",
     price: 99,
     period: "one-time",
@@ -107,6 +124,7 @@ const Pricing = () => {
 
   const normalizePlanTier = (name: string): PlanName => {
     const normalized = name.toLowerCase();
+    if (normalized.includes("first ask")) return "First Ask";
     if (normalized.includes("quick ask")) return "Quick Ask";
     if (normalized.includes("deep dive")) return "Deep Dive";
     if (normalized.includes("power pack")) return "The Power Pack";
@@ -510,7 +528,7 @@ const Pricing = () => {
     }
 
     // Validate plan is one of our valid plans
-    const validPlans = ['Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'];
+    const validPlans = ['First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'];
     if (!validPlans.includes(plan)) {
       return;
     }
@@ -975,7 +993,7 @@ const Pricing = () => {
             </Card>
 
             <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
-              {plans.map((plan) => {
+              {plans.filter(plan => plan.name !== 'First Ask' || !planName || planName === 'Free').map((plan) => {
                 const isDeepDive = plan.name === 'Deep Dive';
                 const visibleBenefits = expandedBenefits[plan.name] ? plan.benefits.slice(1) : plan.benefits.slice(1, 6);
                 

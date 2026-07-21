@@ -288,7 +288,7 @@ export default function Chat() {
   })();
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
-    const paidPlanKeywords = ["quick ask", "deep dive", "power pack"];
+    const paidPlanKeywords = ["first ask", "quick ask", "deep dive", "power pack"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
 
@@ -1148,6 +1148,20 @@ export default function Chat() {
                             <p className="text-xs text-muted-foreground">Unlock premium Vedic astrology insights</p>
                           </div>
                           <div className="space-y-2">
+                            {!isProPlan && (
+                              <div
+                                onClick={() => navigate('/pricing/onboarding?plan=First%20Ask&amount=39&type=pack')}
+                                className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 p-1 cursor-pointer transform transition-all duration-300 hover:scale-[1.02]"
+                              >
+                                <div className="flex justify-between items-center bg-card px-4 py-3 rounded-lg">
+                                  <div>
+                                    <div className="text-sm font-medium text-white">First Ask</div>
+                                    <div className="text-xs text-muted-foreground">2 questions</div>
+                                  </div>
+                                  <div className="text-base font-semibold text-white">₹39</div>
+                                </div>
+                              </div>
+                            )}
                             <div
                               onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=99&type=pack')}
                               className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
