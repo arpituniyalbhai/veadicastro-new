@@ -973,7 +973,7 @@ export default function AiKundliAnalysis() {
             </p>
 
             <p className="text-white/80 leading-7 mb-6">
-              The quality of the result depends heavily on the underlying astrology engine. If the calculations are wrong, the interpretation will be wrong too. That is why serious platforms rely on astronomical calculation systems such as Swiss Ephemeris rather than guessing planetary locations.
+              The quality of the result depends heavily on the underlying astrology engine. If the calculations are wrong, the interpretation will be wrong too. That is why serious platforms rely on astronomical calculation systems such as Swiss Ephemeris rather than guessing planetary locations. Before diving into a full kundli analysis, you can quickly check your Vedic Moon sign using our <Link to="/rashi-calculator-by-date-of-birth" className="text-pink-300 hover:text-pink-200 underline">Rashi Calculator by Date of Birth</Link>.
             </p>
 
             <p className="text-white/80 leading-7 mb-8">

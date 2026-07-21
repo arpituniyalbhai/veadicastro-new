@@ -911,7 +911,7 @@ const LuckyColourForToday = () => {
               </p>
               
               <p>
-                If you want to go deeper, your birth chart matters. Your ascendant (lagna) and your Moon sign determine which colours are most beneficial for you specifically. Someone with a strong Saturn in their chart might actually benefit from more Saturn-blue energy regularly, not just on Saturdays. Someone with a weak Sun might need to lean into orange and gold more intentionally.
+                If you want to go deeper, your birth chart matters. Your ascendant (lagna) and your <Link to="/rashi-calculator-by-date-of-birth" style={{color:"#ec4899", textDecoration:"underline"}}>Moon sign (Rashi)</Link> determine which colours are most beneficial for you specifically. Someone with a strong Saturn in their chart might actually benefit from more Saturn-blue energy regularly, not just on Saturdays. Someone with a weak Sun might need to lean into orange and gold more intentionally.
               </p>
               
               <p>

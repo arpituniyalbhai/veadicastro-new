@@ -81,6 +81,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/lucky-colour-for-today',
     breadcrumb: 'Lucky Colour for Today',
   },
+  '/rashi-calculator-by-date-of-birth': {
+    title: 'Rashi Calculator by Date of Birth — Find Your Vedic Moon Sign | Veadicastro',
+    description: 'Free Rashi calculator by date of birth. Instantly find your Vedic moon sign (Chandra Rashi), sun sign, lagna, nakshatra, and dasha based on exact birth details using Swiss Ephemeris.',
+    canonical: 'https://veadicastro.in/rashi-calculator-by-date-of-birth',
+    breadcrumb: 'Rashi Calculator',
+  },
   '/astrology-store': {
     title: 'Astrology Store — Spiritual Products from Haridwar | Veadicastro',
     description: 'Buy authentic spiritual and astrology products. Rudraksha, crystal bracelets, puja items sourced from Haridwar. Free delivery across India.',

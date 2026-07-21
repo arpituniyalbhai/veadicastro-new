@@ -25,6 +25,7 @@ const linkGroups = [
       { name: "Career Prediction Tool", path: "/ai-career-prediction-by-date-of-birth" },
       { name: "Love Astrology by Date of Birth", path: "/love-astrology-by-date-of-birth" },
       { name: "Astrology by Date of Birth", path: "/astrology-by-date-of-birth" },
+      { name: "Rashi Calculator", path: "/rashi-calculator-by-date-of-birth" },
       { name: "Future Spouse Prediction", path: "/ai-future-spouse-prediction" },
       { name: "Astrology AI Tools", path: "/#features" },
       { name: "Kundli Generator", path: "/free-kundli-generator" },

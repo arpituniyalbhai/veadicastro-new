@@ -1271,7 +1271,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 </div>
                 
                 <div>
-                  <strong className="text-white">The "Vedika" Filter:</strong> Unlike a standard AI that might give you Western Tropical astrology, Vedika is locked into the Sidereal (Lahiri) system. It calculates your Lagna (Ascendant) and Nakshatras with traditional Indian accuracy.
+                  <strong className="text-white">The "Vedika" Filter:</strong> Unlike a standard AI that might give you Western Tropical astrology, Vedika is locked into the Sidereal (Lahiri) system. It calculates your Lagna (Ascendant) and Nakshatras with traditional Indian accuracy. To discover your Vedic Moon sign (Chandra Rashi) instantly, use our <a href="/rashi-calculator-by-date-of-birth" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Rashi Calculator by Date of Birth</a>.
                 </div>
               </div>
               

@@ -1402,7 +1402,7 @@ Respond in English only.`;
                 </p>
 
                 <p>
-                  Your janam kundli is not just a horoscope. It is a precise mathematical map of the sky at the exact moment you were born. Every planet, every degree, every nakshatra recorded at that instant becomes a blueprint of your personality, your karma, your strengths, your challenges, and the timing of major events in your life. For thousands of years, Vedic astrologers have used this birth chart to guide people through decisions about marriage, career, health, and spiritual growth. Today, with Veadicastro's free kundli generator, you can access this ancient wisdom instantly using just your date of birth, time, and place.
+                  Your janam kundli is not just a horoscope. It is a precise mathematical map of the sky at the exact moment you were born. Every planet, every degree, every nakshatra recorded at that instant becomes a blueprint of your personality, your karma, your strengths, your challenges, and the timing of major events in your life. For thousands of years, Vedic astrologers have used this birth chart to guide people through decisions about marriage, career, health, and spiritual growth. Today, with Veadicastro's free kundli generator, you can access this ancient wisdom instantly using just your date of birth, time, and place. If you only need to know your Vedic Moon sign, start with our <a href="/rashi-calculator-by-date-of-birth" style={{color:"#ec4899", textDecoration:"underline"}}>Rashi Calculator by Date of Birth</a> for a quick and accurate answer.
                 </p>
 
                 <div>
