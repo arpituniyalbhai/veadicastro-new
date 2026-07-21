@@ -1068,7 +1068,7 @@ export default function Chat() {
               variant="cosmic"
               size="sm"
               className="gap-1.5 text-xs h-9 px-4"
-              onClick={() => window.open("http://localhost:8080/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack", "_self")}
+              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack')}
             >
               Upgrade
             </Button>
