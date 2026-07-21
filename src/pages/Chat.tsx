@@ -589,8 +589,15 @@ export default function Chat() {
       // Remove the empty assistant placeholder
       setMessages((m) => m.slice(0, -1));
       
-      // Show limit warning instead of a message
-      setShowLimitWarning(true);
+      // Generate conversion message instead of showing modal
+      const conversionMsg = await generateConversionMessage({
+        userName: displayName,
+        lastQuestion: outgoingMessage,
+        recentMessages: messages,
+        language: lang,
+        isNewChat: messages.length === 0
+      });
+      setMessages((m) => [...m, { role: "assistant", content: conversionMsg, isConversion: true }]);
       setSending(false);
       setIsTyping(false);
       return;
@@ -1121,6 +1128,67 @@ export default function Chat() {
                             {question}
                           </button>
                         ))}
+                      </div>
+                    )}
+                    {m.isConversion && (
+                      <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
+                        <div className="rounded-2xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-4 space-y-3">
+                          <div className="text-center">
+                            <p className="text-sm font-medium text-white mb-1">Upgrade to Continue</p>
+                            <p className="text-xs text-muted-foreground">Get unlimited AI astrology readings</p>
+                          </div>
+                          <div className="space-y-2">
+                            <button
+                              onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=99&type=pack')}
+                              className="w-full rounded-xl bg-card/80 border border-border/60 px-4 py-3 text-left hover:border-pink-500/50 transition-colors"
+                            >
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-sm font-medium text-white">Quick Ask</div>
+                                  <div className="text-xs text-muted-foreground">5 questions</div>
+                                </div>
+                                <div className="text-lg font-bold text-pink-500">₹99</div>
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack')}
+                              className="w-full rounded-xl bg-card/80 border-2 border-pink-500/50 px-4 py-3 text-left relative"
+                            >
+                              <span className="absolute -top-2 right-2 bg-pink-500 text-white text-[10px] px-2 py-0.5 rounded-full">Popular</span>
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-sm font-medium text-white">Deep Dive</div>
+                                  <div className="text-xs text-muted-foreground">15 questions</div>
+                                </div>
+                                <div className="text-lg font-bold text-pink-500">₹389</div>
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => navigate('/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack')}
+                              className="w-full rounded-xl bg-card/80 border border-border/60 px-4 py-3 text-left hover:border-pink-500/50 transition-colors"
+                            >
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-sm font-medium text-white">Power Pack</div>
+                                  <div className="text-xs text-muted-foreground">30 questions</div>
+                                </div>
+                                <div className="text-lg font-bold text-pink-500">₹699</div>
+                              </div>
+                            </button>
+                            <button
+                              onClick={() => navigate('/pricing/onboarding?plan=Monthly&amount=499&type=subscription')}
+                              className="w-full rounded-xl bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 px-4 py-3 text-left hover:border-purple-500/50 transition-colors"
+                            >
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <div className="text-sm font-medium text-white">Monthly Pro</div>
+                                  <div className="text-xs text-muted-foreground">Unlimited questions</div>
+                                </div>
+                                <div className="text-lg font-bold text-purple-400">₹499/mo</div>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>

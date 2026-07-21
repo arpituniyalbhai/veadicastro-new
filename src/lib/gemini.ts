@@ -43,7 +43,7 @@ FINAL CHECK:
 If any fails → rewrite now.
 `;
 
-export type ChatTurn = { role: "user" | "assistant"; content: string };
+export type ChatTurn = { role: "user" | "assistant"; content: string; isConversion?: boolean };
 type ApiKeySlot = "primary" | "secondary";
 
 /**
