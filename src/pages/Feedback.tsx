@@ -164,27 +164,6 @@ const Feedback = () => {
             </div>
           </div>
 
-          {/* Prompt Chips */}
-          {showChips && (
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> Quick prompts — tap to add
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {PROMPT_CHIPS.map((chip) => (
-                  <button
-                    key={chip}
-                    type="button"
-                    onClick={() => appendChip(chip)}
-                    className="text-xs px-3 py-1.5 rounded-full border border-border/50 bg-background/60 hover:border-secondary/40 hover:text-secondary transition-colors"
-                  >
-                    {chip}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Feedback Textarea */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
