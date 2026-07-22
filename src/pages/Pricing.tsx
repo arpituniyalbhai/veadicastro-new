@@ -396,12 +396,10 @@ const Pricing = () => {
 
                   if (saveResponse.ok) {
                     console.log('[Payment] Fallback: Plan activated despite verification failure');
-                    setSelectedPlan(planName);
+                    setSelectedPlan({ name: planName, credits: getPlanCredits(planName) });
                     setSuccessPopupOpen(true);
-                    const normalizedTier = normalizePlanTier(planName || "Premium");
-                    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-                    applyPlanLocally(normalizedTier, expiresAt);
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    // Don't call applyPlanLocally - let Firestore real-time sync handle it
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                     await refreshPlan();
                     return; // Exit early, don't throw error
                   }
@@ -415,7 +413,7 @@ const Pricing = () => {
 
             // Payment verified successfully
             console.log('[Payment] Verification successful:', verifyData);
-            setSelectedPlan(planName);
+            setSelectedPlan({ name: planName, credits: getPlanCredits(planName) });
             setSuccessPopupOpen(true);
             
             // Firestore update should already be done by verify-payment endpoint
@@ -423,13 +421,12 @@ const Pricing = () => {
             if (verifyData.firestoreUpdated) {
               console.log('[Payment] Firestore updated by verify-payment endpoint');
             } else {
-              console.warn('[Payment] Firestore not updated by verify-payment, updating locally');
+              console.warn('[Payment] Firestore not updated by verify-payment');
             }
             
-            const normalizedTier = normalizePlanTier(planName || "Premium");
-            const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-            applyPlanLocally(normalizedTier, expiresAt);
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Don't call applyPlanLocally - let Firestore real-time sync handle it
+            // This prevents showing wrong credits in sidebar before backend syncs
+            await new Promise(resolve => setTimeout(resolve, 2000));
             await refreshPlan();
             
             // Store payment info in localStorage

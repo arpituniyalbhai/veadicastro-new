@@ -28,7 +28,9 @@ const PricingOnboarding = () => {
   const [advancedSettingsOpen, setAdvancedSettingsOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(planName);
+  const [selectedPlan, setSelectedPlan] = useState<{ name: string; credits: number } | null>(
+    planName ? { name: planName, credits: getPlanCredits(planName) } : null
+  );
 
   // Dynamic Razorpay script loading function
   const loadRazorpayScript = useCallback(() => {
@@ -82,7 +84,7 @@ const PricingOnboarding = () => {
   }, [user]);
 
   useEffect(() => {
-    setSelectedPlan(planName);
+    setSelectedPlan(planName ? { name: planName, credits: getPlanCredits(planName) } : null);
   }, [planName]);
 
   // Razorpay script will be loaded only when payment is initiated
@@ -110,6 +112,7 @@ const PricingOnboarding = () => {
 
   const normalizePlanTier = (name: string): PlanName => {
     const normalized = name.toLowerCase();
+    if (normalized.includes("first ask")) return "First Ask";
     if (normalized.includes("quick ask")) return "Quick Ask";
     if (normalized.includes("deep dive")) return "Deep Dive";
     if (normalized.includes("power pack")) return "The Power Pack";
@@ -117,7 +120,19 @@ const PricingOnboarding = () => {
     if (normalized.includes("standard")) return "Standard";
     if (normalized.includes("premium")) return "Premium";
     if (normalized.includes("free")) return "Free";
-    return "Quick Ask";
+    return "Free";
+  };
+
+  const getPlanCredits = (planName: string): number => {
+    const normalized = planName.toLowerCase();
+    if (normalized.includes("first ask")) return 2;
+    if (normalized.includes("quick ask")) return 5;
+    if (normalized.includes("deep dive")) return 15;
+    if (normalized.includes("power pack")) return 30;
+    if (normalized.includes("day pass")) return 999;
+    if (normalized.includes("premium")) return 20;
+    if (normalized.includes("standard")) return 10;
+    return 0;
   };
 
 
@@ -221,16 +236,12 @@ const PricingOnboarding = () => {
 
             // Payment verified successfully
             console.log('[Payment] Verification successful:', verifyData);
-            setSelectedPlan(planName);
+            setSelectedPlan({ name: planName, credits: getPlanCredits(planName) });
             setSuccessPopupOpen(true);
 
-            // Only update plan state for actual plans, NOT reports or compatibility
-            if (planType !== 'report' && planType !== 'compatibility') {
-              const normalizedTier = normalizePlanTier(planName || "Premium");
-              const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-              applyPlanLocally(normalizedTier, expiresAt);
-            }
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Don't call applyPlanLocally - let Firestore real-time sync handle it
+            // This prevents showing wrong credits in sidebar before backend syncs
+            await new Promise(resolve => setTimeout(resolve, 2000));
             await refreshPlan();
 
             // Store payment info in localStorage
@@ -541,10 +552,13 @@ const PricingOnboarding = () => {
             <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 w-full">
               <p className="text-sm text-muted-foreground mb-2">You got your credits!</p>
               <p className="text-lg font-semibold text-foreground">
-                {selectedPlan}
+                {selectedPlan?.name || selectedPlan}
+              </p>
+              <p className="text-base font-semibold text-secondary mt-1">
+                {selectedPlan?.credits ? `${selectedPlan.credits} Questions` : ''}
               </p>
               <p className="text-xs text-muted-foreground mt-2">
-                Credits will be available within 24 hours
+                Credits available immediately
               </p>
             </div>
             <Button 
