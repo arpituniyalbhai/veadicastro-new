@@ -20,6 +20,32 @@ const PricingOnboarding = () => {
   const planAmount = parseFloat(searchParams.get("amount") || "0");
   const planType = searchParams.get("type") || "";
   
+  // Helper functions - must be declared before use
+  const getPlanCredits = (planName: string): number => {
+    const normalized = planName.toLowerCase();
+    if (normalized.includes("first ask")) return 2;
+    if (normalized.includes("quick ask")) return 5;
+    if (normalized.includes("deep dive")) return 15;
+    if (normalized.includes("power pack")) return 30;
+    if (normalized.includes("day pass")) return 999;
+    if (normalized.includes("premium")) return 20;
+    if (normalized.includes("standard")) return 10;
+    return 0;
+  };
+
+  const normalizePlanTier = (name: string): PlanName => {
+    const normalized = name.toLowerCase();
+    if (normalized.includes("first ask")) return "First Ask";
+    if (normalized.includes("quick ask")) return "Quick Ask";
+    if (normalized.includes("deep dive")) return "Deep Dive";
+    if (normalized.includes("power pack")) return "The Power Pack";
+    if (normalized.includes("day pass")) return "Day Pass";
+    if (normalized.includes("standard")) return "Standard";
+    if (normalized.includes("premium")) return "Premium";
+    if (normalized.includes("free")) return "Free";
+    return "Free";
+  };
+  
   const [step, setStep] = useState(2);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState(user?.email || "");
@@ -109,31 +135,6 @@ const PricingOnboarding = () => {
   };
 
   const pricing = calculatePricing(planAmount);
-
-  const normalizePlanTier = (name: string): PlanName => {
-    const normalized = name.toLowerCase();
-    if (normalized.includes("first ask")) return "First Ask";
-    if (normalized.includes("quick ask")) return "Quick Ask";
-    if (normalized.includes("deep dive")) return "Deep Dive";
-    if (normalized.includes("power pack")) return "The Power Pack";
-    if (normalized.includes("day pass")) return "Day Pass";
-    if (normalized.includes("standard")) return "Standard";
-    if (normalized.includes("premium")) return "Premium";
-    if (normalized.includes("free")) return "Free";
-    return "Free";
-  };
-
-  const getPlanCredits = (planName: string): number => {
-    const normalized = planName.toLowerCase();
-    if (normalized.includes("first ask")) return 2;
-    if (normalized.includes("quick ask")) return 5;
-    if (normalized.includes("deep dive")) return 15;
-    if (normalized.includes("power pack")) return 30;
-    if (normalized.includes("day pass")) return 999;
-    if (normalized.includes("premium")) return 20;
-    if (normalized.includes("standard")) return 10;
-    return 0;
-  };
 
 
   const handleComplete = useCallback(async () => {
@@ -552,7 +553,7 @@ const PricingOnboarding = () => {
             <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 w-full">
               <p className="text-sm text-muted-foreground mb-2">You got your credits!</p>
               <p className="text-lg font-semibold text-foreground">
-                {selectedPlan?.name || selectedPlan}
+                {selectedPlan?.name || 'Plan'}
               </p>
               <p className="text-base font-semibold text-secondary mt-1">
                 {selectedPlan?.credits ? `${selectedPlan.credits} Questions` : ''}
