@@ -1193,7 +1193,7 @@ export default function Dashboard() {
                   <div className="bg-card/30 p-6 rounded-lg border border-border/40">
                     <h3 className="text-2xl font-bold text-white mb-2">Talk to P. Aman Uniyal</h3>
                     <div className="flex items-center justify-center gap-2 mb-4">
-                      <span className="text-3xl font-bold text-accent">₹799</span>
+                      <span className="text-3xl font-bold text-accent">₹499</span>
                       <span className="text-muted-foreground">Unlimited</span>
                     </div>
                     <p className="text-muted-foreground mb-6">
@@ -1203,7 +1203,7 @@ export default function Dashboard() {
                       onClick={() => navigate('/talk-to-astrologer')}
                       className="w-full bg-accent hover:bg-accent/90 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
                     >
-                      Book Now - ₹799 Unlimited
+                      Book Now - ₹499 Unlimited
                     </Button>
                     <p className="text-xs text-muted-foreground mt-3">
                       ⚡ Available Now | 📞 Direct Call | 🔒 100% Private

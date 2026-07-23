@@ -17,7 +17,7 @@ const astrologers = [
     reviews: 156,
     specialties: ["Career Guidance", "Marriage Compatibility", "Vedic Astrology", "Vastu Consultation"],
     languages: ["Hindi", "English", "Sanskrit"],
-    callPrice: 799,
+    callPrice: 499,
     chatPrice: 599,
     available: true,
     image: "/amanuniyalastrologe.webp",
@@ -39,8 +39,8 @@ const TalkToAstrologer = () => {
   }, []);
 
   const handleConsultation = (astrologerId: number) => {
-    setSelectedAstrologer(astrologerId);
-    setShowPopup(true);
+    // Redirect to payment onboarding with astrologer booking plan
+    navigate(`/pricing/onboarding?plan=Astrologer%20Call&amount=589&type=astrologer`);
   };
 
   const handleCallSupport = () => {
@@ -442,7 +442,7 @@ const TalkToAstrologer = () => {
                         <Phone className="w-4 h-4 text-accent" />
                         <span className="text-sm text-white">Call</span>
                       </div>
-                      <span className="text-lg font-bold text-accent">₹799</span>
+                      <span className="text-lg font-bold text-accent">₹499</span>
                     </div>
                     <div className="flex items-center justify-between bg-card/20 rounded-lg p-2">
                       <div className="flex items-center gap-2">
@@ -502,7 +502,7 @@ const TalkToAstrologer = () => {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                "Honestly pehle mujhe doubt tha, but session lene ke baad clear ho gaya ki sir ko kaafi deep knowledge hai. 799 me unlimited call milna is actually crazy value. Maine 3 baar call kiya same din."
+                "Honestly pehle mujhe doubt tha, but session lene ke baad clear ho gaya ki sir ko kaafi deep knowledge hai. 499 me unlimited call milna is actually crazy value. Maine 3 baar call kiya same din."
               </p>
             </div>
 
@@ -610,7 +610,7 @@ const TalkToAstrologer = () => {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                "I wasn't sure what to expect at first, but the consultation turned out to be really insightful. The astrologer explained things in a very calm and structured way. The unlimited calls for 799 is honestly a great deal."
+                "I wasn't sure what to expect at first, but the consultation turned out to be really insightful. The astrologer explained things in a very calm and structured way. The unlimited calls for 499 is honestly a great deal."
               </p>
             </div>
 
@@ -646,7 +646,7 @@ const TalkToAstrologer = () => {
                 ))}
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                "The predictions were surprisingly accurate, especially regarding my career situation. Having unlimited access for 799 makes it much more comfortable to clarify doubts later."
+                "The predictions were surprisingly accurate, especially regarding my career situation. Having unlimited access for 499 makes it much more comfortable to clarify doubts later."
               </p>
             </div>
 

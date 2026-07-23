@@ -12,6 +12,7 @@ const VALID_PLAN_PRICES: Record<string, number> = {
   'Standard': 19900,    // ₹199 in paise
   'Premium': 49900,    // ₹499 in paise
   'Quick Pack': 4900,   // ₹49 in paise (legacy support)
+  'Astrologer Call': 58900, // ₹589 in paise (₹499 + 18% GST)
 };
 
 // Micro-transaction pricing

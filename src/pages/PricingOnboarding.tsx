@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { ArrowLeft, Tag, User, Mail, Building2, FileText, ChevronDown, ChevronUp, Settings, Loader2 } from "lucide-react";
+import { ArrowLeft, Tag, User, Mail, Building2, FileText, ChevronDown, ChevronUp, Settings, Loader2, XCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -54,6 +54,7 @@ const PricingOnboarding = () => {
   const [advancedSettingsOpen, setAdvancedSettingsOpen] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [failurePopupOpen, setFailurePopupOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{ name: string; credits: number } | null>(
     planName ? { name: planName, credits: getPlanCredits(planName) } : null
   );
@@ -298,6 +299,7 @@ const PricingOnboarding = () => {
         modal: {
           ondismiss: () => {
             console.log("Payment cancelled by user");
+            setFailurePopupOpen(true);
             setIsProcessingPayment(false);
           },
         },
@@ -309,7 +311,7 @@ const PricingOnboarding = () => {
       const razorpay = new (window as any).Razorpay(options);
       razorpay.on('payment.failed', (response: any) => {
         console.error("Payment failed:", response);
-        alert(`Payment failed: ${response.error?.description || 'Unknown error'}\n\nError Code: ${response.error?.code || 'N/A'}`);
+        setFailurePopupOpen(true);
         setIsProcessingPayment(false);
       });
       
@@ -552,16 +554,33 @@ const PricingOnboarding = () => {
               </DialogDescription>
             </div>
             <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 w-full">
-              <p className="text-sm text-muted-foreground mb-2">You got your credits!</p>
-              <p className="text-lg font-semibold text-foreground">
-                {selectedPlan?.name || 'Plan'}
-              </p>
-              <p className="text-base font-semibold text-secondary mt-1">
-                {selectedPlan?.credits ? `${selectedPlan.credits} Questions` : ''}
-              </p>
-              <p className="text-xs text-muted-foreground mt-2">
-                Credits available immediately
-              </p>
+              {planType === 'astrologer' ? (
+                <>
+                  <p className="text-sm text-muted-foreground mb-2">Astrologer Booking Confirmed!</p>
+                  <p className="text-lg font-semibold text-foreground">
+                    {selectedPlan?.name || 'Astrologer Call'}
+                  </p>
+                  <p className="text-base font-semibold text-secondary mt-1">
+                    Astrologer will connect with you within 24 hours
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Our Team Member will call you within 12 hours
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-muted-foreground mb-2">You got your credits!</p>
+                  <p className="text-lg font-semibold text-foreground">
+                    {selectedPlan?.name || 'Plan'}
+                  </p>
+                  <p className="text-base font-semibold text-secondary mt-1">
+                    {selectedPlan?.credits ? `${selectedPlan.credits} Questions` : ''}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Credits available immediately
+                  </p>
+                </>
+              )}
             </div>
             <Button 
               variant="cosmic" 
@@ -572,6 +591,55 @@ const PricingOnboarding = () => {
               }}
             >
               Go to Dashboard
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Failure Popup */}
+      <Dialog open={failurePopupOpen} onOpenChange={setFailurePopupOpen}>
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-24 h-24 rounded-full bg-red-500/20 flex items-center justify-center">
+              <XCircle className="w-12 h-12 text-red-500" />
+            </div>
+            <div>
+              <DialogTitle className="text-2xl mb-2">Payment Failed</DialogTitle>
+              <DialogDescription className="text-base">
+                Hey, your payment failed. If you think payment is successful then email or call us at 9411761184
+              </DialogDescription>
+            </div>
+            <div className="flex gap-3 w-full">
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={() => {
+                  setFailurePopupOpen(false);
+                  window.location.href = 'tel:9411761184';
+                }}
+              >
+                Call Support
+              </Button>
+              <Button 
+                variant="cosmic" 
+                className="flex-1"
+                onClick={() => {
+                  setFailurePopupOpen(false);
+                  window.location.href = 'mailto:support@veadicastro.in?subject=Payment Issue';
+                }}
+              >
+                Email Support
+              </Button>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={() => {
+                setFailurePopupOpen(false);
+                navigate("/dashboard");
+              }}
+            >
+              Return to Dashboard
             </Button>
           </div>
         </DialogContent>
