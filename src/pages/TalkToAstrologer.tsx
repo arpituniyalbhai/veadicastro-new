@@ -10,7 +10,7 @@ import Navbar from "@/components/Navbar";
 const astrologers = [
   {
     id: 1,
-    name: "P. Aman Uniyal",
+    name: "Acharya Aman Uniyal",
     title: "Vedic Astrology Expert",
     experience: "10+ Years",
     rating: 4.7,
@@ -52,8 +52,8 @@ const TalkToAstrologer = () => {
     setIsLoading(true);
     
     // Send email to support
-    const subject = encodeURIComponent("Booking Request - P. Aman Uniyal");
-    const body = encodeURIComponent("Hey, I want to book a consultation with P. Aman Uniyal");
+    const subject = encodeURIComponent("Booking Request - Acharya Aman Uniyal");
+    const body = encodeURIComponent("Hey, I want to book a consultation with Acharya Aman Uniyal");
     const mailtoUrl = `mailto:support@veadicastro.in?subject=${subject}&body=${body}`;
     
     // Simulate loading delay before redirect
@@ -67,13 +67,13 @@ const TalkToAstrologer = () => {
   return (
     <>
       <Helmet>
-        <title>Best Astrologer in Uttarakhand – Pandit Aman Uniyal | Online Vedic Consultation</title>
-        <meta name="description" content="Talk to Pandit Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
+        <title>Best Astrologer in Uttarakhand – Acharya Aman Uniyal | Online Vedic Consultation</title>
+        <meta name="description" content="Talk to Acharya Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
         <link rel="canonical" href="https://veadicastro.in/talk-to-astrologer" />
         
         {/* Open Graph / Social Media */}
-        <meta property="og:title" content="Best Astrologer in Uttarakhand – Pandit Aman Uniyal | Online Vedic Consultation" />
-        <meta property="og:description" content="Talk to Pandit Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
+        <meta property="og:title" content="Best Astrologer in Uttarakhand – Acharya Aman Uniyal | Online Vedic Consultation" />
+        <meta property="og:description" content="Talk to Acharya Aman Uniyal – trusted Vedic astrologer from Pauri Garhwal, Uttarakhand. Serving clients from Dehradun, Haridwar, Rishikesh & across India. Book consultation at ₹599." />
         <meta property="og:image" content="https://veadicastro.in/optimized/reviews.webp" />
         <meta property="og:url" content="https://veadicastro.in/talk-to-astrologer" />
         <meta property="og:type" content="website" />
@@ -113,7 +113,7 @@ const TalkToAstrologer = () => {
                 "name": "Veadicastro – Vedic Astrology Consultation",
                 "url": "https://veadicastro.in/talk-to-astrologer",
                 "image": "https://veadicastro.in/amanuniyalastrologe.webp",
-                "description": "Best Vedic astrologer in Uttarakhand. Pandit Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
+                "description": "Best Vedic astrologer in Uttarakhand. Acharya Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
                 "address": {
                   "@type": "PostalAddress",
                   "addressRegion": "Uttarakhand",
@@ -128,7 +128,7 @@ const TalkToAstrologer = () => {
               {
                 "@type": "Service",
                 "name": "Vedic Astrology Consultation",
-                "description": "Best Vedic astrologer in Uttarakhand. Pandit Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
+                "description": "Best Vedic astrologer in Uttarakhand. Acharya Aman Uniyal from Pauri Garhwal offers online consultations for clients in Dehradun, Haridwar, Rishikesh, and across India.",
                 "provider": {
                   "@type": "Organization",
                   "name": "Veadicastro",
@@ -171,7 +171,7 @@ const TalkToAstrologer = () => {
                     "name": "Is consultation available in Hindi?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes. Pandit Aman Uniyal consults in Hindi and English. Most clients from North India prefer Hindi and he is fully comfortable with that."
+                      "text": "Yes. Acharya Aman Uniyal consults in Hindi and English. Most clients from North India prefer Hindi and he is fully comfortable with that."
                     }
                   },
                   {
@@ -187,7 +187,7 @@ const TalkToAstrologer = () => {
                     "name": "Is the call consultation really unlimited?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Yes. The ₹799 call package gives you unlimited call duration on the day of your session with Pandit Aman Uniyal. No per-minute charges."
+                      "text": "Yes. The ₹499 call package gives you unlimited call duration on the day of your session with Acharya Aman Uniyal. No per-minute charges."
                     }
                   },
                   {
@@ -195,7 +195,7 @@ const TalkToAstrologer = () => {
                     "name": "How is Veadicastro different from other astrology apps?",
                     "acceptedAnswer": {
                       "@type": "Answer",
-                      "text": "Most platforms route you to whoever is available from a large pool of astrologers. At Veadicastro, you book specifically with Pandit Aman Uniyal — a verified astrologer from a traditional Brahmin background in Uttarakhand with over 10 years of experience."
+                      "text": "Most platforms route you to whoever is available from a large pool of astrologers. At Veadicastro, you book specifically with Acharya Aman Uniyal — a verified astrologer from a traditional Brahmin background in Uttarakhand with over 10 years of experience."
                     }
                   },
                   {
@@ -238,7 +238,7 @@ const TalkToAstrologer = () => {
           <div className="bg-card/95 border border-border/60 rounded-2xl p-8 max-w-md mx-4 shadow-2xl">
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Contact for Booking</h3>
-              <p className="text-muted-foreground">Choose how you'd like to book P. Aman Uniyal</p>
+              <p className="text-muted-foreground">Choose how you'd like to book Acharya Aman Uniyal</p>
             </div>
 
             <div className="bg-card/20 rounded-lg p-6 mb-6">
@@ -318,7 +318,7 @@ const TalkToAstrologer = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Connect with <strong>Pandit Aman Uniyal</strong> — a Vedic astrologer from{" "}
+              Connect with <strong>Acharya Aman Uniyal</strong> — a Vedic astrologer from{" "}
               <strong>Pauri Garhwal, Uttarakhand</strong>, trusted by clients across{" "}
               <strong>Dehradun, Haridwar, Rishikesh, Nainital, Roorkee</strong> and beyond.
               Get personalized guidance on career, marriage, love, and life decisions via
@@ -376,7 +376,7 @@ const TalkToAstrologer = () => {
 
               {/* Basic Info */}
               <div className="text-center mb-4">
-                <h2 className="text-xl font-bold text-white mb-1">Pandit Aman Uniyal – Best Vedic Astrologer in Uttarakhand</h2>
+                <h2 className="text-xl font-bold text-white mb-1">Acharya Aman Uniyal – Best Vedic Astrologer in Uttarakhand</h2>
                 <p className="text-accent text-sm mb-2">Expert in Vedic Astrology</p>
                 <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-2">
                   <span>10+ years of experience</span>
@@ -391,7 +391,7 @@ const TalkToAstrologer = () => {
 
               {/* Description */}
               <p className="text-sm text-muted-foreground text-center mb-4">
-                Originally from <strong>Pauri Garhwal, Uttarakhand</strong>, Pandit Aman 
+                Originally from <strong>Pauri Garhwal, Uttarakhand</strong>, Acharya Aman 
                 Uniyal brings over 10 years of traditional Vedic astrology experience. 
                 He has guided thousands of clients from Dehradun, Haridwar, Rishikesh, 
                 and across India on career, marriage, and life decisions.
@@ -482,7 +482,7 @@ const TalkToAstrologer = () => {
         {/* Reviews Section */}
         <div className="mt-12 p-6 rounded-xl border border-border/60 bg-background/50">
           <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold mb-2">What Our Clients Say About Pandit Aman Uniyal</h3>
+            <h3 className="text-xl font-semibold mb-2">What Our Clients Say About Acharya Aman Uniyal</h3>
             <p className="text-sm text-muted-foreground">
               Real experiences from people who have consulted with our Vedic astrology expert
             </p>
@@ -683,13 +683,13 @@ const TalkToAstrologer = () => {
                 <h3 className="text-lg font-semibold text-white">Choose Your Mode</h3>
               </div>
               <p className="text-muted-foreground leading-relaxed">
-                Booking a consultation with Pandit Aman Uniyal is simple and takes less than two minutes. Here's what happens after you click "Book Now":
+                Booking a consultation with Acharya Aman Uniyal is simple and takes less than two minutes. Here's what happens after you click "Book Now":
               </p>
               <div className="space-y-3 mt-4">
                 <div className="flex gap-3">
                   <span className="text-accent font-semibold">Step 1 — Choose Your Mode:</span>
                   <p className="text-muted-foreground">
-                    Decide whether you want a call consultation (₹799, unlimited duration) or a chat consultation (₹599, 20 minutes). Both options give you direct, one-on-one access to Pandit Aman Uniyal — no bots, no automated responses, no junior assistants. You speak directly with the astrologer himself.
+                    Decide whether you want a call consultation (₹499, unlimited duration) or a chat consultation (₹599, 20 minutes). Both options give you direct, one-on-one access to Acharya Aman Uniyal — no bots, no automated responses, no junior assistants. You speak directly with the astrologer himself.
                   </p>
                 </div>
                 <div className="flex gap-3">
@@ -701,7 +701,7 @@ const TalkToAstrologer = () => {
                 <div className="flex gap-3">
                   <span className="text-accent font-semibold">Step 3 — Your Consultation Begins:</span>
                   <p className="text-muted-foreground">
-                    At your scheduled time, Pandit Aman Uniyal will call you directly on your registered number, or connect via chat mode you selected. He will have already reviewed your chart before the session begins, so the conversation starts from a place of genuine preparation — not generic advice.
+                    At your scheduled time, Acharya Aman Uniyal will call you directly on your registered number, or connect via chat mode you selected. He will have already reviewed your chart before the session begins, so the conversation starts from a place of genuine preparation — not generic advice.
                   </p>
                 </div>
               </div>
@@ -709,14 +709,14 @@ const TalkToAstrologer = () => {
           </div>
         </section>
 
-        {/* Section 2: About Pandit Aman Uniyal */}
+        {/* Section 2: About Acharya Aman Uniyal */}
         <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Meet Your Astrologer — Pandit Aman Uniyal</h2>
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">Meet Your Astrologer — Acharya Aman Uniyal</h2>
           <div className="grid gap-8 lg:grid-cols-2">
             <div className="space-y-6">
               <div>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Pandit Aman Uniyal comes from a traditional Brahmin family in Uttarakhand, where Vedic astrology has been a living practice across generations — not just an academic subject. He has spent over a decade studying Jyotisha Shastra, Parashari system, and Vastu Vidya, and has personally guided thousands of individuals across India on matters of career, marriage, health, and life decisions.
+                  Acharya Aman Uniyal comes from a traditional Brahmin family in Uttarakhand, where Vedic astrology has been a living practice across generations — not just an academic subject. He has spent over a decade studying Jyotisha Shastra, Parashari system, and Vastu Vidya, and has personally guided thousands of individuals across India on matters of career, marriage, health, and life decisions.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   What makes his approach different from most online astrology platforms is this: he reads your chart the way it was meant to be read — through the lens of your specific planetary placements, dasha periods, and transits — not through generic Sun sign predictions that apply to one-twelfth of the entire population.
@@ -765,7 +765,7 @@ const TalkToAstrologer = () => {
         <section className="mt-16 p-8 rounded-xl border border-border/60 bg-background/50">
           <h2 className="text-2xl font-bold text-white mb-6 text-center">What Can You Discuss in Your Consultation?</h2>
           <p className="text-muted-foreground leading-relaxed mb-8 text-center">
-            A lot of people come into their first astrology consultation unsure of what to ask. Here is a broad overview of what Pandit Aman Uniyal covers in his sessions — and what people most commonly seek guidance on.
+            A lot of people come into their first astrology consultation unsure of what to ask. Here is a broad overview of what Acharya Aman Uniyal covers in his sessions — and what people most commonly seek guidance on.
           </p>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className="space-y-4">
@@ -819,14 +819,14 @@ const TalkToAstrologer = () => {
                   When you are dealing with a genuinely difficult decision — a marriage proposal, a business risk, a health scare, a family conflict — what you need is not just data. You need someone who can listen to your specific situation, hold your chart in mind, ask the right follow-up questions, and give you an honest, experience-backed perspective. That is what a real astrologer brings to the table.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Pandit Aman Uniyal has had thousands of such conversations. He has seen how the same planetary combination expresses differently depending on a person's background, their chart's overall strength, and phase of life they are in. That pattern recognition — built over a decade of real consultations — is not something any algorithm can fully replicate yet.
+                  Acharya Aman Uniyal has had thousands of such conversations. He has seen how the same planetary combination expresses differently depending on a person's background, their chart's overall strength, and phase of life they are in. That pattern recognition — built over a decade of real consultations — is not something any algorithm can fully replicate yet.
                 </p>
               </div>
             </div>
             <div className="mt-8 p-6 bg-card/20 rounded-lg border border-border/40">
               <p className="text-accent font-semibold mb-3">We see AI and human astrology not as competitors but as complements.</p>
               <p className="text-muted-foreground leading-relaxed">
-                Use Vedika AI when you want quick answers, chart generation, or everyday guidance. Come to Pandit Aman Uniyal when the stakes are higher and you want a real conversation with a real expert.
+                Use Vedika AI when you want quick answers, chart generation, or everyday guidance. Come to Acharya Aman Uniyal when the stakes are higher and you want a real conversation with a real expert.
               </p>
             </div>
           </div>
@@ -838,7 +838,7 @@ const TalkToAstrologer = () => {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-accent mb-2">Is the consultation available in Hindi?</h3>
-              <p className="text-muted-foreground">Yes. Pandit Aman Uniyal consults primarily in Hindi and also in English. Most clients from North India prefer conversing in Hindi, and he is completely comfortable with that.</p>
+              <p className="text-muted-foreground">Yes. Acharya Aman Uniyal consults primarily in Hindi and also in English. Most clients from North India prefer conversing in Hindi, and he is completely comfortable with that.</p>
             </div>
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-accent mb-2">What details do I need to provide before the session?</h3>
@@ -846,11 +846,11 @@ const TalkToAstrologer = () => {
             </div>
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-accent mb-2">Is the call consultation really unlimited?</h3>
-              <p className="text-muted-foreground">Yes. The ₹799 call package gives you unlimited call duration on the day of your session with Pandit Aman Uniyal. Many clients use this to ask follow-up questions they think of after the initial discussion, without worrying about per-minute charges.</p>
+              <p className="text-muted-foreground">Yes. The ₹499 call package gives you unlimited call duration on the day of your session with Acharya Aman Uniyal. Many clients use this to ask follow-up questions they think of after the initial discussion, without worrying about per-minute charges.</p>
             </div>
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-accent mb-2">How is Veadicastro different from other astrology apps?</h3>
-              <p className="text-muted-foreground">Most astrology apps, including larger platforms, work with a pool of hundreds of astrologers with varying levels of experience and quality. At Veadicastro, you are consulting with one verified astrologer who has been vetted by our team and comes from a genuine traditional background. There is no algorithm routing your call to whoever is available. You book with Pandit Aman Uniyal specifically.</p>
+              <p className="text-muted-foreground">Most astrology apps, including larger platforms, work with a pool of hundreds of astrologers with varying levels of experience and quality. At Veadicastro, you are consulting with one verified astrologer who has been vetted by our team and comes from a genuine traditional background. There is no algorithm routing your call to whoever is available. You book with Acharya Aman Uniyal specifically.</p>
             </div>
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-accent mb-2">Can I consult about someone else's chart — like my child or spouse?</h3>

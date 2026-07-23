@@ -65,6 +65,7 @@
     { "source": "/blog/vedika-ai-astrologer-india", "destination": "/api/meta?path=blog/vedika-ai-astrologer-india" },
     { "source": "/blog/free-ai-astrology-chat-india", "destination": "/api/meta?path=blog/free-ai-astrology-chat-india" },
     { "source": "/blog/fifa-world-cup-2026-winner-astrology-prediction", "destination": "/api/meta?path=blog/fifa-world-cup-2026-winner-astrology-prediction" },
+    { "source": "/best-astrologer-in-dehradun", "destination": "/api/meta?path=best-astrologer-in-dehradun" },
     { "source": "/((?!api|assets|.*\\.js|.*\\.css|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.ico|.*\\.webp|.*\\.woff|.*\\.woff2).*)", "destination": "/index.html" }
   ],
   "headers": [

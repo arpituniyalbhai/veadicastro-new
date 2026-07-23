@@ -100,6 +100,7 @@ const HiAstroAlternative = lazy(() => import("@/pages/HiAstroAlternative"));
 const KundliGPTAlternative = lazy(() => import("@/pages/KundliGPTAlternative"));
 const AstroSageAlternative = lazy(() => import("@/pages/AstroSageAlternative"));
 const ArpitUniyal = lazy(() => import("@/pages/ArpitUniyal"));
+const BestAstrologerInDehradun = lazy(() => import("../astrologer/best-astrologer-in-dehradun"));
 const DailyPrediction = lazy(() => import("@/pages/DailyPrediction"));
 const MonthlyPrediction = lazy(() => import("@/pages/MonthlyPrediction"));
 const AstrologyByDateOfBirth = lazy(() => import("@/pages/AstrologyByDateOfBirth"));
@@ -225,6 +226,7 @@ const AuthenticatedRoutes = ({
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
         <Route path="/about-founder" element={<Suspense fallback={<PageLoading />}><AboutFounder /></Suspense>} />
         <Route path="/arpit-uniyal" element={<Suspense fallback={<PageLoading />}><ArpitUniyal /></Suspense>} />
+        <Route path="/best-astrologer-in-dehradun" element={<Suspense fallback={<PageLoading />}><BestAstrologerInDehradun /></Suspense>} />
         <Route path="/mission" element={<Suspense fallback={<PageLoading />}><Mission /></Suspense>} />
         <Route path="/how-it-works" element={<Suspense fallback={<PageLoading />}><HowItWorks /></Suspense>} />
         <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />

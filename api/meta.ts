@@ -178,6 +178,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/about-founder',
     breadcrumb: 'About Founder',
   },
+  '/best-astrologer-in-dehradun': {
+    title: 'Best Astrologer in Dehradun — Acharya Aman Uniyal Ji | Veadicastro',
+    description: 'Best astrologer in Dehradun — Acharya Aman Uniyal Ji. 10-generation lineage from Pauri Garhwal, gold medalist in Vedic Astrology, 10+ years experience. Book consultation for career, marriage & life guidance.',
+    canonical: 'https://veadicastro.in/best-astrologer-in-dehradun',
+    breadcrumb: 'Best Astrologer in Dehradun',
+  },
   '/arpit-uniyal': {
     title: 'Arpit Uniyal — Founder of Veadicastro | AI Vedic Astrology',
     description: 'The story of why I built Veadicastro — an AI-powered Vedic astrology platform rooted in 300 years of authentic astrological knowledge. Written by founder Arpit Uniyal.',

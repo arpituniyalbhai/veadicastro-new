@@ -22,6 +22,18 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "30",
+    title: "Best Astrologer in Dehradun — Acharya Aman Uniyal Ji",
+    excerpt: "Discover the best astrologer in Dehradun — Acharya Aman Uniyal Ji. 10-generation lineage from Pauri Garhwal, gold medalist in Vedic Astrology with 10+ years of experience. Book your consultation today.",
+    author: "Acharya Aman Uniyal Ji",
+    date: "2026-07-23",
+    readTime: "15 min read",
+    category: "Vedic Astrology",
+    image: "/amanuniyalastrologe.webp",
+    externalLink: "/best-astrologer-in-dehradun"
+  },
+
+  {
     id: "29",
     title: "AstroSaga Alternative: Free AI Astrology | Veadicastro",
     excerpt: "Looking for a reliable AstroSaga alternative? Discover Veadicastro, featuring precise Swiss Ephemeris calculations and personal AI astrology chat.",
