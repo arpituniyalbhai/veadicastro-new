@@ -13,7 +13,7 @@ import { usePlan, type PlanName } from "@/context/PlanContext";
 
 const PricingOnboarding = () => {
   const { user, loading, setAuthOpen } = useAuth();
-  const { applyPlanLocally, refreshPlan } = usePlan();
+  const { applyPlanLocally, refreshPlan, planName: userPlan } = usePlan();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const planName = searchParams.get("plan") || "";
@@ -168,6 +168,7 @@ const PricingOnboarding = () => {
         body: JSON.stringify({
           currency: 'INR',
           planName,
+          userPlan: userPlan || 'Free', // Send user's current plan for discount eligibility
         }),
       });
 

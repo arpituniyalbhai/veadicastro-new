@@ -288,9 +288,19 @@ export default function Chat() {
   })();
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
-    const paidPlanKeywords = ["first ask", "quick ask", "deep dive", "power pack"];
+    const paidPlanKeywords = ["first ask", "quick ask", "deep dive", "power pack", "premium", "standard"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
+
+  // Get discounted price for paid users
+  const getDiscountedPrice = (originalPrice: number, planName: string): number => {
+    if (!isProPlan) return originalPrice;
+    
+    const normalizedPlan = planName.toLowerCase();
+    if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
+    if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
+    return originalPrice;
+  };
 
   const historyKey = useMemo(() => `chat_history_${user?.email || "guest"}`, [user?.email]);
   const historyMetaKey = useMemo(() => `${historyKey}_meta`, [historyKey]);
@@ -1175,7 +1185,7 @@ export default function Chat() {
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack')}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(389, 'Deep Dive')}&type=pack`)}
                               className="w-full rounded-xl bg-pink-500/10 border-2 border-pink-500/50 px-4 py-3 cursor-pointer relative"
                             >
                               <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">Popular</span>
@@ -1184,11 +1194,14 @@ export default function Chat() {
                                   <div className="text-sm font-medium text-white">Deep Dive</div>
                                   <div className="text-xs text-muted-foreground">15 questions</div>
                                 </div>
-                                <div className="text-base font-semibold text-pink-400">₹389</div>
+                                <div className="flex items-center gap-2">
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹389</span>}
+                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(389, 'Deep Dive')}</div>
+                                </div>
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate('/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack')}
+                              onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(699, 'The Power Pack')}&type=pack`)}
                               className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
                             >
                               <div className="flex justify-between items-center">
@@ -1196,7 +1209,10 @@ export default function Chat() {
                                   <div className="text-sm font-medium text-white">Power Pack</div>
                                   <div className="text-xs text-muted-foreground">30 questions</div>
                                 </div>
-                                <div className="text-base font-semibold text-white">₹699</div>
+                                <div className="flex items-center gap-2">
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹699</span>}
+                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(699, 'The Power Pack')}</div>
+                                </div>
                               </div>
                             </div>
                             <div

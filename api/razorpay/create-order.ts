@@ -71,7 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { currency, customAmount, promoCode } = req.body;
+    const { currency, customAmount, promoCode, userPlan } = req.body;
     const planName = typeof req.body.planName === 'string' ? req.body.planName.trim() : req.body.planName;
 
     if (!currency || !planName) {
@@ -116,6 +116,42 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Apply 33% discount if promo code is valid
     let finalAmount = originalAmount;
     let discountApplied = false;
+    
+    // Check if user has a paid plan for discount eligibility
+    const hasPaidPlan = userPlan && typeof userPlan === 'string' ? (() => {
+      const normalized = userPlan.toLowerCase();
+      return [
+        "first ask",
+        "quick ask",
+        "deep dive",
+        "power pack",
+        "premium",
+        "standard"
+      ].some(keyword => normalized.includes(keyword));
+    })() : false;
+    
+    // Apply dynamic pricing for paid users
+    if (hasPaidPlan && !promoCode) {
+      const normalizedPlan = planName.toLowerCase();
+      if (normalizedPlan.includes("deep dive")) {
+        finalAmount = 29900; // ₹299 in paise (discounted from ₹389)
+        discountApplied = true;
+        console.log('[Create Order] Applied paid user discount for Deep Dive:', { 
+          userPlan, 
+          originalAmount: originalAmount / 100, 
+          finalAmount: finalAmount / 100 
+        });
+      } else if (normalizedPlan.includes("power pack")) {
+        finalAmount = 45000; // ₹450 in paise (discounted from ₹699)
+        discountApplied = true;
+        console.log('[Create Order] Applied paid user discount for Power Pack:', { 
+          userPlan, 
+          originalAmount: originalAmount / 100, 
+          finalAmount: finalAmount / 100 
+        });
+      }
+      // Quick Ask stays at 99, First Ask stays at 39 (no additional discount)
+    }
     
     if (promoCode && promoCode.toUpperCase() === "NEW33") {
       finalAmount = Math.round(originalAmount * 0.67); // 33% off = 67% of original

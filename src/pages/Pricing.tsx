@@ -22,7 +22,7 @@ import {
   Award,
   XCircle
 } from "lucide-react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuthInstance, savePremiumUserToFirestore } from "@/lib/firebase";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -133,6 +133,43 @@ const Pricing = () => {
     if (normalized.includes("standard")) return "Standard";
     if (normalized.includes("free")) return "Free";
     return "Free";
+  };
+
+  const getPlanCredits = (planName: string): number => {
+    const normalized = planName.toLowerCase();
+    if (normalized.includes("first ask")) return 2;
+    if (normalized.includes("quick ask")) return 5;
+    if (normalized.includes("deep dive")) return 15;
+    if (normalized.includes("power pack")) return 30;
+    if (normalized.includes("day pass")) return 999;
+    if (normalized.includes("premium")) return 20;
+    if (normalized.includes("standard")) return 10;
+    return 0;
+  };
+
+  // Check if user has a paid plan for discount eligibility
+  const hasPaidPlan = useMemo(() => {
+    if (!planName) return false;
+    const normalized = planName.toLowerCase();
+    return [
+      "first ask",
+      "quick ask",
+      "deep dive",
+      "power pack",
+      "premium",
+      "standard"
+    ].some(keyword => normalized.includes(keyword));
+  }, [planName]);
+
+  // Apply dynamic pricing based on user's plan
+  const getDiscountedPrice = (originalPrice: number, planName: string): number => {
+    if (!hasPaidPlan) return originalPrice;
+    
+    const normalizedPlan = planName.toLowerCase();
+    if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
+    if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
+    // Quick Ask stays at 99, First Ask stays at 39
+    return originalPrice;
   };
 
   const [isRazorpayLoading, setIsRazorpayLoading] = useState(false);
@@ -284,6 +321,7 @@ const Pricing = () => {
         body: JSON.stringify({
           currency: 'INR',
           planName,
+          userPlan: planName || 'Free', // Send user's current plan for discount eligibility
         }),
       });
 
@@ -984,7 +1022,9 @@ const Pricing = () => {
                   <span className="text-sm bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">LIMITED TIME</span>
                   <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
-                <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">Get 30 Questions for just Rs 699!</h3>
+                <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">
+                  Get 30 Questions for just Rs {hasPaidPlan ? '450' : '699'}!
+                </h3>
                 <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
               </div>
             </Card>
@@ -992,6 +1032,8 @@ const Pricing = () => {
             <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
               {plans.filter(plan => plan.name !== 'First Ask' || !planName || planName === 'Free').map((plan) => {
                 const isDeepDive = plan.name === 'Deep Dive';
+                const discountedPrice = getDiscountedPrice(plan.price, plan.name);
+                const showDiscount = discountedPrice !== plan.price;
                 const visibleBenefits = expandedBenefits[plan.name] ? plan.benefits.slice(1) : plan.benefits.slice(1, 6);
                 
                 return (
@@ -1031,14 +1073,30 @@ const Pricing = () => {
                         </span>
                       </div>
                     )}
+                    {showDiscount && (
+                      <div className="absolute -top-3 right-6 z-10">
+                        <span className="rounded-full border border-orange-500/40 bg-orange-500/10 px-3 py-1 text-xs font-bold text-orange-300">
+                          🔥 Special Offer
+                        </span>
+                      </div>
+                    )}
                     
                     {/* Header */}
                     <div className="mb-5 pt-3">
                       <h2 className="mb-5 text-xl font-bold leading-tight text-white">{plan.name}</h2>
                       <div className="mb-3 flex items-baseline gap-2">
-                        <span className="text-4xl font-extrabold leading-none text-pink-500">
-                          ₹{plan.price}
-                        </span>
+                        {showDiscount ? (
+                          <>
+                            <span className="text-sm text-muted-foreground line-through">₹{plan.price}</span>
+                            <span className="text-4xl font-extrabold leading-none text-pink-500">
+                              ₹{discountedPrice}
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-4xl font-extrabold leading-none text-pink-500">
+                            ₹{plan.price}
+                          </span>
+                        )}
                         <span className="text-sm text-muted-foreground">/ {plan.period}</span>
                       </div>
                       <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
@@ -1087,7 +1145,7 @@ const Pricing = () => {
                         className="h-12 w-full rounded-lg border border-pink-500/60 bg-pink-500 text-base font-bold text-white shadow-sm shadow-pink-500/20 hover:bg-pink-600 hover:text-white"
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
+                          navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${discountedPrice}&type=pack`);
                         }}
                       >
                         Get Started
