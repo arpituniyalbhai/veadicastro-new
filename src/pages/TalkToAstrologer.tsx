@@ -318,18 +318,18 @@ const TalkToAstrologer = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Connect with <strong>Acharya Aman Uniyal</strong> — a Vedic astrologer from{" "}
-              <strong>Pauri Garhwal, Uttarakhand</strong>, trusted by clients across{" "}
-              <strong>Dehradun, Haridwar, Rishikesh, Nainital, Roorkee</strong> and beyond.
-              Get personalized guidance on career, marriage, love, and life decisions via
-              call or chat — in Hindi and English — starting at just ₹40/min.{" "}
-              <a href="/" className="text-accent hover:text-accent/80 underline">
-                Try India's best astrologer
-              </a>{" "}
-              or explore our{" "}
-              <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">
-                AI astrology platform
-              </a>.
+               Connect with <strong>Acharya Aman Uniyal</strong> — a Vedic astrologer from{" "}
+               <strong>Pauri Garhwal, Uttarakhand</strong>, trusted by clients across{" "}
+               <strong>Dehradun, Haridwar, Rishikesh, Nainital, Roorkee</strong> and beyond.
+               Get personalized guidance on career, marriage, love, and life decisions via
+               call or chat — in Hindi and English — starting at just ₹40/min.{" "}
+               <a href="/best-astrologer-in-dehradun" className="text-accent hover:text-accent/80 underline">
+                 See why we are the best astrologer in Dehradun
+               </a>{" "}
+               or explore our{" "}
+               <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">
+                 AI astrology platform
+               </a>.
             </p>
           </div>
 
@@ -880,14 +880,18 @@ const TalkToAstrologer = () => {
             
             <div className="bg-card/30 p-5 rounded-xl border border-border/40">
               <h3 className="text-lg font-semibold text-accent mb-2">
-                Best Astrologer in Dehradun
+                <a href="/best-astrologer-in-dehradun" className="hover:text-accent/80 transition-colors">
+                  Best Astrologer in Dehradun
+                </a>
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Looking for a trusted astrologer in Dehradun? Pandit Aman Uniyal 
                 offers online Vedic consultations to clients in Dehradun — from 
                 Rajpur Road to Clement Town — covering career, marriage, kundali 
-                matching, and Vastu. No need to travel; consult from home via call 
-                or chat at ₹599 onwards.
+                matching, and Vastu.{" "}
+                <a href="/best-astrologer-in-dehradun" className="text-accent hover:text-accent/80 underline">
+                  Learn more about why he is the best astrologer in Dehradun
+                </a>.
               </p>
             </div>
 
