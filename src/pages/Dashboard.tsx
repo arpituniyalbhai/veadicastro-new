@@ -1206,7 +1206,7 @@ export default function Dashboard() {
                   Book Now
                 </Button>
                 <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                  <span>📞 Direct Call</span>
+                  <span>⏳ Unlimited Calling</span>
                   <span>⭐ 4.9/5</span>
                   <span className="text-green-400/80 font-medium">Full Refund if not satisfied</span>
                 </div>
