@@ -140,6 +140,7 @@ const PricingOnboarding = () => {
 
   const handleComplete = useCallback(async () => {
     if (!user) {
+      sessionStorage.setItem("auth_return_path", window.location.pathname + window.location.search);
       setAuthOpen(true);
       return;
     }

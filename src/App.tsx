@@ -9,6 +9,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { useAuth } from "@/context/AuthContext";
 import { I18nProvider } from "@/context/I18nContext";
 import { cleanupOldCache } from "@/lib/dailyPredictionsPipeline";
+import { PlanProvider } from "@/context/PlanContext";
 import Footer from "@/components/Footer";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
@@ -271,8 +272,8 @@ const AuthenticatedRoutes = ({
         <Route path="/reports" element={protectedPage(<Reports />)} />
         <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
         <Route path="/pricing" element={protectedPage(<Pricing />)} />
-        <Route path="/pricing/onboarding" element={protectedPage(<PricingOnboarding />)} />
-        <Route path="/subscription/onboarding" element={protectedPage(<SubscriptionOnboarding />)} />
+        <Route path="/pricing/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><PricingOnboarding /></PlanProvider></Suspense>} />
+        <Route path="/subscription/onboarding" element={<Suspense fallback={<PageLoading />}><SubscriptionOnboarding /></Suspense>} />
         <Route path="/chat" element={protectedPage(<Chat />)} />
         <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
