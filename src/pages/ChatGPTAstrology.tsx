@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import AdBanner from "@/components/AdBanner";
 import { ArrowUp, Loader2, MapPin, MessageSquare, Plus, Search, X } from "lucide-react";
 import { getPlanetaryData, type AstroPayload } from "@/lib/astroCalc";
 import { generateGeminiStream, type ChatTurn } from "@/lib/gemini";
@@ -565,6 +566,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 <p className="mt-2 text-center text-[11px] text-white/35">
                   One free answer. Sign up to continue deeper with Vedika.
                 </p>
+                <AdBanner adSlot="3274072156" className="mt-4" />
               </div>
             </div>
           </main>
