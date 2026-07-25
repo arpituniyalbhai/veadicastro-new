@@ -154,9 +154,11 @@ const AuthModal = () => {
         setUser(userData);
         
         setAuthOpen(false);
-        
-        // Redirect flow: Welcome -> Onboarding -> Dashboard (for all users)
-        navigate("/welcome");
+
+        // Redirect to original page or welcome
+        const returnPath = sessionStorage.getItem("auth_return_path");
+        sessionStorage.removeItem("auth_return_path");
+        navigate(returnPath || "/welcome");
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Google sign-in failed";

@@ -25,8 +25,10 @@ const Feedback = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
   const [charCount, setCharCount] = useState(0);
+  const [wordCount, setWordCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const MAX_CHARS = 500;
+  const MIN_WORDS = 20;
 
   const displayName = (() => {
     try {
@@ -41,6 +43,7 @@ const Feedback = () => {
     if (val.length <= MAX_CHARS) {
       setFeedback(val);
       setCharCount(val.length);
+      setWordCount(val.trim() ? val.trim().split(/\s+/).length : 0);
     }
   };
 
@@ -171,8 +174,8 @@ const Feedback = () => {
                 <MessageCircle className="w-3.5 h-3.5" />
                 Your feedback
               </label>
-              <span className={cn("text-xs", charCount > MAX_CHARS * 0.85 ? "text-red-400" : "text-muted-foreground/60")}>
-                {charCount}/{MAX_CHARS}
+              <span className={cn("text-xs", wordCount > 0 && wordCount < MIN_WORDS ? "text-red-400" : charCount > MAX_CHARS * 0.85 ? "text-red-400" : "text-muted-foreground/60")}>
+                {wordCount}/{MIN_WORDS} words · {charCount}/{MAX_CHARS}
               </span>
             </div>
             <Textarea
@@ -187,13 +190,16 @@ const Feedback = () => {
                 style={{ width: `${progressPct}%`, backgroundColor: progressColor }}
               />
             </div>
+            {wordCount > 0 && wordCount < MIN_WORDS && (
+              <p className="text-xs text-red-400 mt-1">Please write at least {MIN_WORDS} words ({MIN_WORDS - wordCount} more needed)</p>
+            )}
           </div>
 
           <Button
             variant="cosmic"
             size="lg"
             className="w-full gap-2"
-            disabled={!feedback.trim() || rating === 0 || isSubmitting}
+            disabled={!feedback.trim() || rating === 0 || isSubmitting || wordCount < MIN_WORDS}
             onClick={handleSubmit}
           >
             {isSubmitting ? (
