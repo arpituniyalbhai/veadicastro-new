@@ -77,19 +77,13 @@ const SubscriptionOnboarding = () => {
     }
   }, [user]);
 
-  // Calculate pricing breakdown with GST
-  const calculatePricing = (total: number) => {
-    // Work backwards from total to show realistic breakdown
-    // Total = Subtotal + GST (18%)
-    // Subtotal = Total / 1.18
-    const subtotal = Math.round(total / 1.18);
-    const gst = total - subtotal;
-    const originalPrice = Math.round(subtotal * 1.5); // Show higher original price
-    const discount = originalPrice - subtotal;
-    return { originalPrice, discount, subtotal, gst, total };
-  };
-
-  const pricing = calculatePricing(499);
+  const basePrice = 499;
+  const platformFeePercent = 5;
+  const paymentFeePercent = 2;
+  const platformFee = Math.round(basePrice * platformFeePercent / 100);
+  const paymentFee = Math.round(basePrice * paymentFeePercent / 100);
+  const totalAmount = basePrice + platformFee + paymentFee;
+  const pricing = { basePrice, platformFee, paymentFee, platformFeePercent, paymentFeePercent, total: totalAmount };
 
   const handleComplete = useCallback(async () => {
     if (!user) {
@@ -435,20 +429,16 @@ const SubscriptionOnboarding = () => {
                   </div>
                   <div className="border-t border-border/60 pt-2 mt-2 space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Original Price:</span>
-                      <span>₹{pricing.originalPrice}</span>
+                      <span className="text-muted-foreground">Base Price:</span>
+                      <span>₹{pricing.basePrice}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Discount:</span>
-                      <span className="text-green-500">-₹{pricing.discount}</span>
+                      <span className="text-muted-foreground">Platform Fee ({pricing.platformFeePercent}%):</span>
+                      <span>₹{pricing.platformFee}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal:</span>
-                      <span>₹{pricing.subtotal}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">GST (18%):</span>
-                      <span>₹{pricing.gst}</span>
+                      <span className="text-muted-foreground">Payment Fee ({pricing.paymentFeePercent}%):</span>
+                      <span>₹{pricing.paymentFee}</span>
                     </div>
                     <div className="border-t border-border/60 pt-2 mt-2">
                       <div className="flex justify-between font-semibold text-lg">
