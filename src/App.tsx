@@ -273,7 +273,7 @@ const AuthenticatedRoutes = ({
         <Route path="/deep-reports" element={protectedPage(<DeepReports />)} />
         <Route path="/pricing" element={protectedPage(<Pricing />)} />
         <Route path="/pricing/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><PricingOnboarding /></PlanProvider></Suspense>} />
-        <Route path="/subscription/onboarding" element={<Suspense fallback={<PageLoading />}><SubscriptionOnboarding /></Suspense>} />
+        <Route path="/subscription/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><SubscriptionOnboarding /></PlanProvider></Suspense>} />
         <Route path="/chat" element={protectedPage(<Chat />)} />
         <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
