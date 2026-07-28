@@ -39,21 +39,6 @@ interface OpenCageResult {
   };
 }
 
-const suggestedQuestions = [
-  "Meri shaadi kab hogi?",
-  "Career mein success kab milegi?",
-  "Kya mera business chalega?",
-  "Mere life mein paise kab aayenge?",
-  "Kya mera love marriage hoga?",
-  "Meri health kaisi rahegi?",
-  "Kab milegi mujhe naukri?",
-  "Mera future kaisa hai?",
-  "Kya 2025 mera lucky year hai?",
-  "Mere rishte mein problem kyun hai?",
-  "Kaunsa career best hai mere liye?",
-  "Kab hogi meri financial growth?",
-];
-
 const thinkingMessages = [
   "Analyzing your planetary positions...",
   "Studying your birth Kundali...",
@@ -98,7 +83,8 @@ export default function ChatGPTAstrology() {
   const [isTyping, setIsTyping] = useState(false);
   const [thinkingMessage, setThinkingMessage] = useState("");
   const [chatStarted, setChatStarted] = useState(false);
-  const [selectedQuestion, setSelectedQuestion] = useState("");
+  const [pendingQuestion, setPendingQuestion] = useState("");
+  const [showAds, setShowAds] = useState(true);
   const [showDobModal, setShowDobModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [isGeneratingKundli, setIsGeneratingKundli] = useState(false);
@@ -256,12 +242,19 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
       return;
     }
 
+    if (!chartData) {
+      setPendingQuestion(question);
+      setShowDobModal(true);
+      return;
+    }
+
     const history = messages;
     setMessage("");
     setChatStarted(true);
     setMessages((prev) => [...prev, { role: "user", content: question }]);
     setMessageCount((prev) => prev + 1);
     setIsTyping(true);
+    setShowAds(false);
 
     let idx = 0;
     setThinkingMessage(thinkingMessages[0]);
@@ -301,15 +294,6 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     }
   };
 
-  const handleQuestionClick = (question: string) => {
-    setSelectedQuestion(question);
-    if (astroData) {
-      sendQuestion(question);
-      return;
-    }
-    setShowDobModal(true);
-  };
-
   const submitBirthDetails = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!birthDetails.name.trim() || !birthDetails.birthPlace.trim()) {
@@ -332,7 +316,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
       setAstroData(payload);
       persistAstroPayload(payload);
       setShowDobModal(false);
-      await sendQuestion(selectedQuestion, payload, language);
+      await sendQuestion(pendingQuestion, payload, language);
     } catch {
       alert("Error generating Kundli. Please try again.");
     } finally {
@@ -401,7 +385,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
       </Helmet>
 
       <div className="min-h-screen bg-black text-white antialiased">
-        <div className="grid min-h-screen md:grid-cols-[260px_1fr]">
+        <style>{`@media (max-width: 767px) { section::-webkit-scrollbar, div::-webkit-scrollbar, body::-webkit-scrollbar, html::-webkit-scrollbar { display: none; width: 0; height: 0; } body { -ms-overflow-style: none; } }`}</style>
+        <div className="flex min-h-screen flex-col md:grid md:grid-cols-[260px_1fr]">
           <aside className="hidden border-r border-white/10 bg-[#111111] md:flex md:flex-col">
             <div className="flex h-14 items-center gap-3 border-b border-white/10 px-4">
               <img src="/favicon.ico" alt="Veadicastro Logo" className="h-7 w-7 rounded" />
@@ -417,7 +402,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                   setMessages([]);
                   setMessage("");
                   setChatStarted(false);
-                  setSelectedQuestion("");
+                  setShowAds(true);
                 }}
                 className="flex h-10 w-full items-center gap-3 rounded-md px-3 text-left text-sm text-white/85 hover:bg-white/10"
               >
@@ -458,6 +443,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                   setMessages([]);
                   setMessage("");
                   setChatStarted(false);
+                  setShowAds(true);
                 }}
                 className="rounded-md p-2 text-white/75 hover:bg-white/10"
                 aria-label="New chat"
@@ -466,9 +452,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               </button>
             </header>
 
-            <section className="flex-1 overflow-y-auto px-4 pb-36 pt-8">
+            <section className="flex-1 overflow-y-auto px-4 pb-40 pt-8 md:pb-36" style={{ WebkitOverflowScrolling: 'touch' }}>
               {!chatStarted ? (
-                <div className="mx-auto flex min-h-[calc(100vh-13rem)] max-w-4xl flex-col items-center justify-center">
+                <div className="mx-auto flex min-h-[calc(100dvh-14rem)] max-w-4xl flex-col items-center justify-center px-2">
                   <div className="mb-8 text-center">
                     <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#111111]">
                       <img src="/favicon.ico" alt="Veadicastro Logo" className="h-8 w-8 rounded" />
@@ -478,18 +464,12 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                     </h1>
                     <p className="mt-2 text-sm text-white/55">Ask Vedika your astrology question</p>
                   </div>
-                  <div className="grid w-full grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                    {suggestedQuestions.map((question) => (
-                      <button
-                        key={question}
-                        type="button"
-                        onClick={() => handleQuestionClick(question)}
-                        className="min-h-[58px] rounded-md border border-white/15 bg-transparent px-4 py-3 text-left text-sm text-white/85 transition hover:border-white/30 hover:bg-white/5"
-                      >
-                        {question}
-                      </button>
-                    ))}
-                  </div>
+                  {showAds && (
+                    <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+                      <AdBanner adSlot="3274072156" className="w-full" />
+                      <AdBanner adSlot="3274072156" className="hidden w-full sm:block" />
+                    </div>
+                  )}
                   <nav className="mt-8 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-white/45">
                     {internalLinks.map((item) => (
                       <Link key={item.href} to={item.href} className="hover:text-[#d9277a]">
@@ -541,32 +521,32 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               )}
             </section>
 
-            <div className="sticky bottom-0 bg-black px-4 pb-5 pt-3">
+            <div className="fixed bottom-0 left-0 right-0 bg-black px-3 pb-3 pt-3 md:sticky md:pb-5" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0.75rem)' }}>
               <div className="mx-auto max-w-3xl">
-                <div className="flex min-h-[58px] items-end gap-3 rounded-2xl border border-white/15 bg-[#111111] px-4 py-3">
+                <div className="flex min-h-[56px] items-center gap-3 rounded-2xl border border-white/15 bg-[#111111] px-4 py-2 md:min-h-[58px] md:py-3">
                   <textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={astroData ? "Ask anything..." : "Choose a question above to begin"}
-                    disabled={!astroData || isTyping}
+                    placeholder="Ask Vedika anything about your life, career, love, or future..."
+                    disabled={isTyping}
                     rows={1}
-                    className="max-h-32 flex-1 resize-none bg-transparent text-sm leading-6 text-white outline-none placeholder:text-white/35 disabled:cursor-not-allowed"
+                    className="max-h-32 flex-1 resize-none bg-transparent text-base leading-6 text-white outline-none placeholder:text-white/35 disabled:cursor-not-allowed md:text-sm"
                   />
                   <button
                     type="button"
                     onClick={() => sendQuestion(message)}
-                    disabled={!message.trim() || !astroData || isTyping}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#d9277a] text-white transition hover:bg-[#c1206d] disabled:cursor-not-allowed disabled:bg-white/20"
+                    disabled={!message.trim() || isTyping}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#d9277a] text-white transition hover:bg-[#c1206d] disabled:cursor-not-allowed disabled:bg-white/20 md:h-8 md:w-8"
                     aria-label="Send message"
                   >
-                    <ArrowUp className="h-4 w-4" />
+                    <ArrowUp className="h-5 w-5 md:h-4 md:w-4" />
                   </button>
                 </div>
                 <p className="mt-2 text-center text-[11px] text-white/35">
                   One free answer. Sign up to continue deeper with Vedika.
                 </p>
-                <AdBanner adSlot="3274072156" className="mt-4" />
+                {showAds && <AdBanner adSlot="3274072156" className="mt-4" />}
               </div>
             </div>
           </main>
