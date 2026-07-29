@@ -254,7 +254,6 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     setMessages((prev) => [...prev, { role: "user", content: question }]);
     setMessageCount((prev) => prev + 1);
     setIsTyping(true);
-    setShowAds(false);
 
     let idx = 0;
     setThinkingMessage(thinkingMessages[0]);
@@ -546,7 +545,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 <p className="mt-2 text-center text-[11px] text-white/35">
                   One free answer. Sign up to continue deeper with Vedika.
                 </p>
-                {showAds && <AdBanner adSlot="3274072156" className="mt-4" />}
+                <AdBanner adSlot="3274072156" className="mt-4" />
               </div>
             </div>
           </main>

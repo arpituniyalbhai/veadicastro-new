@@ -90,16 +90,16 @@ export default function AiAstrology() {
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
               Try India's most trusted free AI astrologer - get instant kundali analysis, personalized predictions, and answers to your questions. No signup required for your first consultation.
             </p>
-            <Link to="/chatgpt-astrology" className="inline-flex items-center gap-2 text-pink-400 hover:text-pink-300 underline mb-8">
-              Try ChatGPT Astrology
+            <button onClick={() => setAuthOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-[#d9277a] px-6 py-3 text-sm font-semibold text-white hover:bg-[#c01e6a] transition-colors shadow-lg shadow-pink-500/25 mb-8">
+              Try Free AI Astrology
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </button>
             
             {/* Social Proof Section */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
               <div className="flex items-center gap-2">
-                <img src="/optimized/reviews.webp" alt="Veadicastro Reviews - 10,000+ Happy Users" className="h-8 rounded-lg" />
-                <span className="text-white/80 text-sm">10,000+ Happy Users</span>
+                <img src="/optimized/reviews.webp" alt="Veadicastro Reviews - 30,000+ Happy Users" className="h-8 rounded-lg" />
+                <span className="text-white/80 text-sm">30,000+ Happy Users</span>
               </div>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map(i => (
