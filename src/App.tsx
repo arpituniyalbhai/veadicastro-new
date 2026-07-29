@@ -95,6 +95,7 @@ const AstrologyStore = lazy(() => import("@/pages/AstrologyStore"));
 const DhanYogBracelet = lazy(() => import("@/pages/DhanYogBracelet"));
 const ChatGPTAstrology = lazy(() => import("@/pages/ChatGPTAstrology"));
 const AiAstrologyPrediction = lazy(() => import("@/pages/AiAstrologyPrediction"));
+const AiNumerologyFreeChat = lazy(() => import("@/pages/AiNumerologyFreeChat"));
 const HoroscopeByDateOfBirth = lazy(() => import("@/pages/HoroscopeByDateOfBirth"));
 const AiPandit = lazy(() => import("@/pages/AiPandit"));
 const HiAstroAlternative = lazy(() => import("@/pages/HiAstroAlternative"));
@@ -222,6 +223,7 @@ const AuthenticatedRoutes = ({
         <Route path="/astrosage-alternative" element={<Suspense fallback={<PageLoading />}><AstroSageAlternative /></Suspense>} />
         <Route path="/astrology-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AstrologyByDateOfBirth /></Suspense>} />
         <Route path="/rashi-calculator-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><RashiCalculatorByDateOfBirth /></Suspense>} />
+        <Route path="/ai-numerology-free-chat" element={<Suspense fallback={<PageLoading />}><AiNumerologyFreeChat /></Suspense>} />
 
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />

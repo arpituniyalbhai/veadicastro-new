@@ -75,6 +75,9 @@ const Footer = () => {
             <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
               ChatGPT Astrology
             </Link>
+            <Link to="/ai-numerology-free-chat" className="text-white/80 hover:text-white transition-colors">
+              AI Numerology Free Chat
+            </Link>
           </div>
 
           <div className="flex flex-col items-start gap-3">

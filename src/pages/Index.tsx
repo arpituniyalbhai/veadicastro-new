@@ -1064,6 +1064,59 @@ const Index = () => {
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </article>
 
+              {/* AI Numerology Free Chat Tool */}
+              <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
+                   itemScope itemType="https://schema.org/SoftwareApplication"
+                   itemProp="mainEntity"
+                   onClick={() => {
+                     navigate('/ai-numerology-free-chat');
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                   }}>
+                <link itemProp="url" href="https://veadicastro.in/ai-numerology-free-chat" />
+                <meta itemProp="name" content="AI Numerology Free Chat - Veadicastro" />
+                <meta itemProp="applicationCategory" content="LifestyleApplication" />
+                <meta itemProp="operatingSystem" content="Web Browser" />
+                <meta itemProp="price" content="0" />
+                <meta itemProp="priceCurrency" content="USD" />
+                <span itemProp="description" className="hidden">Chat with a free AI numerologist. Get your Life Path, Destiny, and Lucky Numbers from your name and date of birth.</span>
+
+                <div className="relative p-6">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-2xl text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Star className="w-6 h-6" />
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors duration-300">
+                    AI Numerology Free Chat
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                    Chat with a free AI numerologist. Get your Life Path, Destiny, and Lucky Numbers from your name and date of birth.
+                  </p>
+
+                  <ul className="space-y-1 text-xs text-muted-foreground mb-4">
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Name & DOB based
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      Life Path & Destiny Numbers
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <div className="w-1 h-1 rounded-full bg-secondary"></div>
+                      AI chat insights
+                    </li>
+                  </ul>
+
+                  <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-3 transition-all duration-300">
+                    <span>Chat Now</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              </article>
+
               {/* Lucky Colour Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden w-full"
                    itemScope itemType="https://schema.org/SoftwareApplication"
