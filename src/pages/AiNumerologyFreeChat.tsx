@@ -346,7 +346,7 @@ Guidelines:
             ))}
           </div>
         </section>
-        <div className="flex justify-center mt-6 mb-2">
+        <div className="flex justify-center mt-6 mb-2 min-h-[120px]">
           <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
         </div>
 
@@ -420,7 +420,7 @@ Guidelines:
                   </button>
                 </div>
               </div>
-              <div className="flex justify-center my-2">
+              <div className="flex justify-center my-2 min-h-[120px]">
                 <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
               </div>
             </div>
@@ -478,8 +478,8 @@ Guidelines:
                   Chat with AI Numerologist <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
-              <div className="flex justify-center my-2">
-                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+              <div className="flex justify-center my-2 min-h-[120px]">
+                <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
               </div>
             </div>
           )}
@@ -602,8 +602,8 @@ Guidelines:
           )}
         </div>
 
-        <div className="flex justify-center my-2">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        <div className="flex justify-center my-2 min-h-[120px]">
+          <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
         </div>
 
         <div className="max-w-5xl mx-auto px-4 my-16">
@@ -635,8 +635,8 @@ Guidelines:
           </div>
         </section>
 
-        <div className="flex justify-center my-8">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        <div className="flex justify-center my-8 min-h-[120px]">
+          <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
         </div>
 
         <section className="max-w-5xl mx-auto px-4 mb-20">
@@ -778,8 +778,8 @@ Guidelines:
           </div>
         </section>
 
-        <div className="max-w-5xl mx-auto px-4 my-8">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        <div className="max-w-5xl mx-auto px-4 my-8 min-h-[120px]">
+          <AdBanner adSlot="4969456887" className="w-full max-w-[728px]" />
         </div>
 
         <section className="max-w-5xl mx-auto px-4 mb-20">
