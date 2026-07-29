@@ -393,9 +393,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>Free AI Astrologer - No signup | Veadicastro</title>
+        <title>Vedika AI Chat — Ask Free Astrology Questions | Veadicastro</title>
         <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
-        <meta name="keywords" content="astrology ai, ai astrology free chat, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology" />
+        <meta name="keywords" content="free ai astrologer chat, chat with vedic astrologer online, ai astrologer no signup, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology, ai astrology free chat" />
         <link rel="canonical" href="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
         <meta name="theme-color" content="#0a0a0f" />
@@ -437,13 +437,14 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         {
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": "Astrology AI - Vedic Astrology Consultant",
+          "name": "Free AI Astrologer Chat - No Signup Required",
           "alternateName": [
-            "AI Astrology Free Chat",
+            "Vedika AI Chat",
             "Personal Birth Chart Analysis", 
             "Authentic Parashari Astrology",
             "Vedic Jyotish Consultation",
-            "Birth Chart Reading AI"
+            "Birth Chart Reading AI",
+            "AI Astrology Free Chat"
           ],
           "description": "Personal Vedic astrology consultant providing authentic birth chart analysis based on Parashari, Jaimini, and Nadi astrology traditions. AI astrology free chat available 24/7.",
           "url": "https://veadicastro.in/free-ai-astrologer-chat",
@@ -577,7 +578,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     {/* ── HERO STRIP ── */}
     <section className="relative py-14 text-center px-4">
       <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 border border-pink-500/30 rounded-full px-4 py-1.5 mb-6">
-        <Sparkles className="w-3 h-3" /> Astrology AI Consultation - AI Astrology Free Chat
+        <Sparkles className="w-3 h-3" /> Free Astrologer Chat — No Signup Required
       </p>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
         Chat with Your Personal Ai Assistant<br />
@@ -605,6 +606,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <a href="/blog/how-ai-is-transforming-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI is Transforming Vedic Astrology</a>
         <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Jyotishi vs AI Astrologer</a>
         <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
+        <a href="/ai-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology — Complete Guide</a>
         <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
         <a href="/free-kundali-matching" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Kundli Matching</a>
         <a href="/" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Best Vedic astrology Platform</a>
