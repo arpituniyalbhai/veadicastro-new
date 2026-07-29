@@ -476,7 +476,7 @@ KEY INSIGHTS:
         <div className="max-w-5xl mx-auto px-4 pb-8">
           {/* AdSense Ad - Above Content */}
           <div className="my-6 flex justify-center">
-            <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+            <AdBanner adSlot="6207230947" className="w-full max-w-[728px]" />
           </div>
 
           {!report && !showTopicScreen && (
@@ -810,12 +810,12 @@ KEY INSIGHTS:
 
         {/* AdSense Ad - Below Report Section */}
         <div className="flex justify-center my-2">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="4894149274" className="w-full max-w-[728px]" />
         </div>
         
         {/* Ad 3 - After Report */}
         <div className="flex justify-center my-2">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="1102364064" className="w-full max-w-[728px]" />
         </div>
 
         {/* SEO Content Section */}
@@ -1208,6 +1208,7 @@ KEY INSIGHTS:
                 <a href="/talk-to-astrologer" className="text-pink-400 hover:text-pink-300 transition-colors">Talk to Astrologer</a>
                 <a href="/lucky-colour-for-today" className="text-pink-400 hover:text-pink-300 transition-colors">Lucky Colour for Today</a>
                 <a href="/angel-number-calculator" className="text-pink-400 hover:text-pink-300 transition-colors">Angel Number Calculator</a>
+                <a href="/ai-numerology-free-chat" className="text-pink-400 hover:text-pink-300 transition-colors">Free AI Numerology Chat</a>
                 <a href="/blog/is-ai-astrology-accurate" className="text-pink-400 hover:text-pink-300 transition-colors">Is AI Astrology Accurate?</a>
                 <a href="/blog/ai-astrologer-vs-human-astrologer" className="text-pink-400 hover:text-pink-300 transition-colors">AI vs Human Astrologer</a>
                 <a href="/blog/ai-jyotish-vedic-astrology" className="text-pink-400 hover:text-pink-300 transition-colors">What is AI Jyotish?</a>

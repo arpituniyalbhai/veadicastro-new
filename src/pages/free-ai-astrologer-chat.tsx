@@ -653,7 +653,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     <div className="max-w-5xl mx-auto px-4 pb-8">
       {/* AdSense Ad - Above Content */}
       <div className="my-6 flex justify-center">
-        <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+        <AdBanner adSlot="3038262265" className="w-full max-w-[728px]" />
       </div>
 
           {!kundliGenerated ? (
@@ -787,7 +787,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               
               {/* AdSense Ad - After Generate Birth Chart Button */}
               <div className="flex justify-center my-2">
-                <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+                <AdBanner adSlot="9228266099" className="w-full max-w-[728px]" />
               </div>
             </div>
           ) : (
@@ -894,7 +894,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* AdSense Ad - Below Chat Section */}
         <div className="flex justify-center my-2">
-          <AdBanner adSlot="4882345522" className="w-full max-w-[728px]" />
+          <AdBanner adSlot="9579619885" className="w-full max-w-[728px]" />
         </div>
         
         {/* ══════════════════════════════════════════════════════════════════
@@ -1214,6 +1214,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Ask Vedika About Marriage</a>
             <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
             <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
+            <a href="/ai-numerology-free-chat" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free AI Numerology Chat</a>
             <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
             <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Traditional Jyotish</a>
             <a href="/blog" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Vedic Astrology Blog</a>

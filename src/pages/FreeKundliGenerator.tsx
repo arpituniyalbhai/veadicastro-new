@@ -1601,6 +1601,9 @@ Respond in English only.`;
                   <p style={{ margin:"16px 0 0", fontSize:"16px", fontStyle:"italic", color:"rgba(255,255,255,0.7)" }}>
                     Veadicastro — Ancient Vedic Wisdom, Powered by AI. Free Kundli Online, Always.
                   </p>
+                  <p style={{ margin:"16px 0 0", fontSize:"14px", color:"rgba(255,255,255,0.6)" }}>
+                    Want to explore your life path through numbers instead? Try our <a href="/ai-numerology-free-chat" style={{ color:"#ec4899", textDecoration:"underline" }}>Free AI Numerology Chat</a> for a personalized reading based entirely on your birth date.
+                  </p>
                 </div>
               </div>
             </div>

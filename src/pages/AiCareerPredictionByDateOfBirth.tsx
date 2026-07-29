@@ -938,6 +938,9 @@ export default function AiCareerPredictionByDateOfBirth() {
                 For broader career questions, continue with <Link to="/free-ai-astrologer-chat" className="text-pink-300 underline-offset-4 hover:underline">Vedika's free AI astrologer chat</Link>. For human support on sensitive decisions, the <Link to="/talk-to-astrologer" className="text-pink-300 underline-offset-4 hover:underline">Talk to Astrologer</Link> page is the better path.
               </p>
               <p>
+                For insights based on your core birth numbers, try our <Link to="/ai-numerology-free-chat" className="text-pink-300 underline-offset-4 hover:underline">Free AI Numerology Chat</Link> — a complete life path analysis based on your date of birth.
+              </p>
+              <p>
                 You can also read related guides on <Link to="/blog/best-careers-for-each-zodiac-sign-in-2026" className="text-pink-300 underline-offset-4 hover:underline">Best Careers for Each Zodiac Sign in 2026</Link>, <Link to="/blog/is-ai-astrology-accurate" className="text-pink-300 underline-offset-4 hover:underline">whether AI astrology is accurate</Link>, <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-pink-300 underline-offset-4 hover:underline">how AI is transforming Vedic astrology</Link>, and <Link to="/blog/ai-astrology-prediction-for-2026" className="text-pink-300 underline-offset-4 hover:underline">AI astrology prediction for 2026</Link>.
               </p>
               <p>
