@@ -239,7 +239,6 @@ Guidelines:
 
         <meta name="author" content="Veadicastro" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
         <script type="application/ld+json">{`
         {
@@ -253,7 +252,10 @@ Guidelines:
           "operatingSystem": "Web",
           "inLanguage": ["en"],
           "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-          "featureList": ["Life Path Number Calculator", "Destiny Number Calculator", "Lucky Number Finder", "AI Numerology Chat", "Personalised Numerology Insights"]
+          "featureList": ["Life Path Number Calculator", "Destiny Number Calculator", "Lucky Number Finder", "AI Numerology Chat", "Personalised Numerology Insights"],
+          "screenshot": "https://veadicastro.in/og-ai-numerology.jpg",
+          "author": { "@type": "Organization", "name": "Veadicastro", "url": "https://veadicastro.in" },
+          "provider": { "@type": "Organization", "name": "Veadicastro", "url": "https://veadicastro.in" }
         }
         `}</script>
 
@@ -274,9 +276,12 @@ Guidelines:
           "@type": "Organization",
           "name": "Veadicastro",
           "url": "https://veadicastro.in",
+          "logo": "https://veadicastro.in/optimized/logo.webp",
           "founded": "2024",
           "areaServed": { "@type": "Country", "name": "IN" },
-          "description": "India's most accurate Vedic Astrology and Numerology AI platform"
+          "description": "India's most accurate Vedic Astrology and Numerology AI platform",
+          "contactPoint": { "@type": "ContactPoint", "contactType": "customer support", "url": "https://veadicastro.in/contact" },
+          "sameAs": ["https://twitter.com/veadicastro", "https://facebook.com/veadicastro", "https://instagram.com/veadicastro"]
         }
         `}</script>
 
@@ -298,6 +303,20 @@ Guidelines:
           ]
         })}
         </script>
+
+        <script type="application/ld+json">{`
+        {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": "AI Numerology Free Chat — What Is It and How It Works",
+          "description": "Learn how AI Numerology Free Chat works, what numbers it calculates, and how to get a personalised numerology reading from an AI numerologist based on your name and date of birth.",
+          "author": { "@type": "Organization", "name": "Veadicastro", "url": "https://veadicastro.in" },
+          "publisher": { "@type": "Organization", "name": "Veadicastro", "url": "https://veadicastro.in" },
+          "datePublished": "2025-06-15",
+          "dateModified": "2025-06-15",
+          "mainEntityOfPage": { "@type": "WebPage", "@id": "https://veadicastro.in/ai-numerology-free-chat" }
+        }
+        `}</script>
       </Helmet>
 
       <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-x-hidden">
@@ -325,10 +344,12 @@ Guidelines:
           <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 border border-pink-500/30 rounded-full px-4 py-1.5 mb-6">
             <Sparkles className="w-3 h-3" /> Free AI Numerology Chat
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
-            AI Numerology Free Chat<br />
-            <span className="text-pink-400 pink-glow">Your Personal AI Numerologist</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-2">
+            AI Numerology Free Chat
           </h1>
+          <h2 className="text-xl sm:text-2xl font-semibold text-pink-400 pink-glow mb-6">
+            Your Personal AI Numerologist
+          </h2>
           <p className="text-white/50 text-sm max-w-xl mx-auto mb-6 leading-relaxed">
             Discover your numerology profile and chat with an AI Numerologist for free. Enter your name and date of birth to receive personalised numerology insights and ask unlimited numerology related questions during your session.
           </p>
@@ -342,7 +363,7 @@ Guidelines:
           </div>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             {internalLinks.map((link) => (
-              <a key={link.href} href={link.href} className="text-sm text-white/60 hover:text-pink-400 transition-colors">{link.label}</a>
+              <Link key={link.href} to={link.href} className="text-sm text-white/60 hover:text-pink-400 transition-colors">{link.label}</Link>
             ))}
           </div>
         </section>
@@ -670,7 +691,7 @@ Guidelines:
         <section className="max-w-4xl mx-auto px-4 mb-20">
           <div className="prose prose-invert max-w-none">
             <article>
-              <h2 className="text-3xl font-black text-white mb-6">What is AI Numerology?</h2>
+              <h2 className="text-3xl font-black text-white mb-6">AI Numerology Free Chat — What Is It and How It Works</h2>
               <p className="text-white/80 leading-relaxed mb-6">
                 AI Numerology Free Chat is the simplest way to discover what your numbers say about you. Instead of reading generic descriptions online, you get a personalised numerology reading generated from your actual name and date of birth. Then you can ask follow up questions and get answers from an AI that understands numerology deeply. For those interested in Vedic birth chart readings, our <a href="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Free AI Astrologer Chat</a> offers a similar experience based on your Kundli.
               </p>
@@ -875,17 +896,25 @@ Guidelines:
         <div className="max-w-5xl mx-auto px-4 mb-8">
           <div className="flex flex-wrap justify-center gap-4">
             {internalLinks.map((link) => (
-              <a key={link.href} href={link.href} className="text-sm text-white/60 hover:text-pink-400 transition-colors">{link.label}</a>
+              <Link key={link.href} to={link.href} className="text-sm text-white/60 hover:text-pink-400 transition-colors">{link.label}</Link>
             ))}
           </div>
         </div>
 
         <footer className="border-t border-white/5 py-8 text-center">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="flex flex-wrap justify-center gap-4 text-xs text-white/40">
+              <span>&copy; {new Date().getFullYear()} Veadicastro. All rights reserved.</span>
+              <Link to="/privacy" className="text-white/40 hover:text-pink-400 transition-colors">Privacy Policy</Link>
+              <Link to="/terms" className="text-white/40 hover:text-pink-400 transition-colors">Terms of Service</Link>
+              <Link to="/contact" className="text-white/40 hover:text-pink-400 transition-colors">Contact Us</Link>
+            </div>
+          </div>
         </footer>
       </div>
 
       {showSignupModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <div className="card-glass rounded-3xl p-8 max-w-md w-full">
             <div className="text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden">

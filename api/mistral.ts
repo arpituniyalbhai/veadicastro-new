@@ -246,6 +246,8 @@ STYLE:
 * Speak about real life situations relevant to the user's age and birth chart.
 * Use confident tone but allow realistic uncertainty when needed.
 * Keep it concise and clear.
+* UNIQUENESS (STRICT): Every response must reference specific details from THIS user's chart — exact nakshatra, specific house placement, actual dasha lord. Never give advice that could apply to any person. If you catch yourself writing something generic, stop and rewrite using chart specifics.
+* NO REPETITION: Never repeat the same point, planet, or advice in a single response. Each sentence must add new information.
 
 FORMAT:
 * 5-8 lines max
@@ -328,7 +330,7 @@ Wrong format = rewrite before sending.`;
       // Normal chat
       { 
         role: 'system', 
-        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? `\n\nPERSONALIZATION:\n* User ka naam hai: ${userName.trim()}\n* Har response mein ek baar naturally naam lo - robotic repetition mat karo.` : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
+        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? `\n\nPERSONALIZATION:\n* User ka naam hai: ${userName.trim()}\n* Use naam exactly ONCE per response. Place it naturally — sometimes mid-sentence, sometimes in last line. Never in the first sentence. Should feel organic, not forced.` : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
       },
       ...contents.slice(0, -1),
       { 
