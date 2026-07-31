@@ -463,6 +463,9 @@ const TheGreatAstrologyScam = () => {
                 <Link to="/astrology-by-date-of-birth" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
                   Astrology by Date of Birth — Free AI Vedic Astrology Reading
                 </Link>
+                <Link to="/blog/numerology-guide" className="block text-purple-400 hover:text-purple-300 transition-colors py-2">
+                  AI Numerology Guide — How AI Reads Your Numbers
+                </Link>
               </div>
             </section>
 

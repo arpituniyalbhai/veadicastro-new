@@ -1223,6 +1223,7 @@ export default function AiKundliAnalysis() {
                 <li><Link to="/talk-to-astrologer" className="text-pink-300 hover:text-pink-200 underline">Talk to astrologer</Link></li>
                 <li><Link to="/about" className="text-pink-300 hover:text-pink-200 underline">About Veadicastro</Link></li>
                 <li><Link to="/how-it-works" className="text-pink-300 hover:text-pink-200 underline">How it works</Link></li>
+                <li><Link to="/blog/numerology-guide" className="text-pink-300 hover:text-pink-200 underline">AI Numerology Guide</Link></li>
               </ul>
             </div>
           </article>

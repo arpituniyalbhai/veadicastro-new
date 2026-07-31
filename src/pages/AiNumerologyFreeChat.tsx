@@ -37,6 +37,7 @@ const internalLinks = [
   { label: "Home", href: "/" },
   { label: "Free AI Astrologer", href: "/free-ai-astrologer-chat" },
   { label: "AI Astrology", href: "/ai-astrology" },
+  { label: "AI Numerology Guide", href: "/blog/numerology-guide" },
   { label: "Marriage Timing AI", href: "/ai-marriage-prediction-by-date-of-birth" },
   { label: "Free Kundli Generator", href: "/free-kundli-generator" },
   { label: "Angel Number Calculator", href: "/angel-number-calculator" },

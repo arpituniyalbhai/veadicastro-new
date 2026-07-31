@@ -415,6 +415,13 @@ const META: Record<string, { title: string; description: string; canonical: stri
     breadcrumb: 'FIFA World Cup 2026 Prediction',
     isBlog: true,
   },
+  '/blog/numerology-guide': {
+    title: 'AI Numerology Guide 2026: Life Path, Destiny & Master Numbers',
+    description: 'Calculate your Life Path, Destiny & Soul Urge Numbers free. Learn how AI interprets your numerology profile with Pythagorean & Chaldean systems.',
+    canonical: 'https://veadicastro.in/blog/numerology-guide',
+    breadcrumb: 'AI Numerology Guide',
+    isBlog: true,
+  },
 };
 
 function buildHtml(meta: { title: string; description: string; canonical: string; breadcrumb: string; isBlog?: boolean }, pathname: string) {

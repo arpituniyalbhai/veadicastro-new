@@ -22,6 +22,17 @@ type BlogPost = {
 // Blog posts with comprehensive content
 const blogPosts: BlogPost[] = [
   {
+    id: "31",
+    title: "AI Numerology: How Artificial Intelligence Reads Your Numbers and What It Can Really Tell You",
+    excerpt: "Learn how AI numerology combines Pythagorean & Chaldean calculation engines with artificial intelligence for personalized life path, destiny, and soul urge insights.",
+    author: "Veadicastro Team",
+    date: "2026-07-31",
+    readTime: "22 min read",
+    category: "Numerology",
+    image: "/blog-images/ai-numerology-guide-main.webp",
+    externalLink: "/blog/numerology-guide"
+  },
+  {
     id: "30",
     title: "Best Astrologer in Dehradun — Acharya Aman Uniyal Ji",
     excerpt: "Discover the best astrologer in Dehradun — Acharya Aman Uniyal Ji. 10-generation lineage from Pauri Garhwal, gold medalist in Vedic Astrology with 10+ years of experience. Book your consultation today.",

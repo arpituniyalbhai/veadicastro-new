@@ -523,7 +523,7 @@ export default function AiPandit() {
               The future may include AI systems that can learn from feedback, adapt to individual preferences, and provide increasingly nuanced insights. We may see new applications of astrology in areas such as mental health, education, and personal development.
             </p>
             <p className="text-base leading-7 text-white/70 mb-6">
-              Despite these technological advances, the foundation will remain the authentic principles of Vedic astrology. AI serves as a tool to make this ancient wisdom more accessible and applicable to modern life. The synergy between tradition and technology promises an exciting future for astrology. Read more in our <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-purple-400 hover:text-purple-300 underline">AI transforming Vedic astrology</Link> article.
+              Despite these technological advances, the foundation will remain the authentic principles of Vedic astrology. AI serves as a tool to make this ancient wisdom more accessible and applicable to modern life. The synergy between tradition and technology promises an exciting future for astrology. Read more in our <Link to="/blog/how-ai-is-transforming-vedic-astrology" className="text-purple-400 hover:text-purple-300 underline">AI transforming Vedic astrology</Link> article. If you are interested in how AI applies to numerology, explore our complete <Link to="/blog/numerology-guide" className="text-purple-400 hover:text-purple-300 underline">AI Numerology Guide</Link>.
             </p>
 
             <h2 className="text-3xl font-black text-white mb-6 mt-12">
