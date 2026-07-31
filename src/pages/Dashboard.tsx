@@ -778,6 +778,26 @@ export default function Dashboard() {
                     </button>
                   );
                 })}
+                <button
+                  onClick={() => {
+                    const sessionId = Math.random().toString(36).substr(2, 9);
+                    navigate(`/chart/${sessionId}?referral=dashboard`);
+                  }}
+                  className={cn(
+                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
+                    "text-muted-foreground hover:bg-accent/10 hover:text-foreground",
+                    sidebarCollapsed && "justify-center px-0 py-3"
+                  )}
+                >
+                  {sidebarCollapsed ? (
+                    <span className="text-sm font-medium">Chart</span>
+                  ) : (
+                    <>
+                      <span className="flex-1 text-left text-sm font-medium">My Chart</span>
+                      <ChevronRight className="w-5 h-5" />
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
@@ -799,27 +819,6 @@ export default function Dashboard() {
                     <>
                       <ShoppingBag className="w-5 h-5" />
                       <span className="flex-1 text-left text-sm font-medium">Veadicastro Store</span>
-                      <ChevronRight className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={() => {
-                    // Generate random session ID and navigate to chart
-                    const sessionId = Math.random().toString(36).substr(2, 9);
-                    navigate(`/chart/${sessionId}?referral=dashboard`);
-                  }}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-                    "text-muted-foreground hover:bg-accent/10 hover:text-foreground",
-                    sidebarCollapsed && "justify-center px-0 py-3"
-                  )}
-                >
-                  {sidebarCollapsed ? (
-                    <span className="text-sm font-medium">Chart</span>
-                  ) : (
-                    <>
-                      <span className="text-sm font-medium">My Chart</span>
                       <ChevronRight className="w-5 h-5" />
                     </>
                   )}
