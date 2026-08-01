@@ -568,8 +568,12 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <span className="hidden sm:inline text-xs text-white/60 border border-white/10 rounded-full px-3 py-1">
               Powered by Advanced AI & Vedic Knowledge
             </span>
-            <button onClick={() => navigate("/")} className="text-sm text-white/60 hover:text-pink-400 transition-colors flex items-center gap-1">
-              ← Back to Home
+            <button
+              onClick={() => setAuthOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full btn-pink px-3 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
+            >
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>Chat with Vedika AI</span>
             </button>
           </div>
         </div>

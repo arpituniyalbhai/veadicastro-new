@@ -436,16 +436,10 @@ KEY INSIGHTS:
               </span>
               <button
                 onClick={() => setAuthOpen(true)}
-                className="inline-flex items-center gap-2 rounded-full btn-pink px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
+                className="inline-flex items-center gap-1.5 rounded-full btn-pink px-3 py-1.5 text-xs font-semibold text-white transition-all hover:opacity-90 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
               >
-                <MessageSquare className="w-4 h-4" />
-                Chat with Vedika AI
-              </button>
-              <button
-                onClick={() => setAuthOpen(true)}
-                className="hidden"
-              >
-                ← Back to Home
+                <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Chat with Vedika AI</span>
               </button>
             </div>
           </div>
@@ -841,7 +835,7 @@ KEY INSIGHTS:
               </p>
               
               <p>
-                This quick reading is one entry point into the full <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro AI astrology platform</a>, where you can explore Vedika AI chat, Kundli generation, daily horoscope, marriage tools, and detailed Vedic reports from the homepage.
+                This quick reading is one entry point into the full <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro AI astrology platform</a>, where you can explore <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">free AI astrologer chat with Vedika AI</Link>, Kundli generation, daily horoscope, marriage tools, and detailed Vedic reports from the homepage.
               </p>
               
               <p>
@@ -1108,7 +1102,7 @@ KEY INSIGHTS:
                 <p><strong>Q: How accurate is a 5 minute reading?</strong></p>
                 <p>For timing windows, general direction, and what your current Dasha means —
                 quite accurate. For very specific life questions, we suggest the full
-                Vedika AI chat where you can go deeper and ask follow-up questions.</p>
+                <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Vedika AI chat</Link> where you can go deeper and ask follow-up questions.</p>
               </div>
               
               <div>
