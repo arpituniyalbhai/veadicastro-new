@@ -74,9 +74,7 @@ const topics = [
 const Free5MinutesAstrology = () => {
   const navigate = useNavigate();
   const { setAuthOpen } = useAuth();
-  
-  // Popup state
-  const [showAstrologerPopup, setShowAstrologerPopup] = useState(false);
+  const setShowAstrologerPopup = (_open: boolean) => {};
 
   // Spam prevention state
   const [hasUsedFeature, setHasUsedFeature] = useState(false);
@@ -367,14 +365,6 @@ KEY INSIGHTS:
     }
   }, []);
 
-  // Show astrologer popup after 6 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowAstrologerPopup(true);
-    }, 6000);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <>
       <Helmet>
@@ -444,7 +434,17 @@ KEY INSIGHTS:
               <span className="hidden sm:inline text-xs text-white/60 border border-white/10 rounded-full px-3 py-1">
                 Powered by Advanced AI & Vedic Knowledge
               </span>
-              <button onClick={() => navigate("/")} className="text-sm text-white/60 hover:text-pink-400 transition-colors flex items-center gap-1">
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="inline-flex items-center gap-2 rounded-full btn-pink px-5 py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90"
+              >
+                <MessageSquare className="w-4 h-4" />
+                Chat with Vedika AI
+              </button>
+              <button
+                onClick={() => setAuthOpen(true)}
+                className="hidden"
+              >
                 ← Back to Home
               </button>
             </div>
@@ -461,7 +461,7 @@ KEY INSIGHTS:
             <span className="text-pink-400 pink-glow">In Just 5 Minutes</span>
           </h1>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
-            <a href="/free-ai-astrologer-chat" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Chat with AI Astrologer</a>
+            <button onClick={() => setAuthOpen(true)} className="text-sm text-white/60 hover:text-pink-400 transition-colors">Chat with Vedika AI</button>
             <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Check Marriage Timing</a>
             <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
             <a href="/ai-astrology-prediction" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Prediction</a>
@@ -779,7 +779,7 @@ KEY INSIGHTS:
                     Chat with Vedika AI for comprehensive insights about your life path
                   </p>
                   <button
-                    onClick={() => navigate('/free-ai-astrologer-chat')}
+                    onClick={() => setAuthOpen(true)}
                     className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl btn-pink text-white font-semibold text-sm hover:opacity-90 transition-opacity"
                   >
                     Chat with Vedika AI →
@@ -1195,7 +1195,7 @@ KEY INSIGHTS:
             {/* Internal Links */}
             <div className="mt-12 pt-8 border-t border-white/10">
               <div className="flex flex-wrap gap-4">
-                <a href="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 transition-colors">Want to go deeper? Chat with Vedika AI</a>
+                <button onClick={() => setAuthOpen(true)} className="text-pink-400 hover:text-pink-300 transition-colors">Want to go deeper? Chat with Vedika AI</button>
                 <a href="/ai-marriage-prediction-by-date-of-birth" className="text-pink-400 hover:text-pink-300 transition-colors">Marriage timing from birth details</a>
                 <a href="/chatgpt-astrology" className="text-pink-400 hover:text-pink-300 transition-colors">Try ChatGPT Astrology</a>
                 <a href="/ai-astrology-prediction" className="text-pink-400 hover:text-pink-300 transition-colors">Generate 10 AI astrology predictions</a>
@@ -1234,7 +1234,7 @@ KEY INSIGHTS:
         </footer>
 
         {/* Astrologer Popup Modal */}
-        {showAstrologerPopup && (
+        {false && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
             <div className="absolute inset-0 bg-black/80" onClick={() => setShowAstrologerPopup(false)} />
             <div className="relative card-glass rounded-2xl p-8 max-w-md w-full shadow-2xl">

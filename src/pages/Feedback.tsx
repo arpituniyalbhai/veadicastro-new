@@ -28,7 +28,7 @@ const Feedback = () => {
   const [wordCount, setWordCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const MAX_CHARS = 500;
-  const MIN_WORDS = 20;
+  const MIN_WORDS = 10;
 
   const displayName = (() => {
     try {
