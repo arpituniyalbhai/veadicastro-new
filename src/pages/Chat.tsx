@@ -1407,22 +1407,43 @@ function parseQuestionSuggestions(raw: string): string[] {
 
 async function generateAnswerSuggestions(question: string, answer: string, lang: string): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
-  const prompt = `Return ONLY the JSON object {"questions":["...","..."]}.
+  const prompt = `You generate exactly two highly relevant follow-up questions after an astrology response.
 
-Create exactly 2 short, curiosity-driven next-question suggestions for an astrology chat, written so the user genuinely feels they NEED to spend a credit to ask them — not generic follow-ups, but questions that create a real itch to know more generate this under 15 word .
+Your goal is to make the user feel understood, continue the conversation naturally, and encourage deeper personalized exploration.
 
-RULES:
-- Each question must be 10 to 14 words maximum — concise, sharp, and to the point.
-- Avoid astrology jargon completely: do not use words like house, nakshatra, planet, dasha, antardasha, transit, yoga, lord, sign, or chart.
-- Questions should sound like what a normal person would naturally ask next — never robotic or templated.
-- Each question must open a curiosity gap: it should imply there's something specific and personal still unrevealed, connected directly to what was just answered. Do not restate or generically continue — it must feel like the next layer the user is dying to know.
-- Make the two questions genuinely different from each other:
-  - Question 1: goes deeper on the exact same topic just discussed — a sharper, more specific, more personal angle than the answer gave (e.g. exact timing, a named outcome, a decision point).
-  - Question 2: pivots to a different but connected practical life area implied by the same answer (e.g. if the answer was about marriage timing, question 2 could tease how that same period affects money or career — not just rephrase the same question).
-- Match the emotional tone of the answer given. If the topic was sensitive or heavy, keep curiosity grounded and caring, not flippant. If it was positive, make the curiosity feel exciting and rewarding.
-- Anchor both questions to the practical outcome in the answer: career choice, marriage timing, partner type, relationship improvement, money, business, study, or next step.
-- Do not introduce any new chart claims, dates, or facts not already implied by the answer above — the curiosity comes from phrasing, not from inventing new information.
-- Do not include predictions, answers, markdown, numbering, or labels — questions only.
+Return ONLY valid JSON in this exact format:
+{"questions":["Question 1","Question 2"]}
+
+Rules:
+
+- Write exactly 2 questions.
+- Questions must sound like natural questions the user would genuinely want to ask next.
+- Use simple, conversational language matching the user's language and tone.
+- If the user writes in Hindi, Hinglish, or English, respond in the same style.
+- Personalize the questions using the topic, concern, and emotional context of the latest conversation.
+- Never repeat the user's exact question.
+
+Question 1:
+- Go deeper into the exact topic just discussed.
+- Focus on timing, causes, obstacles, opportunities, or the best next step.
+- It should feel like the most obvious and valuable continuation.
+
+Question 2:
+- Connect the current topic to another relevant practical life area.
+- Prefer areas such as career, money, relationships, family, education, confidence, or decision-making.
+- The connection must feel natural, not random.
+
+Conversion and engagement principles:
+
+- Prefer questions that require personalized birth-chart analysis rather than generic advice.
+- Create genuine curiosity without implying that a dramatic secret, guaranteed event, or hidden danger exists.
+- Make each question specific enough that the answer would feel valuable.
+- Avoid yes/no questions where possible.
+- Keep each question concise, ideally under 14 words.
+
+- Do not introduce new planetary placements, dates, predictions, remedies, or chart facts.
+- Do not answer the questions.
+- Do not use markdown, numbering, labels, explanations, or any text outside the JSON object.
 
 Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
 

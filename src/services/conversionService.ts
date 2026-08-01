@@ -1,27 +1,39 @@
 import { generateGemini } from "@/lib/gemini";
 import type { ChatTurn } from "@/lib/gemini";
 
-const CONVERSION_SYSTEM_PROMPT = `You are Vedika AI's Conversion Agent.
+const CONVERSION_SYSTEM_PROMPT = `You are Vedika AI's personalized conversion assistant.
 
-Your only responsibility is to convert free users into premium users naturally.
+Generate one short, personalized conversion message based on:
 
-You are NOT an astrology assistant and must never answer the user's astrology question.
+- The user's latest question
+- Their name, FIRST WORD when available
+- The recent conversation context
+- The emotional tone behind the question
 
-RULES:
-- Personalize every response using the user's name
-- Continue the current conversation naturally
-- Keep the message between 20-30 words
-- Match the user's language
-- Sound warm, friendly and conversational
-- always said - upgrade and force user to uprade
-- End naturally with an invitation to continue after unlocking
+Core objective:
 
-VERY IMPORTANT - Never reveal the actual answer:
-❌ Wrong: "You will marry in 2029.", "You should start a SaaS company.", "Your future wife is from Delhi."
+Make the user feel that their exact question was understood and that premium access will provide a deeper, personalized answer based on their birth-chart data.
 
-If user starts a NEW CHAT (no previous messages):
-- Do NOT call the AI for this
-- Use the simple fallback message directly`;
+Message structure:
+
+1. Briefly acknowledge the user's exact concern.
+2. Explain in simple language what would need to be analyzed to answer it properly.
+3. State the practical value the complete analysis could provide.
+4. End with one clear and natural call to action.
+
+Strict rules:
+
+- Never reveal the actual answer.
+- Never give a date, prediction, outcome, probability, remedy, planetary placement, house claim, dasha claim, or chart conclusion.
+- Do not sound like an advertisement.
+- Do not say that the user has wasted credits.
+- Match the user's language:
+  - Hindi user -> natural Hindi
+  - Hinglish user -> natural Hinglish
+  - English user -> natural English
+- Keep the message between 30 and 35 words.
+- Use no markdown, headings, bullet points, quotation marks, or emojis.
+- End with a short CTA related to the user's question.`;
 
 export interface ConversionContext {
   userName: string;
@@ -35,6 +47,7 @@ export interface ConversionContext {
 
 export async function generateConversionMessage(ctx: ConversionContext): Promise<string> {
   const name = ctx.userName || "there";
+  const firstName = name.split(/\s+/)[0] || name;
 
   // New chat - use fallback directly, no AI call
   if (ctx.isNewChat || !ctx.recentMessages?.length) {
@@ -49,18 +62,13 @@ export async function generateConversionMessage(ctx: ConversionContext): Promise
     const lastQ = ctx.lastQuestion || ctx.recentMessages.filter(m => m.role === "user").pop()?.content || "";
     const lastA = ctx.lastAnswer || ctx.recentMessages.filter(m => m.role === "assistant").pop()?.content || "";
 
-    const prompt = `User name: ${name}
+    const prompt = `User name: ${firstName}
 User's current question: "${lastQ}"
 Previous AI response: "${lastA?.slice(0, 150)}"
 User's language: ${ctx.language || "en"}
 Clicked "Maybe Later": ${!!ctx.clickedMaybeLater}
 
-Generate a 20-30 word message from Vedika that:
-1. Naturally references their current question or last topic
-2. Creates curiosity about what's in their chart without revealing the answer
-3. Ends with a warm invitation to unlock and continue
-
-Rules: 20-30 words, match their language, warm and conversational, no sales pressure, no fake urgency, never reveal the astrology answer.`;
+Generate one 30-35 word personalized conversion message from Vedika that acknowledges the exact concern, explains what needs birth-chart analysis, states the practical value, and ends with a natural CTA. Never reveal the answer.`;
 
     const text = await generateGemini(prompt, [], CONVERSION_SYSTEM_PROMPT, ctx.language, ctx.userName);
     const cleaned = text.replace(/^["']|["']$/g, "").trim();
@@ -73,3 +81,4 @@ Rules: 20-30 words, match their language, warm and conversational, no sales pres
 function fallbackExistingChat(name: string): string {
   return `${name || "there"}, I'd love to continue where we left off. Unlock anytime and I'll pick up right from your last question.}`;
 }
+

@@ -25,6 +25,8 @@ const Onboarding = () => {
   const [dob, setDob] = useState<Date | undefined>();
   const [hour, setHour] = useState<number | undefined>();
   const [minute, setMinute] = useState<number | undefined>();
+  const [unknownBirthTime, setUnknownBirthTime] = useState(false);
+  const [showUnknownTimeMessage, setShowUnknownTimeMessage] = useState(false);
   const [gender, setGender] = useState<string>("");
   const [placeQuery, setPlaceQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<PlaceSuggestion | null>(null);
@@ -74,6 +76,18 @@ const Onboarding = () => {
       !!gender
     );
   }, [dob, hour, minute, selectedPlace, gender]);
+
+  const handleUnknownBirthTimeChange = (checked: boolean) => {
+    setUnknownBirthTime(checked);
+    setShowUnknownTimeMessage(checked);
+    if (checked) {
+      setHour(0);
+      setMinute(0);
+    } else {
+      setHour(undefined);
+      setMinute(undefined);
+    }
+  };
 
 useEffect(() => {
   if (!user?.uid) {
@@ -247,6 +261,7 @@ useEffect(() => {
                   <input
                     type="time"
                     className="md:hidden w-full h-11 px-3 rounded-md bg-background/50 border border-border/60 text-foreground text-sm"
+                    disabled={unknownBirthTime}
                     value={hour !== undefined && minute !== undefined ? `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}` : ""}
                     onChange={(e) => {
                       if (e.target.value) {
@@ -261,6 +276,7 @@ useEffect(() => {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
+                        disabled={unknownBirthTime}
                         className={"hidden md:flex w-full justify-start h-11 rounded-md bg-background/50 border-border/60 hover:bg-accent/10"}
                       >
                         <Clock className="mr-2 h-4 w-4" />
@@ -304,6 +320,15 @@ useEffect(() => {
                       </div>
                     </PopoverContent>
                   </Popover>
+                  <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <input
+                      type="checkbox"
+                      checked={unknownBirthTime}
+                      onChange={(e) => handleUnknownBirthTimeChange(e.target.checked)}
+                      className="h-3.5 w-3.5 rounded border-border/60 accent-pink-500"
+                    />
+                    I don't know my exact time of birth
+                  </label>
                 </div>
                 <div className="space-y-2 w-full md:col-span-1" ref={placeBoxRef}>
                   <Label htmlFor="place" className="text-sm font-medium whitespace-nowrap">{t('placeOfBirth')}</Label>
@@ -451,6 +476,7 @@ useEffect(() => {
                     lng: sel?.lng ?? null,
                     tzone: (typeof sel?.tzone === 'number' ? sel.tzone : -new Date().getTimezoneOffset()/60),
                     gender,
+                    unknownBirthTime,
                     age: { years: ageYears, months: ageMonths, days: ageDays },
                   };
                   localStorage.setItem('onboarding_details', JSON.stringify(details));
@@ -518,6 +544,37 @@ useEffect(() => {
           </div>
         </div>
       </div>
+      {showUnknownTimeMessage && (
+        <div className="fixed inset-x-0 bottom-4 z-50 px-4">
+          <div className="mx-auto flex max-w-xl items-start gap-3 rounded-2xl border border-border/60 bg-card/95 p-4 shadow-2xl backdrop-blur">
+            <img
+              src="/optimized/vedika.webp"
+              alt="Vedika AI"
+              className="h-12 w-12 flex-shrink-0 rounded-full border border-secondary/40 object-cover"
+              loading="lazy"
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">
+                Hey {displayName}, that's okay.
+              </p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                If you don't know your exact time of birth, you can still continue. Around 40% of people do not know their exact birth time, but they still get useful answers on Veadicastro.
+              </p>
+              <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                <span className="font-semibold text-foreground">Note:</span> Exact time of birth is highly recommended for the most accurate reading. Some chart details and predictions may be less precise without it.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowUnknownTimeMessage(false)}
+              className="rounded-full px-2 text-lg leading-none text-muted-foreground hover:text-foreground"
+              aria-label="Close birth time note"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
       {animating && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-background/95" />
