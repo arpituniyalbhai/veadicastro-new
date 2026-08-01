@@ -42,11 +42,11 @@ const plans = [
     recentBuyers: 156,
     benefits: [
       "2 Personalized Questions",
-      "Perfect starter pack",
+      "Best for trying Vedika AI",
       "Instant Vedika AI responses",
       "Powered by your exact birth chart",
-      "Never expire — use anytime",
-      "Best value for beginners"
+      "Never expires",
+      "Perfect starter pack",
     ]
   },
   {
@@ -59,11 +59,11 @@ const plans = [
     recentBuyers: 389,
     benefits: [
       "5 Personalized Questions",
-      "Career, love, finance & more",
-      "Instant Vedika AI responses",
-      "Powered by your exact birth chart",
-    " Never expire — use anytime",
-      "Cheaper than one pandit visit"
+      "Best for one important topic",
+      "Career, love, marriage & finance",
+      "Instant AI responses",
+      "Never expires",
+      "Unlocked Vedika AI 2.0 - powered by our most advanced AI astrology engine",
     ]
   },
   {
@@ -75,12 +75,12 @@ const plans = [
     buyers: 1243,
     recentBuyers: 901,
     benefits: [
+      "Everything in Quick Ask",
       "15 Personalized Questions",
-      "Ideal for career, marriage & life planning",
-      "Vedika Advanced AI Model",
-      "Deeper analysis & accurate predictions",
-      "Never expire — use at your pace",
-      "Save 46% vs Quick Ask"
+      "Deeper follow-up conversations",
+      "Better for life planning",
+      "Save 46%",
+      "Unlocked Vedika AI 2.0 - powered by our most advanced AI astrology engine",
     ]
   },
   {
@@ -92,13 +92,12 @@ const plans = [
     buyers: 241,
     recentBuyers: 321,
     benefits: [
+      "Everything in Deep Dive",
       "30 Personalized Questions",
-      "Vedika Advanced AI — Highest Thinking Mode",
-       "Never expire — yours forever",
-      "Most accurate & detailed readings",
-      "Priority response generation",
-      "Go Beyond Basic Predictions with in-depth insights",
-      "Save 55% vs Quick Ask"
+      "Long conversations",
+      "Best value",
+      "Save 55%",
+      "Unlocked Vedika AI 2.0 - powered by our most advanced AI astrology engine",
     ]
   }
 ];
@@ -113,7 +112,7 @@ const Pricing = () => {
   const [expandedFeatures, setExpandedFeatures] = useState<{[key: string]: boolean}>({});
   const [expandedBenefits, setExpandedBenefits] = useState<{[key: string]: boolean}>({});
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 48, minutes: 0, seconds: 0 });
-  const [activeTab, setActiveTab] = useState<'monthly' | 'onetime'>('monthly');
+  const [activeTab, setActiveTab] = useState<'monthly' | 'onetime'>('onetime');
   const navigate = useNavigate();
   const { user } = useAuth();
   const location = useLocation();
@@ -1423,3 +1422,4 @@ const Pricing = () => {
 };
 
 export default Pricing;
+

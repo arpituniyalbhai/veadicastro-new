@@ -1152,20 +1152,20 @@ export default function Chat() {
                     )}
                     {m.isConversion && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
-                        <div className="rounded-2xl border border-white/10 bg-card/90 p-4 space-y-3">
-                          <div className="text-center pb-3 border-b border-white/10">
+                        <div className="rounded-3xl border border-white/10 bg-card/95 p-3.5 sm:p-4 shadow-xl shadow-black/20">
+                          <div className="text-center px-3 pb-3 border-b border-white/10">
                             <p className="text-sm font-semibold text-white mb-1">✨ Upgrade to Continue</p>
-                            <p className="text-xs text-muted-foreground">Unlock premium Vedic astrology insights</p>
+                            <p className="text-xs leading-5 text-muted-foreground">Unlock deeper personalized Vedic insights from Vedika</p>
                           </div>
-                          <div className="space-y-2">
+                          <div className="space-y-2.5 pt-3">
                             {!isProPlan && (
                               <div
                                 onClick={() => navigate('/pricing/onboarding?plan=First%20Ask&amount=39&type=pack')}
-                                className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 p-1 cursor-pointer transform transition-all duration-300 hover:scale-[1.02]"
+                                className="group w-full rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 p-[1px] cursor-pointer transition-all hover:shadow-lg hover:shadow-pink-500/10"
                               >
-                                <div className="flex justify-between items-center bg-card px-4 py-3 rounded-lg">
+                                <div className="flex justify-between items-center bg-card px-4 py-3 rounded-2xl transition-colors group-hover:bg-card/95">
                                   <div>
-                                    <div className="text-sm font-medium text-white">First Ask</div>
+                                    <div className="text-sm font-semibold text-white">First Ask</div>
                                     <div className="text-xs text-muted-foreground">2 questions</div>
                                   </div>
                                   <div className="text-base font-semibold text-white">₹39</div>
@@ -1174,11 +1174,11 @@ export default function Chat() {
                             )}
                             <div
                               onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=99&type=pack')}
-                              className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
+                              className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
                                 <div>
-                                  <div className="text-sm font-medium text-white">Quick Ask</div>
+                                  <div className="text-sm font-semibold text-white">Quick Ask</div>
                                   <div className="text-xs text-muted-foreground">5 questions</div>
                                 </div>
                                 <div className="text-base font-semibold text-white">₹99</div>
@@ -1186,12 +1186,12 @@ export default function Chat() {
                             </div>
                             <div
                               onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(389, 'Deep Dive')}&type=pack`)}
-                              className="w-full rounded-xl bg-pink-500/10 border-2 border-pink-500/50 px-4 py-3 cursor-pointer relative"
+                              className="group w-full rounded-2xl bg-pink-500/10 border border-pink-500/60 px-4 py-3 cursor-pointer relative shadow-[0_0_24px_rgba(236,72,153,0.14),0_0_0_1px_rgba(236,72,153,0.12)] transition-all hover:bg-pink-500/15 hover:shadow-[0_0_30px_rgba(236,72,153,0.2),0_0_0_1px_rgba(236,72,153,0.16)]"
                             >
-                              <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-medium px-2 py-0.5 rounded-full">Popular</span>
+                              <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">Popular</span>
                               <div className="flex justify-between items-center">
                                 <div>
-                                  <div className="text-sm font-medium text-white">Deep Dive</div>
+                                  <div className="text-sm font-semibold text-white">Deep Dive</div>
                                   <div className="text-xs text-muted-foreground">15 questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -1202,11 +1202,11 @@ export default function Chat() {
                             </div>
                             <div
                               onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(699, 'The Power Pack')}&type=pack`)}
-                              className="w-full rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 px-4 py-3 cursor-pointer transition-colors"
+                              className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
                                 <div>
-                                  <div className="text-sm font-medium text-white">Power Pack</div>
+                                  <div className="text-sm font-semibold text-white">Power Pack</div>
                                   <div className="text-xs text-muted-foreground">30 questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -1215,16 +1215,27 @@ export default function Chat() {
                                 </div>
                               </div>
                             </div>
+                            <div className="flex items-center gap-3 py-0.5">
+                              <div className="h-px flex-1 bg-white/10" />
+                              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">or</span>
+                              <div className="h-px flex-1 bg-white/10" />
+                            </div>
                             <div
                               onClick={() => window.open('https://veadicastro.in/subscription/onboarding', '_blank')}
-                              className="w-full rounded-xl bg-purple-500/10 border border-purple-500/30 hover:border-purple-500/50 px-4 py-3 cursor-pointer transition-colors"
+                              className="group w-full rounded-2xl bg-gradient-to-r from-purple-500/15 to-pink-500/10 border border-purple-400/40 hover:border-purple-300/70 hover:from-purple-500/20 hover:to-pink-500/15 px-4 py-3.5 cursor-pointer transition-all shadow-[0_0_26px_rgba(168,85,247,0.16)] hover:shadow-[0_0_34px_rgba(168,85,247,0.24)]"
                             >
-                              <div className="flex justify-between items-center">
-                                <div>
-                                  <div className="text-sm font-medium text-white">Monthly Pro</div>
-                                  <div className="text-xs text-muted-foreground">Advance astrology featured</div>
+                              <div className="flex justify-between items-center gap-4">
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <div className="text-sm font-semibold text-white">Monthly Pro</div>
+                                    <span className="rounded-full bg-purple-400/20 px-2 py-0.5 text-[10px] font-semibold text-purple-200">Best value</span>
+                                  </div>
+                                  <div className="mt-1 text-xs text-muted-foreground">20 questions + advanced features</div>
                                 </div>
-                                <div className="text-base font-semibold text-purple-400">₹499/mo</div>
+                                <div className="shrink-0 text-right">
+                                  <div className="text-[10px] uppercase tracking-wide text-muted-foreground">or</div>
+                                  <div className="text-base font-bold text-purple-300">₹499/month</div>
+                                </div>
                               </div>
                             </div>
                           </div>
