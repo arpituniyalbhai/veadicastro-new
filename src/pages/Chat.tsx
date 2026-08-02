@@ -19,6 +19,74 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
+type HighlightType = "dasha" | "house" | "year" | "career" | "planet";
+
+const PLANETS = "Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu";
+const CAREER_FIELDS = [
+  "software engineering", "software development", "web development", "app development",
+  "data science", "artificial intelligence", "machine learning", "cybersecurity", "technology",
+  "coding", "programming", "research", "digital content", "content creation", "astrology",
+  "teaching", "education", "marketing", "sales", "finance", "banking", "business",
+  "entrepreneurship", "consulting", "management", "design", "law", "medicine", "healthcare",
+  "government job", "civil services", "media", "writing",
+];
+
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const careerPattern = CAREER_FIELDS.sort((a, b) => b.length - a.length).map(escapeRegex).join("|");
+
+const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
+  {
+    type: "dasha",
+    regex: new RegExp(
+      `\\b(?:${PLANETS})(?:\\s*[-–]\\s*(?:${PLANETS}))?\\s+(?:Mahadasha|Antardasha|Dasha)\\b`,
+      "gi"
+    ),
+  },
+  { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi },
+  { type: "year", regex: /\b(?:19|20|21)\d{2}\b/g },
+  { type: "career", regex: new RegExp(`\\b(?:${careerPattern})\\b`, "gi") },
+  // Case-sensitive so the ordinary word "sun" is not highlighted as a planet.
+  { type: "planet", regex: new RegExp(`\\b(?:${PLANETS})\\b`, "g") },
+];
+
+interface HighlightMatch { start: number; end: number; value: string; type: HighlightType; }
+
+function getHighlights(text: string): HighlightMatch[] {
+  const matches: HighlightMatch[] = [];
+  for (const rule of HIGHLIGHT_RULES) {
+    const regex = new RegExp(rule.regex.source, rule.regex.flags);
+    for (const match of text.matchAll(regex)) {
+      if (match.index === undefined) continue;
+      matches.push({ start: match.index, end: match.index + match[0].length, value: match[0], type: rule.type });
+    }
+  }
+  matches.sort((a, b) => a.start - b.start || b.end - b.start - (a.end - a.start));
+  const filtered: HighlightMatch[] = [];
+  let lastEnd = -1;
+  for (const match of matches) {
+    if (match.start >= lastEnd) { filtered.push(match); lastEnd = match.end; }
+  }
+  return filtered;
+}
+
+function highlightAstroText(text: string): React.ReactNode[] {
+  const matches = getHighlights(text);
+  if (!matches.length) return [text];
+  const output: React.ReactNode[] = [];
+  let cursor = 0;
+  matches.forEach((match, index) => {
+    if (match.start > cursor) output.push(text.slice(cursor, match.start));
+    output.push(
+      <span key={`${match.start}-${match.end}-${index}`} className="rounded-sm bg-secondary/15 px-0.5 font-semibold text-foreground" data-highlight-type={match.type}>
+        {match.value}
+      </span>
+    );
+    cursor = match.end;
+  });
+  if (cursor < text.length) output.push(text.slice(cursor));
+  return output;
+}
+
 // ─── Chat Session Types ───────────────────────────────────────────────────────
 interface ChatSession {
   id: string;
@@ -1116,7 +1184,7 @@ export default function Chat() {
                           <div className="space-y-3">
                             {formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => (
                               <p key={paragraphIndex} className="whitespace-pre-wrap">
-                                {paragraph}
+                                {highlightAstroText(paragraph)}
                               </p>
                             ))}
                           </div>
