@@ -19,9 +19,10 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-type HighlightType = "dasha" | "house" | "year" | "career";
+type HighlightType = "dasha" | "house" | "year" | "date" | "career";
 
 const PLANETS = "Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu";
+const MONTHS = "January|February|March|April|May|June|July|August|September|October|November|December";
 const CAREER_FIELDS = [
   "software engineering", "software development", "web development", "app development",
   "data science", "artificial intelligence", "machine learning", "cybersecurity", "technology",
@@ -43,6 +44,12 @@ const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
     ),
   },
   { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi },
+  {
+    type: "date",
+    regex: new RegExp(`\\b(?:(?:${MONTHS})\\s+\\d{1,2}(?:st|nd|rd|th)?(?:,)?\\s+\\d{4}|\\d{1,2}(?:st|nd|rd|th)?\\s+(?:${MONTHS})(?:\\s+\\d{4})?|(?:${MONTHS})\\s+\\d{4})\\b`, "gi"),
+  },
+  { type: "date", regex: /\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/g },
+  { type: "date", regex: new RegExp(`\\b(?:${MONTHS})\\b`, "gi") },
   { type: "year", regex: /\b(?:19|20|21)\d{2}\b/g },
   { type: "career", regex: new RegExp(`\\b(?:${careerPattern})\\b`, "gi") },
 ];
@@ -665,10 +672,18 @@ export default function Chat() {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true };
+            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: false };
           }
           return copy;
         });
+      });
+      setMessages((m) => {
+        const copy = [...m];
+        const lastIndex = copy.length - 1;
+        if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+          copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: true };
+        }
+        return copy;
       });
       setSending(false);
       setIsTyping(false);
@@ -851,7 +866,7 @@ export default function Chat() {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: "", isConversion: true };
+            copy[lastIndex] = { role: "assistant", content: "", isConversion: true, isConversionComplete: false };
           }
           return copy;
         });
@@ -867,10 +882,18 @@ export default function Chat() {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true };
+            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: false };
           }
           return copy;
           });
+        });
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: true };
+          }
+          return copy;
         });
         return;
       }
@@ -1232,7 +1255,7 @@ export default function Chat() {
                         ))}
                       </div>
                     )}
-                    {m.isConversion && (
+                    {m.isConversion && m.isConversionComplete !== false && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
                         <div className="rounded-3xl border border-white/10 bg-card/95 p-3.5 sm:p-4 shadow-xl shadow-black/20">
                           <div className="text-center px-3 pb-3 border-b border-white/10">

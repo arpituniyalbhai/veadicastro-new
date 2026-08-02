@@ -22,9 +22,9 @@ const VALID_PLAN_PRICES: Record<string, number> = {
 
 // Micro-transaction pricing
 const MICRO_PRICES: Record<string, number> = {
-  'Personal Growth': 19900,     // ₹199 in paise
-  'Love & Relationships': 19900, // ₹199 in paise
-  'Career & Wealth': 19900,      // ₹199 in paise
+  'Personal Growth': 14900,     // ₹149 in paise
+  'Love & Relationships': 14900, // ₹149 in paise
+  'Career & Wealth': 14900,      // ₹149 in paise
   'Basic Personalized Report': 99900, // ₹999 in paise
   'Deep Life Analysis': 199900, // ₹1999 in paise
   'Premium Expert Guidance': 399900, // ₹3999 in paise

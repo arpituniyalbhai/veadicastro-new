@@ -17,9 +17,9 @@ const VALID_PLAN_PRICES: Record<string, number> = {
 
 // Micro-transaction pricing
 const MICRO_PRICES: Record<string, number> = {
-  'Personal Growth': 19900,      // ₹199 in paise
-  'Love & Relationships': 19900, // ₹199 in paise
-  'Career & Wealth': 19900,      // ₹199 in paise
+  'Personal Growth': 14900,      // ₹149 in paise
+  'Love & Relationships': 14900, // ₹149 in paise
+  'Career & Wealth': 14900,      // ₹149 in paise
   'Basic Personalized Report': 99900, // ₹999 in paise
   'Deep Life Analysis': 199900, // ₹1999 in paise
   'Premium Expert Guidance': 399900, // ₹3999 in paise
@@ -89,10 +89,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (STORE_PRODUCT_PRICES[planName]) {
       originalAmount = STORE_PRODUCT_PRICES[planName];
       console.log('[Create Order] Using store product price:', { planName, originalAmount });
-    } else if (customAmount && typeof customAmount === 'number' && customAmount > 0) {
-      // For custom amounts (like single reports), use the provided amount
-      originalAmount = customAmount;
-      console.log('[Create Order] Using custom amount:', { planName, customAmount });
     } else if (getSpecialReportPrice(planName)) {
       originalAmount = getSpecialReportPrice(planName)!;
       console.log('[Create Order] Using special report price:', { planName, originalAmount });
@@ -104,6 +100,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // For compatibility credits
       originalAmount = COMPATIBILITY_PRICES[planName];
       console.log('[Create Order] Using compatibility price:', { planName, originalAmount });
+    } else if (customAmount && typeof customAmount === 'number' && customAmount > 0) {
+      // Only products without a server-side price may use a custom amount.
+      originalAmount = customAmount;
+      console.log('[Create Order] Using custom amount:', { planName, customAmount });
     } else {
       // For plans, get from server-side price mapping
       originalAmount = VALID_PLAN_PRICES[planName];

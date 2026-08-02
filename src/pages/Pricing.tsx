@@ -1164,17 +1164,17 @@ const Pricing = () => {
             {[{
               name: "Personal Growth",
               description: "Complete personal growth guidance based on your birth chart",
-              price: 199
+              price: 149
             },
             {
               name: "Love & Relationships",
               description: "Complete love and relationship guidance based on your birth chart",
-              price: 199
+              price: 149
             },
             {
               name: "Career & Wealth",
               description: "Complete career and wealth guidance based on your birth chart",
-              price: 199
+              price: 149
             }].map((report) => (
               <Card
                 key={report.name}
