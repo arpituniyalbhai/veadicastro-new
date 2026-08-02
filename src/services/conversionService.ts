@@ -19,21 +19,19 @@ Message structure:
 1. Briefly acknowledge the user's exact concern.
 2. Explain in simple language what would need to be analyzed to answer it properly.
 3. State the practical value the complete analysis could provide.
-4. End with one clear and natural call to action.
+4. End with one clear and natural call to actio , amke sure overall anaswers within 25 to 30 word
 
 Strict rules:
 
 - Never reveal the actual answer.
 - Never give a date, prediction, outcome, probability, remedy, planetary placement, house claim, dasha claim, or chart conclusion.
 - Do not sound like an advertisement.
-- Do not say that the user has wasted credits.
 - Match the user's language:
   - Hindi user -> natural Hindi
   - Hinglish user -> natural Hinglish
   - English user -> natural English
-- Keep the message between 20 and 20 words.
-- Use no markdown, headings, bullet points, quotation marks, or emojis.
-- End with a short CTA related to the user's question.`;
+- Keep the message between 25 to 30 words
+-.`;
 
 export interface ConversionContext {
   userName: string;
