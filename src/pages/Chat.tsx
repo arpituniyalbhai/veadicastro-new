@@ -19,7 +19,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
-type HighlightType = "dasha" | "house" | "year" | "career" | "planet";
+type HighlightType = "dasha" | "house" | "year" | "career";
 
 const PLANETS = "Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu";
 const CAREER_FIELDS = [
@@ -45,8 +45,6 @@ const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
   { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi },
   { type: "year", regex: /\b(?:19|20|21)\d{2}\b/g },
   { type: "career", regex: new RegExp(`\\b(?:${careerPattern})\\b`, "gi") },
-  // Case-sensitive so the ordinary word "sun" is not highlighted as a planet.
-  { type: "planet", regex: new RegExp(`\\b(?:${PLANETS})\\b`, "g") },
 ];
 
 interface HighlightMatch { start: number; end: number; value: string; type: HighlightType; }
@@ -66,7 +64,7 @@ function getHighlights(text: string): HighlightMatch[] {
   for (const match of matches) {
     if (match.start >= lastEnd) { filtered.push(match); lastEnd = match.end; }
   }
-  return filtered;
+  return filtered.slice(0, 3);
 }
 
 function highlightAstroText(text: string): React.ReactNode[] {

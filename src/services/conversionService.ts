@@ -31,7 +31,7 @@ Strict rules:
   - Hindi user -> natural Hindi
   - Hinglish user -> natural Hinglish
   - English user -> natural English
-- Keep the message between 30 and 35 words.
+- Keep the message between 20 and 20 words.
 - Use no markdown, headings, bullet points, quotation marks, or emojis.
 - End with a short CTA related to the user's question.`;
 
