@@ -9,7 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
-import { generateConversionMessage } from "@/services/conversionService";
+import { generateConversionMessageStream } from "@/services/conversionService";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
 import { getDbInstance } from "@/lib/firebase";
@@ -654,18 +654,24 @@ export default function Chat() {
     
     const canAsk = await canAskMoreQuestions();
     if (!canAsk) {
-      // Remove the empty assistant placeholder
-      setMessages((m) => m.slice(0, -1));
-      
-      // Generate conversion message instead of showing modal
-      const conversionMsg = await generateConversionMessage({
+      let conversionText = "";
+      await generateConversionMessageStream({
         userName: displayName,
         lastQuestion: outgoingMessage,
         recentMessages: messages,
         language: lang,
         isNewChat: messages.length === 0
+      }, (delta) => {
+        conversionText += delta;
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true };
+          }
+          return copy;
+        });
       });
-      setMessages((m) => [...m, { role: "assistant", content: conversionMsg, isConversion: true }]);
       setSending(false);
       setIsTyping(false);
       return;
@@ -842,21 +848,31 @@ export default function Chat() {
 
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
-        // Generate conversion message instead of showing modal
-        const conversionMsg = await generateConversionMessage({
+        let conversionText = "";
+        setMessages((m) => {
+          const copy = [...m];
+          const lastIndex = copy.length - 1;
+          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+            copy[lastIndex] = { role: "assistant", content: "", isConversion: true };
+          }
+          return copy;
+        });
+        await generateConversionMessageStream({
           userName: displayName,
           lastQuestion: outgoingMessage,
           recentMessages: messages,
           language: lang,
           isNewChat: false
-        });
-        setMessages((m) => {
+        }, (delta) => {
+          conversionText += delta;
+          setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionMsg, isConversion: true };
+            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true };
           }
           return copy;
+          });
         });
         return;
       }
