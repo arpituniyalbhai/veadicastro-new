@@ -393,7 +393,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>Vedika AI Chat — Ask Free Astrology Questions | Veadicastro</title>
+        <title>Chat with AI Astrologer - Free &amp; Instant | Veadicastro</title>
         <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta name="keywords" content="free ai astrologer chat, chat with vedic astrologer online, ai astrologer no signup, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology, ai astrology free chat" />
         <link rel="canonical" href="https://veadicastro.in/free-ai-astrologer-chat" />
@@ -405,7 +405,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <meta name="ICBM" content="20.5937,78.9629" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Free AI Astrology Chat — Vedic Birth Chart Analysis | Veadicastro" />
+        <meta property="og:title" content="Chat with AI Astrologer - Free &amp; Instant | Veadicastro" />
         <meta property="og:description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta property="og:url" content="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta property="og:type" content="website" />
@@ -417,7 +417,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free AI Astrology Chat — Vedic Birth Chart Analysis | Veadicastro" />
+        <meta name="twitter:title" content="Chat with AI Astrologer - Free &amp; Instant | Veadicastro" />
         <meta name="twitter:description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
         <meta name="twitter:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
         <meta name="twitter:site" content="@veadicastro" />

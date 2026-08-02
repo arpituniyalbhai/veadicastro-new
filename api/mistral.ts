@@ -254,6 +254,7 @@ STYLE:
 
 FORMAT:
 * 5-8 lines max
+* Always highlight all planets, houses, zodiac signs, dashas, yogas, nakshatras, years, and important predictions using **Markdown bold**.
 
 END:
 * End with a useful concluding sentence, not a question.
