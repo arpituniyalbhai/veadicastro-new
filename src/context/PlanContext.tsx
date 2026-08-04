@@ -341,16 +341,6 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         console.log("✅ Credit successfully deducted, updating UI optimistically");
         console.log("💳 Before optimistic update - UI credits:", currentCredits);
         const newCredits = Math.max(0, data.credits ?? currentCredits - 1);
-        if (newCredits === 0) {
-          void fetch(`${API_BASE}/api/send-low-credit-email`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: user.email,
-              username: user.displayName || user.email.split("@")[0],
-            }),
-          }).catch((err) => console.error("Low credit email failed:", err));
-        }
         // Optimistic update - use ref value to avoid stale closure
         setCredits(prev => {
           console.log("💳 After optimistic update - UI credits:", newCredits);
