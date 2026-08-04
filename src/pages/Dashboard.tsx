@@ -973,7 +973,7 @@ export default function Dashboard() {
               <Button
                 variant="default"
                 className="rounded-xl border border-orange-300/40 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-sm shadow-orange-500/20 hover:from-orange-600 hover:to-red-600 hover:text-white"
-                onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(699, 'The Power Pack')}&type=pack`)}
+                onClick={() => navigate("/subscription/onboarding")}
               >
                 Grab Now
               </Button>
