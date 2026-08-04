@@ -1335,7 +1335,7 @@ export default function Chat() {
                                     <div className="text-sm font-semibold text-white">Monthly Pro</div>
                                     <span className="rounded-full bg-purple-400/20 px-2 py-0.5 text-[10px] font-semibold text-purple-200">Best value</span>
                                   </div>
-                                  <div className="mt-1 text-xs text-muted-foreground">20 questions + advanced features</div>
+                                  <div className="mt-1 text-xs text-muted-foreground">30 questions + advanced features</div>
                                 </div>
                                 <div className="shrink-0 text-right">
                                   <div className="text-[10px] uppercase tracking-wide text-muted-foreground">or</div>

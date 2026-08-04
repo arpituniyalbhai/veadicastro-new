@@ -137,7 +137,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Update user with renewed credits
         await userDocRef.set({
-          credits: 20, // Reset to 20 credits monthly (NOT increment)
+          credits: 30, // Reset to 30 credits monthly (NOT increment)
           reportCredits: admin.firestore.FieldValue.increment(1), // Add 1 report credit
           subscriptionExpiresAt: admin.firestore.Timestamp.fromDate(subscriptionExpiresAt),
           subscriptionStatus: 'active',
@@ -181,7 +181,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email,
           subscriptionId,
           paymentId,
-          credits: 20,
+          credits: 30,
           reportCredits: (existingUserData?.reportCredits || 0) + 1,
           expiresAt: subscriptionExpiresAt.toISOString(),
         });

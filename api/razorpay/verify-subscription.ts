@@ -188,7 +188,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         displayName: displayName || existingUserData?.displayName || null,
         planName: 'Premium Subscription',
         isPremium: true,
-        credits: 20, // Monthly credit allocation
+        credits: 30, // Monthly credit allocation
         reportCredits: (existingUserData?.reportCredits || 0) + 1, // Add 1 report credit
         subscriptionId: razorpay_subscription_id,
         subscriptionStatus: 'active',
@@ -231,7 +231,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         email,
         subscriptionId: razorpay_subscription_id,
         paymentId: razorpay_payment_id,
-        credits: 20,
+        credits: 30,
         reportCredits: (existingUserData?.reportCredits || 0) + 1,
         expiresAt: subscriptionExpiresAt.toISOString(),
         timestamp: new Date().toISOString(),

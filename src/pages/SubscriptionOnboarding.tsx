@@ -523,7 +523,7 @@ const SubscriptionOnboarding = () => {
             <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 w-full">
               <p className="text-sm text-muted-foreground mb-2">You received:</p>
               <p className="text-lg font-semibold text-foreground mb-1">
-                20 Question Credits
+                30 Question Credits
               </p>
               <p className="text-lg font-semibold text-foreground mb-2">
                 +1 Report Credit

@@ -15,7 +15,7 @@ const VALID_PLAN_PRICES: Record<string, number> = {
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
   'Standard': 29900,    // ₹299 in paise
-  'Premium': 59900,    // ₹599 in paise
+  'Premium': 49900,    // ₹499 in paise
   'Quick Pack': 4900,   // ₹49 in paise (legacy support)
   'Astrologer Call': 58900, // ₹589 in paise (₹499 + 18% GST)
 };
@@ -548,6 +548,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                        planName === 'Deep Dive' ? 15 : 
                        planName === 'The Power Pack' ? 24 : 
                        planName === 'Day Pass' ? 999 : // Unlimited represented as 999
+                       planName === 'Premium' ? 30 :
                        (existingUserData?.credits || 0), // Preserve existing credits for other plans
               reportCredits: existingUserData?.reportCredits || 0, // No free reports
               // Add compatibility credits based on plan
@@ -569,7 +570,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             console.log('[Verify Payment] Plan purchase completed', {
               userId,
               planName,
-              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 24 : planName === 'Day Pass' ? 999 : existingUserData?.credits || 0,
+              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 24 : planName === 'Day Pass' ? 999 : planName === 'Premium' ? 30 : existingUserData?.credits || 0,
               compatibilityCredits: planName === 'Standard' ? 5 : planName === 'Premium' ? 10 : existingUserData?.compatibilitycredits || 0,
               paymentId: razorpay_payment_id,
             });
@@ -597,7 +598,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                      planName === 'Quick Ask' ? 5 : 
                      planName === 'Deep Dive' ? 15 : 
                      planName === 'The Power Pack' ? 24 : 
-                     planName === 'Day Pass' ? 999 : 0,
+                     planName === 'Day Pass' ? 999 :
+                     planName === 'Premium' ? 30 : 0,
             compatibilityCredits: planName === 'Standard' ? 5 :
                                 planName === 'Premium' ? 10 : 0,
           });

@@ -137,7 +137,7 @@ export default async function handler(req: Request) {
       );
     }
     
-    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary", model: modelOverride } = body || {};
+    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary" } = body || {};
     if (!prompt || typeof prompt !== 'string') return new Response(
       JSON.stringify({ error: 'Missing or invalid prompt' }),
       { status: 422, headers: { 'Content-Type': 'application/json' } }
@@ -182,7 +182,7 @@ export default async function handler(req: Request) {
     const istTimeParts = now.toLocaleString('en-US', { 
       timeZone: 'Asia/Kolkata',
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit', .dsaoijkfn
       second: '2-digit',
       hour12: false
     }).split(':');
@@ -225,15 +225,13 @@ CORE RULES (STRICT):
 * Never write any astrology date unless that exact date exists in the backend chart data. If a required date is missing, state that the date is unavailable. Never generate, estimate, interpolate, or substitute years or dates.
 ${lang === "hi" ? "LANGUAGE RULE: Respond ONLY in pure Hindi (Devanagari script). No English words, no Hinglish." : "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."}
 
-LOGIC ORDER (internal reasoning only — never narrate this sequence to the user):
+LOGIC ORDER:
 House → Lord → Sign → Nakshatra → Dasha → Transit
 Focus on strongest 1 planetary indicator only. Pick the strongest factor and commit to it - no multiple options.
-Explain ONLY its real-life meaning to the user — not the technical chain that led you there.
 
 REALITY FILTER:
-* Never describe physical traits of spouse/people.
 * Never use phrases like "watch for", "notice if", "possibly".
-* Give practical, grounded advice (career, money, studies).
+* Give practica, Uniq , grounded advice (career, money, studies).
 * No extreme claims.
 
 AGE FILTER:
@@ -242,27 +240,23 @@ AGE FILTER:
 
 STYLE:
 * Start with direct answer (no intro).
-* Answer the user's question directly in the first 1-2 sentences.
+* Answer the user's question directly in the first 2-3 sentences.
 * Explain the astrological reasoning only after giving the conclusion.
 * Speak about real life situations relevant to the user's age and birth chart.
 * Use confident tone but allow realistic uncertainty when needed.
 * Keep it concise and clear.
-* PLAIN LANGUAGE RULE (MANDATORY): For EVERY astrological term you mention (house, planet, dasha, nakshatra), immediately explain its real-life meaning in simple words right after — never leave a term unexplained. Example: instead of "Venus rules your 5th house and sits in Magha nakshatra" write "Venus rules your 5th house — the house of creativity — so you naturally think in original ways."
-* Maximum 2 technical terms per paragraph. Rest of that paragraph must be plain conversational explanation with zero new terms.
-* Never stack multiple technical terms back to back in one sentence. Pick ONE, explain its real-life meaning fully, then move to practical advice.
-* NO REPETITION: Never repeat the same point, planet, or advice in a single response. Each sentence must add new information.
 
 FORMAT:
 * 5-8 lines max
-
-END:
-* End with a useful concluding sentence, not a question.
+ 
+END: 
+* End with a useful concluding sentence (dont sound generic), not a question.
 * Do not add follow-up questions, curiosity hooks, or sales hooks.
 `;
 
     const contents = [
       // Include last 10 messages for conversation context
-      ...(Array.isArray(history) ? history.slice(-20) : []).map((h: any) => ({
+      ...(Array.isArray(history) ? history.slice(-10) : []).map((h: any) => ({
         role: h?.role === 'user' ? 'user' : 'assistant',
         content: String(h?.content || ''),
       })),
@@ -300,7 +294,7 @@ Wrong format = rewrite before sending.`;
     const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
-    const model = modelOverride || (isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest');
+    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
@@ -333,7 +327,7 @@ Wrong format = rewrite before sending.`;
       // Normal chat
       { 
         role: 'system', 
-        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? `\n\nPERSONALIZATION:\n* User ka naam hai: ${userName.trim()}\n* Use naam exactly ONCE per response. Place it naturally — sometimes mid-sentence, sometimes in last line. Never in the first sentence. Should feel organic, not forced.` : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
+        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? `\n\nPERSONALIZATION:\n* User ka naam hai: ${userName.trim()}\n* Har response mein ek baar naturally naam lo - robotic repetition mat karo.` : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
       },
       ...contents.slice(0, -1),
       { 

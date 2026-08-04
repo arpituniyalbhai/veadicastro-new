@@ -141,7 +141,7 @@ const Pricing = () => {
     if (normalized.includes("deep dive")) return 15;
     if (normalized.includes("power pack")) return 30;
     if (normalized.includes("day pass")) return 999;
-    if (normalized.includes("premium")) return 20;
+    if (normalized.includes("premium")) return 30;
     if (normalized.includes("standard")) return 10;
     return 0;
   };
@@ -790,10 +790,10 @@ const Pricing = () => {
 
                 {/* Features List */}
                 <div className="px-7 pb-7 space-y-6">
-                  {/* 20 AI Chats */}
+                  {/* 30 AI Chats */}
                   <div>
                     <h3 className="flex items-center gap-2 text-sm font-bold text-white mb-2">
-                      <span>20 AI Astrology Chats / Month</span>
+                      <span>30 AI Astrology Chats / Month</span>
                     </h3>
                     <ul className="space-y-1.5">
                       <li className="flex items-start gap-2 text-xs text-muted-foreground">
@@ -982,7 +982,7 @@ const Pricing = () => {
                   </thead>
                   <tbody className="divide-y divide-white/[0.04]">
                     {[
-                      { feature: "AI Questions", free: "2 AI Questions", premium: "20 AI Questions / Month" },
+                      { feature: "AI Questions", free: "2 AI Questions", premium: "30 AI Questions / Month" },
                       { feature: "Daily Prediction", free: "Daily Preview", premium: "Full Daily Prediction (Any day, any time)" },
                       { feature: "Monthly Prediction", free: "Monthly Locked", premium: "Full Monthly Prediction" },
                       { feature: "Astrology Reports", free: "No Reports", premium: "1 Premium Report / Month" },

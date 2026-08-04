@@ -65,7 +65,7 @@ const PlanContext = createContext<PlanContextType | undefined>(undefined);
 const PLAN_CREDITS: Record<PlanName, number> = {
   Free: 2,
   Standard: 10,
-  Premium: 15,
+  Premium: 30,
   "First Ask": 2,
   "Quick Ask": 5,
   "Deep Dive": 15,
