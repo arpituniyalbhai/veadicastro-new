@@ -34,7 +34,7 @@ import SEO from "@/components/SEO";
 const plans = [
   {
     name: "First Ask",
-    price: 39,
+    price: 49,
     period: "one-time",
     questions: 2,
     description: "Try Vedika AI with your first question — low risk, high clarity",
@@ -167,7 +167,7 @@ const Pricing = () => {
     const normalizedPlan = planName.toLowerCase();
     if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
     if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
-    // Quick Ask stays at 99, First Ask stays at 39
+    // Quick Ask stays at 99, First Ask stays at 49
     return originalPrice;
   };
 

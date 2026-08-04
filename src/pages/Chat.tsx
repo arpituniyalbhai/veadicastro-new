@@ -1265,7 +1265,7 @@ export default function Chat() {
                           <div className="space-y-2.5 pt-3">
                             {!isProPlan && (
                               <div
-                                onClick={() => navigate('/pricing/onboarding?plan=First%20Ask&amount=39&type=pack')}
+                                onClick={() => navigate('/pricing/onboarding?plan=First%20Ask&amount=49&type=pack')}
                                 className="group w-full rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 p-[1px] cursor-pointer transition-all hover:shadow-lg hover:shadow-pink-500/10"
                               >
                                 <div className="flex justify-between items-center bg-card px-4 py-3 rounded-2xl transition-colors group-hover:bg-card/95">
@@ -1273,7 +1273,7 @@ export default function Chat() {
                                     <div className="text-sm font-semibold text-white">First Ask</div>
                                     <div className="text-xs text-muted-foreground">2 questions</div>
                                   </div>
-                                  <div className="text-base font-semibold text-white">₹39</div>
+                                  <div className="text-base font-semibold text-white">₹49</div>
                                 </div>
                               </div>
                             )}

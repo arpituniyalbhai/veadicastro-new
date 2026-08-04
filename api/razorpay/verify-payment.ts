@@ -6,7 +6,7 @@ import admin from 'firebase-admin';
 
 // CRITICAL: Server-side price source of truth
 const VALID_PLAN_PRICES: Record<string, number> = {
-  'First Ask': 3900,      // ₹39 in paise
+  'First Ask': 4900,      // ₹49 in paise
   'Quick Ask': 9900,      // ₹99 in paise
   'Deep Dive': 38900,     // ₹389 in paise (original price)
   'Deep Dive Discounted': 29900, // ₹299 in paise (discounted for paid users)
