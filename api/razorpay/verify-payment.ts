@@ -8,7 +8,7 @@ import admin from 'firebase-admin';
 const VALID_PLAN_PRICES: Record<string, number> = {
   'First Ask': 4900,      // ₹49 in paise
   'Quick Ask': 9900,      // ₹99 in paise
-  'Deep Dive': 38900,     // ₹389 in paise (original price)
+  'Deep Dive': 39900,     // ₹399 in paise (original price)
   'Deep Dive Discounted': 29900, // ₹299 in paise (discounted for paid users)
   'The Power Pack': 69900, // ₹699 in paise (original price)
   'The Power Pack Discounted': 45000, // ₹450 in paise (discounted for paid users)

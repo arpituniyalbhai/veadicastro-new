@@ -370,7 +370,7 @@ export default function Chat() {
     if (!isProPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
+    if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
     if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
     return originalPrice;
   };
@@ -1183,7 +1183,7 @@ export default function Chat() {
               variant="cosmic"
               size="sm"
               className="gap-1.5 text-xs h-9 px-4"
-              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=389&type=pack')}
+              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack')}
             >
               Upgrade
             </Button>
@@ -1290,7 +1290,7 @@ export default function Chat() {
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(389, 'Deep Dive')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(399, 'Deep Dive')}&type=pack`)}
                               className="group w-full rounded-2xl bg-pink-500/10 border border-pink-500/60 px-4 py-3 cursor-pointer relative shadow-[0_0_24px_rgba(236,72,153,0.14),0_0_0_1px_rgba(236,72,153,0.12)] transition-all hover:bg-pink-500/15 hover:shadow-[0_0_30px_rgba(236,72,153,0.2),0_0_0_1px_rgba(236,72,153,0.16)]"
                             >
                               <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">Popular</span>
@@ -1300,8 +1300,8 @@ export default function Chat() {
                                   <div className="text-xs text-muted-foreground">15 questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹389</span>}
-                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(389, 'Deep Dive')}</div>
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹399</span>}
+                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(399, 'Deep Dive')}</div>
                                 </div>
                               </div>
                             </div>

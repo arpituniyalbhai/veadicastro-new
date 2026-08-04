@@ -68,7 +68,7 @@ const plans = [
   },
   {
     name: "Deep Dive",
-    price: 389,
+    price: 399,
     period: "one-time",
     questions: 15,
     description: "Most popular — serious guidance for life's big decisions",
@@ -165,7 +165,7 @@ const Pricing = () => {
     if (!hasPaidPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
+    if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
     if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
     // Quick Ask stays at 99, First Ask stays at 49
     return originalPrice;
@@ -595,7 +595,7 @@ const Pricing = () => {
       {
         "@type": "Offer",
         "name": "Deep Dive Pack",
-        "price": "389",
+        "price": "399",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
@@ -648,7 +648,7 @@ const Pricing = () => {
       `}</style>
       <SEO
         title="Pricing Plans - Veadicastro Astrology"
-        description="Choose from Quick Ask (₹99), Deep Dive (₹389), or Power Pack (₹199) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
+        description="Choose from Quick Ask (₹99), Deep Dive (₹399), or Power Pack (₹199) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
         keywords={["astrology pricing", "vedicastro packs", "astrology questions", "astrology cost", "astrology packs", "vedic astrology guidance"]}
         url="https://veadicastro.in/pricing"
         schema={pricingSchema}

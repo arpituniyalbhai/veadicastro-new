@@ -5,7 +5,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const VALID_PLAN_PRICES: Record<string, number> = {
   'First Ask': 4900,      // ₹49 in paise
   'Quick Ask': 9900,      // ₹99 in paise
-  'Deep Dive': 38900,     // ₹389 in paise
+  'Deep Dive': 39900,     // ₹399 in paise
   'The Power Pack': 69900, // ₹199 in paise
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
@@ -135,7 +135,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (hasPaidPlan && !promoCode) {
       const normalizedPlan = planName.toLowerCase();
       if (normalizedPlan.includes("deep dive")) {
-        finalAmount = 29900; // ₹299 in paise (discounted from ₹389)
+        finalAmount = 29900; // ₹299 in paise (discounted from ₹399)
         discountApplied = true;
         console.log('[Create Order] Applied paid user discount for Deep Dive:', { 
           userPlan, 
