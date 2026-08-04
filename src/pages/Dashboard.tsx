@@ -892,7 +892,7 @@ export default function Dashboard() {
                 <div className="inline-flex max-w-full items-center justify-center gap-1.5 text-foreground hover:text-secondary transition-colors">
                   <span className="flex min-w-0 flex-col items-center justify-center leading-tight sm:flex-row sm:gap-1.5 sm:leading-normal">
                     <span className="text-[11px] font-semibold sm:text-xs lg:text-sm">
-                      🎉 {lang === "hi" ? `30 सवाल केवल ${hasPaidPlan ? '450' : '699'}` : `30 questions only ${hasPaidPlan ? '450' : '699'}`}
+                      🎉 {lang === "hi" ? "30 सवाल केवल 499" : "30 questions only 499"}
                     </span>
                     <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
                       {lang === "hi" ? "सीमित समय ऑफर - केवल आपके लिए" : "Limited Time offer - only for you"} <span className="font-extrabold text-white sm:text-base lg:text-lg">{displayName}</span>
@@ -963,9 +963,9 @@ export default function Dashboard() {
                   <span className="text-xs text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
                 <h3 className="font-bold text-lg text-orange-600 dark:text-orange-400 mb-1">
-                  Get 30 Questions for just Rs.{hasPaidPlan ? '450' : '699'}!
+                  Get 30 Questions for just Rs.499!
                 </h3>
-                <p className="text-sm text-muted-foreground">Deep Dive with Vedika: Get precise answers on love, career, and wealth.</p>
+                <p className="text-sm text-muted-foreground">Premium with Vedika: Get 30 precise answers on love, career, and wealth.</p>
               </div>
               <Button variant="cosmic" className="rounded-xl bg-orange-500 hover:bg-orange-600 text-white" onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(699, 'The Power Pack')}&type=pack`)}>
                 Grab Now

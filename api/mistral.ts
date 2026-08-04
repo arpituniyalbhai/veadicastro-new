@@ -182,7 +182,7 @@ export default async function handler(req: Request) {
     const istTimeParts = now.toLocaleString('en-US', { 
       timeZone: 'Asia/Kolkata',
       hour: '2-digit',
-      minute: '2-digit', .dsaoijkfn
+      minute: '2-digit',
       second: '2-digit',
       hour12: false
     }).split(':');
