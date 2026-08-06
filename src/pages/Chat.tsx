@@ -9,7 +9,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
-import { generateConversionMessageStream } from "@/services/conversionService";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData } from "@/lib/astroCalc";
 import { getDbInstance } from "@/lib/firebase";
@@ -320,9 +319,6 @@ export default function Chat() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [openCategory, setOpenCategory] = useState<string | null>(null);
 
-  // Check if any conversion message is shown to disable input
-  const hasConversionMessage = messages.some(m => m.isConversion);
-
   const categoryPrompts = [
     { id: "love", icon: "", labelEn: "Love", labelHi: "प्रेम",
       promptsEn: ["When will I meet my true love?", "Is my current relationship destined to last?", "What qualities should I look for in a partner?", "Will I find love this year?", "How can I attract the right person into my life?"],
@@ -359,6 +355,10 @@ export default function Chat() {
       return user?.displayName || "User"; 
     } 
   })();
+  const getOutOfCreditsMessage = useCallback(() => {
+    const firstName = displayName.trim().split(/\s+/)[0] || "there";
+    return `Hey ${firstName}, you have used all your credits. Please choose a plan below to continue chatting with Vedika AI.`;
+  }, [displayName]);
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
     const paidPlanKeywords = ["first ask", "quick ask", "deep dive", "power pack", "premium", "standard"];
@@ -659,29 +659,11 @@ export default function Chat() {
     
     const canAsk = await canAskMoreQuestions();
     if (!canAsk) {
-      let conversionText = "";
-      await generateConversionMessageStream({
-        userName: displayName,
-        lastQuestion: outgoingMessage,
-        recentMessages: messages,
-        language: lang,
-        isNewChat: messages.length === 0
-      }, (delta) => {
-        conversionText += delta;
-        setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: false };
-          }
-          return copy;
-        });
-      });
       setMessages((m) => {
         const copy = [...m];
         const lastIndex = copy.length - 1;
         if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-          copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: true };
+          copy[lastIndex] = { role: "assistant", content: getOutOfCreditsMessage(), isOutOfCredits: true };
         }
         return copy;
       });
@@ -861,37 +843,11 @@ export default function Chat() {
 
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
-        let conversionText = "";
         setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: "", isConversion: true, isConversionComplete: false };
-          }
-          return copy;
-        });
-        await generateConversionMessageStream({
-          userName: displayName,
-          lastQuestion: outgoingMessage,
-          recentMessages: messages,
-          language: lang,
-          isNewChat: false
-        }, (delta) => {
-          conversionText += delta;
-          setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: false };
-          }
-          return copy;
-          });
-        });
-        setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            copy[lastIndex] = { role: "assistant", content: conversionText, isConversion: true, isConversionComplete: true };
+            copy[lastIndex] = { role: "assistant", content: getOutOfCreditsMessage(), isOutOfCredits: true };
           }
           return copy;
         });
@@ -1215,8 +1171,8 @@ export default function Chat() {
                     </div>
                   )}
                   <div className={`${m.role === "user" ? "max-w-[82%] sm:max-w-[70%]" : "max-w-[calc(100%-2.25rem)] sm:max-w-[88%] md:max-w-[82%]"} min-w-0`}>
-                    <Card className={`${m.role === "user" ? "bg-secondary/15" : "bg-card/45"} w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-border/60 ${m.role === "user" ? "" : "ml-0 sm:ml-1"}`}>
-                      <div className="text-sm sm:text-[15px] leading-7 text-foreground/90">
+                    <Card className={`${m.role === "user" ? "bg-secondary/15" : m.isOutOfCredits ? "bg-yellow-500/10 border-yellow-400/40" : "bg-card/45"} w-full px-4 sm:px-5 py-3.5 sm:py-4 rounded-2xl border border-border/60 ${m.role === "user" ? "" : "ml-0 sm:ml-1"}`}>
+                      <div className={`text-sm sm:text-[15px] leading-7 ${m.isOutOfCredits ? "font-medium text-yellow-300" : "text-foreground/90"}`}>
                         {m.role === "assistant" ? (
                           <div className="space-y-3">
                             {formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => (
@@ -1255,12 +1211,12 @@ export default function Chat() {
                         ))}
                       </div>
                     )}
-                    {m.isConversion && m.isConversionComplete !== false && (
+                    {m.isOutOfCredits && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
                         <div className="rounded-3xl border border-white/10 bg-card/95 p-3.5 sm:p-4 shadow-xl shadow-black/20">
                           <div className="text-center px-3 pb-3 border-b border-white/10">
-                            <p className="text-sm font-semibold text-white mb-1">✨ Upgrade to Continue</p>
-                            <p className="text-xs leading-5 text-muted-foreground">Unlock deeper personalized Vedic insights from Vedika</p>
+                            <p className="text-sm font-semibold text-yellow-300 mb-1">Upgrade to continue</p>
+                            <p className="text-xs leading-5 text-muted-foreground">Choose a question pack or monthly plan to keep chatting.</p>
                           </div>
                           <div className="space-y-2.5 pt-3">
                             {!isProPlan && (
@@ -1443,7 +1399,7 @@ export default function Chat() {
                   <Input
                     ref={inputRef}
                     id="chat-input"
-                    placeholder={hasConversionMessage ? "Please upgrade to continue" : t("askPlaceholder")}
+                    placeholder={t("askPlaceholder")}
                     value={message}
                     onChange={(e) => {
                       const v = e.target.value;
@@ -1456,7 +1412,7 @@ export default function Chat() {
                         send();
                       }
                     }}
-                    disabled={hasConversionMessage}
+                    disabled={sending}
                     className="h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                   <Button
@@ -1464,7 +1420,7 @@ export default function Chat() {
                     size="icon"
                     className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full"
                     onClick={() => send()}
-                    disabled={hasConversionMessage}
+                    disabled={sending || !message.trim()}
                     aria-label="Send"
                   >
                     <Send className="w-3.5 sm:w-4 h-3.5 sm:h-4" />

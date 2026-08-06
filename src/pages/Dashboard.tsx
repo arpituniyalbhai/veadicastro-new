@@ -82,6 +82,8 @@ export default function Dashboard() {
   const [rateOpen, setRateOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [sending, setSending] = useState(false);
+  const [askFocused, setAskFocused] = useState(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const promoIconUrl = "";
   const [sectionModalOpen, setSectionModalOpen] = useState(false);
@@ -98,6 +100,7 @@ export default function Dashboard() {
   const [dayVibeLoading, setDayVibeLoading] = useState<Record<string, boolean>>({}); // dateKey -> bool
   // monthlySummaryLoading declared above; old monthly state removed
   const pendingDateRef = useRef<string | null>(null);
+  const askInputRef = useRef<HTMLInputElement | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
   const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
   const [timeRemaining, setTimeRemaining] = useState(() => {
@@ -660,6 +663,13 @@ export default function Dashboard() {
     }
   };
 
+  const handleSuggestionClick = (q: string) => {
+    setSelectedSuggestion(q);
+    setQuestion(q);
+    askInputRef.current?.focus();
+    window.setTimeout(() => setSelectedSuggestion(null), 420);
+  };
+
   const handleTabChange = (val: string) => {
     if (val === "tomorrow") {
       // Tomorrow predictions are now free for everyone
@@ -907,7 +917,14 @@ export default function Dashboard() {
 
         <div className="p-4 lg:p-6 space-y-6 max-w-6xl mx-auto">
           {/* Ask Question Section */}
-          <Card className={cn("p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-transform duration-300", sending && "-translate-y-4") }>
+          <Card
+            className={cn(
+              "p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-all duration-500 ease-out",
+              "hover:border-white/15 hover:bg-card/50 hover:shadow-lg hover:shadow-black/10",
+              askFocused && "border-secondary/45 shadow-[0_0_0_1px_rgba(236,72,153,0.18),0_18px_45px_rgba(0,0,0,0.18)]",
+              sending && "-translate-y-2 scale-[0.995] border-secondary/50 shadow-xl shadow-secondary/10"
+            )}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full overflow-hidden ring-1 ring-border/60">
                 <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" loading="lazy" />
@@ -917,20 +934,34 @@ export default function Dashboard() {
             <div className="flex items-center gap-2 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
                 <Input
+                  ref={askInputRef}
                   placeholder={t("askPlaceholder")}
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
+                  onFocus={() => setAskFocused(true)}
+                  onBlur={() => setAskFocused(false)}
                   onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
-                  className="h-14 bg-background/50 border-border/60 rounded-xl pr-16"
+                  disabled={sending}
+                  className={cn(
+                    "h-14 rounded-xl border-border/60 bg-background/50 pr-16 transition-all duration-300 ease-out",
+                    "focus-visible:ring-2 focus-visible:ring-secondary/35 focus-visible:ring-offset-0",
+                    question && "border-secondary/35 bg-background/70",
+                    sending && "cursor-wait opacity-80"
+                  )}
                 />
                 <Button
                   variant="cosmic"
                   size="icon"
                   onClick={handleAskQuestion}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full shadow-md"
+                  disabled={sending || !question.trim()}
+                  className={cn(
+                    "absolute right-2 top-1/2 h-10 w-10 rounded-full shadow-md transition-all duration-300 ease-out",
+                    "-translate-y-1/2 hover:scale-105 active:scale-95",
+                    sending && "-translate-y-1/2 scale-95 animate-pulse"
+                  )}
                   aria-label="Send"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className={cn("w-4 h-4 transition-transform duration-300", sending && "translate-x-0.5 -translate-y-0.5")} />
                 </Button>
               </div>
             </div>
@@ -938,8 +969,14 @@ export default function Dashboard() {
               {suggestions.map((q) => (
                 <button
                   key={q}
-                  onClick={() => setQuestion(q)}
-                  className="text-left text-xs sm:text-sm px-3 py-2 rounded-lg bg-background/50 border border-border/60 hover:bg-accent/10"
+                  onClick={() => handleSuggestionClick(q)}
+                  disabled={sending}
+                  className={cn(
+                    "text-left text-xs sm:text-sm px-3 py-2 rounded-lg bg-background/50 border border-border/60",
+                    "transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-secondary/35 hover:bg-accent/10 hover:shadow-sm",
+                    "active:translate-y-0 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60",
+                    selectedSuggestion === q && "border-secondary/60 bg-secondary/10 shadow-[0_0_0_1px_rgba(236,72,153,0.16)]"
+                  )}
                 >
                   {q}
                 </button>

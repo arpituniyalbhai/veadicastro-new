@@ -46,8 +46,7 @@ If any fails → rewrite now.
 export type ChatTurn = {
   role: "user" | "assistant";
   content: string;
-  isConversion?: boolean;
-  isConversionComplete?: boolean;
+  isOutOfCredits?: boolean;
 };
 type ApiKeySlot = "primary" | "secondary";
 
