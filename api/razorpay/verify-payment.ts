@@ -546,7 +546,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               credits: planName === 'First Ask' ? 2 :
                        planName === 'Quick Ask' ? 5 : 
                        planName === 'Deep Dive' ? 15 : 
-                       planName === 'The Power Pack' ? 24 : 
+                       planName === 'The Power Pack' ? 30 :
                        planName === 'Day Pass' ? 999 : // Unlimited represented as 999
                        planName === 'Premium' ? 30 :
                        (existingUserData?.credits || 0), // Preserve existing credits for other plans
@@ -570,7 +570,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             console.log('[Verify Payment] Plan purchase completed', {
               userId,
               planName,
-              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 24 : planName === 'Day Pass' ? 999 : planName === 'Premium' ? 30 : existingUserData?.credits || 0,
+              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 30 : planName === 'Day Pass' ? 999 : planName === 'Premium' ? 30 : existingUserData?.credits || 0,
               compatibilityCredits: planName === 'Standard' ? 5 : planName === 'Premium' ? 10 : existingUserData?.compatibilitycredits || 0,
               paymentId: razorpay_payment_id,
             });
@@ -597,7 +597,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             credits: planName === 'First Ask' ? 2 : 
                      planName === 'Quick Ask' ? 5 : 
                      planName === 'Deep Dive' ? 15 : 
-                     planName === 'The Power Pack' ? 24 : 
+                     planName === 'The Power Pack' ? 30 :
                      planName === 'Day Pass' ? 999 :
                      planName === 'Premium' ? 30 : 0,
             compatibilityCredits: planName === 'Standard' ? 5 :

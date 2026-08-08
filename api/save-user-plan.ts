@@ -116,7 +116,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Add credits based on plan
       credits: planName === 'Quick Ask' ? 5 : 
                planName === 'Deep Dive' ? 15 : 
-               planName === 'The Power Pack' ? 24 : 
+               planName === 'The Power Pack' ? 30 :
                planName === 'Day Pass' ? 999 : // Unlimited represented as 999
                planName === 'Premium' ? 30 :
                (existingUserData?.credits || 0), // Preserve existing credits for other plans
