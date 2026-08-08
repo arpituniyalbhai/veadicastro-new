@@ -5,8 +5,9 @@ import { Label } from "@/components/ui/label";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
-import { Calendar, Clock, MapPin, Lock } from "lucide-react";
+import { Calendar, Clock, MapPin, Lock, Moon, Sunrise, Sun, Sunset } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { persistAstroPayload } from "@/lib/astroStorage";
@@ -26,7 +27,8 @@ const Onboarding = () => {
   const [hour, setHour] = useState<number | undefined>();
   const [minute, setMinute] = useState<number | undefined>();
   const [unknownBirthTime, setUnknownBirthTime] = useState(false);
-  const [showUnknownTimeMessage, setShowUnknownTimeMessage] = useState(false);
+  const [showUnknownTimeDialog, setShowUnknownTimeDialog] = useState(false);
+  const [approximateBirthPeriod, setApproximateBirthPeriod] = useState<string>("");
   const [gender, setGender] = useState<string>("");
   const [placeQuery, setPlaceQuery] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<PlaceSuggestion | null>(null);
@@ -79,11 +81,30 @@ const Onboarding = () => {
 
   const handleUnknownBirthTimeChange = (checked: boolean) => {
     setUnknownBirthTime(checked);
-    setShowUnknownTimeMessage(checked);
     if (checked) {
-      setHour(0);
-      setMinute(0);
+      setHour(undefined);
+      setMinute(undefined);
+      setApproximateBirthPeriod("");
+      setShowUnknownTimeDialog(true);
     } else {
+      setShowUnknownTimeDialog(false);
+      setApproximateBirthPeriod("");
+      setHour(undefined);
+      setMinute(undefined);
+    }
+  };
+
+  const selectApproximateBirthTime = (period: string, selectedHour: number) => {
+    setHour(selectedHour);
+    setMinute(0);
+    setApproximateBirthPeriod(period);
+    setShowUnknownTimeDialog(false);
+  };
+
+  const handleUnknownTimeDialogChange = (open: boolean) => {
+    setShowUnknownTimeDialog(open);
+    if (!open && !approximateBirthPeriod) {
+      setUnknownBirthTime(false);
       setHour(undefined);
       setMinute(undefined);
     }
@@ -329,6 +350,11 @@ useEffect(() => {
                     />
                     I don't know my exact time of birth
                   </label>
+                  {unknownBirthTime && approximateBirthPeriod && hour !== undefined && (
+                    <p className="text-xs text-secondary">
+                      Using {approximateBirthPeriod.toLowerCase()} time: {String(hour).padStart(2, '0')}:00
+                    </p>
+                  )}
                 </div>
                 <div className="space-y-2 w-full md:col-span-1" ref={placeBoxRef}>
                   <Label htmlFor="place" className="text-sm font-medium whitespace-nowrap">{t('placeOfBirth')}</Label>
@@ -544,37 +570,42 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      {showUnknownTimeMessage && (
-        <div className="fixed inset-x-0 bottom-4 z-50 px-4">
-          <div className="mx-auto flex max-w-xl items-start gap-3 rounded-2xl border border-border/60 bg-card/95 p-4 shadow-2xl backdrop-blur">
-            <img
-              src="/optimized/vedika.webp"
-              alt="Vedika AI"
-              className="h-12 w-12 flex-shrink-0 rounded-full border border-secondary/40 object-cover"
-              loading="lazy"
-            />
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">
-                Hey {displayName}, that's okay.
-              </p>
-              <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                If you don't know your exact time of birth, you can still continue. Around 40% of people do not know their exact birth time, but they still get useful answers on Veadicastro.
-              </p>
-              <p className="mt-2 text-xs leading-5 text-muted-foreground">
-                <span className="font-semibold text-foreground">Note:</span> Exact time of birth is highly recommended for the most accurate reading. Some chart details and predictions may be less precise without it.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowUnknownTimeMessage(false)}
-              className="rounded-full px-2 text-lg leading-none text-muted-foreground hover:text-foreground"
-              aria-label="Close birth time note"
-            >
-              ×
-            </button>
+      <Dialog open={showUnknownTimeDialog} onOpenChange={handleUnknownTimeDialogChange}>
+        <DialogContent className="w-[calc(100%-2rem)] max-w-md rounded-2xl border-border/60 bg-card/95 p-5 shadow-2xl backdrop-blur-xl sm:p-6">
+          <DialogHeader className="pr-6 text-left">
+            <DialogTitle className="text-xl leading-7">Do you have any idea when you were born?</DialogTitle>
+            <DialogDescription className="pt-1 leading-5">
+              Choose the closest part of the day. We will use an approximate birth time for your reading.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { period: "Night", time: "2:00 AM", hour: 2, Icon: Moon },
+              { period: "Morning", time: "6:00 AM", hour: 6, Icon: Sunrise },
+              { period: "Afternoon", time: "1:00 PM", hour: 13, Icon: Sun },
+              { period: "Evening", time: "5:00 PM", hour: 17, Icon: Sunset },
+            ].map(({ period, time, hour: selectedHour, Icon }) => (
+              <button
+                key={period}
+                type="button"
+                onClick={() => selectApproximateBirthTime(period, selectedHour)}
+                className="flex min-h-24 flex-col items-start justify-between rounded-xl border border-border/60 bg-background/50 p-4 text-left transition-colors hover:border-secondary/70 hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+              >
+                <Icon className="h-5 w-5 text-secondary" aria-hidden="true" />
+                <span>
+                  <span className="block text-sm font-semibold text-foreground">{period}</span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground">Use {time}</span>
+                </span>
+              </button>
+            ))}
           </div>
-        </div>
-      )}
+
+          <p className="text-xs leading-5 text-muted-foreground">
+            Exact birth time gives the most accurate chart. You can return and enter it manually if you find it later.
+          </p>
+        </DialogContent>
+      </Dialog>
       {animating && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
           <div className="absolute inset-0 bg-background/95" />
