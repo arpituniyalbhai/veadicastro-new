@@ -172,6 +172,23 @@ const DASHA_YEARS: Record<string, number> = {
   Rahu: 18, Jupiter: 16, Saturn: 19, Mercury: 17
 };
 
+export type VimshottariPeriod = {
+  lord: string;
+  start: Date;
+  end: Date;
+  years: number;
+};
+
+export type VimshottariDasha = {
+  birthDashaLord: string;
+  birthDashaBalanceYears: number;
+  mahadasha: VimshottariPeriod;
+  antardasha: VimshottariPeriod;
+  pratyantardasha: VimshottariPeriod;
+  nextMahadasha: string;
+  timeline: VimshottariPeriod[];
+};
+
 type SwissEphInstance = Awaited<ReturnType<typeof SwissEPH.init>>;
 
 type PlanetConfig = {
@@ -307,64 +324,97 @@ const addYears = (date: Date, years: number): Date => {
   return result;
 };
 
-const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
-  const NAKSHATRA_SIZE = 13.3333333333;
-  const moonPositionInNakshatra = moonLongitude % NAKSHATRA_SIZE;
-  const fractionElapsed = moonPositionInNakshatra / NAKSHATRA_SIZE;
-  const fractionRemaining = 1 - fractionElapsed;
+const subtractYears = (date: Date, years: number): Date => {
+  return new Date(date.getTime() - Math.round(years * 365.25 * 24 * 60 * 60 * 1000));
+};
 
-  const birthDashaLord = NAKSHATRA_LORDS[moonNakshatraIndex] || 'Ketu';
-  const birthDashaTotalYears = DASHA_YEARS[birthDashaLord];
-  const birthDashaRemainingYears = birthDashaTotalYears * fractionRemaining;
+/**
+ * Calculates Vimshottari periods from the sidereal Moon longitude returned by
+ * Swiss Ephemeris. The first dasha is balanced from the Moon's progress
+ * through its birth Nakshatra; all later periods follow the standard 120-year
+ * Ketu-to-Mercury sequence.
+ */
+export const calculateVimshottariDasha = (
+  birthDate: Date,
+  moonNakshatraIndex: number,
+  moonLongitude: number,
+  currentDate = new Date(),
+): VimshottariDasha => {
+  const nakshatraSize = 13.3333333333;
+  const positionInNakshatra = normalizeDegree(moonLongitude) % nakshatraSize;
+  const fractionElapsed = positionInNakshatra / nakshatraSize;
+  const birthDashaLord = NAKSHATRA_LORDS[moonNakshatraIndex] || "Ketu";
+  const birthDashaYears = DASHA_YEARS[birthDashaLord];
+  const birthDashaBalanceYears = birthDashaYears * (1 - fractionElapsed);
+  const birthDashaStart = subtractYears(birthDate, birthDashaYears * fractionElapsed);
 
-  const exactBirthDate = new Date(Date.UTC(utcParts.year, utcParts.month - 1, utcParts.day, utcParts.hour, utcParts.minute, Math.floor(utcParts.second)));
-  const currentDate = new Date();
+  const startIndex = Math.max(0, DASHA_SEQUENCE.indexOf(birthDashaLord));
+  const timeline: VimshottariPeriod[] = [];
+  let start = new Date(birthDate);
+  let end = addYears(birthDate, birthDashaBalanceYears);
 
-  const dashaStartIndex = DASHA_SEQUENCE.indexOf(birthDashaLord);
-  let dashaStart = new Date(exactBirthDate);
-  let dashaEnd = addYears(exactBirthDate, birthDashaRemainingYears);
-  let idx = Math.max(0, dashaStartIndex);
-
-  while (dashaEnd < currentDate) {
-    idx = (idx + 1) % 9;
-    dashaStart = new Date(dashaEnd);
-    dashaEnd = addYears(dashaStart, DASHA_YEARS[DASHA_SEQUENCE[idx]]);
+  timeline.push({ lord: birthDashaLord, start, end, years: birthDashaBalanceYears });
+  for (let offset = 1; offset < DASHA_SEQUENCE.length; offset++) {
+    const lord = DASHA_SEQUENCE[(startIndex + offset) % DASHA_SEQUENCE.length];
+    start = new Date(end);
+    end = addYears(start, DASHA_YEARS[lord]);
+    timeline.push({ lord, start, end, years: DASHA_YEARS[lord] });
   }
 
-  const currentMaha = DASHA_SEQUENCE[idx];
-  const mahaStart = dashaStart;
-  const mahaEnd = dashaEnd;
-
-  const mahaYears = (idx === dashaStartIndex) 
-    ? birthDashaRemainingYears 
-    : DASHA_YEARS[currentMaha];
+  const mahadasha = timeline.find((period) => currentDate < period.end) || timeline[timeline.length - 1];
+  const mahaStart = mahadasha === timeline[0] ? birthDashaStart : mahadasha.start;
+  const mahaYears = DASHA_YEARS[mahadasha.lord];
+  const mahaIndex = DASHA_SEQUENCE.indexOf(mahadasha.lord);
 
   let antarStart = new Date(mahaStart);
-  let antarEnd = new Date(mahaStart);
-  let antarIdx = idx;
-  let currentAntar = '';
-  let finalAntarEnd = new Date();
-
-  for (let i = 0; i < 9; i++) {
-    const antarLord = DASHA_SEQUENCE[antarIdx % 9];
-    const antarYears = (DASHA_YEARS[antarLord] / 120) * mahaYears;
-    antarEnd = addYears(antarStart, antarYears);
-
-    if (antarEnd >= currentDate) {
-      currentAntar = antarLord;
-      finalAntarEnd = antarEnd;
+  let antardasha: VimshottariPeriod | null = null;
+  for (let offset = 0; offset < DASHA_SEQUENCE.length; offset++) {
+    const lord = DASHA_SEQUENCE[(mahaIndex + offset) % DASHA_SEQUENCE.length];
+    const years = (mahaYears * DASHA_YEARS[lord]) / 120;
+    const antarEnd = addYears(antarStart, years);
+    if (currentDate < antarEnd || offset === DASHA_SEQUENCE.length - 1) {
+      antardasha = { lord, start: antarStart, end: antarEnd, years };
       break;
     }
-    antarStart = new Date(antarEnd);
-    antarIdx++;
+    antarStart = antarEnd;
+  }
+
+  const activeAntar = antardasha as VimshottariPeriod;
+  const antarIndex = DASHA_SEQUENCE.indexOf(activeAntar.lord);
+  let pratyantarStart = new Date(activeAntar.start);
+  let pratyantardasha: VimshottariPeriod | null = null;
+  for (let offset = 0; offset < DASHA_SEQUENCE.length; offset++) {
+    const lord = DASHA_SEQUENCE[(antarIndex + offset) % DASHA_SEQUENCE.length];
+    const years = (activeAntar.years * DASHA_YEARS[lord]) / 120;
+    const pratyantarEnd = addYears(pratyantarStart, years);
+    if (currentDate < pratyantarEnd || offset === DASHA_SEQUENCE.length - 1) {
+      pratyantardasha = { lord, start: pratyantarStart, end: pratyantarEnd, years };
+      break;
+    }
+    pratyantarStart = pratyantarEnd;
   }
 
   return {
-    mahadasha: currentMaha,
-    antardasha: currentAntar,
-    mahaEnds: mahaEnd.toISOString().split('T')[0],
-    antarEnds: finalAntarEnd.toISOString().split('T')[0],
-    nextMahadasha: DASHA_SEQUENCE[(idx + 1) % 9],
+    birthDashaLord,
+    birthDashaBalanceYears,
+    mahadasha,
+    antardasha: activeAntar,
+    pratyantardasha: pratyantardasha as VimshottariPeriod,
+    nextMahadasha: DASHA_SEQUENCE[(mahaIndex + 1) % DASHA_SEQUENCE.length],
+    timeline,
+  };
+};
+
+const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
+  const exactBirthDate = new Date(Date.UTC(utcParts.year, utcParts.month - 1, utcParts.day, utcParts.hour, utcParts.minute, Math.floor(utcParts.second)));
+  const dasha = calculateVimshottariDasha(exactBirthDate, moonNakshatraIndex, moonLongitude);
+
+  return {
+    mahadasha: dasha.mahadasha.lord,
+    antardasha: dasha.antardasha.lord,
+    mahaEnds: dasha.mahadasha.end.toISOString().split('T')[0],
+    antarEnds: dasha.antardasha.end.toISOString().split('T')[0],
+    nextMahadasha: dasha.nextMahadasha,
   };
 };
 

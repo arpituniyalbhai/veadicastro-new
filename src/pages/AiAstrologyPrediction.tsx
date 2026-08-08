@@ -725,7 +725,7 @@ export default function AiAstrologyPrediction() {
             The career prediction can show the kind of work energy that is strong in your chart. The marriage and love life predictions can help you understand relationship timing and emotional patterns. The money and business predictions can show when growth becomes easier and where you should stay careful. Health and family predictions give simple guidance about balance, routine, and responsibility.
           </p>
           <p className="mb-5 leading-7">
-            The lucky period prediction is useful because timing is a big part of Vedic astrology. Some periods support action, while some periods ask for patience. A good prediction does not only say what can happen. It also tells you when the energy becomes stronger.
+            The lucky period prediction is useful because timing is a big part of Vedic astrology. Some periods support action, while some periods ask for patience. Use the <Link to="/dasha-calculator/" className="text-[#d9277a] hover:text-white">Dasha Calculator</Link> to see your active Mahadasha and Antardasha dates. A good prediction does not only say what can happen. It also tells you when the energy becomes stronger.
           </p>
 
           <h2 className="mb-4 text-2xl font-semibold text-white">Who Should Use This AI Astrology Tool</h2>

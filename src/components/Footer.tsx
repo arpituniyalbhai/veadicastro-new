@@ -72,6 +72,9 @@ const Footer = () => {
             <Link to="/lucky-colour-for-today" className="text-white/80 hover:text-white transition-colors">
               Lucky Colour Today
             </Link>
+            <Link to="/dasha-calculator/" className="text-white/80 hover:text-white transition-colors">
+              Dasha Calculator
+            </Link>
             <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
               ChatGPT Astrology
             </Link>

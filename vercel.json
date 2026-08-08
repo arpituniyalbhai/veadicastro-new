@@ -26,6 +26,7 @@
     { "source": "/kundligpt-alternative", "destination": "/api/meta?path=kundligpt-alternative" },
     { "source": "/astrology-by-date-of-birth", "destination": "/api/meta?path=astrology-by-date-of-birth" },
     { "source": "/rashi-calculator-by-date-of-birth", "destination": "/api/meta?path=rashi-calculator-by-date-of-birth" },
+    { "source": "/dasha-calculator", "destination": "/api/meta?path=dasha-calculator" },
 
     { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },
     { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },

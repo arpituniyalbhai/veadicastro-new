@@ -1120,7 +1120,7 @@ export default function AiKundliAnalysis() {
             </p>
 
             <p className="text-white/80 leading-7 mb-8">
-              For timing-specific predictions, explore our <Link to="/ai-astrology-prediction" className="text-pink-300 hover:text-pink-200 underline">AI astrology prediction</Link> tool or read about <Link to="/blog/ai-astrology-prediction-for-2026" className="text-pink-300 hover:text-pink-200 underline">AI astrology predictions for 2026</Link>.
+              For timing-specific predictions, use the <Link to="/dasha-calculator/" className="text-pink-300 hover:text-pink-200 underline">Dasha Calculator</Link> to see your Mahadasha and Antardasha dates, explore our <Link to="/ai-astrology-prediction" className="text-pink-300 hover:text-pink-200 underline">AI astrology prediction</Link> tool, or read about <Link to="/blog/ai-astrology-prediction-for-2026" className="text-pink-300 hover:text-pink-200 underline">AI astrology predictions for 2026</Link>.
             </p>
 
             <h2 className="text-2xl font-bold text-white mb-6">How AI Kundli Analysis Differs from ChatGPT</h2>

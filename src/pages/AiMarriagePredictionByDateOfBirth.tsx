@@ -821,7 +821,7 @@ export default function AiMarriagePredictionByDateOfBirth() {
               <section>
                 <h3 className="text-2xl font-black text-white">5. Why marriage timing is shown as a window</h3>
                 <p className="mt-3 text-sm leading-8 text-white/70 sm:text-base">
-                  Marriage timing is normally checked through dasha and transit. Dasha shows which planetary period is active in your life. Transit shows what current planets are triggering in the chart. When marriage-related houses and planets become active together, the chart can show a stronger window for meeting someone, engagement, commitment, or marriage. A window is more responsible than a fixed guaranteed date because real-life choices and circumstances also matter.
+                  Marriage timing is normally checked through dasha and transit. Dasha shows which planetary period is active in your life. Transit shows what current planets are triggering in the chart. Use the <Link to="/dasha-calculator/" className="text-pink-300 underline-offset-4 hover:underline">Dasha Calculator</Link> to check your current Mahadasha, Antardasha, and their dates. When marriage-related houses and planets become active together, the chart can show a stronger window for meeting someone, engagement, commitment, or marriage. A window is more responsible than a fixed guaranteed date because real-life choices and circumstances also matter.
                 </p>
               </section>
 

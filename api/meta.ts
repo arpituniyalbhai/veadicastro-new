@@ -87,6 +87,12 @@ const META: Record<string, { title: string; description: string; canonical: stri
     canonical: 'https://veadicastro.in/rashi-calculator-by-date-of-birth',
     breadcrumb: 'Rashi Calculator',
   },
+  '/dasha-calculator': {
+    title: 'Dasha Calculator - Find Your Mahadasha & Antardasha',
+    description: 'Free Dasha Calculator using Swiss Ephemeris. Find your current Vimshottari Mahadasha, Antardasha, Pratyantardasha, dates, and full Dasha timeline.',
+    canonical: 'https://veadicastro.in/dasha-calculator/',
+    breadcrumb: 'Dasha Calculator',
+  },
   '/astrology-store': {
     title: 'Astrology Store — Spiritual Products from Haridwar | Veadicastro',
     description: 'Buy authentic spiritual and astrology products. Rudraksha, crystal bracelets, puja items sourced from Haridwar. Free delivery across India.',
