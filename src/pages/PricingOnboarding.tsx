@@ -170,6 +170,7 @@ const PricingOnboarding = () => {
         body: JSON.stringify({
           currency: 'INR',
           planName,
+          customAmount: Math.round(finalPrice * 100),
           userPlan: userPlan || 'Free', // Send user's current plan for discount eligibility
         }),
       });

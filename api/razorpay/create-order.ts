@@ -42,6 +42,13 @@ const STORE_PRODUCT_PRICES: Record<string, number> = {
   'Money Magnet Dhan Yog Bracelet - Pack of 2': 59900,
 };
 
+const ALLOWED_PACK_AMOUNTS: Record<string, number[]> = {
+  'First Ask': [4900],
+  'Quick Ask': [9900],
+  'Deep Dive': [39900, 29900],
+  'The Power Pack': [69900, 45000],
+};
+
 const getSpecialReportPrice = (planName: string): number | undefined => {
   const normalized = planName.trim().toLowerCase();
 
@@ -117,6 +124,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Apply 33% discount if promo code is valid
     let finalAmount = originalAmount;
     let discountApplied = false;
+
+    if (
+      customAmount &&
+      typeof customAmount === 'number' &&
+      ALLOWED_PACK_AMOUNTS[planName]?.includes(customAmount) &&
+      customAmount < originalAmount &&
+      !promoCode
+    ) {
+      finalAmount = customAmount;
+      discountApplied = true;
+      console.log('[Create Order] Applied onboarding pack price:', {
+        planName,
+        originalAmount: originalAmount / 100,
+        finalAmount: finalAmount / 100,
+      });
+    }
     
     // Check if user has a paid plan for discount eligibility
     const hasPaidPlan = userPlan && typeof userPlan === 'string' ? (() => {
@@ -132,7 +155,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     })() : false;
     
     // Apply dynamic pricing for paid users
-    if (hasPaidPlan && !promoCode) {
+    if (hasPaidPlan && !promoCode && finalAmount === originalAmount) {
       const normalizedPlan = planName.toLowerCase();
       if (normalizedPlan.includes("deep dive")) {
         finalAmount = 29900; // ₹299 in paise (discounted from ₹399)
@@ -269,4 +292,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 }
-
