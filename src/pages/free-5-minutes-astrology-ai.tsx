@@ -815,7 +815,7 @@ KEY INSIGHTS:
         {/* SEO Content Section */}
         <section className="max-w-4xl mx-auto px-4 py-16">
           <div className="prose prose-invert max-w-none">
-            <h1 className="text-3xl sm:text-4xl font-black text-white mb-6">Free 5 Minute Astrology AI — Get Your Answer Right Now</h1>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-6">Free 5 Minute Astrology AI — Get Your Answer Right Now</h2>
             
             <div className="text-white/80 leading-relaxed space-y-6">
               <p>

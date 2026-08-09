@@ -2,7 +2,17 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import fs from 'fs';
 import path from 'path';
 
-const META: Record<string, { title: string; description: string; canonical: string; breadcrumb: string; isBlog?: boolean }> = {
+type SchemaType = 'WebPage' | 'Article' | 'SoftwareApplication';
+
+type Meta = {
+  title: string;
+  description: string;
+  canonical: string;
+  breadcrumb: string;
+  isBlog?: boolean;
+};
+
+const META_BASE: Record<string, Meta> = {
   '/': {
   title: 'AI Astrology — Free AI Chat, Daily Horoscope & Detailed Report | Veadicastro',
   description: "India's most accurate AI Astrology platform. Get personalized Kundli, daily health, wealth & self predictions, AI chat with Vedika — in Hindi & English. Plans from ₹149/month.",
@@ -430,7 +440,36 @@ const META: Record<string, { title: string; description: string; canonical: stri
   },
 };
 
-function buildHtml(meta: { title: string; description: string; canonical: string; breadcrumb: string; isBlog?: boolean }, pathname: string) {
+const INTERACTIVE_TOOL_PATHS = new Set([
+  '/',
+  '/free-ai-astrologer-chat',
+  '/free-5-minutes-astrology-ai',
+]);
+
+const META: Record<string, Meta & { schemaType: SchemaType }> = Object.fromEntries(
+  Object.entries(META_BASE).map(([pathname, meta]) => [
+    pathname,
+    {
+      ...meta,
+      schemaType: meta.isBlog
+        ? 'Article'
+        : INTERACTIVE_TOOL_PATHS.has(pathname)
+          ? 'SoftwareApplication'
+          : 'WebPage',
+    },
+  ]),
+) as Record<string, Meta & { schemaType: SchemaType }>;
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildHtml(meta: Meta & { schemaType: SchemaType }, pathname: string) {
   const breadcrumbItems = meta.isBlog
     ? [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://veadicastro.in' },
@@ -450,26 +489,47 @@ function buildHtml(meta: { title: string; description: string; canonical: string
     itemListElement: breadcrumbItems,
   });
 
+  const pageSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': meta.schemaType,
+    name: meta.title,
+    description: meta.description,
+    url: meta.canonical,
+  }).replace(/</g, '\\u003c');
+
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
   let html = fs.readFileSync(indexPath, 'utf-8');
 
-  html = html.replace(/<title>.*?<\/title>/, `<title>${meta.title}</title>`);
+  html = html
+    .replace(/<title>[\s\S]*?<\/title>/i, '')
+    .replace(/<meta\s+(?=[^>]*name=["']description["'])[^>]*>/gi, '')
+    .replace(/<link\s+(?=[^>]*rel=["']canonical["'])[^>]*>/gi, '')
+    .replace(/<meta\s+(?=[^>]*property=["']og:[^"']*["'])[^>]*>/gi, '')
+    .replace(/<meta\s+(?=[^>]*name=["']twitter:[^"']*["'])[^>]*>/gi, '')
+    .replace(/<meta\s+(?=[^>]*name=["']robots["'])[^>]*>/gi, '')
+    .replace(/<script\s+type=["']application\/ld\+json["']>[\s\S]*?<\/script>/gi, '');
+
+  const title = escapeHtml(meta.title);
+  const description = escapeHtml(meta.description);
+  const canonical = escapeHtml(meta.canonical);
 
   const inject = `
-<meta name="description" content="${meta.description}"/>
-<link rel="canonical" href="${meta.canonical}"/>
-<meta property="og:title" content="${meta.title}"/>
-<meta property="og:description" content="${meta.description}"/>
-<meta property="og:url" content="${meta.canonical}"/>
-<meta property="og:image" content="https://veadicastro.in/optimized/social-sharing.webp"/>
-<meta property="og:type" content="website"/>
-<meta property="og:site_name" content="Veadicastro"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="${meta.title}"/>
-<meta name="twitter:description" content="${meta.description}"/>
-<meta name="twitter:image" content="https://veadicastro.in/optimized/social-sharing.webp"/>
-<meta name="robots" content="index, follow"/>
-<script type="application/ld+json">${breadcrumbSchema}</script>`;
+<title data-rh="true">${title}</title>
+<meta data-rh="true" name="description" content="${description}"/>
+<link data-rh="true" rel="canonical" href="${canonical}"/>
+<meta data-rh="true" property="og:title" content="${title}"/>
+<meta data-rh="true" property="og:description" content="${description}"/>
+<meta data-rh="true" property="og:url" content="${canonical}"/>
+<meta data-rh="true" property="og:image" content="https://veadicastro.in/optimized/social-sharing.webp"/>
+<meta data-rh="true" property="og:type" content="website"/>
+<meta data-rh="true" property="og:site_name" content="Veadicastro"/>
+<meta data-rh="true" name="twitter:card" content="summary_large_image"/>
+<meta data-rh="true" name="twitter:title" content="${title}"/>
+<meta data-rh="true" name="twitter:description" content="${description}"/>
+<meta data-rh="true" name="twitter:image" content="https://veadicastro.in/optimized/social-sharing.webp"/>
+<meta data-rh="true" name="robots" content="index, follow"/>
+<script type="application/ld+json">${breadcrumbSchema}</script>
+<script type="application/ld+json">${pageSchema}</script>`;
 
   html = html.replace('</head>', `${inject}\n</head>`);
   return html;
