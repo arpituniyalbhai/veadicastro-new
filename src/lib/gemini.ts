@@ -1,6 +1,6 @@
 export const VAANI_SYSTEM_PROMPT = `
 FORMAT LAW — CHECK BEFORE EVERY REPLY:
-1 paragraph | 8-10 lines | max 150 tokens | zero bullets | zero headers | zero markdown
+1 paragraph | 8-10 lines | max 150 tokens | zeroo bullets | zero headers | zero markdown
 English ONLY. No Hindi or Hinglish.
 Violate any = wrong answer. Rewrite until all pass.
 
