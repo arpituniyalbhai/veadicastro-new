@@ -126,18 +126,6 @@ function canonicalFactAnswer(question: string, chart: any, lang: string): string
   return null;
 }
 
-function hasUnsupportedNumericLordship(text: string, chart: any): boolean {
-  for (const [key, value] of Object.entries(chart.facts.d1.planets) as any) {
-    if (!Array.isArray(value.lord_of) || value.lord_of.length !== 2) continue;
-    const match = text.match(new RegExp(`${key}.{0,80}(?:rule|rules|lord|lordship).{0,80}?(\\d{1,2})(?:st|nd|rd|th)?\\s*(?:and|&)\\s*(\\d{1,2})`, 'i'));
-    if (!match) continue;
-    const given = [Number(match[1]), Number(match[2])].sort((a, b) => a - b).join(',');
-    const expected = [...value.lord_of].sort((a: number, b: number) => a - b).join(',');
-    if (given !== expected) return true;
-  }
-  return false;
-}
-
 async function handleCanonicalChartRequest(body: any, key: string) {
   const { requestId, chart, question, history = [], lang = 'en' } = body;
   if (!question || typeof question !== 'string' || !chart?.chart_id || !chart?.chart_hash || !chart?.facts?.d1?.planets) {
@@ -157,10 +145,7 @@ async function handleCanonicalChartRequest(body: any, key: string) {
   });
   if (!response.ok) return new Response(JSON.stringify({ error: 'AI service error' }), { status: response.status, headers: { 'Content-Type': 'application/json' } });
   const data = await response.json();
-  let text = String(data?.choices?.[0]?.message?.content || '').trim();
-  if (hasUnsupportedNumericLordship(text, chart)) {
-    text = lang === 'hi' ? 'उत्तर में असमर्थित जन्म-कुंडली तथ्य था, इसलिए उसे रोका गया है। कृपया सत्यापित चार्ट तथ्यों के आधार पर प्रश्न पूछें।' : 'An unsupported birth-chart fact was blocked from this response. Please ask using the verified chart facts.';
-  }
+  const text = String(data?.choices?.[0]?.message?.content || '').trim();
   console.log('chart-request', { requestId, chartId: chart.chart_id, chartHash: chart.chart_hash, route: 'validated-interpretation', model: PINNED_CHAT_MODEL, temperature });
   return new Response(JSON.stringify({ text, meta: { requestId, chartHash: chart.chart_hash, route: 'validated-interpretation', model: PINNED_CHAT_MODEL, temperature } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 }
