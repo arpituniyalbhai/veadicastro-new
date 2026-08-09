@@ -72,6 +72,9 @@ export async function generateCanonicalChartAnswer(request: CanonicalChartReques
       requestId: request.requestId,
       chart: request.chart,
       question: request.question,
+      // Backward-compatible during a staggered frontend/API deployment. The
+      // canonical backend ignores this field; an older backend requires it.
+      prompt: request.question,
       history: request.history,
       lang: request.lang,
       userName: request.userName,
