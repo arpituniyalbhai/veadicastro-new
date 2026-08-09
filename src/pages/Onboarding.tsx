@@ -10,8 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
-import { persistAstroPayload } from "@/lib/astroStorage";
-import { getPlanetaryData } from "@/lib/astroCalc";
+import { getCanonicalChartSnapshot } from "@/lib/canonicalChart";
 import SwissEPH from "sweph-wasm";
 
 type PlaceSuggestion = { label: string; lat: number; lng: number; tzone?: number; uid?: string | null };
@@ -530,8 +529,7 @@ useEffect(() => {
                         lon: details.lng,
                         tzone: details.tzone,
                       };
-                      const payload = await getPlanetaryData(body);
-                      persistAstroPayload(payload);
+                      await getCanonicalChartSnapshot(body);
                       return true;
                     } catch (e) {
                       console.error("[Onboarding] Planet calc failed", e);

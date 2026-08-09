@@ -109,6 +109,62 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+const PINNED_CHAT_MODEL = 'mistral-large-2512';
+
+function canonicalFactAnswer(question: string, chart: any, lang: string): string | null {
+  const planets = chart?.facts?.d1?.planets;
+  if (!planets || typeof planets !== 'object') return null;
+  const asked = question.toLowerCase();
+  const asksLordship = /(?:which|what).{0,30}(?:house|bhav)|(?:house|bhav).{0,30}(?:rule|lord)|(?:rule|lord).{0,30}(?:house|bhav)|lordship/.test(asked);
+  if (!asksLordship) return null;
+  for (const [key, value] of Object.entries(planets) as any) {
+    if (!new RegExp(`\\b${key}\\b`, 'i').test(asked) || !Array.isArray(value.lord_of)) continue;
+    const houses = value.lord_of.map((n: number) => `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'}`).join(' and ');
+    const name = key.charAt(0).toUpperCase() + key.slice(1);
+    return lang === 'hi' ? `D1 जन्म कुंडली में ${name} ${houses} भाव का स्वामी है।` : `In your D1 birth chart, ${name} rules the ${houses} houses.`;
+  }
+  return null;
+}
+
+function hasUnsupportedNumericLordship(text: string, chart: any): boolean {
+  for (const [key, value] of Object.entries(chart.facts.d1.planets) as any) {
+    if (!Array.isArray(value.lord_of) || value.lord_of.length !== 2) continue;
+    const match = text.match(new RegExp(`${key}.{0,80}(?:rule|rules|lord|lordship).{0,80}?(\\d{1,2})(?:st|nd|rd|th)?\\s*(?:and|&)\\s*(\\d{1,2})`, 'i'));
+    if (!match) continue;
+    const given = [Number(match[1]), Number(match[2])].sort((a, b) => a - b).join(',');
+    const expected = [...value.lord_of].sort((a: number, b: number) => a - b).join(',');
+    if (given !== expected) return true;
+  }
+  return false;
+}
+
+async function handleCanonicalChartRequest(body: any, key: string) {
+  const { requestId, chart, question, history = [], lang = 'en' } = body;
+  if (!question || typeof question !== 'string' || !chart?.chart_id || !chart?.chart_hash || !chart?.facts?.d1?.planets) {
+    return new Response(JSON.stringify({ error: 'Invalid canonical chart request' }), { status: 422, headers: { 'Content-Type': 'application/json' } });
+  }
+  const direct = canonicalFactAnswer(question, chart, lang);
+  if (direct) return new Response(JSON.stringify({ text: direct, meta: { requestId, chartHash: chart.chart_hash, route: 'deterministic-fact' } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  const temperature = /career|job|work|profession|business/i.test(question) ? 0.35 : 0.5;
+  const messages = [
+    { role: 'system', content: `You are Vedika. Interpret only verified canonical D1 facts. Never calculate, modify, or invent immutable astrology facts. If a fact is absent, say it is unavailable. Use plain text. VERIFIED_FACTS=${JSON.stringify(chart.facts)}` },
+    ...(Array.isArray(history) ? history.slice(-10).map((item: any) => ({ role: item?.role === 'user' ? 'user' : 'assistant', content: String(item?.content || '') })) : []),
+    { role: 'user', content: question },
+  ];
+  const response = await fetch('https://api.mistral.ai/v1/chat/completions', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({ model: PINNED_CHAT_MODEL, messages, temperature, max_tokens: 350 }),
+  });
+  if (!response.ok) return new Response(JSON.stringify({ error: 'AI service error' }), { status: response.status, headers: { 'Content-Type': 'application/json' } });
+  const data = await response.json();
+  let text = String(data?.choices?.[0]?.message?.content || '').trim();
+  if (hasUnsupportedNumericLordship(text, chart)) {
+    text = lang === 'hi' ? 'उत्तर में असमर्थित जन्म-कुंडली तथ्य था, इसलिए उसे रोका गया है। कृपया सत्यापित चार्ट तथ्यों के आधार पर प्रश्न पूछें।' : 'An unsupported birth-chart fact was blocked from this response. Please ask using the verified chart facts.';
+  }
+  console.log('chart-request', { requestId, chartId: chart.chart_id, chartHash: chart.chart_hash, route: 'validated-interpretation', model: PINNED_CHAT_MODEL, temperature });
+  return new Response(JSON.stringify({ text, meta: { requestId, chartHash: chart.chart_hash, route: 'validated-interpretation', model: PINNED_CHAT_MODEL, temperature } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+}
+
 export default async function handler(req: Request) {
   try {
     // Add request logging for debugging
@@ -158,6 +214,12 @@ export default async function handler(req: Request) {
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
     const key: string = keyEnv;
+
+    // Canonical chart traffic uses a structured, single-source contract. It must
+    // never fall through to the legacy string-parser/streaming path below.
+    if (body?.pipelineVersion === 'canonical-chart-v1') {
+      return handleCanonicalChartRequest(body, key);
+    }
 
     // Get current date/time in IST (Asia/Kolkata)
     const now = new Date();

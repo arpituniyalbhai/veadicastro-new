@@ -8,9 +8,8 @@ import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, Chevr
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
-import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
-import { persistAstroPayload } from "@/lib/astroStorage";
-import { getPlanetaryData } from "@/lib/astroCalc";
+import { generateCanonicalChartAnswer, type ChatTurn } from "@/lib/gemini";
+import { getCanonicalChartSnapshot } from "@/lib/canonicalChart";
 import { getDbInstance } from "@/lib/firebase";
 import type { AstroInput } from "@/lib/astroCalc";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -720,6 +719,8 @@ export default function Chat() {
         setIsTyping(false);
         return;
       }
+      let snapshot;
+      // Legacy display cache is intentionally not sent to the canonical chat API.
       let planetsBlock = "";
       if (details?.dob && details?.time && (details?.lat != null) && (details?.lng != null)) {
         try {
@@ -736,11 +737,9 @@ export default function Chat() {
             lon: details.lng,
             tzone: tzone,
           };
-          const payload = await getPlanetaryData(body);
-          planetsBlock = `Planetary Data:\n${JSON.stringify(payload)}`;
-          persistAstroPayload(payload);
+          snapshot = await getCanonicalChartSnapshot(body);
         } catch (e) {
-          console.debug('[Chat] Astrology calculation failed, will try local cache.', e);
+          console.debug('[Chat] Canonical chart preparation failed.', e);
         }
       }
       if (!planetsBlock) {
@@ -786,53 +785,35 @@ export default function Chat() {
         return out;
       };
 
-      let firstChunkReceived = false;
-      let streamBuffer = "";
-      let rafId: number | null = null;
-      const flushBuffer = () => {
-        if (!streamBuffer) return;
-        const chunk = streamBuffer;
-        streamBuffer = "";
-        setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            const next = (copy[lastIndex].content || "") + chunk;
-            copy[lastIndex] = { role: "assistant", content: sanitize(next) };
-          }
-          return copy;
-        });
-      };
-      await generateGeminiStream(promptText, messages.slice(-20), (delta) => {
-        streamedAnswer += delta;
-        if (sanitize(streamedAnswer).trim()) {
-          aiAnswerCompleted = true;
+      if (!snapshot) throw new Error("Unable to prepare the canonical chart snapshot");
+      const final = await generateCanonicalChartAnswer({
+        requestId: crypto.randomUUID(),
+        chart: {
+          chart_id: snapshot.chart_id,
+          chart_hash: snapshot.chart_hash,
+          schema_version: snapshot.schema_version,
+          calculator_version: snapshot.calculator_version,
+          facts: snapshot.facts,
+        },
+        question: userText,
+        history: messages.slice(-10),
+        lang,
+        userName: displayName,
+      });
+      const sanitizedFinal = sanitize(final || "");
+      streamedAnswer = sanitizedFinal;
+      finalAnswerForSuggestions = sanitizedFinal;
+      aiAnswerCompleted = !!sanitizedFinal.trim();
+      deltaCount = sanitizedFinal ? 1 : 0;
+      setMessages((m) => {
+        const copy = [...m];
+        const lastIndex = copy.length - 1;
+        if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+          copy[lastIndex] = { role: "assistant", content: sanitizedFinal };
         }
-        if (!firstChunkReceived) {
-          firstChunkReceived = true;
-          setIsTyping(false);
-        }
-        streamBuffer += delta;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(flushBuffer);
-        deltaCount++;
-      }, systemExtra, lang, displayName, "primary", "mistral-large-latest");
-      if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
-      if (deltaCount === 0) {
-        // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-large-latest");
-        const sanitizedFinal = sanitize(final || "");
-        finalAnswerForSuggestions = sanitizedFinal;
-        aiAnswerCompleted = !!sanitizedFinal.trim();
-          setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-              copy[lastIndex] = { role: "assistant", content: sanitizedFinal };
-          }
-          return copy;
-        });
-      }
+        return copy;
+      });
+      setIsTyping(false);
       if (!aiAnswerCompleted) {
         throw new Error("AI response was empty");
       }

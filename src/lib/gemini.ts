@@ -48,6 +48,40 @@ export type ChatTurn = {
   content: string;
   isOutOfCredits?: boolean;
 };
+export type CanonicalChartRequest = {
+  requestId: string;
+  chart: {
+    chart_id: string;
+    chart_hash: string;
+    schema_version: string;
+    calculator_version: string;
+    facts: unknown;
+  };
+  question: string;
+  history: ChatTurn[];
+  lang: string;
+  userName?: string;
+};
+
+export async function generateCanonicalChartAnswer(request: CanonicalChartRequest): Promise<string> {
+  const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || '';
+  const res = await fetch(`${API_BASE}/api/mistral`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      requestId: request.requestId,
+      chart: request.chart,
+      question: request.question,
+      history: request.history,
+      lang: request.lang,
+      userName: request.userName,
+      pipelineVersion: 'canonical-chart-v1',
+    }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const data = await res.json();
+  return String(data?.text || '').trim();
+}
 type ApiKeySlot = "primary" | "secondary";
 
 /**
