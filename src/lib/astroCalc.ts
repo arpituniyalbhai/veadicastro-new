@@ -45,9 +45,12 @@ export type AstroPayload = {
   dasha: {
     mahadasha: string;
     antardasha: string;
+    mahaStart: string;
     mahaEnds: string;
+    antarStart: string;
     antarEnds: string;
     nextMahadasha: string;
+    futureMahadashas: { lord: string; start: string; end: string }[];
   };
   houseLords: string[];
   astro_locked: boolean;
@@ -408,13 +411,24 @@ export const calculateVimshottariDasha = (
 const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude: number) => {
   const exactBirthDate = new Date(Date.UTC(utcParts.year, utcParts.month - 1, utcParts.day, utcParts.hour, utcParts.minute, Math.floor(utcParts.second)));
   const dasha = calculateVimshottariDasha(exactBirthDate, moonNakshatraIndex, moonLongitude);
+  const currentIndex = dasha.timeline.indexOf(dasha.mahadasha);
+  const futureMahadashas = dasha.timeline
+    .slice(currentIndex + 1, currentIndex + 4)
+    .map((period) => ({
+      lord: period.lord,
+      start: period.start.toISOString().split('T')[0],
+      end: period.end.toISOString().split('T')[0],
+    }));
 
   return {
     mahadasha: dasha.mahadasha.lord,
     antardasha: dasha.antardasha.lord,
+    mahaStart: dasha.mahadasha.start.toISOString().split('T')[0],
     mahaEnds: dasha.mahadasha.end.toISOString().split('T')[0],
+    antarStart: dasha.antardasha.start.toISOString().split('T')[0],
     antarEnds: dasha.antardasha.end.toISOString().split('T')[0],
     nextMahadasha: dasha.nextMahadasha,
+    futureMahadashas,
   };
 };
 
@@ -513,7 +527,10 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
   const sunData = planetMap.sun || null;
   const moonNakshatra = moonData ? moonData.nakshatra : null;
 
-  let dasha = { mahadasha: '', antardasha: '', mahaEnds: '', antarEnds: '', nextMahadasha: '' };
+  let dasha = {
+    mahadasha: '', antardasha: '', mahaStart: '', mahaEnds: '',
+    antarStart: '', antarEnds: '', nextMahadasha: '', futureMahadashas: [],
+  };
   if (moonData && moonNakshatra) {
     dasha = calculateDasha(utcParts, moonNakshatra.index, moonData.longitude);
   }
