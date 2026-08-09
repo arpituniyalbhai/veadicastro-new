@@ -763,8 +763,10 @@ export default function Chat() {
       
       // Backend already handles VAANI_SYSTEM_PROMPT, so we only need language + formatting rules
       const systemBlock = `${languageRule}\n${formattingBan}`.trim();
-      const inlineContext = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}`.trim();
-      const promptText = `Context (use this for accuracy):\n${inlineContext}\n\nUser Question:\n${userText}`.trim();
+      // The chart is already supplied once through systemExtra. Keep the user
+      // message to the user's question so the same chart is not duplicated in
+      // both the system and user messages.
+      const promptText = `User Question:\n${userText}`.trim();
       console.debug('[Chat] Prepared prompt', { hasPlanets: !!planetsBlock, detailsPresent: !!detailsBlock, promptLen: promptText.length, systemLen: systemBlock.length });
       const sanitize = (txt: string) => {
         // Remove bold/italics markers and inline code/backticks

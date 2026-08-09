@@ -9,7 +9,34 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     if (!systemExtra.includes('Planetary Data:')) return systemExtra;
 
     const dataStart = systemExtra.indexOf('Planetary Data:');
-    const jsonString = systemExtra.slice(dataStart + 'Planetary Data:'.length).trim();
+    const dataTail = systemExtra.slice(dataStart + 'Planetary Data:'.length);
+
+    // `systemExtra` also contains human-readable blocks (for example User
+    // Details) after the chart. Extract only the first complete JSON object;
+    // parsing the entire tail made every normal chat payload invalid JSON.
+    const firstBrace = dataTail.indexOf('{');
+    if (firstBrace < 0) return systemExtra;
+    let depth = 0;
+    let inString = false;
+    let escaped = false;
+    let end = -1;
+    for (let index = firstBrace; index < dataTail.length; index++) {
+      const char = dataTail[index];
+      if (inString) {
+        if (escaped) escaped = false;
+        else if (char === '\\') escaped = true;
+        else if (char === '"') inString = false;
+        continue;
+      }
+      if (char === '"') inString = true;
+      else if (char === '{') depth++;
+      else if (char === '}' && --depth === 0) {
+        end = index + 1;
+        break;
+      }
+    }
+    if (end < 0) return systemExtra;
+    const jsonString = dataTail.slice(firstBrace, end);
 
     let chart;
     try {
