@@ -442,7 +442,7 @@ Continue for all 8 sections.`,
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 lg:px-6 py-6">
+    <div className="report-print-root min-h-screen bg-background px-4 lg:px-6 py-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Button
@@ -693,7 +693,7 @@ Continue for all 8 sections.`,
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex gap-4 justify-center">
+            <div className="report-actions flex gap-4 justify-center">
               <Button variant="outline" onClick={() => navigate("/reports")}>
                 Back to Reports
               </Button>

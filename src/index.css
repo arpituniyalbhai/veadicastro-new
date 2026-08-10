@@ -12,6 +12,47 @@ html, body {
   touch-action: manipulation;
 }
 
+/* Preserve the report's dark design when the browser saves it as a PDF. */
+@media print {
+  @page {
+    margin: 10mm;
+  }
+
+  html,
+  body,
+  #root {
+    background: #0d0b16 !important;
+  }
+
+  .report-print-root,
+  .report-print-root .bg-card\/40 {
+    background: #0d0b16 !important;
+    color: #f8f7ff !important;
+  }
+
+  .report-print-root .border-border,
+  .report-print-root .border-border\/40,
+  .report-print-root .border-border\/60 {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .report-print-root .text-muted-foreground,
+  .report-print-root .text-foreground\/90 {
+    color: #d4d0df !important;
+  }
+
+  .report-print-root .report-actions,
+  .report-print-root > div > button {
+    display: none !important;
+  }
+
+  .report-print-root,
+  .report-print-root * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 5%;
