@@ -7,8 +7,6 @@ import { ArrowLeft, Calendar, MapPin, Clock, Sparkles, Loader2 } from "lucide-re
 import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
 import { useI18n } from "@/context/I18nContext";
-import { generateGemini } from "@/lib/gemini";
-import { VAANI_SYSTEM_PROMPT } from "@/lib/gemini";
 
 type ReportSection = {
   title: string;
@@ -26,6 +24,7 @@ const ReportDetail = () => {
   const [reportGenerated, setReportGenerated] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
   const [reportSections, setReportSections] = useState<ReportSection[]>([]);
+  const [reportDraft, setReportDraft] = useState("");
   
   // Get user birth details from localStorage
   const birthDetails = JSON.parse(localStorage.getItem("onboarding_details") || "{}");
@@ -67,27 +66,31 @@ const ReportDetail = () => {
 
   const { canGenerateReport, registerReportUsage } = usePlan();
 
-  // Get planetary data for reports
-  const getPlanetaryDataForReport = () => {
+  const getChartSummary = () => {
     try {
       const stored = localStorage.getItem("astro_payload");
-      if (stored) {
-        return JSON.parse(stored);
-      }
+      const chart = stored ? JSON.parse(stored) : null;
+      if (!chart) return "";
+
+      const planets = Object.entries(chart.planets || {}).map(([key, value]: [string, any]) => {
+        const name = value?.name || key;
+        const nakshatra = value?.nakshatra?.name ? `, Nakshatra ${value.nakshatra.name}` : "";
+        const house = chart.planetHouseMap?.[key.toLowerCase()];
+        return `${name}: ${value?.sign || "Unknown"}${house ? `, House ${house}` : ""}${nakshatra}`;
+      });
+      const dasha = chart.dasha || {};
+      return [
+        `Name: ${displayName}`,
+        `Birth details: ${birthDetails.dob || "Unknown"}, ${birthDetails.time || birthDetails.tob || "Unknown"}, ${birthDetails.place || birthDetails.pob || "Unknown"}`,
+        `Ascendant: ${chart.ascendantSign || "Unknown"}`,
+        `Planets: ${planets.join("; ") || "Unknown"}`,
+        `Current dasha: ${dasha.mahadasha || "Unknown"} / ${dasha.antardasha || "Unknown"}`,
+      ].join("\n");
     } catch {}
-    return null;
+    return "";
   };
 
   const getReportPrompt = (reportType: string) => {
-    const planetaryData = getPlanetaryDataForReport();
-    const planetaryInfo = planetaryData ? `\n\nPlanetary Data:\n${JSON.stringify(planetaryData, null, 2)}` : "";
-    
-    const languageInstruction = lang === "hi" ? 
-      "\n\nIMPORTANT: Generate this entire report in Hindi language." : 
-      "\n\nIMPORTANT: Generate this entire report in English language.";
-    
-    const baseInfo = `Name: ${displayName}\nDate of Birth: ${birthDetails.dob || "Unknown"}\nTime of Birth: ${birthDetails.tob || birthDetails.time || "Unknown"}\nPlace of Birth: ${birthDetails.pob || birthDetails.place || "Unknown"}${planetaryInfo}${languageInstruction}`;
-
     const reportPrompts: Record<string, string> = {
       "life-guidance": `Generate exactly 8 numbered sections. Use these exact headings:
 
@@ -290,6 +293,7 @@ Continue for all 8 sections.`,
 
     setGenerating(true);
     setProgress(0);
+    setReportDraft("");
 
     // Simulate progress
     const progressInterval = setInterval(() => {
@@ -303,22 +307,47 @@ Continue for all 8 sections.`,
     }, 2500);
 
     try {
-      const prompt = getReportPrompt(reportId || "life-guidance");
-      const systemPrompt = `CRITICAL REPORT GENERATION RULES:
-1. Generate EXACTLY 8 numbered sections with the exact headings provided
-2. Each section MUST be minimum 150 words
-3. Use plain text only, no markdown
-4. Start directly with "1. [Section Title]"
-5. Use user's birth chart data for personalized insights`;
-      
-      const response = await generateGemini(prompt, [], systemPrompt);
-      
+      const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
+      const response = await fetch(`${API_BASE}/api/report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          prompt: getReportPrompt(reportId),
+          chartSummary: getChartSummary(),
+          lang,
+        }),
+      });
+      if (!response.ok || !response.body) throw new Error(await response.text());
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let generatedText = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const events = buffer.split("\n\n");
+        buffer = events.pop() || "";
+        for (const event of events) {
+          const line = event.split("\n").find((item) => item.startsWith("data: "));
+          if (!line) continue;
+          const data = JSON.parse(line.slice(6));
+          if (data.error) throw new Error(data.error);
+          if (typeof data.text === "string") {
+            generatedText += data.text;
+            setReportDraft(generatedText);
+          }
+        }
+      }
+      reader.releaseLock();
+
       clearInterval(progressInterval);
       setProgress(100);
 
       // Only show report when fully generated
-      if (response && response.length > 100) {
-        const sections = parseReportSections(response);
+      if (generatedText.length > 100) {
+        const sections = parseReportSections(generatedText);
         setReportSections(sections);
         setReportGenerated(true);
         
@@ -331,7 +360,7 @@ Continue for all 8 sections.`,
       console.error("Error generating report:", error);
       clearInterval(progressInterval);
       setProgress(0);
-      alert("Failed to generate report. Please try again.");
+      alert(error instanceof Error ? error.message : "Failed to generate report. Please try again.");
     } finally {
       setGenerating(false);
     }
@@ -486,8 +515,13 @@ Continue for all 8 sections.`,
                     <p className="text-lg font-medium">Generating your report...</p>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    This may take up to 2 minutes. dont go back - please wait...
+                    Preparing your report. It will appear here as it is written.
                   </p>
+                  {reportDraft && (
+                    <pre className="max-h-80 overflow-y-auto whitespace-pre-wrap rounded-lg border border-border/60 bg-background/40 p-4 text-left text-sm leading-relaxed text-foreground">
+                      {reportDraft}
+                    </pre>
+                  )}
                 </div>
               )}
             </Card>
