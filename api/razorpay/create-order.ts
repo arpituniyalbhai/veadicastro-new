@@ -46,7 +46,7 @@ const ALLOWED_PACK_AMOUNTS: Record<string, number[]> = {
   'First Ask': [4900],
   'Quick Ask': [9900],
   'Deep Dive': [39900, 29900],
-  'The Power Pack': [69900, 45000],
+  'The Power Pack': [69900, 49900],
 };
 
 const getSpecialReportPrice = (planName: string): number | undefined => {
@@ -166,7 +166,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           finalAmount: finalAmount / 100 
         });
       } else if (normalizedPlan.includes("power pack")) {
-        finalAmount = 45000; // ₹450 in paise (discounted from ₹699)
+        finalAmount = 49900; // ₹499 in paise (discounted from ₹699)
         discountApplied = true;
         console.log('[Create Order] Applied paid user discount for Power Pack:', { 
           userPlan, 

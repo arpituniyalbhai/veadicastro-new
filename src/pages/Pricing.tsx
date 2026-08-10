@@ -166,7 +166,7 @@ const Pricing = () => {
     
     const normalizedPlan = planName.toLowerCase();
     if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
-    if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
+    if (normalizedPlan.includes("power pack")) return 499; // 699 -> 499
     // Quick Ask stays at 99, First Ask stays at 49
     return originalPrice;
   };
@@ -1022,7 +1022,7 @@ const Pricing = () => {
                   <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
                 <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">
-                  Get 30 Questions for just Rs {hasPaidPlan ? '450' : '699'}!
+                  Get 30 Questions for just Rs {hasPaidPlan ? '499' : '699'}!
                 </h3>
                 <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
               </div>

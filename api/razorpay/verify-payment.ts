@@ -11,7 +11,7 @@ const VALID_PLAN_PRICES: Record<string, number> = {
   'Deep Dive': 39900,     // ₹399 in paise (original price)
   'Deep Dive Discounted': 29900, // ₹299 in paise (discounted for paid users)
   'The Power Pack': 69900, // ₹699 in paise (original price)
-  'The Power Pack Discounted': 45000, // ₹450 in paise (discounted for paid users)
+  'The Power Pack Discounted': 49900, // ₹499 in paise (discounted for paid users)
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
   'Standard': 29900,    // ₹299 in paise

@@ -249,7 +249,7 @@ export default function Dashboard() {
     
     const normalizedPlan = planName.toLowerCase();
     if (normalizedPlan.includes("deep dive")) return 299; // 389 -> 299
-    if (normalizedPlan.includes("power pack")) return 450; // 699 -> 450
+    if (normalizedPlan.includes("power pack")) return 499; // 699 -> 499
     return originalPrice;
   };
 
