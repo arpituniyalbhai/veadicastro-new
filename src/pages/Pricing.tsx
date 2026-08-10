@@ -59,6 +59,7 @@ const plans = [
     recentBuyers: 389,
     benefits: [
       "5 Personalized Questions",
+      "Vedika Memory for more personalized guidance",
       "Best for one important topic",
       "Career, love, marriage & finance",
       "Instant AI responses",
@@ -76,6 +77,7 @@ const plans = [
     recentBuyers: 901,
     benefits: [
       "Everything in Quick Ask",
+      "Vedika Memory for more personalized guidance",
       "15 Personalized Questions",
       "Deeper follow-up conversations",
       "Better for life planning",
@@ -93,6 +95,7 @@ const plans = [
     recentBuyers: 321,
     benefits: [
       "Everything in Deep Dive",
+      "Vedika Memory for more personalized guidance",
       "30 Personalized Questions",
       "Long conversations",
       "Best value",

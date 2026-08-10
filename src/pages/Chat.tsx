@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -99,6 +99,41 @@ interface ChatSession {
   createdAt: number;
   updatedAt: number;
 }
+
+type VedikaMemory = Record<string, string>;
+
+const MEMORY_QUESTIONS = [
+  {
+    key: "maritalStatus",
+    question: "What is your current marital status?",
+    options: ["Single", "In a relationship", "Engaged", "Married", "Divorced", "Prefer not to say"],
+  },
+  {
+    key: "professionalStatus",
+    question: "What are you currently doing professionally?",
+    options: ["Job", "Business", "Student", "Freelancer", "Looking for work", "Other"],
+  },
+  {
+    key: "professionalField",
+    question: "If you’re working, what field or profession are you in?",
+    placeholder: "Example: IT, Government, Healthcare, Finance, Education",
+  },
+  {
+    key: "lifeFocus",
+    question: "What is your main focus in life right now?",
+    options: ["Career", "Business", "Marriage", "Relationship", "Money", "Education", "Family", "Health", "Spiritual growth"],
+  },
+  {
+    key: "guidanceStyle",
+    question: "How do you prefer your astrology guidance?",
+    options: ["Short & direct", "Detailed", "Detailed with remedies"],
+  },
+  {
+    key: "additionalContext",
+    question: "Please add anything else you want Vedika to remember.",
+    placeholder: "Your goal, concern, or any detail that would help Vedika guide you better",
+  },
+];
 
 function generateSessionId() {
   return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
@@ -201,10 +236,88 @@ export default function Chat() {
   const [hasTyped, setHasTyped] = useState<boolean>(false);
   const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
   const [loadingSuggestions, setLoadingSuggestions] = useState<Record<number, boolean>>({});
+  const [showMemoryPrompt, setShowMemoryPrompt] = useState(false);
+  const [showMemoryQuestions, setShowMemoryQuestions] = useState(false);
+  const [showMemoryLocked, setShowMemoryLocked] = useState(false);
+  const [showMemoryReset, setShowMemoryReset] = useState(false);
+  const [memoryStep, setMemoryStep] = useState(0);
+  const [memoryAnswers, setMemoryAnswers] = useState<VedikaMemory>({});
+  const [memoryText, setMemoryText] = useState("");
   const [inputBarLeft, setInputBarLeft] = useState<string>('0');
   const assistantAvatarUrl = "/optimized/vedika.webp"; // Vedika avatar from public
   const userAvatarUrl = (() => { try { return localStorage.getItem('profile_photo') || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } catch { return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } })(); // user's avatar
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const openedMemoryFromNavigation = useRef(false);
+
+  const memoryStorageKey = useMemo(() => `vedika_memory_${user?.email || "guest"}`, [user?.email]);
+  const isMemoryEligible = useMemo(() => {
+    const plan = (planName || "").toLowerCase();
+    return ["quick ask", "deep dive", "power pack"].some((name) => plan.includes(name));
+  }, [planName]);
+
+  useEffect(() => {
+    if (!user || !isMemoryEligible) {
+      setShowMemoryPrompt(false);
+      return;
+    }
+    try {
+      if (!localStorage.getItem(memoryStorageKey)) setShowMemoryPrompt(true);
+    } catch {
+      // Local memory is optional when browser storage is unavailable.
+    }
+  }, [user, isMemoryEligible, memoryStorageKey]);
+
+  const saveMemoryAnswer = (value: string) => {
+    const question = MEMORY_QUESTIONS[memoryStep];
+    const nextAnswers = { ...memoryAnswers, [question.key]: value.trim() || "Not provided" };
+    if (memoryStep === MEMORY_QUESTIONS.length - 1) {
+      try { localStorage.setItem(memoryStorageKey, JSON.stringify(nextAnswers)); } catch {}
+      setMemoryAnswers(nextAnswers);
+      setShowMemoryQuestions(false);
+      setShowMemoryPrompt(false);
+      return;
+    }
+    setMemoryAnswers(nextAnswers);
+    setMemoryStep((step) => step + 1);
+    setMemoryText("");
+  };
+
+  const startMemoryQuestions = () => {
+    setMemoryStep(0);
+    setMemoryAnswers({});
+    setMemoryText("");
+    setShowMemoryPrompt(false);
+    setShowMemoryQuestions(true);
+  };
+
+  const openMemory = () => {
+    if (!isMemoryEligible) {
+      setShowMemoryLocked(true);
+      return;
+    }
+    try {
+      if (localStorage.getItem(memoryStorageKey)) {
+        setShowMemoryReset(true);
+        return;
+      }
+    } catch {
+      // Continue with a new memory profile if browser storage is unavailable.
+    }
+    startMemoryQuestions();
+  };
+
+  const resetMemory = () => {
+    try { localStorage.removeItem(memoryStorageKey); } catch {}
+    setShowMemoryReset(false);
+    startMemoryQuestions();
+  };
+
+  useEffect(() => {
+    if (location?.state?.openMemory && !openedMemoryFromNavigation.current) {
+      openedMemoryFromNavigation.current = true;
+      openMemory();
+    }
+  }, [location?.state?.openMemory]);
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -753,7 +866,18 @@ export default function Chat() {
       const detailsBlock = `User Details:\nDate of Birth: ${details.dob}\n${age}\nGender: ${details.gender || 'N/A'}`;
       
       // SAHI - sirf planetary data + user details bhejo
-      const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}`.trim();
+      let memoryBlock = "";
+      if (isMemoryEligible) {
+        try {
+          const storedMemory = JSON.parse(localStorage.getItem(memoryStorageKey) || "null") as VedikaMemory | null;
+          if (storedMemory) {
+            memoryBlock = `User Memory (provided by the user; use it only when relevant):\n${Object.entries(storedMemory)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join("\n")}`;
+          }
+        } catch { /* Ignore invalid local memory. */ }
+      }
+      const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}${memoryBlock ? `\n\n${memoryBlock}` : ""}`.trim();
       
       const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
       const languageRule = lang === "hi"
@@ -859,7 +983,7 @@ export default function Chat() {
       console.log("AI answer completed, credit deducted successfully");
 
       // Generate suggestions in background without blocking - no loading state
-      generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang)
+      generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang, memoryBlock)
         .then((nextQuestions) => {
           if (nextQuestions.length && assistantIndex >= 0) {
             setAnswerSuggestions((prev) => ({ ...prev, [assistantIndex]: nextQuestions }));
@@ -996,6 +1120,20 @@ export default function Chat() {
             }
           }} 
         />
+        <button
+          type="button"
+          onClick={() => {
+            setActiveItem("Memory");
+            openMemory();
+            if (window.innerWidth < 768) setSidebarOpen(false);
+          }}
+          className={`group flex items-center ${(sidebarOpen || sidebarExpanded) ? "w-full h-11 justify-start gap-3 px-4" : "h-12 w-12 justify-center"} rounded-full border bg-card/60 border-border/60 transition-all overflow-hidden hover:border-secondary/40 hover:shadow-[0_0_0_2px_rgba(236,72,153,0.2)] ${activeItem === "Memory" ? "border-secondary/70 shadow-[0_0_0_3px_rgba(236,72,153,0.35)]" : ""}`}
+          title="Vedika Memory"
+        >
+          <Brain className="w-5 h-5 text-muted-foreground group-hover:text-foreground" />
+          {(sidebarOpen || sidebarExpanded) && <span className="text-sm text-foreground/90">Vedika Memory</span>}
+          {(sidebarOpen || sidebarExpanded) && !isMemoryEligible && <LockKeyhole className="ml-auto h-3.5 w-3.5 text-muted-foreground" />}
+        </button>
         
         {/* Chat History */}
         {(sidebarOpen || sidebarExpanded) && sessions.length > 0 && (
@@ -1065,6 +1203,13 @@ export default function Chat() {
               </div>
             )}
           </div>
+          {(sidebarOpen || sidebarExpanded) && (
+            <button type="button" onClick={openMemory} className="mt-2 flex w-full items-center gap-2 rounded-xl border border-border/60 bg-card/40 px-3 py-2 text-left text-xs transition hover:border-secondary/50">
+              <Brain className="h-4 w-4 text-secondary" />
+              <span className="flex-1">Vedika Memory</span>
+              {isMemoryEligible ? <span className="text-[10px] text-secondary">Add / update</span> : <LockKeyhole className="h-3.5 w-3.5 text-muted-foreground" />}
+            </button>
+          )}
         </div>
       </aside>
 
@@ -1111,6 +1256,11 @@ export default function Chat() {
               )}
             </div>
           </div>
+          <button type="button" onClick={openMemory} className="hidden shrink-0 items-center gap-1.5 rounded-full border border-border/60 bg-card/40 px-3 py-2 text-xs text-muted-foreground transition hover:border-secondary/50 hover:text-foreground sm:flex" title="Vedika Memory">
+            <Brain className="h-4 w-4 text-secondary" />
+            Memory
+            {!isMemoryEligible && <LockKeyhole className="h-3 w-3" />}
+          </button>
           {credits > 0 ? (
             <>
               <div className="hidden md:block flex-shrink-0 ml-2">
@@ -1449,6 +1599,120 @@ export default function Chat() {
           }}
         />
       )}
+
+      <Dialog open={showMemoryPrompt} onOpenChange={setShowMemoryPrompt}>
+        <DialogContent className="max-w-md border-border/70 bg-card">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Add Memory</DialogTitle>
+            <DialogDescription className="text-base leading-6">
+              Add memory and make Vedika more accurate. Your answers stay stored locally on this device and help personalize your chat guidance.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-col-reverse gap-2 pt-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setShowMemoryPrompt(false)}>Maybe later</Button>
+            <Button variant="cosmic" onClick={startMemoryQuestions}>Add my memory</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showMemoryQuestions} onOpenChange={setShowMemoryQuestions}>
+        <DialogContent className="max-w-lg border-border/70 bg-card">
+          <DialogHeader>
+            <DialogTitle>Add your memory</DialogTitle>
+            <DialogDescription>
+              Question {memoryStep + 1} of {MEMORY_QUESTIONS.length}
+            </DialogDescription>
+          </DialogHeader>
+          {MEMORY_QUESTIONS[memoryStep] && (
+            <div className="space-y-4 pt-2">
+              <p className="text-base font-medium text-foreground">{MEMORY_QUESTIONS[memoryStep].question}</p>
+              {MEMORY_QUESTIONS[memoryStep].options ? (
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {MEMORY_QUESTIONS[memoryStep].options!.map((option) => (
+                    <Button
+                      key={option}
+                      type="button"
+                      variant="outline"
+                      className="h-auto min-h-11 justify-start whitespace-normal text-left"
+                      onClick={() => saveMemoryAnswer(option)}
+                    >
+                      {option}
+                    </Button>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {MEMORY_QUESTIONS[memoryStep].key === "additionalContext" ? (
+                    <>
+                      <textarea
+                        value={memoryText}
+                        onChange={(event) => {
+                          const nextValue = event.target.value;
+                          if (nextValue.trim().split(/\s+/).filter(Boolean).length <= 50) setMemoryText(nextValue);
+                        }}
+                        placeholder={MEMORY_QUESTIONS[memoryStep].placeholder}
+                        rows={6}
+                        maxLength={1000}
+                        autoFocus
+                        className="flex w-full resize-y rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      />
+                      <p className="text-right text-xs text-muted-foreground">
+                        {memoryText.trim() ? memoryText.trim().split(/\s+/).length : 0}/50 words
+                      </p>
+                    </>
+                  ) : (
+                    <Input
+                      value={memoryText}
+                      onChange={(event) => setMemoryText(event.target.value)}
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") saveMemoryAnswer(memoryText);
+                      }}
+                      placeholder={MEMORY_QUESTIONS[memoryStep].placeholder}
+                      autoFocus
+                    />
+                  )}
+                  <div className="flex justify-between gap-2">
+                    <Button type="button" variant="ghost" onClick={() => saveMemoryAnswer("Not applicable")}>Skip</Button>
+                    <Button type="button" variant="cosmic" onClick={() => saveMemoryAnswer(memoryText)} disabled={!memoryText.trim()}>
+                      {memoryStep === MEMORY_QUESTIONS.length - 1 ? "Save memory" : "Next"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showMemoryLocked} onOpenChange={setShowMemoryLocked}>
+        <DialogContent className="max-w-md border-border/70 bg-card">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2"><LockKeyhole className="h-5 w-5 text-secondary" /> Vedika Memory is locked</DialogTitle>
+            <DialogDescription className="text-base leading-6">
+              Upgrade to Quick Ask, Deep Dive, or Power Pack to save personal memory and receive more accurate guidance from Vedika.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" onClick={() => setShowMemoryLocked(false)}>Close</Button>
+            <Button variant="cosmic" onClick={() => navigate("/pricing")}>View plans</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showMemoryReset} onOpenChange={setShowMemoryReset}>
+        <DialogContent className="max-w-md border-border/70 bg-card">
+          <DialogHeader>
+            <DialogTitle>Replace saved memory?</DialogTitle>
+            <DialogDescription className="text-base leading-6">
+              You already have saved Vedika Memory on this device. Do you want to delete your previous memory and start again?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="outline" onClick={() => setShowMemoryReset(false)}>No, keep it</Button>
+            <Button variant="destructive" onClick={resetMemory}>Yes, delete and start again</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -1479,7 +1743,7 @@ function parseQuestionSuggestions(raw: string): string[] {
     .slice(0, 2);
 }
 
-async function generateAnswerSuggestions(question: string, answer: string, lang: string): Promise<string[]> {
+async function generateAnswerSuggestions(question: string, answer: string, lang: string, memoryBlock = ""): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const prompt = `You generate exactly two highly relevant follow-up questions after an astrology response.
 
@@ -1537,7 +1801,7 @@ ${answer.slice(0, 1200)}`;
         body: JSON.stringify({
           prompt,
           history: [],
-          systemExtra: "Return valid JSON only. Do not include markdown fences.",
+          systemExtra: `Return valid JSON only. Do not include markdown fences.${memoryBlock ? `\n\n${memoryBlock}` : ""}`,
           lang,
           apiKeySlot: "secondary",
           model: "mistral-large-latest",

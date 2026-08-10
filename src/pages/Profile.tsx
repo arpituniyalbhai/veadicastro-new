@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
-import { ArrowLeft, LogOut, Lock, Loader2, User, Shield, Camera, Settings, Info, Mail, Calendar, MapPin, Star, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, LogOut, Lock, Loader2, User, Shield, Camera, Settings, Info, Mail, Calendar, MapPin, Star, CheckCircle, AlertCircle, Brain } from "lucide-react";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { getAuthInstance } from "@/lib/firebase";
 import { useToast } from "@/hooks/use-toast";
@@ -52,6 +52,7 @@ const Profile = () => {
   const { planName, expiresAt } = usePlan();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMemoryEligible = ["quick ask", "deep dive", "power pack"].some((name) => (planName || "").toLowerCase().includes(name));
 
   // Auth guard
   useEffect(() => {
@@ -296,6 +297,24 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
+        <Card className="mb-6 border-border/60 bg-card/40 p-5 backdrop-blur-md">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-secondary/15 text-secondary">
+                <Brain className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="font-semibold">Vedika Memory</h2>
+                <p className="text-sm text-muted-foreground">Save a few personal details locally so Vedika can make your chat guidance more relevant.</p>
+              </div>
+            </div>
+            <Button variant={isMemoryEligible ? "cosmic" : "outline"} onClick={() => navigate("/chat", { state: { openMemory: true } })} className="shrink-0 gap-2">
+              {!isMemoryEligible && <Lock className="h-4 w-4" />}
+              {isMemoryEligible ? "Add / update memory" : "Memory locked"}
+            </Button>
+          </div>
+        </Card>
 
         {/* Navigation Tabs */}
         <div className="mb-6">
