@@ -64,7 +64,7 @@ const buildWelcomeEmail = (username: string) => `
         <tr>
           <td style="padding:18px 20px;">
             <p style="margin:0 0 2px;font-size:13px;color:#9f1239;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Your free credits</p>
-            <p style="margin:0 0 4px;font-size:28px;font-weight:700;color:#d9277a;line-height:1.2;">2 free chats</p>
+            <p style="margin:0 0 4px;font-size:28px;font-weight:700;color:#d9277a;line-height:1.2;">1 free chat</p>
             <p style="margin:0;font-size:13px;color:#71717a;">Ask Vedika AI anything — no payment needed to start</p>
           </td>
         </tr>
@@ -125,7 +125,7 @@ const buildWelcomeEmail = (username: string) => `
         <tr>
           <td align="center">
             <a href="https://veadicastro.in/chat" style="display:inline-block;background:#d9277a;color:#ffffff;text-decoration:none;padding:13px 36px;border-radius:8px;font-size:15px;font-weight:600;">Start Your Free Reading</a>
-            <p style="margin:10px 0 0;font-size:12px;color:#a1a1aa;">No card required · 2 free chats included</p>
+            <p style="margin:10px 0 0;font-size:12px;color:#a1a1aa;">No card required · 1 free chat included</p>
           </td>
         </tr>
       </table>
@@ -149,7 +149,7 @@ const buildWelcomeEmail = (username: string) => `
 </html>
 `;
 
-// Use the same Zoho SMTP configuration as the OTP sender.
+// Welcome email transporter
 let welcomeTransporter: any;
 
 try {
@@ -158,8 +158,8 @@ try {
     port: parseInt(process.env.ZOHO_PORT || '465'),
     secure: true,
     auth: {
-      user: process.env.ZOHO_USER || 'support@veadicastro.in',
-      pass: process.env.ZOHO_PASS,
+      user: process.env.WELCOME_EMAIL_USER || 'no-reply@veadicastro.in',
+      pass: process.env.WELCOME_EMAIL_PASS,
     },
   });
 } catch (error) {
@@ -216,7 +216,7 @@ export async function POST(req: any) {
     }
 
     const mailOptions = {
-      from: `"Veadicastro" <${process.env.ZOHO_USER || 'support@veadicastro.in'}>`,
+      from: `"Veadicastro" <${process.env.WELCOME_EMAIL_USER || 'no-reply@veadicastro.in'}>`,
       to: email,
       subject: `🌟 Welcome to Veadicastro, ${username}!`,
       html: buildWelcomeEmail(username),
