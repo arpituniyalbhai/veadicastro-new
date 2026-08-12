@@ -1,5 +1,6 @@
 export const config = {
-  runtime: 'edge',
+  runtime: 'nodejs',
+  maxDuration: 60,
 };
 
 // api/mistral.ts - strict pass-through layer
