@@ -149,7 +149,7 @@ const buildWelcomeEmail = (username: string) => `
 </html>
 `;
 
-// Welcome email transporter
+// Use the same Zoho SMTP configuration as the OTP sender.
 let welcomeTransporter: any;
 
 try {
@@ -158,8 +158,8 @@ try {
     port: parseInt(process.env.ZOHO_PORT || '465'),
     secure: true,
     auth: {
-      user: process.env.WELCOME_EMAIL_USER || 'no-reply@veadicastro.in',
-      pass: process.env.WELCOME_EMAIL_PASS,
+      user: process.env.ZOHO_USER || 'support@veadicastro.in',
+      pass: process.env.ZOHO_PASS,
     },
   });
 } catch (error) {
@@ -216,7 +216,7 @@ export async function POST(req: any) {
     }
 
     const mailOptions = {
-      from: `"Veadicastro" <${process.env.WELCOME_EMAIL_USER || 'no-reply@veadicastro.in'}>`,
+      from: `"Veadicastro" <${process.env.ZOHO_USER || 'support@veadicastro.in'}>`,
       to: email,
       subject: `🌟 Welcome to Veadicastro, ${username}!`,
       html: buildWelcomeEmail(username),
