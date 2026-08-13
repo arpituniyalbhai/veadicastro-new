@@ -122,8 +122,8 @@ const META_BASE: Record<string, Meta> = {
     breadcrumb: 'Dhan Yoga Bracelet',
   },
   '/chatgpt-astrology': {
-    title: 'ChatGPT Astrology vs Vedic AI — Which is Better? | Veadicastro',
-    description: 'ChatGPT astrology compared to real Vedic AI. See why Veadicastro gives more accurate astrology predictions than ChatGPT.',
+    title: 'Free Chatgpt Astrology | Veadicastro',
+    description: 'Discover free ChatGPT astrology with Veadicastro. Chat with our AI astrologer instantly for personalized insights on love, career, relationships, future guidance, and more—all free and easy to access online..',
     canonical: 'https://veadicastro.in/chatgpt-astrology',
     breadcrumb: 'ChatGPT Astrology',
   },
