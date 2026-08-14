@@ -1460,22 +1460,26 @@ export default function Chat() {
               )
             ))}
             {isTyping && (
-              <div className="flex items-start gap-3 pl-1 sm:pl-2">
-                <div className="mt-1 shrink-0">
-                  <img src={assistantAvatarUrl} alt="assistant" className="w-8 h-8 rounded-full object-cover" />
+              <div className="flex items-start gap-3 pl-1 sm:pl-2" role="status" aria-live="polite">
+                <div className="relative mt-1 shrink-0">
+                  <img src={assistantAvatarUrl} alt="Vedika" className="w-8 h-8 rounded-full object-cover ring-2 ring-pink-400/20" />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
                 </div>
-                <div className="space-y-1">
-                  <div className="text-xs text-muted-foreground flex items-center gap-2">
-                    <span>thinking...</span>
-                    <div className="thinking-dots">
-                      <div className="thinking-dot"></div>
-                      <div className="thinking-dot"></div>
-                      <div className="thinking-dot"></div>
+                <div className="min-w-0 rounded-2xl rounded-tl-md border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.025] px-3.5 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-sm">
+                  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-pink-200/90">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-pink-400/15">
+                      <span className="h-1.5 w-1.5 rounded-full bg-pink-300 animate-pulse" />
+                    </span>
+                    Vedika is thinking
+                    <div className="thinking-dots" aria-hidden="true">
+                      <div className="thinking-dot" />
+                      <div className="thinking-dot" />
+                      <div className="thinking-dot" />
                     </div>
                   </div>
-                  <div className="text-sm leading-relaxed text-foreground/90 italic text-muted-foreground">
+                  <p className="mt-1.5 max-w-[min(21rem,calc(100vw-8rem))] text-sm leading-relaxed text-muted-foreground">
                     {thinkingMessage || "Preparing your astrological guidance..."}
-                  </div>
+                  </p>
                 </div>
               </div>
             )}
