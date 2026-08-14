@@ -334,33 +334,46 @@ export default function Chat() {
   })();
 
   // Dynamic thinking messages
-  const thinkingUserName = displayName.trim().split(/\s+/)[0] || "your";
-  const thinkingMessages = [
-    `Loading ${thinkingUserName}'s birth profile...`,
-    `Calculating ${thinkingUserName}'s planetary positions...`,
-    `Mapping houses and ascendant for ${thinkingUserName}...`,
-    "Running Dasha and Nakshatra calculations...",
-    "Reading current planetary transits...",
-    `Synthesizing ${thinkingUserName}'s personalized guidance...`
-  ];
+  const thinkingUserName = displayName.trim().split(/\s+/)[0] || "User";
 
-  // Cycle through thinking messages
+  // Cycle through processing messages in a different order for each answer.
   useEffect(() => {
     if (!isTyping) {
       setThinkingMessage("");
       return;
     }
 
-    let messageIndex = 0;
-    setThinkingMessage(thinkingMessages[0]);
+    let previousMessage = "";
+    const showRandomMessage = () => {
+      const formattedDate = new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Asia/Kolkata",
+      }).format(new Date());
+      const messages = [
+        `Loading ${thinkingUserName}'s birth profile...`,
+        `Calculating ${thinkingUserName}'s planetary positions...`,
+        `Mapping houses and ascendant for ${thinkingUserName}...`,
+        "Running Dasha and Nakshatra calculations...",
+        "Reading current planetary transits...",
+        `Reviewing ${formattedDate} planetary positions for ${thinkingUserName}...`,
+      ];
+      const availableMessages = messages.filter((message) => message !== previousMessage);
+      const nextMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+
+      previousMessage = nextMessage;
+      setThinkingMessage(nextMessage);
+    };
+
+    showRandomMessage();
 
     const interval = setInterval(() => {
-      messageIndex = (messageIndex + 1) % thinkingMessages.length;
-      setThinkingMessage(thinkingMessages[messageIndex]);
+      showRandomMessage();
     }, 1000); // Change message every second
 
     return () => clearInterval(interval);
-  }, [isTyping, displayName]);
+  }, [isTyping, thinkingUserName]);
 
   // Update input bar position based on sidebar state and screen size
   useEffect(() => {
