@@ -323,14 +323,25 @@ export default function Chat() {
     messagesRef.current = messages;
   }, [messages]);
 
+  const displayName = (() => {
+    try {
+      return localStorage.getItem('profile_name') ||
+             user?.displayName ||
+             "User";
+    } catch {
+      return user?.displayName || "User";
+    }
+  })();
+
   // Dynamic thinking messages
+  const thinkingUserName = displayName.trim().split(/\s+/)[0] || "your";
   const thinkingMessages = [
-    "Investigating your planetary positions...",
-    "Studying your birth Kundali...",
-    "Mapping your life timeline...",
-    "Calculating dashas and Nakshatra..",
-    "Studying current planet movements...",
-    "Preparing your astrological outcome..."
+    `Loading ${thinkingUserName}'s birth profile...`,
+    `Calculating ${thinkingUserName}'s planetary positions...`,
+    `Mapping houses and ascendant for ${thinkingUserName}...`,
+    "Running Dasha and Nakshatra calculations...",
+    "Reading current planetary transits...",
+    `Synthesizing ${thinkingUserName}'s personalized guidance...`
   ];
 
   // Cycle through thinking messages
@@ -346,10 +357,10 @@ export default function Chat() {
     const interval = setInterval(() => {
       messageIndex = (messageIndex + 1) % thinkingMessages.length;
       setThinkingMessage(thinkingMessages[messageIndex]);
-    }, 3000); // Change message every 3 seconds
+    }, 1000); // Change message every second
 
     return () => clearInterval(interval);
-  }, [isTyping]);
+  }, [isTyping, displayName]);
 
   // Update input bar position based on sidebar state and screen size
   useEffect(() => {
@@ -459,15 +470,6 @@ export default function Chat() {
       promptsHi: ["मुझे किस क्षेत्र में अध्ययन करना चाहिए?", "क्या मैं अपनी परीक्षाओं में सफल होऊंगा?", "मेरी पढ़ाई के बाद सबसे अच्छा करियर क्या है?", "मैं अपनी एकाग्रता और फोकस कैसे सुधारूं?", "क्या मुझे विदेश में पढ़ाई करनी चाहिए?"] },
   ];
 
-  const displayName = (() => { 
-    try { 
-      return localStorage.getItem('profile_name') || 
-             user?.displayName ||    // Google ka actual name
-             "User";                 // email split hatao, sirf "User" fallback
-    } catch { 
-      return user?.displayName || "User"; 
-    } 
-  })();
   const getOutOfCreditsMessage = useCallback(() => {
     const firstName = displayName.trim().split(/\s+/)[0] || "there";
     return `Hey ${firstName}, you have used all your credits. Please choose a plan below to continue chatting with Vedika AI.`;
