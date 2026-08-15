@@ -1401,7 +1401,7 @@ export default function Chat() {
                               </div>
                             )}
                             <div
-                              onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=99&type=pack')}
+                              onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=149&type=pack')}
                               className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
@@ -1409,7 +1409,7 @@ export default function Chat() {
                                   <div className="text-sm font-semibold text-white">Quick Ask</div>
                                   <div className="text-xs text-muted-foreground">5 questions</div>
                                 </div>
-                                <div className="text-base font-semibold text-white">₹99</div>
+                                <div className="text-base font-semibold text-white">₹149</div>
                               </div>
                             </div>
                             <div

@@ -4,7 +4,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // Frontend CANNOT override these prices
 const VALID_PLAN_PRICES: Record<string, number> = {
   'First Ask': 4900,      // ₹49 in paise
-  'Quick Ask': 9900,      // ₹99 in paise
+  'Quick Ask': 14900,     // ₹149 in paise
   'Deep Dive': 39900,     // ₹399 in paise
   'The Power Pack': 69900, // ₹199 in paise
   'Day Pass': 24900,      // ₹249 in paise
@@ -44,7 +44,7 @@ const STORE_PRODUCT_PRICES: Record<string, number> = {
 
 const ALLOWED_PACK_AMOUNTS: Record<string, number[]> = {
   'First Ask': [4900],
-  'Quick Ask': [9900],
+  'Quick Ask': [14900],
   'Deep Dive': [39900, 29900],
   'The Power Pack': [69900, 49900],
 };
@@ -174,7 +174,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           finalAmount: finalAmount / 100 
         });
       }
-      // Quick Ask stays at 99, First Ask stays at 49 (no additional discount)
+      // Quick Ask stays at ₹149, First Ask stays at ₹49 (no additional discount)
     }
     
     if (promoCode && promoCode.toUpperCase() === "NEW33") {

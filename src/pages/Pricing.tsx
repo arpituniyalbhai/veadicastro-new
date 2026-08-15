@@ -51,7 +51,7 @@ const plans = [
   },
   {
     name: "Quick Ask",
-    price: 99,
+    price: 149,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions — get clarity fast",
@@ -170,7 +170,7 @@ const Pricing = () => {
     const normalizedPlan = planName.toLowerCase();
     if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
     if (normalizedPlan.includes("power pack")) return 499; // 699 -> 499
-    // Quick Ask stays at 99, First Ask stays at 49
+    // Quick Ask stays at ₹149, First Ask stays at ₹49
     return originalPrice;
   };
 
@@ -591,7 +591,7 @@ const Pricing = () => {
       {
         "@type": "Offer",
         "name": "Quick Ask Pack",
-        "price": "99",
+        "price": "149",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
@@ -651,7 +651,7 @@ const Pricing = () => {
       `}</style>
       <SEO
         title="Pricing Plans - Veadicastro Astrology"
-        description="Choose from Quick Ask (₹99), Deep Dive (₹399), or Power Pack (₹199) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
+        description="Choose from Quick Ask (₹149), Deep Dive (₹399), or Power Pack (₹199) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
         keywords={["astrology pricing", "vedicastro packs", "astrology questions", "astrology cost", "astrology packs", "vedic astrology guidance"]}
         url="https://veadicastro.in/pricing"
         schema={pricingSchema}
@@ -1353,7 +1353,7 @@ const Pricing = () => {
               },
               {
                 q: "What's the difference between packs?",
-                a: "Quick Ask gives you 5 questions for quick guidance (₹9.8/question). Deep Dive offers 15 questions with detailed analysis (₹6.6/question) - Best Value! Power Pack provides 30 questions with maximum value (₹6.6/question).",
+                a: "Quick Ask gives you 5 questions for quick guidance (₹29.8/question). Deep Dive offers 15 questions with detailed analysis (₹6.6/question) - Best Value! Power Pack provides 30 questions with maximum value (₹6.6/question).",
               },
               {
                 q: "Can I buy multiple packs?",

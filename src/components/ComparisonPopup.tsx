@@ -144,7 +144,7 @@ const PersonalizedWelcomePopup = () => {
               🔮 Welcome {userName} to Veadicastro!
             </h2>
             <p className="text-base md:text-lg text-muted-foreground">
-              From my side, you have 2 free credits and 5 questions in just ₹99.
+              From my side, you have 2 free credits and 5 questions in just ₹149.
             </p>
           </div>
         </div>
