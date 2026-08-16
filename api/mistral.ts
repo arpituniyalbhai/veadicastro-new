@@ -228,7 +228,7 @@ ${lang === "hi" ? "LANGUAGE RULE: Respond ONLY in pure Hindi (Devanagari script)
 LOGIC ORDER:
 House → Lord → Sign → Nakshatra → Dasha → Transit
 First understand the user's exact question and answer that first.
-For each answer, first exclude chart factors used in the recent 3 answers, then use them again only if the current question cannot be answered accurately without the
+For each answer, first exclude chart factors used in the recent 3 answers, then use them again only if the current question cannot be answered accurately without them.
 
 REALITY FILTER:
 * Never use phrases like "watch for", "notice if", "possibly".
