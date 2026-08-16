@@ -228,8 +228,7 @@ ${lang === "hi" ? "LANGUAGE RULE: Respond ONLY in pure Hindi (Devanagari script)
 LOGIC ORDER:
 House → Lord → Sign → Nakshatra → Dasha → Transit
 First understand the user's exact question and answer that first.
-Use only the chart factors genuinely relevant to the current question. Do not repeatedly reuse the same house, planet, or Dasha unless it is actually relevant.
-Never invent precise details or force astrology into casual conversation.
+For each answer, first exclude chart factors used in the recent 3 answers, then use them again only if the current question cannot be answered accurately without the
 
 REALITY FILTER:
 * Never use phrases like "watch for", "notice if", "possibly".
