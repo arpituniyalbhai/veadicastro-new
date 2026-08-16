@@ -9,34 +9,7 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     if (!systemExtra.includes('Planetary Data:')) return systemExtra;
 
     const dataStart = systemExtra.indexOf('Planetary Data:');
-    const dataTail = systemExtra.slice(dataStart + 'Planetary Data:'.length);
-
-    // `systemExtra` also contains human-readable blocks (for example User
-    // Details) after the chart. Extract only the first complete JSON object;
-    // parsing the entire tail made every normal chat payload invalid JSON.
-    const firstBrace = dataTail.indexOf('{');
-    if (firstBrace < 0) return systemExtra;
-    let depth = 0;
-    let inString = false;
-    let escaped = false;
-    let end = -1;
-    for (let index = firstBrace; index < dataTail.length; index++) {
-      const char = dataTail[index];
-      if (inString) {
-        if (escaped) escaped = false;
-        else if (char === '\\') escaped = true;
-        else if (char === '"') inString = false;
-        continue;
-      }
-      if (char === '"') inString = true;
-      else if (char === '{') depth++;
-      else if (char === '}' && --depth === 0) {
-        end = index + 1;
-        break;
-      }
-    }
-    if (end < 0) return systemExtra;
-    const jsonString = dataTail.slice(firstBrace, end);
+    const jsonString = systemExtra.slice(dataStart + 'Planetary Data:'.length).trim();
 
     let chart;
     try {
@@ -80,9 +53,6 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     const dasha = chart.dasha || {};
     const houseLords = chart.houseLords || [];
     const houseLordLines = houseLords.map((lord: string, i: number) => `House ${i + 1} Lord: ${lord}`);
-    const futureMahadashaLines = (dasha.futureMahadashas || [])
-      .map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
-      .join('\n');
 
     const summary = `
 === PRE-CALCULATED VEDIC CHART (LOCKED) ===
@@ -101,11 +71,9 @@ HOUSE LORDS (WHOLE SIGN):
 ${houseLordLines.join('\n')}
 
 CURRENT DASHA TIMING (PRE-CALCULATED):
-Mahadasha: ${dasha.mahadasha || 'N/A'} (${dasha.mahaStart || 'N/A'} to ${dasha.mahaEnds || 'N/A'})
-Antardasha: ${dasha.antardasha || 'N/A'} (${dasha.antarStart || 'N/A'} to ${dasha.antarEnds || 'N/A'})
-
-UPCOMING MAHADASHAS (PRE-CALCULATED — exact dates, do not recompute):
-${futureMahadashaLines || 'Not available'}
+Mahadasha: ${dasha.mahadasha || 'N/A'} (ends ${dasha.mahaEnds || 'N/A'})
+Antardasha: ${dasha.antardasha || 'N/A'} (ends ${dasha.antarEnds || 'N/A'})
+Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
 === END PRE-CALCULATED FACTS ===
 
 (Raw source block below, but rely on the facts above)
@@ -255,15 +223,13 @@ CORE RULES (STRICT):
 * Retrograde/Direct status is explicitly given for each planet — use it exactly as stated, never guess or assume.
 * The "Next Mahadasha" is explicitly given in the data — never invent or guess a different next dasha lord.
 * Never write any astrology date unless that exact date exists in the backend chart data. If a required date is missing, state that the date is unavailable. Never generate, estimate, interpolate, or substitute years or dates.
-* DASHA DATE RULE: Use only the Mahadasha/Antardasha dates explicitly supplied above (the current periods and listed upcoming Mahadashas). Never calculate, extrapolate, or reconstruct a date beyond those entries. If asked about a later Mahadasha, state that its exact date is unavailable in the calculated data.
-* PROVENANCE RULE: Never call a Dasha date direct, pre-calculated, or backend-calculated unless that exact date appears in the supplied chart data.
-* Avoid repeating the same planetary positions, placements, Mahadasha, or Antardasha unless they are genuinely relevant to the user's question or necessary to support the interpretation.
-* Understand the user's question before answering. Tailor the response to their intent, emotional state, context, and the outcome they are seeking.
 ${lang === "hi" ? "LANGUAGE RULE: Respond ONLY in pure Hindi (Devanagari script). No English words, no Hinglish." : "LANGUAGE RULE: Detect user's language from their last message. Match their style exactly."}
 
 LOGIC ORDER:
 House → Lord → Sign → Nakshatra → Dasha → Transit
-Focus on strongest 1 planetary indicator only. Pick the strongest factor and commit to it - no multiple options.
+First understand the user's exact question and answer that first.
+Use only the chart factors genuinely relevant to the current question. Do not repeatedly reuse the same house, planet, or Dasha unless it is actually relevant.
+Never invent precise details or force astrology into casual conversation.
 
 REALITY FILTER:
 * Never use phrases like "watch for", "notice if", "possibly".
@@ -329,7 +295,7 @@ Wrong format = rewrite before sending.`;
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
     const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
-    // Use Mistral Large for general, Ministral for monthly requests (faster)
+    // Use Mistral small for general, ministral for monthly (faster)
     const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
