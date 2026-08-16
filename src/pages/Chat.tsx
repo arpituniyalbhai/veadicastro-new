@@ -42,7 +42,7 @@ const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
       "gi"
     ),
   },
-  { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi },
+  { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th)(?:\s+house)?\b/gi },
   {
     type: "date",
     regex: new RegExp(`\\b(?:(?:${MONTHS})\\s+\\d{1,2}(?:st|nd|rd|th)?(?:,)?\\s+\\d{4}|\\d{1,2}(?:st|nd|rd|th)?\\s+(?:${MONTHS})(?:\\s+\\d{4})?|(?:${MONTHS})\\s+\\d{4})\\b`, "gi"),

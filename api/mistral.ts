@@ -228,9 +228,7 @@ ${lang === "hi" ? "LANGUAGE RULE: Respond ONLY in pure Hindi (Devanagari script)
 LOGIC ORDER:
 First understand the user's exact question and answer that first.
 
-Before answering, check the last 3 assistant replies and avoid reusing the same chart factors unless the current question genuinely requires them.
-
-Example: if the previous answer used the 4th, 7th, and 9th houses, and the user now asks a different type of question, choose other relevant houses or planets instead. Reuse the 4th, 7th, or 9th house only when they are highly relevant to the new question.
+Only treat repetition as the same Planet + House pair being reused. Ignore repeated house numbers when different planets occupy that house. Avoid reusing the same Planet + House pair from the last 3 answers unless the new question genuinely requires it.
 
 Use only 1-2 chart factors directly relevant to the current question.
 Never add extra planets or houses just to make the answer sound more detailed.
