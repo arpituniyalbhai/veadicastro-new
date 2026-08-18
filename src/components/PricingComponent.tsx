@@ -6,25 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
-    name: "First Ask",
-    price: 39,
-    period: "one-time",
-    questions: 2,
-    description: "Try Vedika AI with your first question - low risk, high clarity",
-    buyers: 245,
-    recentBuyers: 156,
-    benefits: [
-      "2 Personalized Questions",
-      "Perfect starter pack",
-      "Instant Vedika AI responses",
-      "Powered by your exact birth chart",
-      "Never expire - use anytime",
-      "Best value for beginners",
-    ],
-  },
-  {
     name: "Quick Ask",
-    price: 149,
+    price: 199,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions - get clarity fast",
@@ -42,7 +25,7 @@ const plans = [
   },
   {
     name: "Deep Dive",
-    price: 399,
+    price: 499,
     period: "one-time",
     questions: 15,
     description: "Most popular - serious guidance for life's big decisions",
@@ -54,12 +37,12 @@ const plans = [
       "Vedika Advanced AI Model",
       "Deeper analysis & accurate predictions",
       "Never expire - use at your pace",
-      "Save 46% vs Quick Ask",
+      "Save 16% vs Quick Ask",
     ],
   },
   {
     name: "The Power Pack",
-    price: 699,
+    price: 799,
     period: "one-time",
     questions: 30,
     description: "Best value - clarity for an entire year of decisions",
@@ -72,7 +55,7 @@ const plans = [
       "Most accurate & detailed readings",
       "Priority response generation",
       "Go beyond basic predictions with in-depth insights",
-      "Save 55% vs Quick Ask",
+      "Save 33% vs Quick Ask",
     ],
   },
 ];
@@ -98,7 +81,7 @@ const PricingComponent = () => {
           </h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-4 max-w-7xl mx-auto mb-12">
+        <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
           {plans.map((plan) => {
             const isDeepDive = plan.name === "Deep Dive";
             const visibleBenefits = expandedBenefits[plan.name]

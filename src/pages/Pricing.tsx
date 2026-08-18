@@ -33,25 +33,8 @@ import SEO from "@/components/SEO";
 
 const plans = [
   {
-    name: "First Ask",
-    price: 49,
-    period: "one-time",
-    questions: 2,
-    description: "Try Vedika AI with your first question — low risk, high clarity",
-    buyers: 245,
-    recentBuyers: 156,
-    benefits: [
-      "2 Personalized Questions",
-      "Best for trying Vedika AI",
-      "Instant Vedika AI responses",
-      "Powered by your exact birth chart",
-      "Never expires",
-      "Perfect starter pack",
-    ]
-  },
-  {
     name: "Quick Ask",
-    price: 149,
+    price: 199,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions — get clarity fast",
@@ -69,7 +52,7 @@ const plans = [
   },
   {
     name: "Deep Dive",
-    price: 399,
+    price: 499,
     period: "one-time",
     questions: 15,
     description: "Most popular — serious guidance for life's big decisions",
@@ -81,13 +64,13 @@ const plans = [
       "15 Personalized Questions",
       "Deeper follow-up conversations",
       "Better for life planning",
-      "Save 46%",
+      "Save 16% vs Quick Ask",
       "Unlocked Vedika AI 2.0 - powered by our most advanced AI astrology engine",
     ]
   },
   {
     name: "The Power Pack",
-    price: 699,
+    price: 799,
     period: "one-time",
     questions: 30,
     description: "Best value — unlimited clarity for an entire year of decisions",
@@ -99,7 +82,7 @@ const plans = [
       "30 Personalized Questions",
       "Long conversations",
       "Best value",
-      "Save 55%",
+      "Save 33% vs Quick Ask",
       "Unlocked Vedika AI 2.0 - powered by our most advanced AI astrology engine",
     ]
   }
@@ -126,7 +109,6 @@ const Pricing = () => {
 
   const normalizePlanTier = (name: string): PlanName => {
     const normalized = name.toLowerCase();
-    if (normalized.includes("first ask")) return "First Ask";
     if (normalized.includes("quick ask")) return "Quick Ask";
     if (normalized.includes("deep dive")) return "Deep Dive";
     if (normalized.includes("power pack")) return "The Power Pack";
@@ -139,7 +121,6 @@ const Pricing = () => {
 
   const getPlanCredits = (planName: string): number => {
     const normalized = planName.toLowerCase();
-    if (normalized.includes("first ask")) return 2;
     if (normalized.includes("quick ask")) return 5;
     if (normalized.includes("deep dive")) return 15;
     if (normalized.includes("power pack")) return 30;
@@ -154,7 +135,6 @@ const Pricing = () => {
     if (!planName) return false;
     const normalized = planName.toLowerCase();
     return [
-      "first ask",
       "quick ask",
       "deep dive",
       "power pack",
@@ -168,9 +148,9 @@ const Pricing = () => {
     if (!hasPaidPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
-    if (normalizedPlan.includes("power pack")) return 499; // 699 -> 499
-    // Quick Ask stays at ₹149, First Ask stays at ₹49
+    if (normalizedPlan.includes("quick ask")) return 149; // 199 -> 149
+    if (normalizedPlan.includes("deep dive")) return 349; // 499 -> 349
+    if (normalizedPlan.includes("power pack")) return 599; // 799 -> 599
     return originalPrice;
   };
 
@@ -298,8 +278,8 @@ const Pricing = () => {
   }, []);
 
   
-  const handlePayment = useCallback(async (planName: string) => {
-    console.log("Payment initiated for:", planName);
+  const handlePayment = useCallback(async (selectedPlanName: string) => {
+    console.log("Payment initiated for:", selectedPlanName);
     
     if (!user?.email) {
       alert("Please log in to proceed with payment");
@@ -322,7 +302,7 @@ const Pricing = () => {
         },
         body: JSON.stringify({
           currency: 'INR',
-          planName,
+          planName: selectedPlanName,
           userPlan: planName || 'Free', // Send user's current plan for discount eligibility
         }),
       });
@@ -352,7 +332,7 @@ const Pricing = () => {
         currency: orderData.currency || 'INR',
         order_id: orderId,
         name: "Veadicastro",
-        description: `${planName} Plan`,
+        description: `${selectedPlanName} Plan`,
         image: "https://veadicastro.in/optimized/logo.webp",
         prefill: {
           email: user.email,
@@ -381,7 +361,7 @@ const Pricing = () => {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              planName,
+              planName: selectedPlanName,
               amount: orderData.amount, // Amount in paise from order
               userId: current.uid, // Add userId
               email: current.email || null,
@@ -428,7 +408,7 @@ const Pricing = () => {
                       uid: current.uid,
                       email: current.email,
                       displayName: current.displayName || current.email?.split("@")[0],
-                      planName: planName || "Premium",
+                      planName: selectedPlanName || "Premium",
                       paymentId: response.razorpay_payment_id,
                       amount: orderData.amount,
                     }),
@@ -436,7 +416,7 @@ const Pricing = () => {
 
                   if (saveResponse.ok) {
                     console.log('[Payment] Fallback: Plan activated despite verification failure');
-                    setSelectedPlan({ name: planName, credits: getPlanCredits(planName) });
+                    setSelectedPlan({ name: selectedPlanName, credits: getPlanCredits(selectedPlanName) });
                     setSuccessPopupOpen(true);
                     // Don't call applyPlanLocally - let Firestore real-time sync handle it
                     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -453,7 +433,7 @@ const Pricing = () => {
 
             // Payment verified successfully
             console.log('[Payment] Verification successful:', verifyData);
-            setSelectedPlan({ name: planName, credits: getPlanCredits(planName) });
+            setSelectedPlan({ name: selectedPlanName, credits: getPlanCredits(selectedPlanName) });
             setSuccessPopupOpen(true);
             
             // Firestore update should already be done by verify-payment endpoint
@@ -473,7 +453,7 @@ const Pricing = () => {
             try {
               const payments = JSON.parse(localStorage.getItem("payments") || "[]");
               const paymentRecord: Record<string, unknown> = {
-                planName,
+                planName: selectedPlanName,
                 amount: orderData.amount, // Amount from verified order
                 paymentId: response.razorpay_payment_id,
                 orderId: response.razorpay_order_id,
@@ -503,7 +483,7 @@ const Pricing = () => {
               const invoice = await generateInvoice({
                 fullName,
                 email: buyerEmail || "noreply@veadicastro.in",
-                planName: planName || "Premium",
+                planName: selectedPlanName || "Premium",
                 totalAmount: Number(orderData.amount) / 100, // Convert from paise to rupees
                 paymentId: response.razorpay_payment_id,
               });
@@ -549,7 +529,7 @@ const Pricing = () => {
     } finally {
       setIsRazorpayLoading(false);
     }
-  }, [user, applyPlanLocally, refreshPlan, loadRazorpayScript]);
+  }, [user, planName, applyPlanLocally, refreshPlan, loadRazorpayScript]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -565,7 +545,7 @@ const Pricing = () => {
     }
 
     // Validate plan is one of our valid plans
-    const validPlans = ['First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'];
+    const validPlans = ['Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'];
     if (!validPlans.includes(plan)) {
       return;
     }
@@ -591,21 +571,21 @@ const Pricing = () => {
       {
         "@type": "Offer",
         "name": "Quick Ask Pack",
-        "price": "149",
+        "price": "199",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
       {
         "@type": "Offer",
         "name": "Deep Dive Pack",
-        "price": "399",
+        "price": "499",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
       {
         "@type": "Offer",
         "name": "The Power Pack",
-        "price": "199",
+        "price": "799",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
@@ -651,7 +631,7 @@ const Pricing = () => {
       `}</style>
       <SEO
         title="Pricing Plans - Veadicastro Astrology"
-        description="Choose from Quick Ask (₹149), Deep Dive (₹399), or Power Pack (₹199) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
+        description="Choose from Quick Ask (₹199), Deep Dive (₹499), or Power Pack (₹799) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
         keywords={["astrology pricing", "vedicastro packs", "astrology questions", "astrology cost", "astrology packs", "vedic astrology guidance"]}
         url="https://veadicastro.in/pricing"
         schema={pricingSchema}
@@ -1025,14 +1005,14 @@ const Pricing = () => {
                   <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
                 <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">
-                  Get 30 Questions for just Rs {hasPaidPlan ? '499' : '699'}!
+                  Get 30 Questions for just Rs {hasPaidPlan ? '599' : '799'}!
                 </h3>
                 <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
               </div>
             </Card>
 
             <div className="grid gap-5 md:grid-cols-3 max-w-6xl mx-auto mb-12">
-              {plans.filter(plan => plan.name !== 'First Ask' || !planName || planName === 'Free').map((plan) => {
+              {plans.map((plan) => {
                 const isDeepDive = plan.name === 'Deep Dive';
                 const discountedPrice = getDiscountedPrice(plan.price, plan.name);
                 const showDiscount = discountedPrice !== plan.price;
@@ -1051,7 +1031,7 @@ const Pricing = () => {
                       if ((e.target as HTMLElement).closest('button')) {
                         return;
                       }
-                      navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${plan.price}&type=pack`);
+                      navigate(`/pricing/onboarding?plan=${encodeURIComponent(plan.name)}&amount=${discountedPrice}&type=pack`);
                     }}
                   >
                     {isDeepDive && (
@@ -1353,7 +1333,7 @@ const Pricing = () => {
               },
               {
                 q: "What's the difference between packs?",
-                a: "Quick Ask gives you 5 questions for quick guidance (₹29.8/question). Deep Dive offers 15 questions with detailed analysis (₹6.6/question) - Best Value! Power Pack provides 30 questions with maximum value (₹6.6/question).",
+                a: "Quick Ask gives you 5 questions for quick guidance. Deep Dive offers 15 questions with detailed analysis - Best Value! Power Pack provides 30 questions with maximum value.",
               },
               {
                 q: "Can I buy multiple packs?",

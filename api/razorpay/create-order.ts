@@ -3,15 +3,13 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // CRITICAL: Server-side price source of truth
 // Frontend CANNOT override these prices
 const VALID_PLAN_PRICES: Record<string, number> = {
-  'First Ask': 4900,      // ₹49 in paise
-  'Quick Ask': 14900,     // ₹149 in paise
-  'Deep Dive': 39900,     // ₹399 in paise
-  'The Power Pack': 69900, // ₹199 in paise
+  'Quick Ask': 19900,     // ₹199 in paise
+  'Deep Dive': 49900,     // ₹499 in paise
+  'The Power Pack': 79900, // ₹799 in paise
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
   'Standard': 19900,    // ₹199 in paise
   'Premium': 49900,    // ₹499 in paise
-  'Quick Pack': 4900,   // ₹49 in paise (legacy support)
   'Astrologer Call': 58900, // ₹589 in paise (₹499 + 18% GST)
 };
 
@@ -43,10 +41,9 @@ const STORE_PRODUCT_PRICES: Record<string, number> = {
 };
 
 const ALLOWED_PACK_AMOUNTS: Record<string, number[]> = {
-  'First Ask': [4900],
-  'Quick Ask': [14900],
-  'Deep Dive': [39900, 29900],
-  'The Power Pack': [69900, 49900],
+  'Quick Ask': [19900, 14900],
+  'Deep Dive': [49900, 34900],
+  'The Power Pack': [79900, 59900],
 };
 
 const getSpecialReportPrice = (planName: string): number | undefined => {
@@ -121,11 +118,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
+    // Check if user has a paid plan for discount eligibility
+    const hasPaidPlan = userPlan && typeof userPlan === 'string' ? (() => {
+      const normalized = userPlan.toLowerCase();
+      return [
+        "quick ask",
+        "deep dive",
+        "power pack",
+        "premium",
+        "standard"
+      ].some(keyword => normalized.includes(keyword));
+    })() : false;
+
     // Apply 33% discount if promo code is valid
     let finalAmount = originalAmount;
     let discountApplied = false;
 
     if (
+      hasPaidPlan &&
       customAmount &&
       typeof customAmount === 'number' &&
       ALLOWED_PACK_AMOUNTS[planName]?.includes(customAmount) &&
@@ -134,31 +144,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ) {
       finalAmount = customAmount;
       discountApplied = true;
-      console.log('[Create Order] Applied onboarding pack price:', {
+      console.log('[Create Order] Applied Pro onboarding pack price:', {
         planName,
         originalAmount: originalAmount / 100,
         finalAmount: finalAmount / 100,
       });
     }
     
-    // Check if user has a paid plan for discount eligibility
-    const hasPaidPlan = userPlan && typeof userPlan === 'string' ? (() => {
-      const normalized = userPlan.toLowerCase();
-      return [
-        "first ask",
-        "quick ask",
-        "deep dive",
-        "power pack",
-        "premium",
-        "standard"
-      ].some(keyword => normalized.includes(keyword));
-    })() : false;
-    
     // Apply dynamic pricing for paid users
     if (hasPaidPlan && !promoCode && finalAmount === originalAmount) {
       const normalizedPlan = planName.toLowerCase();
-      if (normalizedPlan.includes("deep dive")) {
-        finalAmount = 29900; // ₹299 in paise (discounted from ₹399)
+      if (normalizedPlan.includes("quick ask")) {
+        finalAmount = 14900; // ₹149 in paise (discounted from ₹199)
+        discountApplied = true;
+        console.log('[Create Order] Applied paid user discount for Quick Ask:', {
+          userPlan,
+          originalAmount: originalAmount / 100,
+          finalAmount: finalAmount / 100
+        });
+      } else if (normalizedPlan.includes("deep dive")) {
+        finalAmount = 34900; // ₹349 in paise (discounted from ₹499)
         discountApplied = true;
         console.log('[Create Order] Applied paid user discount for Deep Dive:', { 
           userPlan, 
@@ -166,7 +171,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           finalAmount: finalAmount / 100 
         });
       } else if (normalizedPlan.includes("power pack")) {
-        finalAmount = 49900; // ₹499 in paise (discounted from ₹699)
+        finalAmount = 59900; // ₹599 in paise (discounted from ₹799)
         discountApplied = true;
         console.log('[Create Order] Applied paid user discount for Power Pack:', { 
           userPlan, 
@@ -174,7 +179,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           finalAmount: finalAmount / 100 
         });
       }
-      // Quick Ask stays at ₹149, First Ask stays at ₹49 (no additional discount)
     }
     
     if (promoCode && promoCode.toUpperCase() === "NEW33") {

@@ -6,17 +6,16 @@ import admin from 'firebase-admin';
 
 // CRITICAL: Server-side price source of truth
 const VALID_PLAN_PRICES: Record<string, number> = {
-  'First Ask': 4900,      // ₹49 in paise
-  'Quick Ask': 14900,     // ₹149 in paise
-  'Deep Dive': 39900,     // ₹399 in paise (original price)
-  'Deep Dive Discounted': 29900, // ₹299 in paise (discounted for paid users)
-  'The Power Pack': 69900, // ₹699 in paise (original price)
-  'The Power Pack Discounted': 49900, // ₹499 in paise (discounted for paid users)
+  'Quick Ask': 19900,     // ₹199 in paise
+  'Quick Ask Discounted': 14900, // ₹149 in paise for Pro users
+  'Deep Dive': 49900,     // ₹499 in paise
+  'Deep Dive Discounted': 34900, // ₹349 in paise for Pro users
+  'The Power Pack': 79900, // ₹799 in paise
+  'The Power Pack Discounted': 59900, // ₹599 in paise for Pro users
   'Day Pass': 24900,      // ₹249 in paise
   'Free': 0,
   'Standard': 29900,    // ₹299 in paise
   'Premium': 49900,    // ₹499 in paise
-  'Quick Pack': 4900,   // ₹49 in paise (legacy support)
   'Astrologer Call': 58900, // ₹589 in paise (₹499 + 18% GST)
 };
 
@@ -182,6 +181,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const orderData = await orderResponse.json();
     const expectedAmount = orderData.amount; // This is the final amount after discount
     const orderNotes = orderData.notes || {};
+
+    if (orderNotes.planName && orderNotes.planName !== planName) {
+      return res.status(400).json({
+        error: 'Plan mismatch detected. Payment verification failed.',
+        details: `Order was created for ${orderNotes.planName}, but verification requested ${planName}`,
+      });
+    }
     
     console.log('[Verify Payment] Order details fetched:', {
       orderId: razorpay_order_id,
@@ -508,9 +514,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             const expiresAt = new Date();
             let unlimitedExpiry = null;
             
-            if (planName === 'First Ask') {
-              expiresAt.setDate(expiresAt.getDate() + 30);
-            } else if (planName === 'Quick Ask') {
+            if (planName === 'Quick Ask') {
               expiresAt.setDate(expiresAt.getDate() + 30);
             } else if (planName === 'Deep Dive') {
               expiresAt.setDate(expiresAt.getDate() + 60);
@@ -538,13 +542,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               email: email || null,
               displayName: displayName || null,
               planName,
-              isPremium: !['Free', 'First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName),
-              premiumSince: !['Free', 'First Ask', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName) ? admin.firestore.FieldValue.serverTimestamp() : existingUserData?.premiumSince || null,
+              isPremium: !['Free', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName),
+              premiumSince: !['Free', 'Quick Ask', 'Deep Dive', 'The Power Pack', 'Day Pass'].includes(planName) ? admin.firestore.FieldValue.serverTimestamp() : existingUserData?.premiumSince || null,
               subscriptionExpiresAt: admin.firestore.Timestamp.fromDate(expiresAt),
               unlimitedExpiry: unlimitedExpiry ? admin.firestore.Timestamp.fromDate(unlimitedExpiry) : null,
               // Add credits based on plan
-              credits: planName === 'First Ask' ? 2 :
-                       planName === 'Quick Ask' ? 5 : 
+              credits: planName === 'Quick Ask' ? 5 :
                        planName === 'Deep Dive' ? 15 : 
                        planName === 'The Power Pack' ? 30 :
                        planName === 'Day Pass' ? 999 : // Unlimited represented as 999
@@ -570,7 +573,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             console.log('[Verify Payment] Plan purchase completed', {
               userId,
               planName,
-              credits: planName === 'First Ask' ? 2 : planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 30 : planName === 'Day Pass' ? 999 : planName === 'Premium' ? 30 : existingUserData?.credits || 0,
+              credits: planName === 'Quick Ask' ? 5 : planName === 'Deep Dive' ? 15 : planName === 'The Power Pack' ? 30 : planName === 'Day Pass' ? 999 : planName === 'Premium' ? 30 : existingUserData?.credits || 0,
               compatibilityCredits: planName === 'Standard' ? 5 : planName === 'Premium' ? 10 : existingUserData?.compatibilitycredits || 0,
               paymentId: razorpay_payment_id,
             });
@@ -594,8 +597,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
           console.log('[Verify Payment] Plan and credits allocated successfully:', {
             planName,
-            credits: planName === 'First Ask' ? 2 : 
-                     planName === 'Quick Ask' ? 5 : 
+            credits: planName === 'Quick Ask' ? 5 :
                      planName === 'Deep Dive' ? 15 : 
                      planName === 'The Power Pack' ? 30 :
                      planName === 'Day Pass' ? 999 :

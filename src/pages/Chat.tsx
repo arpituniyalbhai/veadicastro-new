@@ -172,7 +172,6 @@ export default function Chat() {
   const { planName, credits, canAccess, canAskMoreQuestions, registerQuestionUsage, useQuickPackQuestion, deductCredit } = usePlan();
   const remainingQuestions = Math.max(credits, 0);
 
-  // Timer state for ₹49 plan
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 0, minutes: 10, seconds: 0 });
 
   // Get referral from query params
@@ -489,7 +488,7 @@ export default function Chat() {
   }, [displayName]);
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
-    const paidPlanKeywords = ["first ask", "quick ask", "deep dive", "power pack", "premium", "standard"];
+    const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
 
@@ -498,8 +497,9 @@ export default function Chat() {
     if (!isProPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("deep dive")) return 299; // 399 -> 299
-    if (normalizedPlan.includes("power pack")) return 499; // 699 -> 499
+    if (normalizedPlan.includes("quick ask")) return 149; // 199 -> 149
+    if (normalizedPlan.includes("deep dive")) return 349; // 499 -> 349
+    if (normalizedPlan.includes("power pack")) return 599; // 799 -> 599
     return originalPrice;
   };
 
@@ -1306,7 +1306,7 @@ export default function Chat() {
               variant="cosmic"
               size="sm"
               className="gap-1.5 text-xs h-9 px-4"
-              onClick={() => navigate('/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack')}
+              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(499, 'Deep Dive')}&type=pack`)}
             >
               Upgrade
             </Button>
@@ -1386,22 +1386,8 @@ export default function Chat() {
                             <p className="text-xs leading-5 text-muted-foreground">Choose a question pack or monthly plan to keep chatting.</p>
                           </div>
                           <div className="space-y-2.5 pt-3">
-                            {!isProPlan && (
-                              <div
-                                onClick={() => navigate('/pricing/onboarding?plan=First%20Ask&amount=49&type=pack')}
-                                className="group w-full rounded-2xl bg-gradient-to-r from-purple-600 to-pink-600 p-[1px] cursor-pointer transition-all hover:shadow-lg hover:shadow-pink-500/10"
-                              >
-                                <div className="flex justify-between items-center bg-card px-4 py-3 rounded-2xl transition-colors group-hover:bg-card/95">
-                                  <div>
-                                    <div className="text-sm font-semibold text-white">First Ask</div>
-                                    <div className="text-xs text-muted-foreground">2 questions</div>
-                                  </div>
-                                  <div className="text-base font-semibold text-white">₹49</div>
-                                </div>
-                              </div>
-                            )}
                             <div
-                              onClick={() => navigate('/pricing/onboarding?plan=Quick%20Ask&amount=149&type=pack')}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Quick%20Ask&amount=${getDiscountedPrice(199, 'Quick Ask')}&type=pack`)}
                               className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
@@ -1409,11 +1395,14 @@ export default function Chat() {
                                   <div className="text-sm font-semibold text-white">Quick Ask</div>
                                   <div className="text-xs text-muted-foreground">5 questions</div>
                                 </div>
-                                <div className="text-base font-semibold text-white">₹149</div>
+                                <div className="flex items-center gap-2">
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹199</span>}
+                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(199, 'Quick Ask')}</div>
+                                </div>
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(399, 'Deep Dive')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(499, 'Deep Dive')}&type=pack`)}
                               className="group w-full rounded-2xl bg-pink-500/10 border border-pink-500/60 px-4 py-3 cursor-pointer relative shadow-[0_0_24px_rgba(236,72,153,0.14),0_0_0_1px_rgba(236,72,153,0.12)] transition-all hover:bg-pink-500/15 hover:shadow-[0_0_30px_rgba(236,72,153,0.2),0_0_0_1px_rgba(236,72,153,0.16)]"
                             >
                               <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">Popular</span>
@@ -1423,13 +1412,13 @@ export default function Chat() {
                                   <div className="text-xs text-muted-foreground">15 questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹399</span>}
-                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(399, 'Deep Dive')}</div>
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹499</span>}
+                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(499, 'Deep Dive')}</div>
                                 </div>
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(699, 'The Power Pack')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=The%20Power%20Pack&amount=${getDiscountedPrice(799, 'The Power Pack')}&type=pack`)}
                               className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
@@ -1438,8 +1427,8 @@ export default function Chat() {
                                   <div className="text-xs text-muted-foreground">30 questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹699</span>}
-                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(699, 'The Power Pack')}</div>
+                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹799</span>}
+                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(799, 'The Power Pack')}</div>
                                 </div>
                               </div>
                             </div>
