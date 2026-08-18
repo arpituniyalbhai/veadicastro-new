@@ -623,16 +623,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
               )}
             </div>
 
-            {result && (
-              <div className="mt-5 flex justify-center overflow-hidden rounded-xl">
-                <AdBanner
-                  adSlot="7302632255"
-                  adFormat="auto"
-                  className="w-full min-h-[90px]"
-                />
-              </div>
-            )}
-
             {/* Post-result CTA */}
             {result && (
               <div className="mt-5 rounded-[1.25rem] border border-pink-400/20 bg-pink-400/10 p-5">
@@ -654,16 +644,6 @@ export default function AiMarriagePredictionByDateOfBirth() {
                     Talk to an astrologer
                   </Link>
                 </div>
-              </div>
-            )}
-
-            {result && (
-              <div className="mt-5 flex justify-center overflow-hidden rounded-xl">
-                <AdBanner
-                  adSlot="7302632255"
-                  adFormat="auto"
-                  className="w-full min-h-[90px]"
-                />
               </div>
             )}
           </div>
