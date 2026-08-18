@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet-async";
 import {
   Heart, Sparkles, Calendar, MapPin, Clock, User, Loader2,
   CheckCircle2, Shield, Star, TrendingUp, Target, Award,
-  ChevronRight, Users, Zap, AlertCircle, CheckCircle, Home, BookOpen, Brain, MessageCircle
+  ChevronRight, Users, Zap, AlertCircle, CheckCircle, Home, BookOpen, Brain, MessageCircle, Moon
 } from "lucide-react";
 import { getPlanetaryData, type AstroPayload } from "@/lib/astroCalc";
 import { cn } from "@/lib/utils";
@@ -1497,6 +1497,14 @@ return (
               </div>
               <h3 className="font-bold text-lg text-white mb-2">Free Kundli Generator</h3>
               <p className="text-white/50 text-sm leading-relaxed">Generate your detailed Vedic birth chart with planetary positions and predictions.</p>
+            </Card>
+
+            <Card className="card-glass border border-white/10 p-6 text-center hover:border-pink-400/30 transition-all duration-300 cursor-pointer" onClick={() => navigate('/nakshatra-calculator/')}>
+              <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-pink-500/10 flex items-center justify-center">
+                <Moon className="w-6 h-6 text-pink-400" />
+              </div>
+              <h3 className="font-bold text-lg text-white mb-2">Nakshatra Calculator</h3>
+              <p className="text-white/50 text-sm leading-relaxed">Find each partner&apos;s exact birth star and pada—the lunar foundation used by Tara, Yoni, Gana, and Nadi matching.</p>
             </Card>
 
             <Card className="card-glass border border-white/10 p-6 text-center hover:border-pink-400/30 transition-all duration-300 cursor-pointer" onClick={() => navigate('/')}>

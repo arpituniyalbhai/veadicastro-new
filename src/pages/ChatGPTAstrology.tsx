@@ -565,7 +565,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             ChatGPT Astrology is simply using an AI to answer your astrology questions the same way you chat with ChatGPT. You type a question, the AI reads your birth chart, and you get a personal answer in seconds. No waiting, no appointments, no per minute charges.
           </p>
           <p className="mb-5 leading-7">
-            Most people have already tried asking ChatGPT about their future. The problem is ChatGPT does not know Vedic astrology deeply. It gives the same generic answer to everyone. It cannot calculate your Dasha period. You can use our <Link to="/dasha-calculator/" className="text-[#d9277a] hover:text-white">Dasha Calculator</Link> to find your Mahadasha and Antardasha from your actual birth details. It does not know your Lagna. It has no idea which planets are affecting your life right now. So the answer feels useless.
+            Most people have already tried asking ChatGPT about their future. The problem is ChatGPT does not know Vedic astrology deeply. It gives the same generic answer to everyone. It cannot calculate your Dasha period. You can use our <Link to="/dasha-calculator/" className="text-[#d9277a] hover:text-white">Dasha Calculator</Link> to find your Mahadasha and Antardasha from your actual birth details, or the <Link to="/nakshatra-calculator/" className="text-[#d9277a] hover:text-white">Nakshatra Calculator</Link> to calculate your Moon&apos;s exact birth star and pada. It does not know your Lagna. It has no idea which planets are affecting your life right now. So the answer feels useless.
           </p>
           <p className="mb-10 leading-7">We built this tool to fix exactly that problem.</p>
 

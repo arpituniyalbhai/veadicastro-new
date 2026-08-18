@@ -36,6 +36,7 @@ const RELATED_PAGES = [
   { href: "/free-kundli-generator", title: "Free Kundli Generator", description: "Generate your full Vedic birth chart with planets, houses, and Nakshatras." },
   { href: "/ai-kundli-analysis", title: "AI Kundli Analysis", description: "Get a guided explanation of the chart factors that support Dasha interpretation." },
   { href: "/rashi-calculator-by-date-of-birth", title: "Rashi Calculator", description: "Find your Moon sign and birth Nakshatra with the same birth details." },
+  { href: "/nakshatra-calculator/", title: "Nakshatra Calculator", description: "Calculate your exact birth Nakshatra, pada, ruling planet, and sidereal Moon position." },
   { href: "/today-horoscope", title: "Today Horoscope", description: "Check daily Vedic guidance alongside your longer-term planetary period." },
   { href: "/astrology-by-date-of-birth", title: "Astrology by Date of Birth", description: "Learn how birth date, time, and place shape a complete Vedic reading." },
   { href: "/ai-astrology-prediction", title: "AI Astrology Prediction", description: "Receive a chart-based prediction that considers your current Dasha context." },

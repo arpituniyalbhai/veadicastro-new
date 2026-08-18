@@ -103,6 +103,12 @@ const META_BASE: Record<string, Meta> = {
     canonical: 'https://veadicastro.in/dasha-calculator/',
     breadcrumb: 'Dasha Calculator',
   },
+  '/nakshatra-calculator': {
+    title: 'Nakshatra Calculator: Find Your Birth Star, Pada & Lord',
+    description: 'Use our free Nakshatra Calculator to find your Janma Nakshatra, birth star, Pada, Nakshatra Lord, Rashi, deity, naming syllables and complete Vedic astrology meaning using your birth date, time and place.',
+    canonical: 'https://veadicastro.in/nakshatra-calculator/',
+    breadcrumb: 'Nakshatra Calculator',
+  },
   '/astrology-store': {
     title: 'Astrology Store — Spiritual Products from Haridwar | Veadicastro',
     description: 'Buy authentic spiritual and astrology products. Rudraksha, crystal bracelets, puja items sourced from Haridwar. Free delivery across India.',
