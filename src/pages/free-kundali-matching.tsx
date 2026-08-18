@@ -1499,7 +1499,7 @@ return (
               <p className="text-white/50 text-sm leading-relaxed">Generate your detailed Vedic birth chart with planetary positions and predictions.</p>
             </Card>
 
-            <Card className="card-glass border border-white/10 p-6 text-center hover:border-pink-400/30 transition-all duration-300 cursor-pointer" onClick={() => navigate('/nakshatra-calculator/')}>
+            <Card className="card-glass border border-white/10 p-6 text-center hover:border-pink-400/30 transition-all duration-300 cursor-pointer" onClick={() => navigate('/nakshatra-calculator')}>
               <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-pink-500/10 flex items-center justify-center">
                 <Moon className="w-6 h-6 text-pink-400" />
               </div>
