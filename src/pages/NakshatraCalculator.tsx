@@ -149,14 +149,14 @@ export default function NakshatraCalculator() {
     name: "Nakshatra Calculator",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "All",
-    url: "https://veadicastro.in/nakshatra-calculator/",
+    url: "https://veadicastro.in/nakshatra-calculator",
     description: "Calculate birth Nakshatra and pada using Swiss Ephemeris and Lahiri sidereal calculations.",
     potentialAction: {
       "@type": "Action",
       name: "Calculate birth Nakshatra",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://veadicastro.in/nakshatra-calculator/",
+        urlTemplate: "https://veadicastro.in/nakshatra-calculator",
       },
       result: {
         "@type": "Thing",
@@ -195,7 +195,7 @@ export default function NakshatraCalculator() {
     <Helmet>
       <html lang="en-IN" /><title>Nakshatra Calculator: Find Your Birth Star, Pada & Lord</title>
       <meta name="description" content="Use our free Nakshatra Calculator to find your Janma Nakshatra, birth star, Pada, Nakshatra Lord, Rashi, deity, naming syllables and complete Vedic astrology meaning using your birth date, time and place." />
-      <link rel="canonical" href="https://veadicastro.in/nakshatra-calculator/" /><meta property="og:title" content="Nakshatra Calculator - Find Your Birth Star & Pada" /><meta property="og:url" content="https://veadicastro.in/nakshatra-calculator/" />
+      <link rel="canonical" href="https://veadicastro.in/nakshatra-calculator" /><meta property="og:title" content="Nakshatra Calculator - Find Your Birth Star & Pada" /><meta property="og:url" content="https://veadicastro.in/nakshatra-calculator" />
       <script type="application/ld+json">{JSON.stringify(schema)}</script>
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       {resultSchema && <script type="application/ld+json">{JSON.stringify(resultSchema)}</script>}

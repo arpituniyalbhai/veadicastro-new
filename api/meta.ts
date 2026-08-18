@@ -106,7 +106,7 @@ const META_BASE: Record<string, Meta> = {
   '/nakshatra-calculator': {
     title: 'Nakshatra Calculator: Find Your Birth Star, Pada & Lord',
     description: 'Use our free Nakshatra Calculator to find your Janma Nakshatra, birth star, Pada, Nakshatra Lord, Rashi, deity, naming syllables and complete Vedic astrology meaning using your birth date, time and place.',
-    canonical: 'https://veadicastro.in/nakshatra-calculator/',
+    canonical: 'https://veadicastro.in/nakshatra-calculator',
     breadcrumb: 'Nakshatra Calculator',
   },
   '/astrology-store': {

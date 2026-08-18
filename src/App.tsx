@@ -227,7 +227,7 @@ const AuthenticatedRoutes = ({
         <Route path="/astrology-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AstrologyByDateOfBirth /></Suspense>} />
         <Route path="/rashi-calculator-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><RashiCalculatorByDateOfBirth /></Suspense>} />
         <Route path="/dasha-calculator/" element={<Suspense fallback={<PageLoading />}><DashaCalculator /></Suspense>} />
-        <Route path="/nakshatra-calculator/" element={<Suspense fallback={<PageLoading />}><NakshatraCalculator /></Suspense>} />
+        <Route path="/nakshatra-calculator" element={<Suspense fallback={<PageLoading />}><NakshatraCalculator /></Suspense>} />
         <Route path="/ai-numerology-free-chat" element={<Suspense fallback={<PageLoading />}><AiNumerologyFreeChat /></Suspense>} />
 
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />

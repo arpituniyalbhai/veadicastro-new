@@ -651,6 +651,12 @@ KEY INSIGHTS:
                   ))}
                 </div>
 
+                <AdBanner
+                  adSlot="9433187751"
+                  adFormat="auto"
+                  className="mt-8 min-h-[90px] overflow-hidden rounded-xl"
+                />
+
                 <div className="text-center mt-8">
                   <button onClick={() => generateReport()} disabled={!selectedTopic}
                     className="w-full h-12 rounded-xl btn-pink text-white font-semibold flex items-center justify-center gap-2 transition-all hover:opacity-90 disabled:opacity-50 text-sm">
