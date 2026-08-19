@@ -20,7 +20,8 @@ import {
   Sun,
   FileText,
   Award,
-  XCircle
+  XCircle,
+  Mail
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -94,6 +95,7 @@ const Pricing = () => {
   const { t } = useI18n();
   const [popupOpen, setPopupOpen] = useState(false);
   const [successPopupOpen, setSuccessPopupOpen] = useState(false);
+  const [outsideIndiaOpen, setOutsideIndiaOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [expandedFeatures, setExpandedFeatures] = useState<{[key: string]: boolean}>({});
   const [expandedBenefits, setExpandedBenefits] = useState<{[key: string]: boolean}>({});
@@ -711,6 +713,17 @@ const Pricing = () => {
               One-Time Questions
             </button>
           </div>
+        </div>
+
+        <div className="-mt-5 mb-10 text-center">
+          <Button
+            type="button"
+            variant="outline"
+            className="border-pink-500/40 bg-pink-500/5 text-pink-200 hover:bg-pink-500/15 hover:text-white"
+            onClick={() => setOutsideIndiaOpen(true)}
+          >
+            Outside India? Need credits?
+          </Button>
         </div>
 
         {/* Tab Contents */}
@@ -1362,6 +1375,24 @@ const Pricing = () => {
       </div>
 
       {/* Success Popup */}
+      <Dialog open={outsideIndiaOpen} onOpenChange={setOutsideIndiaOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Paying from outside India?</DialogTitle>
+            <DialogDescription className="pt-2 text-sm leading-6">
+              Please email us at support@veadicastro.in and we will process your payment manually.
+              Your credits will be added to your account within 10 minutes of payment.
+            </DialogDescription>
+          </DialogHeader>
+          <Button asChild className="w-full bg-pink-500 text-white hover:bg-pink-600">
+            <a href="mailto:support@veadicastro.in?subject=International%20payment%20and%20credits">
+              <Mail className="mr-2 h-4 w-4" />
+              Send Email
+            </a>
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={successPopupOpen} onOpenChange={setSuccessPopupOpen}>
         <DialogContent className="sm:max-w-md text-center">
           <div className="flex flex-col items-center gap-4">
