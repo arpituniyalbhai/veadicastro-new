@@ -715,14 +715,14 @@ const Pricing = () => {
           </div>
         </div>
 
-        <div className="-mt-5 mb-10 flex justify-center rounded-2xl border border-white/[0.08] bg-white/[0.03] p-3">
+        <div className="-mt-5 mb-10 flex justify-center">
           <Button
             type="button"
             variant="outline"
             className="h-11 rounded-xl border border-pink-500/50 bg-black px-6 font-semibold text-white shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition-all hover:-translate-y-0.5 hover:border-pink-400 hover:bg-zinc-950 hover:text-white"
             onClick={() => setOutsideIndiaOpen(true)}
           >
-            Outside India? Email us for credits
+            International customer? Contact us by email to purchase credits.
           </Button>
         </div>
 

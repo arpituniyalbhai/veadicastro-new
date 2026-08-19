@@ -152,6 +152,8 @@ const RouterShell = () => {
     p === "/onboarding" ||
     p === "/subscription/onboarding" ||
     p === "/chatgpt-astrology" ||
+    p === "/chart" ||
+    p.startsWith("/chart/") ||
     p === "/ai-astrology-prediction" ||
     p === "/about" ||
     p === "/how-it-works" ||
@@ -284,6 +286,7 @@ const AuthenticatedRoutes = ({
         <Route path="/subscription/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><SubscriptionOnboarding /></PlanProvider></Suspense>} />
         <Route path="/chat" element={protectedPage(<Chat />)} />
         <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
+        <Route path="/chart" element={protectedPage(<Chart />)} />
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
         <Route path="/settings/language" element={protectedPage(<LanguageSettings />)} />
         <Route path="/profile" element={protectedPage(<Profile />)} />

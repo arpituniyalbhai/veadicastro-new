@@ -900,16 +900,17 @@ export default function Dashboard() {
             </button>
             <div className="flex-1">
               <div className="rounded-sm bg-secondary/15 border border-border/60 px-1 sm:px-1.5 lg:px-2 py-0.5 sm:py-1 lg:py-1.5 text-xs sm:text-xs lg:text-sm text-muted-foreground text-center">
-                <div className="inline-flex max-w-full items-center justify-center gap-1.5 text-foreground hover:text-secondary transition-colors">
-                  <span className="flex min-w-0 flex-col items-center justify-center leading-tight sm:flex-row sm:gap-1.5 sm:leading-normal">
-                    <span className="text-[11px] font-semibold sm:text-xs lg:text-sm">
-                      🎉 {lang === "hi" ? "30 सवाल / Month केवल ₹499" : "30 questions / Month only ₹499"}
-                    </span>
-                    <span className="text-[11px] font-medium text-muted-foreground sm:text-xs lg:text-sm">
-                      {lang === "hi" ? "सीमित समय ऑफर - केवल आपके लिए" : "Limited Time offer - only for you"} <span className="font-semibold text-white">{firstName}</span>
-                    </span>
-                  </span>
-                </div>
+                <p className="text-[11px] font-medium text-foreground sm:text-xs lg:text-sm">
+                  🎉 The Veadicastro app is now live on Google Play —{' '}
+                  <a
+                    href="https://play.google.com/store/apps/details?id=in.veadicastro.app"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-secondary underline underline-offset-2 transition-colors hover:text-pink-300"
+                  >
+                    Download it here
+                  </a>
+                </p>
               </div>
             </div>
           </div>

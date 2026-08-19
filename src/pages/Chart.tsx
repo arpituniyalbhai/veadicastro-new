@@ -369,6 +369,9 @@ const Chart = () => {
         .fkg-glass { background: rgba(255,255,255,.04); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,.08); }
         .fkg-btn-pink { background: linear-gradient(135deg,#ec4899,#be185d); }
         .fkg-btn-pink:hover { background: linear-gradient(135deg,#f472b6,#ec4899); }
+        .fkg-tab-scroll { overflow-x: auto; scrollbar-width: none; }
+        .fkg-tab-scroll::-webkit-scrollbar { display: none; }
+        .fkg-tab-scroll button { white-space: nowrap; flex-shrink: 0; }
 
         select option { background: #180a20; color: white; }
         select:focus  { border-color: #ec4899 !important; box-shadow: 0 0 0 1px #ec4899; }
@@ -395,10 +398,13 @@ const Chart = () => {
         <div style={{ position:"relative", zIndex:1 }}>
           {/* Header */}
           <header style={{ position:"sticky", top:0, zIndex:50, borderBottom:"1px solid rgba(255,255,255,0.05)", background:"rgba(5,3,10,0.80)", backdropFilter:"blur(18px)" }}>
-            <div style={{ maxWidth:"1280px", margin:"0 auto", padding:"0 24px", height:"60px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+            <div style={{ maxWidth:"1280px", margin:"0 auto", padding:"0 24px", height:"64px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
               <button onClick={() => navigate("/dashboard")} style={{ display:"flex", alignItems:"center", gap:"10px", background:"none", border:"none", color:"white", cursor:"pointer" }}>
                 <img src="/logo.jpg" alt="Veadicastro" style={{ width:"36px", height:"36px", borderRadius:"50%" }} />
                 <span className="fkg-serif" style={{ fontSize:"17px", fontWeight:700 }}>Veadicastro</span>
+              </button>
+              <button onClick={() => navigate("/dashboard")} style={{ display:"flex", alignItems:"center", gap:"7px", border:"1px solid rgba(255,255,255,0.12)", borderRadius:"999px", padding:"8px 13px", background:"rgba(255,255,255,0.04)", color:"rgba(255,255,255,0.75)", cursor:"pointer", fontSize:"12px" }}>
+                <ArrowLeft style={{ width:"14px", height:"14px" }} /> Dashboard
               </button>
             </div>
           </header>
@@ -438,7 +444,7 @@ const Chart = () => {
             </div>
 
             {/* Highlights */}
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"10px", marginTop:"18px" }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(145px,1fr))", gap:"10px", marginTop:"18px" }}>
               {[
                 ["☀️","Sun Sign",chartData.sunSign],
                 ["🌙","Moon Sign",chartData.moonSign],
@@ -462,7 +468,7 @@ const Chart = () => {
             </div>
 
             {/* Tab bar */}
-            <div style={{ display:"flex", flexWrap:"wrap", gap:"6px", background:"rgba(255,255,255,0.04)", borderRadius:"12px", padding:"4px", marginTop:"18px" }}>
+            <div className="fkg-tab-scroll" style={{ display:"flex", gap:"6px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:"14px", padding:"5px", marginTop:"18px" }}>
               {[
                 {id:"basic",label:"Basic & Panchang",I:Star},
                 {id:"planets",label:"Planets",I:Globe},

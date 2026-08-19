@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole, BarChart3, UserRound, Crown, Sparkles } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -188,6 +188,8 @@ export default function Chat() {
   const initial = location?.state?.query || "";
   const [message, setMessage] = useState(initial);
   const [sending, setSending] = useState(false);
+  const [composerMenuOpen, setComposerMenuOpen] = useState(false);
+  const [deepReasoningOpen, setDeepReasoningOpen] = useState(false);
   // Keep sidebar closed on mobile, open on desktop
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth >= 768);
   const [sidebarOpen, setSidebarOpen] = useState(false); // Always start closed on mobile
@@ -1553,15 +1555,50 @@ export default function Chat() {
                 {credits} Credits available
               </div>
             </div>
-            <Card className={`relative overflow-hidden p-2 sm:p-2.5 rounded-3xl bg-card border border-border/60 transition-all duration-500 ${message.trim() ? "border-pink-400/40 shadow-[0_0_22px_rgba(236,72,153,0.10),0_0_52px_rgba(236,72,153,0.06)]" : ""} ${sending ? "ring-1 ring-secondary" : ""}`}>
+            <div className="relative">
               {message.trim() && (
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 animate-typing-glow bg-[radial-gradient(ellipse_at_50%_55%,rgba(236,72,153,0.16)_0%,rgba(236,72,153,0.07)_42%,transparent_76%)]"
+                  className="pointer-events-none absolute -inset-2 z-0 animate-typing-glow rounded-full bg-pink-500/15 blur-xl"
                 />
               )}
-              <div className="relative flex items-center gap-2 sm:gap-3 flex-wrap">
+              <div className="relative z-10 flex items-center gap-2 sm:gap-3 flex-wrap">
                 <div className="relative flex-1 min-w-[220px]">
+                  <Popover open={composerMenuOpen} onOpenChange={setComposerMenuOpen}>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        aria-label="Open chat tools"
+                        className="absolute left-4 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+                      >
+                        <Plus className="h-5 w-5" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent align="start" side="top" className="mb-2 w-64 rounded-2xl border-border/70 bg-card p-2 shadow-xl">
+                      <div className="space-y-1">
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); navigate("/chart"); }}>
+                          <BarChart3 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <span><span className="block text-sm font-medium">Chart</span><span className="block text-xs text-muted-foreground">View your birth chart</span></span>
+                        </Button>
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); setShowMemoryPrompt(true); }}>
+                          <Brain className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <span><span className="block text-sm font-medium">Memory</span><span className="block text-xs text-muted-foreground">Save details for better guidance</span></span>
+                        </Button>
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); navigate("/profile"); }}>
+                          <UserRound className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <span><span className="block text-sm font-medium">Profile</span><span className="block text-xs text-muted-foreground">Manage your birth details</span></span>
+                        </Button>
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); navigate("/pricing"); }}>
+                          <Crown className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <span><span className="block text-sm font-medium">Upgrade</span><span className="block text-xs text-muted-foreground">Get more questions and features</span></span>
+                        </Button>
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); setDeepReasoningOpen(true); }}>
+                          <Sparkles className="h-4 w-4 shrink-0 text-muted-foreground" />
+                          <span><span className="block text-sm font-medium">Deep Reasoning</span><span className="block text-xs text-muted-foreground">Get a detailed answer</span></span>
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                   <Input
                     ref={inputRef}
                     id="chat-input"
@@ -1579,24 +1616,34 @@ export default function Chat() {
                       }
                     }}
                     disabled={sending}
-                    className={`h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${message.trim() ? "border-secondary/40 bg-background/75 shadow-[0_0_18px_rgba(236,72,153,0.12)]" : ""}`}
+                    className={`h-14 rounded-full border-border/60 bg-background/65 pl-14 pr-16 text-sm shadow-inner shadow-black/10 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-secondary/35 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 ${message.trim() ? "border-secondary/50 bg-background/80 shadow-[0_0_24px_rgba(236,72,153,0.18)]" : ""}`}
                   />
                   <Button
                     variant="cosmic"
                     size="icon"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 sm:h-10 sm:w-10 rounded-full"
+                    className="absolute right-2 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
                     onClick={() => send()}
                     disabled={sending || !message.trim()}
                     aria-label="Send"
                   >
-                    <Send className="w-3.5 sm:w-4 h-3.5 sm:h-4" />
+                    <Send className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            </Card>
+            </div>
           </div>
         </div>
       </main>
+
+      {deepReasoningOpen && (
+        <aside className="fixed right-4 top-1/2 z-[60] w-[calc(100vw-2rem)] max-w-sm -translate-y-1/2 animate-in slide-in-from-right-8 fade-in duration-300">
+          <div className="rounded-2xl border border-pink-500/35 bg-card p-5 shadow-[0_18px_50px_rgba(0,0,0,0.42)]">
+            <p className="text-lg font-semibold">Hey {thinkingUserName}</p>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">Deep Reasoning is coming soon.</p>
+            <Button className="mt-5 w-full" onClick={() => setDeepReasoningOpen(false)}>Got it</Button>
+          </div>
+        </aside>
+      )}
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
