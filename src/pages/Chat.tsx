@@ -1553,8 +1553,14 @@ export default function Chat() {
                 {credits} Credits available
               </div>
             </div>
-            <Card className={`p-2 sm:p-2.5 rounded-3xl bg-card border border-border/60 ${sending ? "ring-1 ring-secondary" : ""}`}>
-              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <Card className={`relative overflow-hidden p-2 sm:p-2.5 rounded-3xl bg-card border border-border/60 transition-all duration-500 ${message.trim() ? "border-pink-400/40 shadow-[0_0_22px_rgba(236,72,153,0.10),0_0_52px_rgba(236,72,153,0.06)]" : ""} ${sending ? "ring-1 ring-secondary" : ""}`}>
+              {message.trim() && (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 animate-typing-glow bg-[radial-gradient(ellipse_at_50%_55%,rgba(236,72,153,0.16)_0%,rgba(236,72,153,0.07)_42%,transparent_76%)]"
+                />
+              )}
+              <div className="relative flex items-center gap-2 sm:gap-3 flex-wrap">
                 <div className="relative flex-1 min-w-[220px]">
                   <Input
                     ref={inputRef}
@@ -1573,7 +1579,7 @@ export default function Chat() {
                       }
                     }}
                     disabled={sending}
-                    className="h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`h-10 sm:h-12 bg-background/60 border border-border/60 focus-visible:ring-1 focus-visible:ring-secondary/40 rounded-2xl px-3 sm:px-4 pr-14 text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${message.trim() ? "border-secondary/40 bg-background/75 shadow-[0_0_18px_rgba(236,72,153,0.12)]" : ""}`}
                   />
                   <Button
                     variant="cosmic"

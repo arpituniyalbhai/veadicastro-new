@@ -919,19 +919,26 @@ export default function Dashboard() {
           {/* Ask Question Section */}
           <Card
             className={cn(
-              "p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-all duration-500 ease-out",
+              "relative overflow-hidden p-5 bg-card/40 backdrop-blur-sm border-border/60 rounded-2xl transition-all duration-500 ease-out",
               "hover:border-white/15 hover:bg-card/50 hover:shadow-lg hover:shadow-black/10",
               askFocused && "border-secondary/45 shadow-[0_0_0_1px_rgba(236,72,153,0.18),0_18px_45px_rgba(0,0,0,0.18)]",
+              question && "border-pink-400/50 shadow-[0_0_28px_rgba(236,72,153,0.16),0_0_70px_rgba(236,72,153,0.10)]",
               sending && "-translate-y-2 scale-[0.995] border-secondary/50 shadow-xl shadow-secondary/10"
             )}
           >
-            <div className="flex items-center gap-3 mb-4">
+            {question && (
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_55%,rgba(236,72,153,0.25)_0%,rgba(236,72,153,0.12)_42%,transparent_76%)] transition-opacity duration-500"
+              />
+            )}
+            <div className="relative flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-full overflow-hidden ring-1 ring-border/60">
                 <img src="/optimized/vedika.webp" alt="Vedika" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <h2 className="font-semibold">{displayName}, {t("askTitle")}</h2>
             </div>
-            <div className="flex items-center gap-2 flex-wrap">
+            <div className="relative flex items-center gap-2 flex-wrap">
               <div className="relative flex-1 min-w-[200px]">
                 <Input
                   ref={askInputRef}
@@ -943,9 +950,9 @@ export default function Dashboard() {
                   onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
                   disabled={sending}
                   className={cn(
-                    "h-14 rounded-xl border-border/60 bg-background/50 pr-16 transition-all duration-300 ease-out",
+                    "h-14 rounded-full border-border/60 bg-background/65 px-5 pr-16 shadow-inner shadow-black/10 transition-all duration-300 ease-out",
                     "focus-visible:ring-2 focus-visible:ring-secondary/35 focus-visible:ring-offset-0",
-                    question && "border-secondary/35 bg-background/70",
+                    question && "border-secondary/50 bg-background/80 shadow-[0_0_24px_rgba(236,72,153,0.18)]",
                     sending && "cursor-wait opacity-80"
                   )}
                 />
@@ -965,22 +972,25 @@ export default function Dashboard() {
                 </Button>
               </div>
             </div>
-            <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
+            <div className="relative mt-4">
+              <p className="mb-2 text-xs font-medium text-muted-foreground">Try a personalised question</p>
+              <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               {suggestions.map((q) => (
                 <button
                   key={q}
                   onClick={() => handleSuggestionClick(q)}
                   disabled={sending}
                   className={cn(
-                    "text-left text-xs sm:text-sm px-3 py-2 rounded-lg bg-background/50 border border-border/60",
-                    "transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-secondary/35 hover:bg-accent/10 hover:shadow-sm",
+                    "flex min-h-14 items-center rounded-xl border border-border/60 bg-background/50 px-3 py-2 text-left text-xs sm:text-sm",
+                    "transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-secondary/45 hover:bg-secondary/10 hover:shadow-md hover:shadow-secondary/10",
                     "active:translate-y-0 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60",
                     selectedSuggestion === q && "border-secondary/60 bg-secondary/10 shadow-[0_0_0_1px_rgba(236,72,153,0.16)]"
                   )}
                 >
-                  {q}
+                  <span className="line-clamp-2">{q}</span>
                 </button>
               ))}
+              </div>
             </div>
           </Card>
 

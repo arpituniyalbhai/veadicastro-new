@@ -100,6 +100,10 @@ export default {
           "from": { transform: "rotate(360deg)" },
           "to": { transform: "rotate(0deg)" }
         },
+        "typing-glow": {
+          "0%, 100%": { opacity: "0.48", transform: "scale(0.96)" },
+          "50%": { opacity: "0.88", transform: "scale(1.04)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -110,6 +114,7 @@ export default {
         "sparkle": "sparkle 2s ease-in-out infinite",
         "spin-slow": "spin-slow 20s linear infinite",
         "spin-reverse": "spin-reverse 15s linear infinite",
+        "typing-glow": "typing-glow 2.8s ease-in-out infinite",
       },
     },
   },
