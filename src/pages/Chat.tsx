@@ -1395,7 +1395,7 @@ export default function Chat() {
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-semibold text-white">Quick Ask</div>
-                                  <div className="text-xs text-muted-foreground">5 questions</div>
+                                  <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">5 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   {isProPlan && getDiscountedPrice(149, 'Quick Ask') !== 149 && <span className="text-xs text-muted-foreground line-through">₹149</span>}
@@ -1411,7 +1411,7 @@ export default function Chat() {
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-semibold text-white">Deep Dive</div>
-                                  <div className="text-xs text-muted-foreground">15 questions</div>
+                                  <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">15 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   {isProPlan && <span className="text-xs text-muted-foreground line-through">₹399</span>}
@@ -1426,7 +1426,7 @@ export default function Chat() {
                               <div className="flex justify-between items-center">
                                 <div>
                                   <div className="text-sm font-semibold text-white">Power Pack</div>
-                                  <div className="text-xs text-muted-foreground">30 questions</div>
+                                  <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">30 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   {isProPlan && <span className="text-xs text-muted-foreground line-through">₹699</span>}

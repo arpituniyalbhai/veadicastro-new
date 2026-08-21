@@ -1018,7 +1018,7 @@ const Pricing = () => {
                   <span className="text-sm text-orange-600 dark:text-orange-400 font-semibold">Offer ends soon!</span>
                 </div>
                 <h3 className="font-bold text-base text-orange-600 dark:text-orange-400 mb-0.5">
-                  Get 30 Questions for just Rs {hasPaidPlan ? '599' : '799'}!
+                  Get 30 Questions for just Rs {hasPaidPlan ? '599' : '699'}!
                 </h3>
                 <p className="text-sm text-muted-foreground">Unlock detailed insights about your future</p>
               </div>
@@ -1094,10 +1094,11 @@ const Pricing = () => {
                         )}
                         <span className="text-sm text-muted-foreground">/ {plan.period}</span>
                       </div>
-                      <div className="mb-5 flex items-center gap-3 text-xs text-muted-foreground">
-                        <span>{plan.questions} Questions</span>
-                        <span>·</span>
-                        <span>{plan.period}</span>
+                      <div className="mb-5 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center rounded-full border border-pink-500/35 bg-pink-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-pink-300">
+                          {plan.questions} Questions
+                        </span>
+                        <span className="text-xs text-muted-foreground">{plan.period}</span>
                       </div>
                       <p className="min-h-[52px] text-sm leading-6 text-muted-foreground">{plan.description}</p>
                     </div>
