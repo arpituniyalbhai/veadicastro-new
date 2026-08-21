@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const plans = [
   {
     name: "Quick Ask",
-    price: 199,
+    price: 149,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions - get clarity fast",
@@ -25,7 +25,7 @@ const plans = [
   },
   {
     name: "Deep Dive",
-    price: 499,
+    price: 399,
     period: "one-time",
     questions: 15,
     description: "Most popular - serious guidance for life's big decisions",
@@ -42,7 +42,7 @@ const plans = [
   },
   {
     name: "The Power Pack",
-    price: 799,
+    price: 699,
     period: "one-time",
     questions: 30,
     description: "Best value - clarity for an entire year of decisions",

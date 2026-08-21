@@ -35,7 +35,7 @@ import SEO from "@/components/SEO";
 const plans = [
   {
     name: "Quick Ask",
-    price: 199,
+    price: 149,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions — get clarity fast",
@@ -53,7 +53,7 @@ const plans = [
   },
   {
     name: "Deep Dive",
-    price: 499,
+    price: 399,
     period: "one-time",
     questions: 15,
     description: "Most popular — serious guidance for life's big decisions",
@@ -71,7 +71,7 @@ const plans = [
   },
   {
     name: "The Power Pack",
-    price: 799,
+    price: 699,
     period: "one-time",
     questions: 30,
     description: "Best value — unlimited clarity for an entire year of decisions",
@@ -150,9 +150,9 @@ const Pricing = () => {
     if (!hasPaidPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("quick ask")) return 149; // 199 -> 149
-    if (normalizedPlan.includes("deep dive")) return 349; // 499 -> 349
-    if (normalizedPlan.includes("power pack")) return 599; // 799 -> 599
+    if (normalizedPlan.includes("quick ask")) return 149;
+    if (normalizedPlan.includes("deep dive")) return 349; // 399 -> 349
+    if (normalizedPlan.includes("power pack")) return 599; // 699 -> 599
     return originalPrice;
   };
 
@@ -573,21 +573,21 @@ const Pricing = () => {
       {
         "@type": "Offer",
         "name": "Quick Ask Pack",
-        "price": "199",
+        "price": "149",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
       {
         "@type": "Offer",
         "name": "Deep Dive Pack",
-        "price": "499",
+        "price": "399",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
       {
         "@type": "Offer",
         "name": "The Power Pack",
-        "price": "799",
+        "price": "699",
         "priceCurrency": "INR",
         "availability": "https://schema.org/InStock"
       },
@@ -633,7 +633,7 @@ const Pricing = () => {
       `}</style>
       <SEO
         title="Pricing Plans - Veadicastro Astrology"
-        description="Choose from Quick Ask (₹199), Deep Dive (₹499), or Power Pack (₹799) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
+        description="Choose from Quick Ask (₹149), Deep Dive (₹399), or Power Pack (₹699) - all with AI-powered astrology guidance and personalized insights. Start your journey today."
         keywords={["astrology pricing", "vedicastro packs", "astrology questions", "astrology cost", "astrology packs", "vedic astrology guidance"]}
         url="https://veadicastro.in/pricing"
         schema={pricingSchema}
