@@ -959,11 +959,11 @@ export default function Chat() {
         if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(flushBuffer);
         deltaCount++;
-      }, systemExtra, lang, displayName, "primary", "mistral-small-latest");
+      }, systemExtra, lang, displayName, "primary", "mistral-large-latest");
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-small-latest");
+        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-large-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
@@ -1865,7 +1865,7 @@ ${answer.slice(0, 1200)}`;
           systemExtra: `Return valid JSON only. Do not include markdown fences.${memoryBlock ? `\n\n${memoryBlock}` : ""}`,
           lang,
           apiKeySlot: "secondary",
-          model: "mistral-small-latest",
+          model: "mistral-large-latest",
         }),
       signal: controller.signal,
     });
