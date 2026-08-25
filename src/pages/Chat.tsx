@@ -237,6 +237,8 @@ export default function Chat() {
   const [hasTyped, setHasTyped] = useState<boolean>(false);
   const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
   const [loadingSuggestions, setLoadingSuggestions] = useState<Record<number, boolean>>({});
+  const [lowCreditOfferIndex, setLowCreditOfferIndex] = useState<number | null>(null);
+  const lowCreditOfferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showMemoryPrompt, setShowMemoryPrompt] = useState(false);
   const [showMemoryQuestions, setShowMemoryQuestions] = useState(false);
   const [showMemoryLocked, setShowMemoryLocked] = useState(false);
@@ -249,6 +251,12 @@ export default function Chat() {
   const userAvatarUrl = (() => { try { return localStorage.getItem('profile_photo') || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } catch { return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF0sUZDH9Yd12Ia12Xlw3x-39T5sqkNn_fTNbqFnDflgVgDNjidcva49jecsqpSMSvuqY&usqp=CAU"; } })(); // user's avatar
   const inputRef = useRef<HTMLInputElement | null>(null);
   const openedMemoryFromNavigation = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (lowCreditOfferTimerRef.current) clearTimeout(lowCreditOfferTimerRef.current);
+    };
+  }, []);
 
   const memoryStorageKey = useMemo(() => `vedika_memory_${user?.email || "guest"}`, [user?.email]);
   const isMemoryEligible = useMemo(() => {
@@ -749,6 +757,12 @@ export default function Chat() {
     const outgoingMessage = (overrideMessage ?? message).trim();
     if (!outgoingMessage || sending) return;
 
+    if (lowCreditOfferTimerRef.current) {
+      clearTimeout(lowCreditOfferTimerRef.current);
+      lowCreditOfferTimerRef.current = null;
+    }
+    setLowCreditOfferIndex(null);
+
     // Create session ID if this is a new chat
     let sessionId = activeSessionId;
     if (!sessionId) {
@@ -998,6 +1012,18 @@ export default function Chat() {
       }
 
       console.log("AI answer completed, credit deducted successfully");
+
+      // Once the completed answer leaves the user with 1 or 0 credits, show a
+      // compact question-pack offer after 13 seconds. Suggested follow-ups use
+      // this same send flow, so the delay restarts after every completed answer.
+      const projectedCredits = Math.max(0, credits - 1);
+      if (projectedCredits <= 1 && assistantIndex >= 0) {
+        lowCreditOfferTimerRef.current = setTimeout(() => {
+          setLowCreditOfferIndex(assistantIndex);
+          lowCreditOfferTimerRef.current = null;
+          requestAnimationFrame(() => scrollToBottom(true));
+        }, 13_000);
+      }
 
       // Generate suggestions in background without blocking - no loading state
       generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang, memoryBlock)
@@ -1379,6 +1405,27 @@ export default function Chat() {
                           </button>
                         ))}
                       </div>
+                    )}
+                    {m.role === "assistant" && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
+                      <button
+                        type="button"
+                        onClick={() => navigate("/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack")}
+                        className="mt-3 ml-0 sm:ml-1 flex w-full max-w-md items-center justify-between gap-3 rounded-2xl border border-pink-400/50 bg-gradient-to-r from-pink-500/15 to-purple-500/15 px-4 py-3 text-left shadow-[0_0_24px_rgba(236,72,153,0.14)] transition hover:border-pink-300/80 hover:from-pink-500/20 hover:to-purple-500/20"
+                        aria-label="Get 15 questions for just 399 rupees"
+                      >
+                        <span className="flex min-w-0 items-center gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-500/20 text-pink-300">
+                            <Sparkles className="h-4 w-4" />
+                          </span>
+                          <span>
+                            <span className="block text-sm font-semibold text-white">Get 15 Questions for Just ₹399</span>
+                            <span className="mt-0.5 block text-xs text-muted-foreground">Keep your conversation with Vedika going</span>
+                          </span>
+                        </span>
+                        <span className="shrink-0 rounded-full bg-pink-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+                          Get Now
+                        </span>
+                      </button>
                     )}
                     {m.isOutOfCredits && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
