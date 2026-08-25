@@ -1407,25 +1407,51 @@ export default function Chat() {
                       </div>
                     )}
                     {m.role === "assistant" && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
-                      <button
-                        type="button"
-                        onClick={() => navigate("/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack")}
-                        className="mt-3 ml-0 sm:ml-1 flex w-full max-w-md items-center justify-between gap-3 rounded-2xl border border-pink-400/50 bg-gradient-to-r from-pink-500/15 to-purple-500/15 px-4 py-3 text-left shadow-[0_0_24px_rgba(236,72,153,0.14)] transition hover:border-pink-300/80 hover:from-pink-500/20 hover:to-purple-500/20"
-                        aria-label="Get 15 questions for just 399 rupees"
-                      >
-                        <span className="flex min-w-0 items-center gap-3">
-                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pink-500/20 text-pink-300">
-                            <Sparkles className="h-4 w-4" />
-                          </span>
-                          <span>
-                            <span className="block text-sm font-semibold text-white">Get 15 Questions for Just ₹399</span>
-                            <span className="mt-0.5 block text-xs text-muted-foreground">Keep your conversation with Vedika going</span>
-                          </span>
-                        </span>
-                        <span className="shrink-0 rounded-full bg-pink-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
-                          Get Now
-                        </span>
-                      </button>
+                      <div className="mt-4 ml-0 w-full max-w-2xl overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xl shadow-black/20 sm:ml-1">
+                        <div className="h-1 w-full bg-pink-500" />
+                        <div className="p-5 sm:p-6">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-pink-300">
+                              Deep Dive Question Pack
+                            </span>
+                            <span className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
+                              One-time purchase
+                            </span>
+                          </div>
+
+                          <div className="mt-4 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
+                            <div>
+                              <h3 className="text-xl font-bold leading-tight text-foreground sm:text-2xl">
+                                Continue your conversation with Vedika
+                              </h3>
+                              <p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">
+                                Get more personalized guidance without starting a new subscription.
+                              </p>
+                            </div>
+                            <div className="sm:text-right">
+                              <div className="text-3xl font-bold tracking-tight text-foreground">₹399</div>
+                              <div className="mt-1 text-xs text-muted-foreground">One-time payment</div>
+                            </div>
+                          </div>
+
+                          <div className="my-5 h-px bg-border/70" />
+
+                          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                              <div className="text-2xl font-bold text-white">15 Questions</div>
+                              <div className="mt-1 text-sm text-muted-foreground">Added to your account immediately</div>
+                            </div>
+                            <Button
+                              type="button"
+                              onClick={() => navigate("/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack")}
+                              className="h-12 w-full rounded-xl bg-pink-500 px-7 text-sm font-semibold text-white shadow-none hover:bg-pink-600 sm:w-auto"
+                              aria-label="Get 15 questions for 399 rupees"
+                            >
+                              Get 15 Questions for ₹399
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     )}
                     {m.isOutOfCredits && (
                       <div className="mt-3 ml-0 sm:ml-1 max-w-full sm:max-w-md">
