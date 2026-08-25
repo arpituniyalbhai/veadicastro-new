@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
 import admin from 'firebase-admin';
@@ -96,13 +94,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Verify signature
-    const text = `${razorpay_payment_id}|${razorpay_signature}`;
+    // Razorpay subscription checkout signs payment_id|subscription_id.
+    const text = `${razorpay_payment_id}|${razorpay_subscription_id}`;
     const generatedSignature = crypto
       .createHmac('sha256', razorpayKeySecret)
       .update(text)
       .digest('hex');
 
-    const isSignatureValid = generatedSignature === razorpay_signature;
+    const generatedBuffer = Buffer.from(generatedSignature, 'utf8');
+    const receivedBuffer = Buffer.from(razorpay_signature, 'utf8');
+    const isSignatureValid =
+      generatedBuffer.length === receivedBuffer.length &&
+      crypto.timingSafeEqual(generatedBuffer, receivedBuffer);
 
     if (!isSignatureValid) {
       console.error('[Verify Subscription] Invalid subscription signature', {
@@ -170,78 +173,61 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const subscriptionExpiresAt = new Date();
     subscriptionExpiresAt.setMonth(subscriptionExpiresAt.getMonth() + 1);
 
-    // Update Firestore with subscription details
-    let firestoreUpdated = false;
-    
-    try {
-      const firestore = initializeFirebaseAdmin();
-      const userDocRef = firestore.collection('users').doc(email);
-      
-      // Get current user data to preserve existing fields
-      const userDoc = await userDocRef.get();
+    // Allocate the plan directly after successful verification, matching the
+    // one-time pack flow. This endpoint does not depend on a webhook.
+    const firestore = initializeFirebaseAdmin();
+    const userDocRef = firestore.collection('users').doc(email);
+    const paymentDocRef = firestore.collection('subscription_payments').doc(razorpay_payment_id);
+
+    await firestore.runTransaction(async (transaction: any) => {
+      const [userDoc, paymentDoc] = await Promise.all([
+        transaction.get(userDocRef),
+        transaction.get(paymentDocRef),
+      ]);
+
+      // Retried verification requests must not allocate benefits twice.
+      if (paymentDoc.exists && paymentDoc.data()?.verificationStatus === 'verified') return;
+
       const existingUserData = userDoc.exists ? userDoc.data() : {};
-      
-      // Update user document with subscription details
-      await userDocRef.set({
+      transaction.set(userDocRef, {
         uid: email,
-        email: email || null,
+        email,
         displayName: displayName || existingUserData?.displayName || null,
-        planName: 'Premium Subscription',
+        planName: 'Premium',
         isPremium: true,
-        credits: 30, // Monthly credit allocation
-        reportCredits: (existingUserData?.reportCredits || 0) + 1, // Add 1 report credit
+        credits: 30,
+        reportCredits: (existingUserData?.reportCredits || 0) + 1,
         subscriptionId: razorpay_subscription_id,
         subscriptionStatus: 'active',
         autoRenew: true,
         subscriptionStartedAt: admin.firestore.FieldValue.serverTimestamp(),
         subscriptionExpiresAt: admin.firestore.Timestamp.fromDate(subscriptionExpiresAt),
         lastPaymentId: razorpay_payment_id,
-        lastPaymentAmount: subscriptionData.amount,
+        lastPaymentAmount: subscriptionData.amount || 49900,
         verificationStatus: 'verified',
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        // CRITICAL: Preserve all existing fields
-        createdAt: existingUserData?.createdAt || admin.firestore.FieldValue.serverTimestamp(),
         premiumSince: existingUserData?.premiumSince || admin.firestore.FieldValue.serverTimestamp(),
-        purchasedReports: existingUserData?.purchasedReports || [],
-        compatibilitycredits: existingUserData?.compatibilitycredits || 0,
-        questionPacks: existingUserData?.questionPacks || {},
-        questionsUsed: existingUserData?.questionsUsed || {},
-        reportsUsed: existingUserData?.reportsUsed || {},
-        unlimitedExpiry: existingUserData?.unlimitedExpiry || null,
+        createdAt: existingUserData?.createdAt || admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       }, { merge: true });
 
-      // Log subscription payment
-      await firestore.collection('subscription_payments').doc(razorpay_payment_id).set(
-        {
-          uid: email,
-          subscriptionId: razorpay_subscription_id,
-          planName: 'Premium Subscription',
-          amount: subscriptionData.amount,
-          paymentId: razorpay_payment_id,
-          verificationStatus: 'verified',
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          billingCycle: 1, // First payment
-        },
-        { merge: true }
-      );
-
-      firestoreUpdated = true;
-      
-      console.log('[Verify Subscription] ✅ Subscription Activated:', {
-        email,
+      transaction.set(paymentDocRef, {
+        uid: email,
         subscriptionId: razorpay_subscription_id,
+        planName: 'Premium',
+        amount: subscriptionData.amount || 49900,
         paymentId: razorpay_payment_id,
-        credits: 30,
-        reportCredits: (existingUserData?.reportCredits || 0) + 1,
-        expiresAt: subscriptionExpiresAt.toISOString(),
-        timestamp: new Date().toISOString(),
-      });
+        verificationStatus: 'verified',
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      }, { merge: true });
+    });
 
-    } catch (firestoreError: any) {
-      console.error('[Verify Subscription] Firestore update failed:', firestoreError);
-      // Don't fail the verification if Firestore update fails
-      // Subscription is already active, we can retry Firestore update later
-    }
+    console.log('[Verify Subscription] Subscription activated directly:', {
+      email,
+      subscriptionId: razorpay_subscription_id,
+      paymentId: razorpay_payment_id,
+      planName: 'Premium',
+      credits: 30,
+    });
 
     // Subscription verified successfully
     return res.status(200).json({
@@ -249,9 +235,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       verified: true,
       subscriptionId: razorpay_subscription_id,
       paymentId: razorpay_payment_id,
-      planName: 'Premium Subscription',
-      amount: subscriptionData.amount,
-      firestoreUpdated,
+      planName: 'Premium',
+      credits: 30,
+      amount: subscriptionData.amount || 49900,
+      firestoreUpdated: true,
       subscriptionExpiresAt: subscriptionExpiresAt.toISOString(),
       timestamp: new Date().toISOString(),
     });

@@ -501,6 +501,16 @@ export default function Chat() {
     const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
+  const isFreePlan = (planName || "").toLowerCase() === "free";
+
+  useEffect(() => {
+    if (isFreePlan) return;
+    if (lowCreditOfferTimerRef.current) {
+      clearTimeout(lowCreditOfferTimerRef.current);
+      lowCreditOfferTimerRef.current = null;
+    }
+    setLowCreditOfferIndex(null);
+  }, [isFreePlan]);
 
   // Get discounted price for paid users
   const getDiscountedPrice = (originalPrice: number, planName: string): number => {
@@ -1017,7 +1027,7 @@ export default function Chat() {
       // compact question-pack offer after 13 seconds. Suggested follow-ups use
       // this same send flow, so the delay restarts after every completed answer.
       const projectedCredits = Math.max(0, credits - 1);
-      if (projectedCredits <= 1 && assistantIndex >= 0) {
+      if (isFreePlan && projectedCredits <= 1 && assistantIndex >= 0) {
         lowCreditOfferTimerRef.current = setTimeout(() => {
           setLowCreditOfferIndex(assistantIndex);
           lowCreditOfferTimerRef.current = null;
@@ -1406,7 +1416,7 @@ export default function Chat() {
                         ))}
                       </div>
                     )}
-                    {m.role === "assistant" && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
+                    {m.role === "assistant" && isFreePlan && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
                       <div className="mt-4 ml-0 w-full max-w-2xl overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xl shadow-black/20 sm:ml-1">
                         <div className="h-1 w-full bg-pink-500" />
                         <div className="p-5 sm:p-6">

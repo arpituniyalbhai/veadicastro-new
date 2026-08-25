@@ -1,5 +1,3 @@
-export const runtime = 'edge';
-
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -121,8 +119,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       planId: subscription.plan_id,
       status: subscription.status,
       keyId: razorpayKeyId,
-      amount: subscription.amount,
-      currency: subscription.currency,
+      amount: subscription.amount || 49900,
+      currency: subscription.currency || 'INR',
     });
 
   } catch (error: any) {
