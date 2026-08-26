@@ -340,8 +340,8 @@ Wrong format = rewrite before sending.`;
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
     const maxTokens = isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
-    // Use Mistral small for general, ministral for monthly (faster)
-    const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
+    // Follow-up questions use Mistral Small; primary astrology answers stay on Mistral Large.
+    const model = isFollowUp ? 'mistral-small-latest' : isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),

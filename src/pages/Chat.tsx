@@ -1946,7 +1946,7 @@ ${memoryBlock}` : ""}`;
           requestType: "follow_up",
           lang,
           apiKeySlot: "secondary",
-          model: "mistral-large-latest",
+          model: "mistral-small-latest",
         }),
       signal: controller.signal,
     });
