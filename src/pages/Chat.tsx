@@ -1881,7 +1881,7 @@ function parseQuestionSuggestions(raw: string): string[] {
 
 async function generateAnswerSuggestions(question: string, answer: string, lang: string, memoryBlock = ""): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
-  const prompt = `You generate exactly two highly relevant follow-up questions after an astrology response.
+  const followUpSystemPrompt = `You generate exactly two highly relevant follow-up questions after an astrology response.
 
 Your goal is to make the user feel understood, continue the conversation naturally, and encourage deeper personalized exploration.
 
@@ -1893,7 +1893,7 @@ Rules:
 - Write exactly 2 questions.
 - Questions must sound like natural questions the user would genuinely want to ask next.
 - Use simple, conversational language matching the user's language and tone.
-- If the user writes in Hindi, Hinglish, or English, respond in the same style.
+- Follow the language selected in the app.
 - Personalize the questions using the topic, concern, and emotional context of the latest conversation.
 - Never repeat the user's exact question.
 
@@ -1919,13 +1919,18 @@ Conversion and engagement principles:
 - Do not answer the questions.
 - Do not use markdown, numbering, labels, explanations, or any text outside the JSON object.
 
-Language: ${lang === "hi" ? "Hindi/Hinglish matching the user" : "English"}.
+Language: ${lang === "hi" ? "Hindi matching the user" : "English only"}.`;
+
+  const prompt = `Use the latest conversation below to generate the follow-up questions.
 
 User question:
 ${question}
 
 Vedika answer:
-${answer.slice(0, 1200)}`;
+${answer.slice(0, 1200)}${memoryBlock ? `
+
+User memory for personalization:
+${memoryBlock}` : ""}`;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
@@ -1937,7 +1942,8 @@ ${answer.slice(0, 1200)}`;
         body: JSON.stringify({
           prompt,
           history: [],
-          systemExtra: `Return valid JSON only. Do not include markdown fences.${memoryBlock ? `\n\n${memoryBlock}` : ""}`,
+          systemExtra: followUpSystemPrompt,
+          requestType: "follow_up",
           lang,
           apiKeySlot: "secondary",
           model: "mistral-large-latest",

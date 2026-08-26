@@ -137,7 +137,7 @@ export default async function handler(req: Request) {
       );
     }
     
-    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary" } = body || {};
+    let { prompt, history = [], systemExtra, userName, stream = false, lang = "en", apiKeySlot = "primary", requestType } = body || {};
     if (!prompt || typeof prompt !== 'string') return new Response(
       JSON.stringify({ error: 'Missing or invalid prompt' }),
       { status: 422, headers: { 'Content-Type': 'application/json' } }
@@ -320,7 +320,8 @@ Your job: think like a smart astrologer, interpret those facts confidently, and 
 - End with a clear, useful closing sentence.
 Wrong format = rewrite before sending.`;
 
-    // Detect if this is a report request
+    // Detect request type before choosing the prompt pipeline.
+    const isFollowUp = requestType === 'follow_up';
     const isReport =
       prompt.includes('Generate exactly 8 numbered sections') ||
       prompt.includes('Soul Overview') ||
@@ -337,7 +338,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
-    const maxTokens = isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
+    const maxTokens = isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Use Mistral small for general, ministral for monthly (faster)
     const model = isMonthly ? 'ministral-8b-latest' : 'mistral-large-latest';
@@ -350,7 +351,13 @@ Wrong format = rewrite before sending.`;
     });
 
     // Append format reminder to user message
-    const messagesWithReminder = isJsonRequest ? [
+    const messagesWithReminder = isFollowUp ? [
+      {
+        role: 'system',
+        content: systemExtra || 'Generate exactly two follow-up questions and return valid JSON only.'
+      },
+      { role: 'user', content: prompt }
+    ] : isJsonRequest ? [
       {
         role: 'system',
         content: `${dateContext}\n\nYou must respond with valid JSON only. No prose, no markdown, no explanation. Just the raw JSON object.\n\n${systemExtra || ''}` 
