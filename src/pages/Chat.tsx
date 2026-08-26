@@ -1853,6 +1853,30 @@ export default function Chat() {
   );
 }
 
+function normalizeFollowUpPerspective(question: string): string {
+  return question
+    .replace(/\bAre you\b/gi, "Am I")
+    .replace(/\bWere you\b/gi, "Was I")
+    .replace(/\bDo you\b/gi, "Do I")
+    .replace(/\bDid you\b/gi, "Did I")
+    .replace(/\bHave you\b/gi, "Have I")
+    .replace(/\bCan you\b/gi, "Can I")
+    .replace(/\bCould you\b/gi, "Could I")
+    .replace(/\bWill you\b/gi, "Will I")
+    .replace(/\bWould you\b/gi, "Would I")
+    .replace(/\bShould you\b/gi, "Should I")
+    .replace(/\bYou are\b/gi, "I am")
+    .replace(/\bYou're\b/gi, "I'm")
+    .replace(/\bYou've\b/gi, "I've")
+    .replace(/\bYou'll\b/gi, "I'll")
+    .replace(/\bYourself\b/gi, "myself")
+    .replace(/\bYours\b/gi, "mine")
+    .replace(/\bYour\b/gi, "my")
+    .replace(/\bYou\b/gi, "I")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function parseQuestionSuggestions(raw: string): string[] {
   const clean = raw
     .replace(/```json/gi, "")
@@ -1864,7 +1888,7 @@ function parseQuestionSuggestions(raw: string): string[] {
     const questions = Array.isArray(parsed) ? parsed : parsed?.questions;
     if (Array.isArray(questions)) {
       return questions
-        .map((q) => String(q || "").trim())
+        .map((q) => normalizeFollowUpPerspective(String(q || "").trim()))
         .filter((q) => q.endsWith("?"))
         .slice(0, 2);
     }
@@ -1875,6 +1899,7 @@ function parseQuestionSuggestions(raw: string): string[] {
   return clean
     .split(/\r?\n/)
     .map((line) => line.replace(/^[-*\d.\s]+/, "").trim())
+    .map(normalizeFollowUpPerspective)
     .filter((line) => line.endsWith("?"))
     .slice(0, 2);
 }
@@ -1892,6 +1917,8 @@ Rules:
 
 - Write exactly 2 questions.
 - Questions must sound like natural questions the user would genuinely want to ask next.
+- Write every question from the user's first-person perspective using "I", "me", and "my".
+- Never address the user as "you" or "your" inside a follow-up question.
 - Use simple, conversational language matching the user's language and tone.
 - Follow the language selected in the app.
 - Personalize the questions using the topic, concern, and emotional context of the latest conversation.
