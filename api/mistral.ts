@@ -4,28 +4,52 @@ export const config = {
 
 // api/mistral.ts - strict pass-through layer
 
+function splitPlanetaryData(systemExtra: string): { json: string; additionalContext: string } | null {
+  const marker = 'Planetary Data:';
+  const markerIndex = systemExtra.indexOf(marker);
+  if (markerIndex === -1) return null;
+
+  const afterMarker = systemExtra.slice(markerIndex + marker.length).trim();
+  const contextMarkers = [
+    '\n\nUser Details:',
+    '\nUser Details:',
+    '\n\nUser Memory (',
+    '\nUser Memory (',
+  ];
+  const contextIndex = contextMarkers
+    .map((contextMarker) => afterMarker.indexOf(contextMarker))
+    .filter((index) => index >= 0)
+    .sort((a, b) => a - b)[0];
+
+  if (contextIndex === undefined) {
+    return { json: afterMarker, additionalContext: '' };
+  }
+
+  return {
+    json: afterMarker.slice(0, contextIndex).trim(),
+    additionalContext: afterMarker.slice(contextIndex).trim(),
+  };
+}
+
 function buildVedicSummary(systemExtra: string, userName?: string): string {
   try {
-    if (!systemExtra.includes('Planetary Data:')) return systemExtra;
-
-    const dataStart = systemExtra.indexOf('Planetary Data:');
-    const jsonString = systemExtra.slice(dataStart + 'Planetary Data:'.length).trim();
+    const planetaryData = splitPlanetaryData(systemExtra);
+    if (!planetaryData) return systemExtra;
 
     let chart;
     try {
-      chart = JSON.parse(jsonString);
+      chart = JSON.parse(planetaryData.json);
     } catch (e) {
       return systemExtra;
     }
 
+    // The local-cache fallback contains only PlanetEntry[]. Preserve it rather
+    // than pretending it is a complete, verified chart.
+    if (Array.isArray(chart)) return systemExtra;
+
     // 🔒 ASTRO LOCK VALIDATION (CRITICAL)
     if (chart.astro_locked !== true || chart.source !== "swiss_ephemeris_v1") {
       throw new Error("Astrology data validation failed. Missing strict lock flag. Rejecting payload to prevent hallucination.");
-    }
-
-    // Ensure no raw DOB leakage in the system extra
-    if (systemExtra.includes('DOB:') && /\d{4}-\d{2}-\d{2}/.test(systemExtra)) {
-      throw new Error("Raw DOB leakage detected in prompt payload. Rejecting to prevent recalculation.");
     }
 
     const displayName = userName && userName.trim() ? userName.trim() : 'User';
@@ -33,8 +57,10 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     const planetLines: string[] = [];
     if (chart.planets) {
       for (const [key, val] of Object.entries(chart.planets) as any) {
+        const house = chart.planetHouseMap?.[key];
+        const longitude = typeof val.longitude === 'number' ? `${val.longitude.toFixed(2)}°` : 'degree unavailable';
         planetLines.push(
-          `${val.name}: ${val.sign}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}${val.retrograde ? ' (Retrograde)' : ' (Direct)'}`
+          `${val.name}: ${val.sign} ${longitude}, House ${house ?? 'N/A'}, Nakshatra ${val.nakshatra.name} pada ${val.nakshatra.pada}, ${val.retrograde ? 'Retrograde' : 'Direct'}`
         );
       }
     }
@@ -53,6 +79,9 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     const dasha = chart.dasha || {};
     const houseLords = chart.houseLords || [];
     const houseLordLines = houseLords.map((lord: string, i: number) => `House ${i + 1} Lord: ${lord}`);
+    const futureMahadashaLines = Array.isArray(dasha.futureMahadashas)
+      ? dasha.futureMahadashas.map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
+      : [];
 
     const summary = `
 === PRE-CALCULATED VEDIC CHART (LOCKED) ===
@@ -60,6 +89,9 @@ USER INFO:
 Name: ${displayName}
 
 Lagna: ${chart.ascendantSign || 'Unknown'} (${chart.ascendant?.toFixed(2) || 0}°)
+Moon Sign: ${chart.moonSign || 'Unknown'}
+Sun Sign: ${chart.sunSign || 'Unknown'}
+Moon Nakshatra: ${chart.nakshatra?.name || 'Unknown'} pada ${chart.nakshatra?.pada || 'N/A'}
 
 PLANETARY POSITIONS (DO NOT RECALCULATE):
 ${planetLines.join('\n')}
@@ -71,13 +103,14 @@ HOUSE LORDS (WHOLE SIGN):
 ${houseLordLines.join('\n')}
 
 CURRENT DASHA TIMING (PRE-CALCULATED):
-Mahadasha: ${dasha.mahadasha || 'N/A'} (ends ${dasha.mahaEnds || 'N/A'})
-Antardasha: ${dasha.antardasha || 'N/A'} (ends ${dasha.antarEnds || 'N/A'})
+Mahadasha: ${dasha.mahadasha || 'N/A'} (${dasha.mahaStart || 'N/A'} to ${dasha.mahaEnds || 'N/A'})
+Antardasha: ${dasha.antardasha || 'N/A'} (${dasha.antarStart || 'N/A'} to ${dasha.antarEnds || 'N/A'})
 Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
+Future Mahadashas:
+${futureMahadashaLines.length ? futureMahadashaLines.join('\n') : 'Not available'}
 === END PRE-CALCULATED FACTS ===
 
-(Raw source block below, but rely on the facts above)
-${systemExtra}`;
+${planetaryData.additionalContext}`.trim();
 
     return summary;
 
@@ -85,6 +118,60 @@ ${systemExtra}`;
     console.error('buildVedicSummary validation error:', e);
     throw e; // Bubble up to reject request
   }
+}
+
+function getQuestionFocus(prompt: string): string {
+  const question = prompt.toLowerCase();
+
+  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam/.test(question)) {
+    return 'Career/work: begin with the 10th house and its lord, then use the most relevant valid factors from the 6th, 2nd, and 11th houses. Use planets only when their actual house, sign, lordship, or dasha role supports this question.';
+  }
+  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding/.test(question)) {
+    return 'Marriage: begin with the 7th house and its lord, then use the most relevant valid factors from the 2nd and 8th houses. Use Venus, Jupiter, Mars, or other planets only when the supplied chart makes them relevant.';
+  }
+  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup/.test(question)) {
+    return 'Love/relationship: begin with the 5th and 7th houses and their lords, then use the Moon, Venus, Mars, or other planets only when their supplied placements are relevant.';
+  }
+  if (/money|wealth|finance|income|saving|debt|loan|property|investment/.test(question)) {
+    return 'Money/wealth: begin with the 2nd and 11th houses and their lords, then check the 5th and 9th houses when relevant. Use only planets whose supplied placements support the conclusion.';
+  }
+  if (/study|studies|education|college|school|degree|learning/.test(question)) {
+    return 'Education: begin with the 4th, 5th, and 9th houses and their lords. Use Mercury, Jupiter, the Moon, or other planets only when their supplied placements are relevant.';
+  }
+  if (/health|illness|disease|fitness|mental|stress|anxiety/.test(question)) {
+    return 'Health: begin with the ascendant and its lord, then use the 6th and 8th houses only as supported by the supplied chart. Do not diagnose a medical condition.';
+  }
+
+  return 'General life question: identify the life area first, then select the 2 to 3 chart factors most directly connected to that area. Do not default automatically to the current dasha.';
+}
+
+function getRecentAstrologyAnchors(history: any[]): string {
+  const recentAssistantText = (Array.isArray(history) ? history : [])
+    .filter((item: any) => item?.role !== 'user')
+    .slice(-4)
+    .map((item: any) => String(item?.content || ''))
+    .join(' ');
+
+  if (!recentAssistantText.trim()) return 'None; this is the first answer with visible assistant history.';
+
+  const planetPattern = /\b(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\b/gi;
+  const housePattern = /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi;
+  const dashaPattern = /\b(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)(?:\s*[-–]\s*(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu))?\s+(?:Mahadasha|Antardasha|Dasha)\b/gi;
+  const datePattern = /\b(?:\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}|20\d{2})\b/gi;
+  const unique = (matches: RegExpMatchArray | null) => Array.from(new Set((matches || []).map((value) => value.toLowerCase())));
+
+  const planets = unique(recentAssistantText.match(planetPattern));
+  const houses = unique(recentAssistantText.match(housePattern));
+  const dashas = unique(recentAssistantText.match(dashaPattern));
+  const dates = unique(recentAssistantText.match(datePattern));
+  const parts = [
+    planets.length ? `planets: ${planets.join(', ')}` : '',
+    houses.length ? `houses: ${houses.join(', ')}` : '',
+    dashas.length ? `dashas: ${dashas.join(', ')}` : '',
+    dates.length ? `dates: ${dates.join(', ')}` : '',
+  ].filter(Boolean);
+
+  return parts.length ? parts.join('; ') : 'No explicit planet, house, dasha, or date anchors detected.';
 }
 
 // Simple rate limiting (in production, use Redis)
@@ -189,7 +276,7 @@ export default async function handler(req: Request) {
     const todayISO = `${istDateParts[0]}-${istDateParts[1]}-${istDateParts[2]}T${istTimeParts[0]}:${istTimeParts[1]}:${istTimeParts[2]}+05:30`;
 
     // Always include current date/time in system instruction
-    const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time for dasha timing, transit analysis, and future predictions.  Never use a different date Never present a past astrology date as a current event. Always compare every date with today's date before responding..`;
+    const dateContext = `TODAY_DATE: ${todayISO}\nCURRENT_DATE_TIME_IST: ${todayIST} (IST +05:30)\n\nUse this exact date and time as the internal reference when comparing chart periods. Never present a past astrology date as a current event. Mention a calendar date in the answer only when the question-specific Timing mode is ON.`;
 
     // Language and formatting rules
     const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
@@ -201,6 +288,17 @@ export default async function handler(req: Request) {
      - Keep the entire response in English even if astrological terms have Sanskrit names. ${numeralRule}`;
     const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
     const languageFormatting = `${languageRule}\n${formattingBan}`;
+
+    const timingRequested = /\b(?:when|what date|which date|month|year|timing|timeline|period|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
+    const questionFocus = getQuestionFocus(prompt);
+    const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
+    const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
+- Topic focus: ${questionFocus}
+- Use 2 to 3 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
+- Recently mentioned anchors: ${recentAstrologyAnchors}
+- Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
+- Do not mention a planet, house, dasha, or date merely to create variety. Every factor must be supported by the supplied chart.
+- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart, and present a realistic window rather than manufacturing an exact event date.' : 'OFF. The user did not explicitly ask for timing. Do not mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
@@ -216,7 +314,7 @@ ${toneInstruction}
 1. Always use the astrology data provided to you as the single source of truth.
 2. Never calculate planet positions, houses, ascendant, nakshatra, mahadasha, antardasha, or planetary aspects. These values are already calculated by the astrology engine.
 3. Never override astrology engine results.
-4. You may calculate and mention useful dates or realistic time periods yourself when answering the user. 
+4. Never invent a calendar date. Mention a pre-calculated date or realistic timing window only when Timing mode is ON.
 5. Do not repeatedly mention the same astrological fact, house, mahadasha, or antardasha in every messages.
 
 ## VARIATION RULE (applies even in a brand-new chat with no prior history)
@@ -234,9 +332,9 @@ ${toneInstruction}
 
 ## LOGIC ORDER
 
-House → Lord → Sign → Nakshatra → Dasha → Transit
+Relevant House → House Lord and its actual placement → Supporting Planet or Nakshatra → Dasha only when it materially changes the answer → Transit only when pre-calculated transit data is supplied
 
-Focus on the single strongest planetary indicator only and commit to it. Do not give multiple competing options.
+Use 2 to 3 mutually supporting indicators that are directly relevant to the user's question. Do not give competing conclusions, and do not use unrelated planets merely to sound different.
 
 ## REALITY FILTER
 
@@ -253,7 +351,7 @@ Focus on the single strongest planetary indicator only and commit to it. Do not 
 ## ANSWER RATIO — STRICT 80/20
 
 1. The response must be roughly 80% natural, practical, real-life prediction and advice, and 20% astrological grounding.
-2. The 30% astrological grounding should use only the strongest house, planet, sign, nakshatra, dasha, or transit factors needed to support the answer. Do not list unrelated chart details.
+2. The 20% astrological grounding should use only the relevant house, its lord, and the strongest supporting planet, sign, nakshatra, or dasha factor needed to support the answer. Do not list unrelated chart details.
 3. Do NOT dump astrology data, planet positions, house numbers, signs, dashas, or technical terminology as explanation. Astrology should support the answer, not overwhelm it.
 4. Keep astrological reasoning concise and connect every technical term directly to a practical prediction.
 
@@ -272,7 +370,7 @@ Focus on the single strongest planetary indicator only and commit to it. Do not 
 3. Give clear conclusions, not vague or generic statements.
 4. Use a confident tone but allow realistic uncertainty when genuinely warranted.
 5. Keep answers concise, clear, natural, and engaging.
-6. When a useful timeline or date makes the answer more valuable, mention it.
+6. Mention a timeline only when Timing mode is ON. Never repeat a dasha end date in a non-timing answer.
 7. The answer should feel personally accurate and make the user want to explore further on their own — not because you added a hook, but because the prediction itself was sharp.
 8. Never let the response feel like a technical astrology report.
 
@@ -280,7 +378,7 @@ Focus on the single strongest planetary indicator only and commit to it. Do not 
 
 1. Keep the response structured, easy to read, in simple language.
 2. Direct answer first, in 2-4 lines, zero astrology terms.
-3. Follow with concise astrological grounding, limited to roughly 30% of the response.
+3. Follow with concise astrological grounding, limited to roughly 20% of the response.
 4. Avoid long paragraphs and unnecessary astrology detail.
 
 ## END
@@ -389,7 +487,7 @@ Wrong format = rewrite before sending.`;
       // Normal chat
       { 
         role: 'system', 
-        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? (lang === "hi" ? `\n\nPERSONALIZATION:\n* उपयोगकर्ता का नाम ${userName.trim()} है। उत्तर में नाम का स्वाभाविक रूप से केवल एक बार प्रयोग करें।` : `\n\nPERSONALIZATION:\n* The user's name is ${userName.trim()}. Use their name naturally once in the response without robotic repetition.`) : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
+        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${evidenceSelectionContext}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? (lang === "hi" ? `\n\nPERSONALIZATION:\n* उपयोगकर्ता का नाम ${userName.trim()} है। उत्तर में नाम का स्वाभाविक रूप से केवल एक बार प्रयोग करें।` : `\n\nPERSONALIZATION:\n* The user's name is ${userName.trim()}. Use their name naturally once in the response without robotic repetition.`) : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
       },
       ...contents.slice(0, -1),
       { 
