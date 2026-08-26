@@ -349,6 +349,8 @@ Wrong format = rewrite before sending.`;
         : (isReport || isJsonRequest || isCompatibility)
           ? 'mistral-large-latest'
           : 'mistral-small-latest';
+    const streamingTemperature = 0.55;
+    const nonStreamingTemperature = isFollowUp ? 0.5 : 0.4;
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
@@ -423,7 +425,7 @@ Wrong format = rewrite before sending.`;
           body: JSON.stringify({
             model,
             messages: messagesWithReminder,
-            temperature: 0.7,
+            temperature: streamingTemperature,
             max_tokens: maxTokens,
             stream: true,
           }),
@@ -562,7 +564,7 @@ Wrong format = rewrite before sending.`;
         body: JSON.stringify({
           model,
           messages: messagesWithReminder,
-          temperature: 0.4,
+          temperature: nonStreamingTemperature,
           max_tokens: maxTokens,
         }),
       });
@@ -618,7 +620,7 @@ Wrong format = rewrite before sending.`;
         body: JSON.stringify({
           model,
           messages: retryMessages,
-          temperature: 0.4,
+          temperature: nonStreamingTemperature,
           max_tokens: maxTokens,
         }),
       });
