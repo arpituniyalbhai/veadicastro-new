@@ -1933,7 +1933,7 @@ User memory for personalization:
 ${memoryBlock}` : ""}`;
 
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 30000); // Allow the dedicated follow-up call to finish
 
   try {
     const response = await fetch(`${API_BASE}/api/mistral`, {
@@ -1951,14 +1951,14 @@ ${memoryBlock}` : ""}`;
       signal: controller.signal,
     });
 
-    clearTimeout(timeoutId);
-
     if (!response.ok) throw new Error(await response.text());
     const data = await response.json();
     return parseQuestionSuggestions(String(data?.text || ""));
   } catch (error) {
     console.error("[generateAnswerSuggestions] Failed:", error);
     return []; // Return empty array on failure to prevent infinite loading
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
