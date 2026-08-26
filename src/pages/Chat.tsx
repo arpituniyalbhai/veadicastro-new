@@ -920,19 +920,11 @@ export default function Chat() {
       }
       const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}${memoryBlock ? `\n\n${memoryBlock}` : ""}`.trim();
       
-      const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
-      const languageRule = lang === "hi"
-        ? `CRITICAL: You MUST respond ONLY in pure Hindi (Devanagari script). Do NOT use any English words, Hinglish, or mixed language. Write everything in complete Hindi sentences using Devanagari script. Never use English words like 'career', 'marriage', 'money', etc. - always use Hindi equivalents like 'करियर', 'विवाह', 'धन', etc. If you use any English words, the response is incorrect. Respond entirely in Hindi Devanagari script only. ${numeralRule}`
-        : `Respond in English. Do not mention anything about language choice. ${numeralRule}`;
-      const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
-      
-      // Backend already handles VAANI_SYSTEM_PROMPT, so we only need language + formatting rules
-      const systemBlock = `${languageRule}\n${formattingBan}`.trim();
       // The chart is already supplied once through systemExtra. Keep the user
       // message to the user's question so the same chart is not duplicated in
       // both the system and user messages.
       const promptText = `User Question:\n${userText}`.trim();
-      console.debug('[Chat] Prepared prompt', { hasPlanets: !!planetsBlock, detailsPresent: !!detailsBlock, promptLen: promptText.length, systemLen: systemBlock.length });
+      console.debug('[Chat] Prepared prompt', { hasPlanets: !!planetsBlock, detailsPresent: !!detailsBlock, promptLen: promptText.length, lang });
       const sanitize = (txt: string) => {
         // Remove bold/italics markers and inline code/backticks
         let out = txt

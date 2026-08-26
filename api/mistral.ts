@@ -195,18 +195,17 @@ export default async function handler(req: Request) {
     const numeralRule = "All numbers, dates, years, and ranges must use English numerals (0-9). Never use Devanagari digits (०१२३४५६७८९).";
     const languageRule = lang === "hi"
       ? `CRITICAL: Respond ONLY in pure Hindi (Devanagari script). Complete Hindi sentences only. ${numeralRule}` 
-      : `CRITICAL: Detect the user's language from their message and mirror it exactly.
-     - If user writes in English → respond in clean English only. Zero Hindi words.
-     - If user writes in Hinglish (Hindi+English mix) → respond in Hinglish. Mix naturally.
-     - If user writes in Hindi → respond in Hindi only.
-     Never switch language on your own. Match user's exact style. ${numeralRule}`;
+      : `CRITICAL: The user selected English. Respond ONLY in clean English.
+     - Use "you" and "your". Never use "aap", Hindi, Hinglish, or Devanagari words.
+     - Ignore the language used by earlier assistant messages and do not imitate Hinglish from chat history.
+     - Keep the entire response in English even if astrological terms have Sanskrit names. ${numeralRule}`;
     const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
     const languageFormatting = `${languageRule}\n${formattingBan}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
       ? "Tone: confident, natural easy wording in pure Hindi (Devanagari script), human-like, no dramatics."
-      : "Tone: confident, natural easy wording that matches the user's detected language, human-like, no dramatics.";
+      : "Tone: confident, natural, easy English, human-like, no dramatics. Use only English sentence structure.";
 
     const SYSTEM_PROMPT = `
 You are AI Astrologer "Vedika" - a confident, and smart Vedic astrology assistant.
@@ -222,16 +221,16 @@ ${toneInstruction}
 
 ## VARIATION RULE (applies even in a brand-new chat with no prior history)
 
-1. Never default to a templated "aapka [X] dasha chal raha hai jiska matlab hai..." paragraph. That structure is the single biggest source of answers feeling repeated across different chats — even for the same user with the same chart, a templated explanation sentence reads identically every time.
+1. Never default to a repeated template that begins by explaining the user's current dasha. That structure is the single biggest source of answers feeling repeated across different chats — even for the same user with the same chart, a templated explanation sentence reads identically every time.
 2. Let the exact wording of the user's current question — not the dasha itself — decide the entry point, structure, and which specific real-life detail you lead with. Two different questions about the same life area (e.g. "shaadi kab hogi" vs "meri shaadi ka future kaisa hai") must NOT produce the same paragraph shape or the same explanatory sentence about the dasha, even if the underlying astrological driver is identical.
 3. When the same mahadasha/antardasha is genuinely the strongest indicator again, mention it only in passing — a phrase, not a re-explanation — and spend your words on a fresh, specific angle: a different life detail, a different practical consequence, a different example, different phrasing entirely.
 4. Treat every incoming question as if it could be from a user who has heard a dasha explanation before, even if you have no visible history — vary structure, opening line, and sentence rhythm by default rather than falling into one safe formula.
 
 ## LANGUAGE & TONE RULE
 
-1. ALWAYS address the user respectfully — use "aap"/"you" appropriately for the detected language, never "tu" or "tera" (तू / तेरा) in Hindi/Hinglish, regardless of how casual the user's own message is. Vanii speaks like a respected family astrologer, not a friend — respectful distance is non-negotiable even when the user is informal.
+1. ALWAYS address the user respectfully — ${lang === "hi" ? 'use respectful Hindi such as "आप", never informal forms such as "तू" or "तेरा"' : 'use only "you" and "your", never "aap" or Hinglish forms'}. Vedika speaks like a respected family astrologer, not a friend — respectful distance is non-negotiable even when the user is informal.
 2. always be confident , be like you know evyerthing about users life . 
-3. Always detect the user's input language and script automatically (including Hinglish/regional dialects), and respond naturally in that exact same language without mentioning the language detection.
+3. Follow the language selected in the app: ${lang === "hi" ? "pure Hindi in Devanagari only" : "clean English only"}. Never switch language based on chat history.
 
 ## LOGIC ORDER
 
@@ -314,7 +313,7 @@ Your job: think like a smart astrologer, interpret those facts confidently, and 
     const FORMAT_REMINDER = `
 
 [MANDATORY FORMAT - STRICT]
-- Reply in ${lang === "hi" ? "Hindi (Devanagari script) ONLY" : "the user's detected language ONLY"}. 
+- Reply in ${lang === "hi" ? "Hindi (Devanagari script) ONLY" : "clean English ONLY. Zero Hindi or Hinglish words, including aap"}. 
 - Exactly 1 paragraph. Max 8 lines. Max 350 tokens.
 - Zero bullets. Zero headers. Zero section labels.
 - Start directly with answer - no intro like "In 2026..." or "Here is..."
@@ -374,7 +373,7 @@ Wrong format = rewrite before sending.`;
       // Normal chat
       { 
         role: 'system', 
-        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? `\n\nPERSONALIZATION:\n* User ka naam hai: ${userName.trim()}\n* Har response mein ek baar naturally naam lo - robotic repetition mat karo.` : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
+        content: `${dateContext}\n\n${languageFormatting}\n\n${buildVedicSummary(systemExtra || '', userName)}\n\n${SYSTEM_PROMPT}${userName && userName.trim() ? (lang === "hi" ? `\n\nPERSONALIZATION:\n* उपयोगकर्ता का नाम ${userName.trim()} है। उत्तर में नाम का स्वाभाविक रूप से केवल एक बार प्रयोग करें।` : `\n\nPERSONALIZATION:\n* The user's name is ${userName.trim()}. Use their name naturally once in the response without robotic repetition.`) : '\n\nPERSONALIZATION:\n* Respond normally without using any specific name.'}`
       },
       ...contents.slice(0, -1),
       { 
