@@ -975,11 +975,11 @@ export default function Chat() {
         if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(flushBuffer);
         deltaCount++;
-      }, systemExtra, lang, displayName, "primary", "mistral-large-latest");
+      }, systemExtra, lang, displayName, "primary", "mistral-small-latest");
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-large-latest");
+        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-small-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
