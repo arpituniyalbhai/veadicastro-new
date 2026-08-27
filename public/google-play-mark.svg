@@ -1,0 +1,35 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="tile" x1="8" y1="5" x2="56" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#242027"/>
+      <stop offset="1" stop-color="#0A090C"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="18" y1="15" x2="35" y2="33" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#21D4E8"/>
+      <stop offset="1" stop-color="#38A8FF"/>
+    </linearGradient>
+    <linearGradient id="green" x1="17" y1="15" x2="28" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#32E67B"/>
+      <stop offset="1" stop-color="#14C88A"/>
+    </linearGradient>
+    <linearGradient id="red" x1="28" y1="33" x2="47" y2="42" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF5A6B"/>
+      <stop offset="1" stop-color="#F43F65"/>
+    </linearGradient>
+    <linearGradient id="yellow" x1="29" y1="27" x2="48" y2="34" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD45A"/>
+      <stop offset="1" stop-color="#FFB938"/>
+    </linearGradient>
+    <filter id="shadow" x="9" y="8" width="48" height="50" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#D9277A" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <rect x="1" y="1" width="62" height="62" rx="17" fill="url(#tile)"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="16.5" stroke="#D9277A" stroke-opacity="0.42"/>
+  <path d="M18.15 14.85C17.43 15.58 17 16.66 17 18.05V45.95C17 47.34 17.43 48.42 18.15 49.15L18.31 49.29L34.02 33.58V32.42L18.31 14.71L18.15 14.85Z" fill="url(#green)" filter="url(#shadow)"/>
+  <path d="M39.25 38.82L34.02 33.58V32.42L39.26 27.18L39.38 27.25L45.57 30.77C47.34 31.78 47.34 33.43 45.57 34.44L39.38 37.96L39.25 38.82Z" fill="url(#yellow)"/>
+  <path d="M39.38 37.96L34.02 32.99L18.15 49.15C19.29 50.36 21.2 50.5 23.36 49.27L39.38 40.15V37.96Z" fill="url(#red)"/>
+  <path d="M39.38 27.25L23.36 18.13C21.2 16.9 19.29 17.04 18.15 18.25L34.02 32.99L39.38 27.25Z" fill="url(#cyan)"/>
+  <path d="M18.15 48.86C17.43 48.13 17 47.05 17 45.66V45.95C17 47.34 17.43 48.42 18.15 49.15L18.31 49.29L18.57 49.03L18.15 48.86Z" fill="#050506" fill-opacity="0.25"/>
+</svg>

@@ -14,8 +14,7 @@ import SEO from "@/components/SEO";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=in.veadicastro.app&hl=en_IN";
-const PLAY_STORE_LOGO_URL =
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ59lINdLeFEzPYZfWMlWuL7VLUMW6MIiIwTO1h6QXKg&s=10";
+const PLAY_STORE_LOGO_URL = "/google-play-mark.svg";
 
 const getCampaignProperties = () => {
   if (typeof window === "undefined") return {};
@@ -127,16 +126,14 @@ const AndroidApp = () => {
                 <a
                   href={PLAY_STORE_URL}
                   onClick={() => trackPlayStoreClick("hero")}
-                  className="group flex min-h-16 w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-6 py-4 text-base font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.38)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b]"
+                  className="group flex min-h-16 w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-3 py-4 text-sm font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.38)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b] sm:gap-3 sm:px-6 sm:text-base"
                   aria-label="Download Veadicastro on Google Play"
                 >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white p-1.5 shadow-sm">
-                    <img
-                      src={PLAY_STORE_LOGO_URL}
-                      alt="Google Play"
-                      className="h-full w-full object-contain"
-                    />
-                  </span>
+                  <img
+                    src={PLAY_STORE_LOGO_URL}
+                    alt="Google Play"
+                    className="h-10 w-10 shrink-0 object-contain"
+                  />
                   <span>Download on Google Play</span>
                   <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
@@ -222,14 +219,12 @@ const AndroidApp = () => {
                 onClick={() => trackPlayStoreClick("app-preview")}
                 className="group mt-8 inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-white px-6 py-3.5 text-sm font-bold text-[#110b0f] transition duration-300 hover:-translate-y-0.5 hover:bg-[#ffe8f3] focus:outline-none focus:ring-2 focus:ring-[#d9277a] focus:ring-offset-2 focus:ring-offset-[#08070b]"
               >
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-white p-1">
-                  <img
-                    src={PLAY_STORE_LOGO_URL}
-                    alt="Google Play"
-                    className="h-full w-full object-contain"
-                    loading="lazy"
-                  />
-                </span>
+                <img
+                  src={PLAY_STORE_LOGO_URL}
+                  alt="Google Play"
+                  className="h-9 w-9 shrink-0 object-contain"
+                  loading="lazy"
+                />
                 Download on Google Play
                 <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
@@ -424,16 +419,14 @@ const AndroidApp = () => {
             <a
               href={PLAY_STORE_URL}
               onClick={() => trackPlayStoreClick("final-cta")}
-              className="group mx-auto mt-8 flex min-h-16 w-full max-w-md items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-6 py-4 text-base font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b]"
+              className="group mx-auto mt-8 flex min-h-16 w-full max-w-md items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-3 py-4 text-sm font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b] sm:gap-3 sm:px-6 sm:text-base"
             >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white p-1.5 shadow-sm">
-                <img
-                  src={PLAY_STORE_LOGO_URL}
-                  alt="Google Play"
-                  className="h-full w-full object-contain"
-                  loading="lazy"
-                />
-              </span>
+              <img
+                src={PLAY_STORE_LOGO_URL}
+                alt="Google Play"
+                className="h-10 w-10 shrink-0 object-contain"
+                loading="lazy"
+              />
               Download on Google Play
               <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
             </a>
