@@ -298,7 +298,7 @@ export default async function handler(req: Request) {
 - Recently mentioned anchors: ${recentAstrologyAnchors}
 - Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
 - Do not mention a planet, house, dasha, or date merely to create variety. Every factor must be supported by the supplied chart.
-- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart, and present a realistic window rather than manufacturing an exact event date.' : 'OFF. The user did not explicitly ask for timing. Do not mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
+- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'ON. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"

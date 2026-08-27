@@ -111,6 +111,7 @@ const Feedback = lazy(() => import("@/pages/Feedback"));
 const RashiCalculatorByDateOfBirth = lazy(() => import("@/pages/RashiCalculatorByDateOfBirth"));
 const DashaCalculator = lazy(() => import("@/pages/DashaCalculator"));
 const NakshatraCalculator = lazy(() => import("@/pages/NakshatraCalculator"));
+const AndroidApp = lazy(() => import("@/pages/AndroidApp"));
 
 const AuthModal = lazy(() => import("@/components/AuthModal"));
 const ProtectedPlanRoute = lazy(() => import("@/components/ProtectedPlanRoute"));
@@ -158,7 +159,8 @@ const RouterShell = () => {
     p === "/about" ||
     p === "/how-it-works" ||
     p === "/blog" ||
-    p.startsWith("/blog/");
+    p.startsWith("/blog/") ||
+    p === "/android-app";
 
   const protectedPage = (page: ReactNode) => (
     <Suspense fallback={<PageLoading />}>
@@ -231,6 +233,7 @@ const AuthenticatedRoutes = ({
         <Route path="/dasha-calculator/" element={<Suspense fallback={<PageLoading />}><DashaCalculator /></Suspense>} />
         <Route path="/nakshatra-calculator" element={<Suspense fallback={<PageLoading />}><NakshatraCalculator /></Suspense>} />
         <Route path="/ai-numerology-free-chat" element={<Suspense fallback={<PageLoading />}><AiNumerologyFreeChat /></Suspense>} />
+        <Route path="/android-app" element={<Suspense fallback={<PageLoading />}><AndroidApp /></Suspense>} />
 
         <Route path="/kundali-matching" element={<Suspense fallback={<PageLoading />}><KundaliMatching /></Suspense>} />
         <Route path="/about" element={<Suspense fallback={<PageLoading />}><About /></Suspense>} />
