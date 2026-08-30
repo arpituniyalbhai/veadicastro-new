@@ -6,11 +6,12 @@ import {
   Heart,
   MessageCircle,
   ShieldCheck,
-  Sparkles,
+  UserRound,
   WalletCards,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
+import { useAuth } from "@/context/AuthContext";
 
 const PLAY_STORE_URL =
   "https://play.google.com/store/apps/details?id=in.veadicastro.app&hl=en_IN";
@@ -28,6 +29,8 @@ const getCampaignProperties = () => {
 };
 
 const AndroidApp = () => {
+  const { setAuthOpen } = useAuth();
+
   const trackPlayStoreClick = (
     location: "hero" | "app-preview" | "final-cta",
   ) => {
@@ -42,6 +45,8 @@ const AndroidApp = () => {
       location: "hero",
       ...getCampaignProperties(),
     });
+
+    setAuthOpen(true);
   };
 
   const appSchema = {
@@ -104,29 +109,27 @@ const AndroidApp = () => {
 
           <div className="mx-auto flex w-full max-w-7xl items-center px-5 pb-20 pt-14 sm:px-8 sm:pt-20 lg:min-h-[calc(100vh-96px)] lg:px-10 lg:pb-28 lg:pt-8">
             <div className="max-w-2xl">
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d9277a]/30 bg-[#d9277a]/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#ff78b5] backdrop-blur-md sm:text-sm">
-                <Sparkles className="h-4 w-4" />
+              <div className="mb-6 inline-flex items-center rounded-full border border-[#d9277a]/30 bg-[#d9277a]/10 px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.15em] text-[#ff78b5] backdrop-blur-md sm:text-sm">
                 Vedic guidance in your pocket
               </div>
 
-              <h1 className="max-w-xl text-balance text-4xl font-extrabold leading-[1.08] tracking-[-0.035em] text-white sm:text-5xl lg:text-7xl">
-                Your AI Astrology,
+              <h1 className="max-w-3xl text-balance text-4xl font-extrabold leading-[1.08] tracking-[-0.035em] text-white sm:text-5xl lg:text-7xl">
+                The World's Most Accurate
                 <span className="block bg-gradient-to-r from-[#ff5ba5] via-[#d9277a] to-[#a44de4] bg-clip-text text-transparent">
-                  Now on Android
+                  AI Astrology Platform
                 </span>
               </h1>
 
-              <p className="mt-6 max-w-lg text-base leading-7 text-white/68 sm:text-lg sm:leading-8">
-                Get personalized Vedic astrology insights with Veadicastro.
-                Ask Vedika about your love, career, money, and future—wherever
-                you are.
+              <p className="mt-6 max-w-2xl text-base leading-7 text-white/68 sm:text-lg sm:leading-8">
+                Get personalized Vedic guidance for love, career, money,
+                relationships, and your future—in English or Hindi.
               </p>
 
-              <div className="mt-8 flex max-w-md flex-col gap-3">
+              <div className="mt-8 flex flex-col items-start gap-3">
                 <a
                   href={PLAY_STORE_URL}
                   onClick={() => trackPlayStoreClick("hero")}
-                  className="group flex min-h-16 w-full items-center justify-center gap-2.5 rounded-2xl bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-3 py-4 text-sm font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.38)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b] sm:gap-3 sm:px-6 sm:text-base"
+                  className="group inline-flex min-h-14 items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-[#d9277a] to-[#a51f62] px-5 py-3 text-sm font-bold text-white shadow-[0_16px_55px_rgba(217,39,122,0.38)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_20px_65px_rgba(217,39,122,0.5)] focus:outline-none focus:ring-2 focus:ring-[#ff78b5] focus:ring-offset-2 focus:ring-offset-[#08070b] sm:gap-3 sm:px-6 sm:text-base"
                   aria-label="Download Veadicastro on Google Play"
                 >
                   <img
@@ -138,14 +141,14 @@ const AndroidApp = () => {
                   <ArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
 
-                <Link
-                  to="/free-ai-astrologer-chat"
+                <button
+                  type="button"
                   onClick={trackWebClick}
-                  className="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.045] px-6 py-3.5 text-sm font-semibold text-white/85 backdrop-blur-md transition duration-300 hover:border-[#d9277a]/45 hover:bg-[#d9277a]/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#d9277a] focus:ring-offset-2 focus:ring-offset-[#08070b]"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.045] px-5 py-3 text-sm font-semibold text-white/85 backdrop-blur-md transition duration-300 hover:border-[#d9277a]/45 hover:bg-[#d9277a]/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-[#d9277a] focus:ring-offset-2 focus:ring-offset-[#08070b] sm:px-6"
                 >
                   Continue on Web
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </button>
               </div>
 
               <div className="mt-7 flex max-w-2xl flex-wrap gap-x-5 gap-y-3 text-sm text-white/65">
@@ -199,7 +202,7 @@ const AndroidApp = () => {
 
               <div className="mt-8 grid gap-3 text-left sm:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-4">
-                  <Sparkles className="mb-3 h-5 w-5 text-[#ff65aa]" />
+                  <UserRound className="mb-3 h-5 w-5 text-[#ff65aa]" />
                   <p className="font-semibold text-white">Personal to you</p>
                   <p className="mt-1 text-sm leading-6 text-white/50">
                     Answers grounded in your birth chart.
@@ -406,10 +409,7 @@ const AndroidApp = () => {
         <section className="relative px-5 py-24 text-center sm:px-8 sm:py-32 lg:px-10">
           <div className="absolute left-1/2 top-1/2 -z-20 h-[32rem] w-[48rem] max-w-full -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d9277a]/10 blur-[150px]" />
           <div className="mx-auto max-w-3xl rounded-[2rem] border border-[#d9277a]/25 bg-gradient-to-br from-[#d9277a]/14 via-white/[0.035] to-[#8f3dbe]/10 px-6 py-12 shadow-[0_30px_100px_rgba(0,0,0,0.4)] sm:px-12 sm:py-16">
-            <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-[#d9277a]/15 text-[#ff6eb0]">
-              <Sparkles className="h-6 w-6" />
-            </div>
-            <h2 className="mt-6 text-3xl font-bold leading-tight tracking-[-0.025em] sm:text-5xl">
+            <h2 className="text-3xl font-bold leading-tight tracking-[-0.025em] sm:text-5xl">
               Your next question may already be on your mind.
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-white/58 sm:text-lg sm:leading-8">
