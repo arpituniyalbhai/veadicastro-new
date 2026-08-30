@@ -169,7 +169,7 @@ export default function Chat() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const { t, lang, setLang } = useI18n();
-  const { planName, credits, canAccess, canAskMoreQuestions, registerQuestionUsage, useQuickPackQuestion, deductCredit } = usePlan();
+  const { planName, credits, loading: planLoading, canAccess, canAskMoreQuestions, registerQuestionUsage, useQuickPackQuestion, deductCredit } = usePlan();
   const remainingQuestions = Math.max(credits, 0);
 
   const [timeRemaining, setTimeRemaining] = useState<{ hours: number; minutes: number; seconds: number }>({ hours: 0, minutes: 10, seconds: 0 });
@@ -498,19 +498,17 @@ export default function Chat() {
   }, [displayName]);
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
-    const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard"];
+    const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard", "day pass"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
-  const isFreePlan = (planName || "").toLowerCase() === "free";
-
   useEffect(() => {
-    if (isFreePlan) return;
+    if (!planLoading && !isProPlan && credits <= 1) return;
     if (lowCreditOfferTimerRef.current) {
       clearTimeout(lowCreditOfferTimerRef.current);
       lowCreditOfferTimerRef.current = null;
     }
     setLowCreditOfferIndex(null);
-  }, [isFreePlan]);
+  }, [credits, isProPlan, planLoading]);
 
   // Get discounted price for paid users
   const getDiscountedPrice = (originalPrice: number, planName: string): number => {
@@ -1015,16 +1013,16 @@ export default function Chat() {
 
       console.log("AI answer completed, credit deducted successfully");
 
-      // Once the completed answer leaves the user with 1 or 0 credits, show a
-      // compact question-pack offer after 13 seconds. Suggested follow-ups use
-      // this same send flow, so the delay restarts after every completed answer.
+      // Once a non-Pro user is left with 1 or 0 credits, show all available
+      // plans after a short delay. Suggested follow-ups use this same send flow,
+      // so the delay restarts after every completed answer.
       const projectedCredits = Math.max(0, credits - 1);
-      if (isFreePlan && projectedCredits <= 1 && assistantIndex >= 0) {
+      if (!planLoading && !isProPlan && projectedCredits <= 1 && assistantIndex >= 0) {
         lowCreditOfferTimerRef.current = setTimeout(() => {
           setLowCreditOfferIndex(assistantIndex);
           lowCreditOfferTimerRef.current = null;
           requestAnimationFrame(() => scrollToBottom(true));
-        }, 13_000);
+        }, 6_000);
       }
 
       // Generate suggestions in background without blocking - no loading state
@@ -1408,48 +1406,41 @@ export default function Chat() {
                         ))}
                       </div>
                     )}
-                    {m.role === "assistant" && isFreePlan && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
+                    {m.role === "assistant" && !planLoading && !isProPlan && credits <= 1 && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
                       <div className="mt-4 ml-0 w-full max-w-2xl overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xl shadow-black/20 sm:ml-1">
                         <div className="h-1 w-full bg-pink-500" />
                         <div className="p-5 sm:p-6">
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <span className="text-xs font-semibold uppercase tracking-[0.16em] text-pink-300">
-                              Deep Dive Question Pack
+                              Low on credits
                             </span>
                             <span className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-                              One-time purchase
+                              Choose any plan
                             </span>
                           </div>
 
-                          <div className="mt-4 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
+                          <div className="mt-4">
                             <div>
                               <h3 className="text-xl font-bold leading-tight text-foreground sm:text-2xl">
                                 Continue your conversation with Vedika
                               </h3>
                               <p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">
-                                Get more personalized guidance without starting a new subscription.
+                                Explore every question pack and monthly plan, then choose the one that suits you.
                               </p>
-                            </div>
-                            <div className="sm:text-right">
-                              <div className="text-3xl font-bold tracking-tight text-foreground">₹399</div>
-                              <div className="mt-1 text-xs text-muted-foreground">One-time payment</div>
                             </div>
                           </div>
 
                           <div className="my-5 h-px bg-border/70" />
 
-                          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div>
-                              <div className="text-2xl font-bold text-white">15 Questions</div>
-                              <div className="mt-1 text-sm text-muted-foreground">Added to your account immediately</div>
-                            </div>
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <p className="text-sm text-muted-foreground">View all plans and their included credits.</p>
                             <Button
                               type="button"
-                              onClick={() => navigate("/pricing/onboarding?plan=Deep%20Dive&amount=399&type=pack")}
+                              onClick={() => navigate("/pricing?referral=chat-low-credit")}
                               className="h-12 w-full rounded-xl bg-pink-500 px-7 text-sm font-semibold text-white shadow-none hover:bg-pink-600 sm:w-auto"
-                              aria-label="Get 15 questions for 399 rupees"
+                              aria-label="View all Veadicastro plans"
                             >
-                              Get 15 Questions for ₹399
+                              View all plans
                             </Button>
                           </div>
                         </div>
