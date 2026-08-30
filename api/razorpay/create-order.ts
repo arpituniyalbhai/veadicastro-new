@@ -3,7 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // CRITICAL: Server-side price source of truth
 // Frontend CANNOT override these prices
 const VALID_PLAN_PRICES: Record<string, number> = {
-  'Quick Ask': 14900,     // ₹149 in paise
+  'Quick Ask': 12900,     // ₹129 in paise
   'Deep Dive': 39900,     // ₹399 in paise
   'The Power Pack': 69900, // ₹699 in paise
   'Day Pass': 24900,      // ₹249 in paise
@@ -41,7 +41,7 @@ const STORE_PRODUCT_PRICES: Record<string, number> = {
 };
 
 const ALLOWED_PACK_AMOUNTS: Record<string, number[]> = {
-  'Quick Ask': [14900],
+  'Quick Ask': [12900],
   'Deep Dive': [39900, 34900],
   'The Power Pack': [69900, 59900],
 };
@@ -155,7 +155,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (hasPaidPlan && !promoCode && finalAmount === originalAmount) {
       const normalizedPlan = planName.toLowerCase();
       if (normalizedPlan.includes("quick ask")) {
-        finalAmount = 14900; // ₹149 in paise
+        finalAmount = 12900; // ₹129 in paise
         discountApplied = true;
         console.log('[Create Order] Applied paid user discount for Quick Ask:', {
           userPlan,

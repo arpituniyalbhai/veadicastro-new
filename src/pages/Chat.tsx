@@ -515,7 +515,7 @@ export default function Chat() {
     if (!isProPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("quick ask")) return 149;
+    if (normalizedPlan.includes("quick ask")) return 129;
     if (normalizedPlan.includes("deep dive")) return 349; // 399 -> 349
     if (normalizedPlan.includes("power pack")) return 599; // 699 -> 599
     return originalPrice;
@@ -1455,7 +1455,7 @@ export default function Chat() {
                           </div>
                           <div className="space-y-2.5 pt-3">
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=Quick%20Ask&amount=${getDiscountedPrice(149, 'Quick Ask')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Quick%20Ask&amount=${getDiscountedPrice(129, 'Quick Ask')}&type=pack`)}
                               className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
@@ -1464,8 +1464,8 @@ export default function Chat() {
                                   <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">5 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && getDiscountedPrice(149, 'Quick Ask') !== 149 && <span className="text-xs text-muted-foreground line-through">₹149</span>}
-                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(149, 'Quick Ask')}</div>
+                                  {isProPlan && getDiscountedPrice(129, 'Quick Ask') !== 129 && <span className="text-xs text-muted-foreground line-through">₹129</span>}
+                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(129, 'Quick Ask')}</div>
                                 </div>
                               </div>
                             </div>
