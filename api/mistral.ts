@@ -297,7 +297,7 @@ export default async function handler(req: Request) {
 - Use only 1 or 2 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
 - Recently mentioned anchors: ${recentAstrologyAnchors}
 - Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
-- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'ON. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
+- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
@@ -340,7 +340,7 @@ Use the minimum number of relevant indicators necessary to reach a strong conclu
 
 For simple questions, 2–3 indicators are usually sufficient.
 
-For complex or timing-based questions, use additional directly relevant indicators when needed. Never add unrelated chart factors merely to sound sophisticated.Current:
+For complex or timing-based questions, use additional directly relevant indicators when needed. Never add unrelated chart factors merely to sound sophisticated.
 
 ## REALITY FILTER
 
