@@ -79,7 +79,8 @@ export async function getOrComputeTodayTransits(dateKey: string, date: Date): Pr
 export function getTransitToNatalSummary(
   transitPlanets: PlanetEntry[],
   natalPlanets: PlanetEntry[],
-  natalAscendantSign: string
+  natalAscendantSign: string,
+  maxItems = 4,
 ): string {
   const natalAscIdx = SIGN_NAMES.indexOf(natalAscendantSign);
   const bullets: string[] = [];
@@ -116,8 +117,9 @@ export function getTransitToNatalSummary(
     });
   });
 
-  // Return a sample of 3-4 bullets to keep prompt focused
-  return bullets.slice(0, 4).map((b) => `- ${b}`).join("\n");
+  // Daily predictions use the default compact summary; chat can request more
+  // evidence for question-specific transit interpretation.
+  return bullets.slice(0, maxItems).map((b) => `- ${b}`).join("\n");
 }
 
 export const BANNED_PHRASES: Record<string, string[]> = {

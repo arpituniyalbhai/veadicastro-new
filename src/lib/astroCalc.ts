@@ -49,6 +49,10 @@ export type AstroPayload = {
     mahaEnds: string;
     antarStart: string;
     antarEnds: string;
+    pratyantardasha: string;
+    pratyStart: string;
+    pratyEnds: string;
+    nextPratyantardashas: { lord: string; start: string; end: string }[];
     nextMahadasha: string;
     futureMahadashas: { lord: string; start: string; end: string }[];
   };
@@ -419,6 +423,28 @@ const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude
       start: period.start.toISOString().split('T')[0],
       end: period.end.toISOString().split('T')[0],
     }));
+  const antarIndex = DASHA_SEQUENCE.indexOf(dasha.antardasha.lord);
+  const pratyantardashaTimeline: VimshottariPeriod[] = [];
+  let pratyStart = new Date(dasha.antardasha.start);
+
+  for (let offset = 0; offset < DASHA_SEQUENCE.length; offset++) {
+    const lord = DASHA_SEQUENCE[(antarIndex + offset) % DASHA_SEQUENCE.length];
+    const years = (dasha.antardasha.years * DASHA_YEARS[lord]) / 120;
+    const end = addYears(pratyStart, years);
+    pratyantardashaTimeline.push({ lord, start: pratyStart, end, years });
+    pratyStart = end;
+  }
+
+  const currentPratyIndex = pratyantardashaTimeline.findIndex(
+    (period) => period.start.getTime() === dasha.pratyantardasha.start.getTime(),
+  );
+  const nextPratyantardashas = pratyantardashaTimeline
+    .slice(currentPratyIndex + 1, currentPratyIndex + 4)
+    .map((period) => ({
+      lord: period.lord,
+      start: period.start.toISOString().split('T')[0],
+      end: period.end.toISOString().split('T')[0],
+    }));
 
   return {
     mahadasha: dasha.mahadasha.lord,
@@ -427,6 +453,10 @@ const calculateDasha = (utcParts: any, moonNakshatraIndex: number, moonLongitude
     mahaEnds: dasha.mahadasha.end.toISOString().split('T')[0],
     antarStart: dasha.antardasha.start.toISOString().split('T')[0],
     antarEnds: dasha.antardasha.end.toISOString().split('T')[0],
+    pratyantardasha: dasha.pratyantardasha.lord,
+    pratyStart: dasha.pratyantardasha.start.toISOString().split('T')[0],
+    pratyEnds: dasha.pratyantardasha.end.toISOString().split('T')[0],
+    nextPratyantardashas,
     nextMahadasha: dasha.nextMahadasha,
     futureMahadashas,
   };
@@ -536,7 +566,8 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
 
   let dasha = {
     mahadasha: '', antardasha: '', mahaStart: '', mahaEnds: '',
-    antarStart: '', antarEnds: '', nextMahadasha: '', futureMahadashas: [],
+    antarStart: '', antarEnds: '', pratyantardasha: '', pratyStart: '', pratyEnds: '',
+    nextPratyantardashas: [], nextMahadasha: '', futureMahadashas: [],
   };
   if (moonData && moonNakshatra) {
     dasha = calculateDasha(utcParts, moonNakshatra.index, moonData.longitude);

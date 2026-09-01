@@ -82,6 +82,9 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     const futureMahadashaLines = Array.isArray(dasha.futureMahadashas)
       ? dasha.futureMahadashas.map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
       : [];
+    const nextPratyantardashaLines = Array.isArray(dasha.nextPratyantardashas)
+      ? dasha.nextPratyantardashas.map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
+      : [];
 
     const summary = `
 === PRE-CALCULATED VEDIC CHART (LOCKED) ===
@@ -105,6 +108,9 @@ ${houseLordLines.join('\n')}
 CURRENT DASHA TIMING (PRE-CALCULATED):
 Mahadasha: ${dasha.mahadasha || 'N/A'} (${dasha.mahaStart || 'N/A'} to ${dasha.mahaEnds || 'N/A'})
 Antardasha: ${dasha.antardasha || 'N/A'} (${dasha.antarStart || 'N/A'} to ${dasha.antarEnds || 'N/A'})
+Pratyantardasha: ${dasha.pratyantardasha || 'N/A'} (${dasha.pratyStart || 'N/A'} to ${dasha.pratyEnds || 'N/A'})
+Next Pratyantardashas within the current Antardasha:
+${nextPratyantardashaLines.length ? nextPratyantardashaLines.join('\n') : 'Not available'}
 Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
 Future Mahadashas:
 ${futureMahadashaLines.length ? futureMahadashaLines.join('\n') : 'Not available'}
@@ -302,7 +308,9 @@ export default async function handler(req: Request) {
 - Recently mentioned anchors: ${recentAstrologyAnchors}
 - Do not reuse a recent anchor unless it is indispensable to this exact question. Never repeat a previous technical explanation.
 - Do not mention a planet, house, dasha, nakshatra, or date merely to make the answer sound astrological.
-- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'ON. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
+- Current Pratyantardasha and a dated Gochar-to-natal mapping are available in the supplied facts. Use them only when they are relevant to this question.
+- For career timing, prefer career-relevant Dasha or Gochar evidence; for marriage timing, prefer relationship-relevant Dasha or Gochar evidence. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
+- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only dates supported by the relevant Dasha or Gochar evidence.' : 'OFF. Do not mention a date, month, year, Dasha end date, or future period unless the user explicitly asks for timing.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
@@ -316,9 +324,9 @@ ${toneInstruction}
 ## CORE RULES
 
 1. Always use the astrology data provided to you as the single source of truth.
-2. Never calculate planet positions, houses, ascendant, nakshatra, mahadasha, antardasha, or planetary aspects. These values are already calculated by the astrology engine.
+2. Never calculate planet positions, houses, ascendant, nakshatra, Dasha dates, transits, or planetary aspects. These values are already calculated by the astrology engine.
 3. Never override astrology engine results.
-4. Never invent a calendar date. Mention a pre-calculated date or realistic timing window only when Timing mode is ON.
+4. Never invent a calendar date. When Timing mode is ON, select a date or range only when it is supported by the question-relevant Dasha or Gochar evidence.
 5. Do not repeatedly mention the same astrological fact, house, mahadasha, or antardasha in every messages.
 
 ## VARIATION RULE (applies even in a brand-new chat with no prior history)
