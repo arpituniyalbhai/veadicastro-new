@@ -1081,7 +1081,7 @@ export default function Chat() {
           };
         }
         return copy;
-      });
+      }, systemExtra, lang, displayName);
       // eslint-disable-next-line no-console
       console.error(e);
     } finally {

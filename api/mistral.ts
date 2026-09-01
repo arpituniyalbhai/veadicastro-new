@@ -138,34 +138,34 @@ type QuestionTopic =
 function getQuestionTopic(prompt: string): QuestionTopic {
   const question = prompt.toLowerCase();
 
-  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam|नौकरी|करियर|काम|व्यवसाय|प्रमोशन|तनख्वाह|परीक्षा/.test(question)) return 'career';
-  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding|शादी|विवाह|पति|पत्नी/.test(question)) return 'marriage';
-  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup|प्यार|प्रेम|रिश्ता|रिलेशनशिप|ब्रेकअप/.test(question)) return 'relationship';
-  if (/money|wealth|finance|income|saving|debt|loan|property|investment|पैसा|धन|आय|बचत|कर्ज|लोन|निवेश/.test(question)) return 'money';
-  if (/study|studies|education|college|school|degree|learning|पढ़ाई|शिक्षा|कॉलेज|स्कूल|डिग्री/.test(question)) return 'education';
-  if (/health|illness|disease|fitness|mental|stress|anxiety|स्वास्थ्य|बीमारी|तनाव|चिंता/.test(question)) return 'health';
+  if (/career|job|naukri|work|profession|business|promotion|salary|technology|tech|government|exam|नौकरी|करियर|काम|व्यवसाय|प्रमोशन|तनख्वाह|परीक्षा/.test(question)) return 'career';
+  if (/marriage|married|marrige|marraige|shaadi|shadi|spouse|husband|wife|wedding|शादी|विवाह|पति|पत्नी/.test(question)) return 'marriage';
+  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup|pyaar|pyar|प्यार|प्रेम|रिश्ता|रिलेशनशिप|ब्रेकअप/.test(question)) return 'relationship';
+  if (/money|wealth|finance|income|saving|debt|loan|property|investment|paisa|paise|पैसा|धन|आय|बचत|कर्ज|लोन|निवेश/.test(question)) return 'money';
+  if (/study|studies|education|college|school|degree|learning|padhai|पढ़ाई|शिक्षा|कॉलेज|स्कूल|डिग्री/.test(question)) return 'education';
+  if (/health|illness|disease|fitness|mental|stress|anxiety|sehat|स्वास्थ्य|बीमारी|तनाव|चिंता/.test(question)) return 'health';
 
   return 'general';
 }
 
 function getQuestionFocus(topic: QuestionTopic): string {
   if (topic === 'career') {
-    return 'Career/work: answer the specific career situation directly. When timing is requested, use career-relevant Gochar or Dasha evidence.';
+    return 'Career/work: answer the specific career situation directly. For astrological grounding, use career-relevant evidence first (2nd, 6th, 10th, or 11th house), not a default house.';
   }
   if (topic === 'marriage') {
-    return 'Marriage: answer the specific marriage concern directly. When timing is requested, use relationship-relevant Gochar or Dasha evidence.';
+    return 'Marriage: answer the specific marriage concern directly. For astrological grounding, use marriage-relevant evidence first (5th, 7th, or 8th house), not a default house.';
   }
   if (topic === 'relationship') {
-    return 'Love/relationship: answer the user\'s actual relationship concern directly. When timing is requested, use relationship-relevant Gochar or Dasha evidence.';
+    return 'Love/relationship: answer the user\'s actual relationship concern directly. For astrological grounding, use relationship-relevant evidence first (5th, 7th, or 8th house), not a default house.';
   }
   if (topic === 'money') {
-    return 'Money/wealth: answer the specific practical money concern directly. When timing is requested, use money-relevant Gochar or Dasha evidence.';
+    return 'Money/wealth: answer the specific practical money concern directly. For astrological grounding, use money-relevant evidence first (2nd, 5th, 8th, 9th, or 11th house), not a default house.';
   }
   if (topic === 'education') {
-    return 'Education: answer the specific study or education concern directly. When timing is requested, use education-relevant Gochar or Dasha evidence.';
+    return 'Education: answer the specific study or education concern directly. For astrological grounding, use education-relevant evidence first (4th, 5th, or 9th house), not a default house.';
   }
   if (topic === 'health') {
-    return 'Health: answer the user\'s practical concern directly without diagnosing a medical condition. When timing is requested, use health-relevant Gochar or Dasha evidence.';
+    return 'Health: answer the user\'s practical concern directly without diagnosing a medical condition. For astrological grounding, use health-relevant evidence first (1st, 6th, 8th, or 12th house), not a default house.';
   }
 
   return 'General life question: identify what the user genuinely wants to know and answer it directly. Use chart details internally rather than displaying a technical explanation.';
@@ -317,7 +317,9 @@ export default async function handler(req: Request) {
 
     const questionTopic = getQuestionTopic(prompt);
     const hasExplicitTimingRequest = /\b(?:when|what date|which date|timing|timeline|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
-    const timingRequested = hasExplicitTimingRequest && questionTopic !== 'general';
+    // An explicit "when" question must receive a timing answer even if its
+    // wording is too broad for the lightweight topic classifier.
+    const timingRequested = hasExplicitTimingRequest;
     const questionFocus = getQuestionFocus(questionTopic);
     const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
@@ -330,10 +332,11 @@ export default async function handler(req: Request) {
 - Do not reuse a recent anchor unless it is indispensable to this exact question. Never repeat a previous technical explanation.
 - Do not mention a planet, house, dasha, nakshatra, or date merely to make the answer sound astrological.
 - Current Pratyantardasha and a dated Gochar-to-natal mapping are available in the supplied facts. Use them only when they are relevant to this question.
-- For a topic-specific timing question, use the relevant Pratyantardasha or Gochar evidence first. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
-- If this is a general or vague question, give a general theme without forcing a calendar date, month, year, Mahadasha, or Antardasha term.
+- For a timing question, use the relevant Pratyantardasha or Gochar evidence first. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
+- A house is never default proof: mention one only when it is tied to the current question's topic. For a different topic than the previous answer, do not reuse the previous house unless it is genuinely indispensable.
+- For a non-timing general or vague question, give a general theme without forcing a calendar date, month, year, Mahadasha, or Antardasha term.
 - If a recent answer already used a date or Dasha term, do not repeat it unless the current question has the same topic and the same computed evidence is genuinely decisive.
-- Timing mode: ${timingRequested ? `ON. This is a ${questionTopic} timing question. Use only dates supported by the ${questionTopic}-relevant Pratyantardasha or Gochar evidence.` : 'OFF. Do not mention a date, month, year, Dasha end date, or future period. Answer the practical theme directly.'}`;
+- Timing mode: ${timingRequested ? `ON. This is a ${questionTopic} timing question. The direct answer MUST include one future calendar date or chronological date range with day, month, and year, selected from the supplied Dasha or Gochar evidence. Do not answer with only "soon", "later", or a Dasha name. If a range is used, its end date must be after its start date.` : 'OFF. Do not mention a date, month, year, Dasha end date, or future period. Answer the practical theme directly.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
@@ -380,8 +383,8 @@ The default response should contain no unnecessary technical astrology terminolo
 
 ## AGE FILTER
 
-1. Match predictions to the user's life stage.
-2. Keep timelines realistic.
+1. Read the supplied Current Age and Date of Birth before choosing a life-event timeline. Match predictions to the user's life stage and keep timelines realistic.
+2. For a first-marriage timing question from an unmarried user aged 18-22, do not treat the current or next short-term Dasha change as the main marriage window. Unless user-provided context confirms an engagement or established commitment, prefer a chart-supported mature window around age 27-30 and state both the calendar timing and the expected age. Do not hard-code this window for older users or users with an engagement context.
 
 ## ANSWER RATIO — STRICT 80/20
 
@@ -395,7 +398,7 @@ The default response should contain no unnecessary technical astrology terminolo
 1. Start with the direct answer. No intro. Say the user's name naturally once.
 2. Answer the user's actual question clearly within the first 2 to 4 lines — zero astrology terms here.
 3. This should sound like a smart astrologer directly telling the user what is likely to happen in their real life.
-4. After the direct prediction, optionally add one short astrological sentence only when it adds real value. Never add a list or chain of factors.
+4. After the direct prediction, optionally add concise astrological grounding only when it adds real value. Never add a list or chain of factors.
 5. Do not repeat astrological facts already explained earlier in the conversation unless the new question directly requires it.
 
 ## STYLE
@@ -442,6 +445,10 @@ Your job: think like a smart astrologer, interpret those facts confidently, and 
       { role: 'user', content: prompt },
     ];
 
+    const timingFormatRule = timingRequested
+      ? '- TIMING REQUIRED: State one future calendar date or chronological range in the direct answer, using day, month, and year from the supplied evidence. Do not answer with only a Dasha name, an age, or vague words such as "soon".'
+      : '- Do not add a date, month, year, or timing range unless the user explicitly asked for timing.';
+
     // Format reminder to enforce rules
     const FORMAT_REMINDER = `
 
@@ -451,6 +458,7 @@ Your job: think like a smart astrologer, interpret those facts confidently, and 
 - Zero bullets. Zero headers. Zero section labels.
 - Start directly with answer - no intro like "In 2026..." or "Here is..."
 - Answer the user's actual concern, not the chart-reading process.
+- ${timingFormatRule}
 - Use up to 2-3 concise, relevant astrological factors only when they reinforce the same conclusion. Weave them into flowing natural sentences; never list them.
 - End with a clear, useful closing sentence.
 Wrong format = rewrite before sending.`;
