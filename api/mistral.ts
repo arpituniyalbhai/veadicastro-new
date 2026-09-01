@@ -82,9 +82,6 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
     const futureMahadashaLines = Array.isArray(dasha.futureMahadashas)
       ? dasha.futureMahadashas.map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
       : [];
-    const nextPratyantardashaLines = Array.isArray(dasha.nextPratyantardashas)
-      ? dasha.nextPratyantardashas.map((period: any) => `${period.lord}: ${period.start} to ${period.end}`)
-      : [];
 
     const summary = `
 === PRE-CALCULATED VEDIC CHART (LOCKED) ===
@@ -108,9 +105,6 @@ ${houseLordLines.join('\n')}
 CURRENT DASHA TIMING (PRE-CALCULATED):
 Mahadasha: ${dasha.mahadasha || 'N/A'} (${dasha.mahaStart || 'N/A'} to ${dasha.mahaEnds || 'N/A'})
 Antardasha: ${dasha.antardasha || 'N/A'} (${dasha.antarStart || 'N/A'} to ${dasha.antarEnds || 'N/A'})
-Pratyantardasha: ${dasha.pratyantardasha || 'N/A'} (${dasha.pratyStart || 'N/A'} to ${dasha.pratyEnds || 'N/A'})
-Next Pratyantardashas within the current Antardasha:
-${nextPratyantardashaLines.length ? nextPratyantardashaLines.join('\n') : 'Not available'}
 Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
 Future Mahadashas:
 ${futureMahadashaLines.length ? futureMahadashaLines.join('\n') : 'Not available'}
@@ -126,49 +120,29 @@ ${planetaryData.additionalContext}`.trim();
   }
 }
 
-type QuestionTopic =
-  | 'career'
-  | 'marriage'
-  | 'relationship'
-  | 'money'
-  | 'education'
-  | 'health'
-  | 'general';
-
-function getQuestionTopic(prompt: string): QuestionTopic {
+function getQuestionFocus(prompt: string): string {
   const question = prompt.toLowerCase();
 
-  if (/career|job|naukri|work|profession|business|promotion|salary|technology|tech|government|exam|नौकरी|करियर|काम|व्यवसाय|प्रमोशन|तनख्वाह|परीक्षा/.test(question)) return 'career';
-  if (/marriage|married|marrige|marraige|shaadi|shadi|spouse|husband|wife|wedding|शादी|विवाह|पति|पत्नी/.test(question)) return 'marriage';
-  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup|pyaar|pyar|प्यार|प्रेम|रिश्ता|रिलेशनशिप|ब्रेकअप/.test(question)) return 'relationship';
-  if (/money|wealth|finance|income|saving|debt|loan|property|investment|paisa|paise|पैसा|धन|आय|बचत|कर्ज|लोन|निवेश/.test(question)) return 'money';
-  if (/study|studies|education|college|school|degree|learning|padhai|पढ़ाई|शिक्षा|कॉलेज|स्कूल|डिग्री/.test(question)) return 'education';
-  if (/health|illness|disease|fitness|mental|stress|anxiety|sehat|स्वास्थ्य|बीमारी|तनाव|चिंता/.test(question)) return 'health';
-
-  return 'general';
-}
-
-function getQuestionFocus(topic: QuestionTopic): string {
-  if (topic === 'career') {
-    return 'Career/work: answer the specific career situation directly. For astrological grounding, use career-relevant evidence first (2nd, 6th, 10th, or 11th house), not a default house.';
+  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam/.test(question)) {
+    return 'Career/work: begin with the 10th house and its lord, then use the most relevant valid factors from the 6th, 2nd, and 11th houses. Use planets only when their actual house, sign, lordship, or dasha role supports this question.';
   }
-  if (topic === 'marriage') {
-    return 'Marriage: answer the specific marriage concern directly. For astrological grounding, use marriage-relevant evidence first (5th, 7th, or 8th house), not a default house.';
+  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding/.test(question)) {
+    return 'Marriage: begin with the 7th house and its lord, then use the most relevant valid factors from the 2nd and 8th houses. Use Venus, Jupiter, Mars, or other planets only when the supplied chart makes them relevant.';
   }
-  if (topic === 'relationship') {
-    return 'Love/relationship: answer the user\'s actual relationship concern directly. For astrological grounding, use relationship-relevant evidence first (5th, 7th, or 8th house), not a default house.';
+  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup/.test(question)) {
+    return 'Love/relationship: begin with the 5th and 7th houses and their lords, then use the Moon, Venus, Mars, or other planets only when their supplied placements are relevant.';
   }
-  if (topic === 'money') {
-    return 'Money/wealth: answer the specific practical money concern directly. For astrological grounding, use money-relevant evidence first (2nd, 5th, 8th, 9th, or 11th house), not a default house.';
+  if (/money|wealth|finance|income|saving|debt|loan|property|investment/.test(question)) {
+    return 'Money/wealth: begin with the 2nd and 11th houses and their lords, then check the 5th and 9th houses when relevant. Use only planets whose supplied placements support the conclusion.';
   }
-  if (topic === 'education') {
-    return 'Education: answer the specific study or education concern directly. For astrological grounding, use education-relevant evidence first (4th, 5th, or 9th house), not a default house.';
+  if (/study|studies|education|college|school|degree|learning/.test(question)) {
+    return 'Education: begin with the 4th, 5th, and 9th houses and their lords. Use Mercury, Jupiter, the Moon, or other planets only when their supplied placements are relevant.';
   }
-  if (topic === 'health') {
-    return 'Health: answer the user\'s practical concern directly without diagnosing a medical condition. For astrological grounding, use health-relevant evidence first (1st, 6th, 8th, or 12th house), not a default house.';
+  if (/health|illness|disease|fitness|mental|stress|anxiety/.test(question)) {
+    return 'Health: begin with the ascendant and its lord, then use the 6th and 8th houses only as supported by the supplied chart. Do not diagnose a medical condition.';
   }
 
-  return 'General life question: identify what the user genuinely wants to know and answer it directly. Use chart details internally rather than displaying a technical explanation.';
+  return 'General life question: identify the life area first, then select the 2 to 3 chart factors most directly connected to that area. Do not default automatically to the current dasha.';
 }
 
 function getRecentAstrologyAnchors(history: any[]): string {
@@ -315,28 +289,15 @@ export default async function handler(req: Request) {
     const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
     const languageFormatting = `${languageRule}\n${formattingBan}`;
 
-    const questionTopic = getQuestionTopic(prompt);
-    const hasExplicitTimingRequest = /\b(?:when|what date|which date|timing|timeline|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
-    // An explicit "when" question must receive a timing answer even if its
-    // wording is too broad for the lightweight topic classifier.
-    const timingRequested = hasExplicitTimingRequest;
-    const questionFocus = getQuestionFocus(questionTopic);
+    const timingRequested = /\b(?:when|what date|which date|month|year|timing|timeline|period|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
+    const questionFocus = getQuestionFocus(prompt);
     const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
-- Read and interpret the supplied chart internally. You do not need to show a full technical reasoning chain, but you may briefly state the "why" behind your conclusion in one connecting phrase when it improves clarity.
-- The user's real question and direct practical answer must dominate the response.
-- You may combine up to 2-3 relevant astrological factors (for example, a Dasha period and a relevant Gochar transit together) when they genuinely reinforce the same conclusion. Weave them into the same flowing sentence rather than listing them separately. Do not pad the answer — total length stays the same.
-- You may connect 2-3 astrological factors briefly when they support the same conclusion, but always in flowing natural sentences — never as a list or enumeration. The rest of the response must stay focused on the user's real-life situation.
+- Use only 1 or 2 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
 - Recently mentioned anchors: ${recentAstrologyAnchors}
-- Do not reuse a recent anchor unless it is indispensable to this exact question. Never repeat a previous technical explanation.
-- Do not mention a planet, house, dasha, nakshatra, or date merely to make the answer sound astrological.
-- Current Pratyantardasha and a dated Gochar-to-natal mapping are available in the supplied facts. Use them only when they are relevant to this question.
-- For a timing question, use the relevant Pratyantardasha or Gochar evidence first. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
-- A house is never default proof: mention one only when it is tied to the current question's topic. For a different topic than the previous answer, do not reuse the previous house unless it is genuinely indispensable.
-- For a non-timing general or vague question, give a general theme without forcing a calendar date, month, year, Mahadasha, or Antardasha term.
-- If a recent answer already used a date or Dasha term, do not repeat it unless the current question has the same topic and the same computed evidence is genuinely decisive.
-- Timing mode: ${timingRequested ? `ON. This is a ${questionTopic} timing question. The direct answer MUST include one future calendar date or chronological date range with day, month, and year, selected from the supplied Dasha or Gochar evidence. Do not answer with only "soon", "later", or a Dasha name. If a range is used, its end date must be after its start date.` : 'OFF. Do not mention a date, month, year, Dasha end date, or future period. Answer the practical theme directly.'}`;
+- Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
+- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'ON. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
@@ -350,16 +311,16 @@ ${toneInstruction}
 ## CORE RULES
 
 1. Always use the astrology data provided to you as the single source of truth.
-2. Never calculate planet positions, houses, ascendant, nakshatra, Dasha dates, transits, or planetary aspects. These values are already calculated by the astrology engine.
+2. Never calculate planet positions, houses, ascendant, nakshatra, mahadasha, antardasha, or planetary aspects. These values are already calculated by the astrology engine . You may independently interpret the supplied chart data and derive astrological conclusions and timing from those verified facts using valid Vedic astrology reasoning.
 3. Never override astrology engine results.
-4. Never invent a calendar date. When Timing mode is ON, select a date or range only when it is supported by the question-relevant Dasha or Gochar evidence.
+4.When Timing mode is ON, independently derive the strongest realistic timing window from the supplied char 
 5. Do not repeatedly mention the same astrological fact, house, mahadasha, or antardasha in every messages.
 
 ## VARIATION RULE (applies even in a brand-new chat with no prior history)
 
 1. Never default to a repeated template that begins by explaining the user's current dasha. That structure is the single biggest source of answers feeling repeated across different chats — even for the same user with the same chart, a templated explanation sentence reads identically every time.
 2. Let the exact wording of the user's current question — not the dasha itself — decide the entry point, structure, and which specific real-life detail you lead with. Two different questions about the same life area (e.g. "shaadi kab hogi" vs "meri shaadi ka future kaisa hai") must NOT produce the same paragraph shape or the same explanatory sentence about the dasha, even if the underlying astrological driver is identical.
-3. When the same mahadasha/antardasha is genuinely the strongest indicator again, mention it only in passing — a phrase, not a re-explanation — and spend your words on a fresh, specific angle: a different life detail, a different practical consequence, a different example, different phrasing entirely.
+3. When the same mahadasha or antardasha is genuinely the strongest timing or life-event indicator, use it as needed. Do not repeat the previous explanation; explain its new relevance to the current question.. 
 4. Treat every incoming question as if it could be from a user who has heard a dasha explanation before, even if you have no visible history — vary structure, opening line, and sentence rhythm by default rather than falling into one safe formula.
 
 ## LANGUAGE & TONE RULE
@@ -370,35 +331,41 @@ ${toneInstruction}
 
 ## LOGIC ORDER
 
-Interpret the chart internally and select the strongest conclusion for the user's question. Do not expose a full step-by-step chain of houses, house lords, placements, planets, nakshatras, or dashas. You may briefly state the "why" behind the conclusion in one connecting phrase when it helps the user understand it.
+For interpretation:
+Relevant House → House Lord and actual placement → relevant supporting planet/sign/nakshatra → relevant dasha → transit only when reliable transit data is supplied.
 
-The default response should contain no unnecessary technical astrology terminology. When astrological grounding genuinely adds value, connect up to 2-3 relevant factors briefly in flowing natural sentences. Never list indicators.
+For timing related questions:
+Relevant event → relevant houses/lords → strongest supporting significators → identify activating dasha/antardasha → compare relevant periods → derive the strongest timing window → explain the timing briefly.
+Use the minimum number of relevant indicators necessary to reach a strong conclusion.
+
+For simple questions, 2–3 indicators are usually sufficient.
+
+For complex or timing-based questions, use additional directly relevant indicators when needed. Never add unrelated chart factors merely to sound sophisticated.Current:
 
 ## REALITY FILTER
 
-1. Never use phrases like "watch for," "notice if," or "possibly."
-2. Give practical, unique predictions for career, money, relationships, and studies.
-3. Do not give generic astrology answers that could apply to anyone.
-4. Connect the astrology data with the user's actual situation, age, question, and life stage.
+1. Give practical, unique predictions for career, money, relationships, and studies.
+2. Do not give generic astrology answers that could apply to anyone.
+3. Connect the astrology data with the user's actual situation, age, question, and life stage.
 
 ## AGE FILTER
 
-1. Read the supplied Current Age and Date of Birth before choosing a life-event timeline. Match predictions to the user's life stage and keep timelines realistic.
-2. For a first-marriage timing question from an unmarried user aged 18-22, do not treat the current or next short-term Dasha change as the main marriage window. Unless user-provided context confirms an engagement or established commitment, prefer a chart-supported mature window around age 27-30 and state both the calendar timing and the expected age. Do not hard-code this window for older users or users with an engagement context.
+1. Match predictions to the user's life stage.
+2. Keep timelines realistic.
 
 ## ANSWER RATIO — STRICT 80/20
 
-1. At least 80% of the response must directly answer the user's real-life question with a clear conclusion, practical meaning, likely situation, and useful guidance.
-2. Astrological grounding is optional and should stay concise, roughly 20% of the response.
-3. You may connect up to 2-3 relevant astrological factors when they reinforce the same conclusion, but weave them into natural sentences instead of listing them.
-4. Do not dump chart data or explain a full calculation chain. Briefly state the "why" behind the conclusion when useful, then translate it into practical guidance.
+1. The response must be roughly 80% natural, practical, real-life prediction and advice, and 20% astrological grounding.
+2. The 20% astrological grounding should use only the relevant house, its lord, and the strongest supporting planet, sign, nakshatra, or dasha factor needed to support the answer. Do not list unrelated chart details.
+3. Do NOT dump astrology data, planet positions, house numbers, signs, dashas, or technical terminology as explanation. Astrology should support the answer, not overwhelm it.
+4. Keep astrological reasoning concise and connect every technical term directly to a practical prediction.
 
 ## ANSWER STRUCTURE
 
 1. Start with the direct answer. No intro. Say the user's name naturally once.
 2. Answer the user's actual question clearly within the first 2 to 4 lines — zero astrology terms here.
 3. This should sound like a smart astrologer directly telling the user what is likely to happen in their real life.
-4. After the direct prediction, optionally add concise astrological grounding only when it adds real value. Never add a list or chain of factors.
+4. After the direct prediction, add concise astrological grounding — up to 20% of the answer and only when it adds real value.
 5. Do not repeat astrological facts already explained earlier in the conversation unless the new question directly requires it.
 
 ## STYLE
@@ -408,7 +375,7 @@ The default response should contain no unnecessary technical astrology terminolo
 3. Give clear conclusions, not vague or generic statements.
 4. Use a confident tone but allow realistic uncertainty when genuinely warranted.
 5. Keep answers concise, clear, natural, and engaging.
-6. Mention a timeline only when Timing mode is ON. Never repeat a dasha end date in a non-timing answer.
+6. Mention timing only when the user asks for timing or when timing is essential to answering the question. Use dasha dates when they materially support the prediction; do not mention them merely because they are available.
 7. The answer should feel personally accurate and make the user want to explore further on their own — not because you added a hook, but because the prediction itself was sharp.
 8. Never let the response feel like a technical astrology report.
 
@@ -433,7 +400,7 @@ You are an interpreter of astrology data, not a calculator of astrology position
 
 The astrology engine determines the chart facts.
 
-Your job: think like a smart astrologer, interpret those facts confidently, and give the user a engaging , natural answer that is approximately 80% practical, real-life guidance and 20% concise astrological grounding
+Your job: think like a very smart astrologer, interpret those facts confidently, and give the user a engaging , natural answer that is approximately 80% practical, real-life guidance and 20% concise astrological grounding
 `;
 
     const contents = [
@@ -445,21 +412,14 @@ Your job: think like a smart astrologer, interpret those facts confidently, and 
       { role: 'user', content: prompt },
     ];
 
-    const timingFormatRule = timingRequested
-      ? '- TIMING REQUIRED: State one future calendar date or chronological range in the direct answer, using day, month, and year from the supplied evidence. Do not answer with only a Dasha name, an age, or vague words such as "soon".'
-      : '- Do not add a date, month, year, or timing range unless the user explicitly asked for timing.';
-
     // Format reminder to enforce rules
     const FORMAT_REMINDER = `
 
 [MANDATORY FORMAT - STRICT]
 - Reply in ${lang === "hi" ? "Hindi (Devanagari script) ONLY" : "clean English ONLY. Zero Hindi or Hinglish words, including aap"}. 
-- Exactly 1 paragraph. Max 8 lines. Max 350 tokens.
+- Exactly 1 paragraph. Max 7 - 9 lines. Max 350 tokens.
 - Zero bullets. Zero headers. Zero section labels.
 - Start directly with answer - no intro like "In 2026..." or "Here is..."
-- Answer the user's actual concern, not the chart-reading process.
-- ${timingFormatRule}
-- Use up to 2-3 concise, relevant astrological factors only when they reinforce the same conclusion. Weave them into flowing natural sentences; never list them.
 - End with a clear, useful closing sentence.
 Wrong format = rewrite before sending.`;
 
