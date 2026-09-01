@@ -49,6 +49,25 @@ const HOUSE_MEANINGS: Record<number, string> = {
   12: "12th house (expenses, solitude, subconscious)",
 };
 
+export type AstrologyQuestionTopic =
+  | "career"
+  | "marriage"
+  | "relationship"
+  | "money"
+  | "education"
+  | "health"
+  | "general";
+
+const TOPIC_RELEVANT_HOUSES: Record<AstrologyQuestionTopic, number[]> = {
+  career: [2, 6, 10, 11],
+  marriage: [1, 5, 7, 8],
+  relationship: [1, 5, 7, 8],
+  money: [2, 5, 8, 9, 11],
+  education: [4, 5, 9],
+  health: [1, 6, 8, 12],
+  general: [],
+};
+
 export async function getOrComputeTodayTransits(dateKey: string, date: Date): Promise<PlanetEntry[]> {
   const cacheKey = `transit_positions_${dateKey}`;
   try {
@@ -81,15 +100,11 @@ export function getTransitToNatalSummary(
   natalPlanets: PlanetEntry[],
   natalAscendantSign: string,
   maxItems = 4,
+  topic: AstrologyQuestionTopic = "general",
 ): string {
   const natalAscIdx = SIGN_NAMES.indexOf(natalAscendantSign);
   const bullets: string[] = [];
-
-  // Helper to find planet by key in lists
-  const findPlanetSign = (list: PlanetEntry[], key: string): string => {
-    const p = list.find((item) => item.key === key);
-    return p ? p.sign : "";
-  };
+  const transitHouseBullets: Array<{ house: number; text: string }> = [];
 
   // 1) Select key transits to highlight
   // Focus on fast transit (Moon) and major ones (Sun, Venus, Mars, Jupiter, Saturn)
@@ -105,8 +120,23 @@ export function getTransitToNatalSummary(
     // Calculate Whole Sign house: House 1 is the sign of Ascendant
     const house = ((transitSignIdx - natalAscIdx + 12) % 12) + 1;
     const meaning = HOUSE_MEANINGS[house] || `house ${house}`;
-    bullets.push(`${tp.name} transiting natal ${meaning}`);
+    transitHouseBullets.push({
+      house,
+      text: `${tp.name} transiting natal ${meaning}`,
+    });
   });
+
+  const relevantHouses = TOPIC_RELEVANT_HOUSES[topic];
+  const topicRelevantBullets = relevantHouses.length
+    ? transitHouseBullets.filter((entry) => relevantHouses.includes(entry.house))
+    : [];
+  const remainingTransitBullets = transitHouseBullets.filter(
+    (entry) => !topicRelevantBullets.includes(entry),
+  );
+  bullets.push(
+    ...topicRelevantBullets.map((entry) => entry.text),
+    ...remainingTransitBullets.map((entry) => entry.text),
+  );
 
   // 2) Conjunctions in same sign
   (transitPlanets || []).forEach((tp) => {
@@ -117,8 +147,8 @@ export function getTransitToNatalSummary(
     });
   });
 
-  // Daily predictions use the default compact summary; chat can request more
-  // evidence for question-specific transit interpretation.
+  // Daily predictions use the default compact summary. Chat can request more
+  // evidence, ordered by the houses relevant to the user's question topic.
   return bullets.slice(0, maxItems).map((b) => `- ${b}`).join("\n");
 }
 

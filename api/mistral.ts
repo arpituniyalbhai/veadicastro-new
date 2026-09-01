@@ -126,26 +126,46 @@ ${planetaryData.additionalContext}`.trim();
   }
 }
 
-function getQuestionFocus(prompt: string): string {
+type QuestionTopic =
+  | 'career'
+  | 'marriage'
+  | 'relationship'
+  | 'money'
+  | 'education'
+  | 'health'
+  | 'general';
+
+function getQuestionTopic(prompt: string): QuestionTopic {
   const question = prompt.toLowerCase();
 
-  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam/.test(question)) {
-    return 'Career/work: answer the specific career situation directly. Use the chart internally, without listing multiple career houses, planets, or technical factors.';
+  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam|नौकरी|करियर|काम|व्यवसाय|प्रमोशन|तनख्वाह|परीक्षा/.test(question)) return 'career';
+  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding|शादी|विवाह|पति|पत्नी/.test(question)) return 'marriage';
+  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup|प्यार|प्रेम|रिश्ता|रिलेशनशिप|ब्रेकअप/.test(question)) return 'relationship';
+  if (/money|wealth|finance|income|saving|debt|loan|property|investment|पैसा|धन|आय|बचत|कर्ज|लोन|निवेश/.test(question)) return 'money';
+  if (/study|studies|education|college|school|degree|learning|पढ़ाई|शिक्षा|कॉलेज|स्कूल|डिग्री/.test(question)) return 'education';
+  if (/health|illness|disease|fitness|mental|stress|anxiety|स्वास्थ्य|बीमारी|तनाव|चिंता/.test(question)) return 'health';
+
+  return 'general';
+}
+
+function getQuestionFocus(topic: QuestionTopic): string {
+  if (topic === 'career') {
+    return 'Career/work: answer the specific career situation directly. When timing is requested, use career-relevant Gochar or Dasha evidence.';
   }
-  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding/.test(question)) {
-    return 'Marriage: answer the specific marriage concern directly. Use the chart internally, without listing multiple houses, planets, or technical factors.';
+  if (topic === 'marriage') {
+    return 'Marriage: answer the specific marriage concern directly. When timing is requested, use relationship-relevant Gochar or Dasha evidence.';
   }
-  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup/.test(question)) {
-    return 'Love/relationship: answer the user\'s actual relationship concern directly. Use the chart internally, without listing multiple houses, planets, or technical factors.';
+  if (topic === 'relationship') {
+    return 'Love/relationship: answer the user\'s actual relationship concern directly. When timing is requested, use relationship-relevant Gochar or Dasha evidence.';
   }
-  if (/money|wealth|finance|income|saving|debt|loan|property|investment/.test(question)) {
-    return 'Money/wealth: answer the specific practical money concern directly. Use the chart internally, without listing multiple houses, planets, or technical factors.';
+  if (topic === 'money') {
+    return 'Money/wealth: answer the specific practical money concern directly. When timing is requested, use money-relevant Gochar or Dasha evidence.';
   }
-  if (/study|studies|education|college|school|degree|learning/.test(question)) {
-    return 'Education: answer the specific study or education concern directly. Use the chart internally, without listing multiple houses, planets, or technical factors.';
+  if (topic === 'education') {
+    return 'Education: answer the specific study or education concern directly. When timing is requested, use education-relevant Gochar or Dasha evidence.';
   }
-  if (/health|illness|disease|fitness|mental|stress|anxiety/.test(question)) {
-    return 'Health: answer the user\'s practical concern directly without listing chart factors, and do not diagnose a medical condition.';
+  if (topic === 'health') {
+    return 'Health: answer the user\'s practical concern directly without diagnosing a medical condition. When timing is requested, use health-relevant Gochar or Dasha evidence.';
   }
 
   return 'General life question: identify what the user genuinely wants to know and answer it directly. Use chart details internally rather than displaying a technical explanation.';
@@ -295,8 +315,10 @@ export default async function handler(req: Request) {
     const formattingBan = "Output must be plain text only. Do not use Markdown, bold, italics, bullets, asterisks, hyphens, numbered lists, quotes, or decorative symbols.";
     const languageFormatting = `${languageRule}\n${formattingBan}`;
 
-    const timingRequested = /\b(?:when|what date|which date|month|year|timing|timeline|period|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
-    const questionFocus = getQuestionFocus(prompt);
+    const questionTopic = getQuestionTopic(prompt);
+    const hasExplicitTimingRequest = /\b(?:when|what date|which date|timing|timeline|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
+    const timingRequested = hasExplicitTimingRequest && questionTopic !== 'general';
+    const questionFocus = getQuestionFocus(questionTopic);
     const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
@@ -309,8 +331,10 @@ export default async function handler(req: Request) {
 - Do not reuse a recent anchor unless it is indispensable to this exact question. Never repeat a previous technical explanation.
 - Do not mention a planet, house, dasha, nakshatra, or date merely to make the answer sound astrological.
 - Current Pratyantardasha and a dated Gochar-to-natal mapping are available in the supplied facts. Use them only when they are relevant to this question.
-- For career timing, prefer career-relevant Dasha or Gochar evidence; for marriage timing, prefer relationship-relevant Dasha or Gochar evidence. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
-- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only dates supported by the relevant Dasha or Gochar evidence.' : 'OFF. Do not mention a date, month, year, Dasha end date, or future period unless the user explicitly asks for timing.'}`;
+- For a topic-specific timing question, use the relevant Pratyantardasha or Gochar evidence first. Do not use the current Antardasha end date merely because it is the nearest date in the chart.
+- If this is a general or vague question, give a general theme without forcing a calendar date, month, year, Mahadasha, or Antardasha term.
+- If a recent answer already used a date or Dasha term, do not repeat it unless the current question has the same topic and the same computed evidence is genuinely decisive.
+- Timing mode: ${timingRequested ? `ON. This is a ${questionTopic} timing question. Use only dates supported by the ${questionTopic}-relevant Pratyantardasha or Gochar evidence.` : 'OFF. Do not mention a date, month, year, Dasha end date, or future period. Answer the practical theme directly.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"

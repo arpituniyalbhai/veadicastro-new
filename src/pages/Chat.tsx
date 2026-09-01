@@ -11,7 +11,11 @@ import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData, type AstroInput } from "@/lib/astroCalc";
-import { getOrComputeTodayTransits, getTransitToNatalSummary } from "@/lib/dailyPredictionsPipeline";
+import {
+  getOrComputeTodayTransits,
+  getTransitToNatalSummary,
+  type AstrologyQuestionTopic,
+} from "@/lib/dailyPredictionsPipeline";
 import { getDbInstance } from "@/lib/firebase";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -52,6 +56,19 @@ const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
   { type: "year", regex: /\b(?:19|20|21)\d{2}\b/g },
   { type: "career", regex: new RegExp(`\\b(?:${careerPattern})\\b`, "gi") },
 ];
+
+const classifyChatQuestionTopic = (question: string): AstrologyQuestionTopic => {
+  const normalized = question.toLowerCase();
+
+  if (/career|job|work|profession|business|promotion|salary|technology|tech|government|exam|नौकरी|करियर|काम|व्यवसाय|प्रमोशन|तनख्वाह|परीक्षा/.test(normalized)) return "career";
+  if (/marriage|married|shaadi|shadi|spouse|husband|wife|wedding|शादी|विवाह|पति|पत्नी/.test(normalized)) return "marriage";
+  if (/love|relationship|partner|boyfriend|girlfriend|romance|breakup|प्यार|प्रेम|रिश्ता|रिलेशनशिप|ब्रेकअप/.test(normalized)) return "relationship";
+  if (/money|wealth|finance|income|saving|debt|loan|property|investment|पैसा|धन|आय|बचत|कर्ज|लोन|निवेश/.test(normalized)) return "money";
+  if (/study|studies|education|college|school|degree|learning|पढ़ाई|शिक्षा|कॉलेज|स्कूल|डिग्री/.test(normalized)) return "education";
+  if (/health|illness|disease|fitness|mental|stress|anxiety|स्वास्थ्य|बीमारी|तनाव|चिंता/.test(normalized)) return "health";
+
+  return "general";
+};
 
 interface HighlightMatch { start: number; end: number; value: string; type: HighlightType; }
 
@@ -893,6 +910,7 @@ export default function Chat() {
           planetsBlock = `Planetary Data:\n${JSON.stringify(payload)}`;
           persistAstroPayload(payload);
 
+          const questionTopic = classifyChatQuestionTopic(userText);
           const transitDate = new Date();
           const transitDateKey = `${transitDate.getFullYear()}-${String(transitDate.getMonth() + 1).padStart(2, "0")}-${String(transitDate.getDate()).padStart(2, "0")}`;
           const transitPlanets = await getOrComputeTodayTransits(transitDateKey, transitDate);
@@ -901,8 +919,9 @@ export default function Chat() {
             payload.planetsList,
             payload.ascendantSign,
             8,
+            questionTopic,
           );
-          transitBlock = `Current Gochar / Transit-to-Natal Mapping (for ${transitDateKey}):\n${transitToNatal || "No relevant transit-to-natal mapping is available."}`;
+          transitBlock = `Current Gochar / Transit-to-Natal Mapping (for ${transitDateKey}; question topic: ${questionTopic}):\n${transitToNatal || "No relevant transit-to-natal mapping is available."}`;
         } catch (e) {
           console.debug('[Chat] Astrology or transit calculation failed, will try local cache.', e);
         }
