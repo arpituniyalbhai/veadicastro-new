@@ -460,8 +460,15 @@ export const getPlanetaryData = async (input: AstroInput): Promise<AstroPayload>
     swe.SE_GREG_CAL
   );
 
-  // Whole Sign House System: Each house = one sign, starting from ascendant sign
-  const houses = swe.swe_houses(julianUT, details.lat, details.lon, "W");
+  // Use Lahiri sidereal houses so the ascendant is in the same zodiac as the
+  // sidereal planetary positions calculated below.
+  const houses = swe.swe_houses_ex(
+    julianUT,
+    swe.SEFLG_SIDEREAL,
+    details.lat,
+    details.lon,
+    "W",
+  );
   const ascendant = normalizeDegree(houses.ascmc?.[0] ?? 0);
   const ascendantSign = getSign(ascendant).name;
   const ascendantSignIndex = getSign(ascendant).index;
