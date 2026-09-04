@@ -446,7 +446,7 @@ Wrong format = rewrite before sending.`;
     // Normal chat and follow-up questions use Mistral Small. Specialized
     // report, JSON, and compatibility pipelines retain their existing model.
     const model = isFollowUp
-      ? 'mistral-small-latest'
+      ? 'ministral-14b-latest'
       : isMonthly
         ? 'ministral-8b-latest'
         : (isReport || isJsonRequest || isCompatibility)
