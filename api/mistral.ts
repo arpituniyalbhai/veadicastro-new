@@ -450,8 +450,8 @@ Wrong format = rewrite before sending.`;
       : isMonthly
         ? 'ministral-8b-latest'
         : (isReport || isJsonRequest || isCompatibility)
-          ? 'mistral-large-latest'
-          : 'mistral-small-latest';
+          ? 'ministral-14b-latest'
+          : 'ministral-14b-latest';
     const streamingTemperature = 0.55;
     const nonStreamingTemperature = isFollowUp ? 0.5 : 0.4;
     
