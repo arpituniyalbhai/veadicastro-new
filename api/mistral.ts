@@ -294,7 +294,7 @@ export default async function handler(req: Request) {
     const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
-- Use only 1 or 2 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
+- Use only 1 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
 - Recently mentioned anchors: ${recentAstrologyAnchors}
 - Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
 - Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
@@ -313,7 +313,7 @@ ${toneInstruction}
 1. Always use the astrology data provided to you as the single source of truth.
 2. Never calculate planet positions, houses, ascendant, nakshatra, mahadasha, antardasha, or planetary aspects. These values are already calculated by the astrology engine . You may independently interpret the supplied chart data and derive astrological conclusions and timing from those verified facts using valid Vedic astrology reasoning.
 3. Never override astrology engine results.
-4.When Timing mode is ON, independently derive the strongest realistic timing window from the supplied char 
+4.When Timing mode is ON, independently derive the strongest realistic timing window from the supplied chart.
 5. Do not repeatedly mention the same astrological fact, house, mahadasha, or antardasha in every messages.
 
 ## VARIATION RULE (applies even in a brand-new chat with no prior history)
@@ -395,7 +395,7 @@ For complex or timing-based questions, use additional directly relevant indicato
 ## END
 
 1. End with a useful concluding sentence.
-2. Do not sound generic.
+2. Do not sound generic , do predictions that not apply in 99 percent people.
 3. Do not ask a question.
 4. Do not add explicit follow-up questions or sales hooks — follow-ups are handled by a separate system.
 5. The answer itself should be useful and engaging enough that the user naturally wants to ask more.
@@ -472,7 +472,7 @@ Wrong format = rewrite before sending.`;
     const messagesWithReminder = isFollowUp ? [
       {
         role: 'system',
-        content: systemExtra || 'Generate exactly two follow-up questions and return valid JSON only.'
+        content: `${dateContext}\n\nThis is today's exact date and current time. Use it when generating follow-up questions.\n\n${systemExtra || 'Generate exactly two follow-up questions and return valid JSON only.'}`
       },
       ...contents
     ] : isJsonRequest ? [
