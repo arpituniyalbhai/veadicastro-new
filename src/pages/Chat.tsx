@@ -1057,7 +1057,7 @@ export default function Chat() {
       }
 
       // Generate suggestions in background without blocking - no loading state
-      generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang, memoryBlock)
+      generateAnswerSuggestions(userText, finalAnswerForSuggestions, lang, memoryBlock, messages.slice(-8))
         .then((nextQuestions) => {
           if (nextQuestions.length && assistantIndex >= 0) {
             setAnswerSuggestions((prev) => ({ ...prev, [assistantIndex]: nextQuestions }));
@@ -1926,7 +1926,7 @@ function parseQuestionSuggestions(raw: string): string[] {
     .slice(0, 2);
 }
 
-async function generateAnswerSuggestions(question: string, answer: string, lang: string, memoryBlock = ""): Promise<string[]> {
+async function generateAnswerSuggestions(question: string, answer: string, lang: string, memoryBlock = "", history: ChatTurn[] = []): Promise<string[]> {
   const API_BASE = (import.meta as any)?.env?.VITE_API_BASE || "";
   const followUpSystemPrompt = `You generate exactly two highly relevant follow-up questions after an astrology response.
 
@@ -1990,7 +1990,7 @@ ${memoryBlock}` : ""}`;
       headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt,
-          history: [],
+          history,
           systemExtra: followUpSystemPrompt,
           requestType: "follow_up",
           lang,

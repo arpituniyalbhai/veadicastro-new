@@ -148,7 +148,7 @@ function getQuestionFocus(prompt: string): string {
 function getRecentAstrologyAnchors(history: any[]): string {
   const recentAssistantText = (Array.isArray(history) ? history : [])
     .filter((item: any) => item?.role !== 'user')
-    .slice(-4)
+    .slice(-8)
     .map((item: any) => String(item?.content || ''))
     .join(' ');
 
@@ -448,12 +448,12 @@ Wrong format = rewrite before sending.`;
     const model = isFollowUp
       ? 'ministral-14b-latest'
       : isMonthly
-        ? 'ministral-8b-latest'
+        ? 'ministral-14b-latest'
         : (isReport || isJsonRequest || isCompatibility)
           ? 'ministral-14b-latest'
           : 'ministral-14b-latest';
-    const streamingTemperature = 0.55;
-    const nonStreamingTemperature = isFollowUp ? 0.5 : 0.4;
+    const streamingTemperature = 0.72;
+    const nonStreamingTemperature = isFollowUp ? 0.85 : 0.4;
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
@@ -468,7 +468,7 @@ Wrong format = rewrite before sending.`;
         role: 'system',
         content: systemExtra || 'Generate exactly two follow-up questions and return valid JSON only.'
       },
-      { role: 'user', content: prompt }
+      ...contents
     ] : isJsonRequest ? [
       {
         role: 'system',
