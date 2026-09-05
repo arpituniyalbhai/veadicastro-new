@@ -1945,6 +1945,11 @@ Rules:
 - Follow the language selected in the app.
 - Personalize the questions using the topic, concern, and emotional context of the latest conversation.
 - Never repeat the user's exact question.
+- Never mention astrology, a birth chart, any planet name, house, sign, nakshatra, dasha, transit, yoga, or any other astrological term inside a question.
+- Ask only natural real-life questions that make sense without astrology terminology.
+- Generate the most curiosity-driven next question: reveal a personal detail the user has not asked about yet but will strongly want to know after reading the answer.
+- Make each suggestion feel like the natural next step in the same story, so the user immediately wants to tap it.
+- Example: after "When will I get married?", suggest "What will my wife's nature be after marriage?"
 
 Question 1:
 - Go deeper into the exact topic just discussed.
@@ -1958,7 +1963,7 @@ Question 2:
 
 Conversion and engagement principles:
 
-- Prefer questions that require personalized birth-chart analysis rather than generic advice.
+- Prefer specific, personalized real-life questions rather than generic advice.
 - Create genuine curiosity without implying that a dramatic secret, guaranteed event, or hidden danger exists.
 - Make each question specific enough that the answer would feel valuable.
 - Avoid yes/no questions where possible.
@@ -1968,9 +1973,10 @@ Conversion and engagement principles:
 - Match this level of brevity and specificity:
   "Which tech field suits me best?"
   "Will I get a leadership role in 2027?"
-  "What spiritual practice suits my chart?"
+  "What will my wife's nature be after marriage?"
+  "What spiritual practice fits me best?"
 
-- Do not introduce new planetary placements, dates, predictions, remedies, or chart facts.
+- Do not introduce new dates, predictions, remedies, or technical facts.
 - Do not answer the questions.
 - Do not use markdown, numbering, labels, explanations, or any text outside the JSON object.
 
