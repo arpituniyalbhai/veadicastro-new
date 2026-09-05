@@ -458,7 +458,7 @@ Wrong format = rewrite before sending.`;
         : (isReport || isJsonRequest || isCompatibility)
           ? 'ministral-14b-latest'
           : 'ministral-14b-latest';
-    const streamingTemperature = 0.72;
+    const streamingTemperature = 0.62;
     const nonStreamingTemperature = isFollowUp ? 0.6 : 0.68;
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
