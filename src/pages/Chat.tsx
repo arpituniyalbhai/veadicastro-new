@@ -1962,7 +1962,13 @@ Conversion and engagement principles:
 - Create genuine curiosity without implying that a dramatic secret, guaranteed event, or hidden danger exists.
 - Make each question specific enough that the answer would feel valuable.
 - Avoid yes/no questions where possible.
-- Keep each question concise, ideally under 14 words.
+- Keep every question mobile-friendly: 5 to 9 words, with a hard maximum of 9 words.
+- Use one short sentence that fits naturally on a mobile suggestion chip.
+- Remove filler words and keep only the topic, personal angle, and useful detail.
+- Match this level of brevity and specificity:
+  "Which tech field suits me best?"
+  "Will I get a leadership role in 2027?"
+  "What spiritual practice suits my chart?"
 
 - Do not introduce new planetary placements, dates, predictions, remedies, or chart facts.
 - Do not answer the questions.
