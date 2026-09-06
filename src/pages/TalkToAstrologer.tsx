@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Star, Phone, MessageCircle, Clock, CheckCircle, Award, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import Navbar from "@/components/Navbar";
 
 const astrologers = [
   {
@@ -290,8 +289,6 @@ const TalkToAstrologer = () => {
         </div>
       )}
       
-      <Navbar />
-      
       <div className="min-h-screen bg-background px-4 lg:px-6 py-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -307,29 +304,14 @@ const TalkToAstrologer = () => {
           </Button>
 
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/15 border border-border/60 mb-4">
-              <Star className="w-4 h-4 text-secondary" />
-              <span className="text-sm text-muted-foreground">Expert Human Astrologers</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 relative">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold relative">
               <span className="relative z-10 bg-gradient-to-r from-white via-accent to-white bg-clip-text text-transparent drop-shadow-2xl">
-                Talk to Best Astrologer in Uttarakhand – Live Vedic Consultation Online
+                Talk to a Vedic Astrologer
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-               Connect with <strong>Acharya Aman Uniyal</strong> — a Vedic astrologer from{" "}
-               <strong>Pauri Garhwal, Uttarakhand</strong>, trusted by clients across{" "}
-               <strong>Dehradun, Haridwar, Rishikesh, Nainital, Roorkee</strong> and beyond.
-               Get personalized guidance on career, marriage, love, and life decisions via
-               call or chat — in Hindi and English — starting at just ₹40/min.{" "}
-               <a href="/best-astrologer-in-dehradun" className="text-accent hover:text-accent/80 underline">
-                 See why we are the best astrologer in Dehradun
-               </a>{" "}
-               or explore our{" "}
-               <a href="/ai-astrology" className="text-accent hover:text-accent/80 underline">
-                 AI astrology platform
-               </a>.
+            <p className="mt-4 text-lg text-muted-foreground">
+              Get personal guidance from an experienced Vedic astrologer.
             </p>
           </div>
 
@@ -375,60 +357,54 @@ const TalkToAstrologer = () => {
               </div>
 
               {/* Basic Info */}
-              <div className="text-center mb-4">
-                <h2 className="text-xl font-bold text-white mb-1">Acharya Aman Uniyal – Best Vedic Astrologer in Uttarakhand</h2>
-                <p className="text-accent text-sm mb-2">Expert in Vedic Astrology</p>
-                <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground mb-2">
-                  <span>10+ years of experience</span>
-                  <span>·</span>
-                  <div className="flex items-center gap-1">
+              <div className="text-center mb-5">
+                <h2 className="text-xl font-bold text-white mb-1">Acharya Aman Uniyal</h2>
+                <p className="text-accent text-sm">Vedic Astrologer &amp; Vastu Consultant</p>
+              </div>
+
+              {/* Consultation Highlights */}
+              <div className="grid grid-cols-3 gap-2 mb-5 text-center">
+                <div className="rounded-lg bg-card/30 border border-border/40 px-2 py-2">
+                  <p className="text-sm font-semibold text-white">10+ Years</p>
+                  <p className="text-xs text-muted-foreground">Experience</p>
+                </div>
+                <div className="rounded-lg bg-card/30 border border-border/40 px-2 py-2">
+                  <div className="flex items-center justify-center gap-1 text-sm font-semibold text-white">
                     <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                     <span>4.9/5</span>
-                    <span>(100+ reviews)</span>
                   </div>
+                  <p className="text-xs text-muted-foreground">Rating</p>
+                </div>
+                <div className="rounded-lg bg-card/30 border border-border/40 px-2 py-2">
+                  <p className="text-sm font-semibold text-white">100+</p>
+                  <p className="text-xs text-muted-foreground">Reviews</p>
                 </div>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-muted-foreground text-center mb-4">
-                Originally from <strong>Pauri Garhwal, Uttarakhand</strong>, Acharya Aman 
-                Uniyal brings over 10 years of traditional Vedic astrology experience. 
-                He has guided thousands of clients from Dehradun, Haridwar, Rishikesh, 
-                and across India on career, marriage, and life decisions.
+              <p className="text-sm leading-relaxed text-muted-foreground text-center mb-5">
+                Acharya ji provides practical, personalised guidance through Vedic astrology,
+                Vastu Shastra, Kundli matching, career and marriage consultations.
               </p>
 
-              {/* Specialties */}
-              <div className="mb-4">
-                <h4 className="text-sm font-semibold text-white mb-2">Specialties:</h4>
-                <div className="flex flex-wrap gap-1">
+              {/* Areas of Expertise */}
+              <div className="mb-5">
+                <h3 className="text-sm font-semibold text-white mb-2">Areas of Expertise</h3>
+                <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="text-xs">Vedic Astrology</Badge>
-                  <Badge variant="secondary" className="text-xs">Career Guidance</Badge>
-                  <Badge variant="secondary" className="text-xs">Marriage and Relationships</Badge>
-                  <Badge variant="secondary" className="text-xs">Life Decisions</Badge>
+                  <Badge variant="secondary" className="text-xs">Vastu Shastra</Badge>
+                  <Badge variant="secondary" className="text-xs">Kundli Matching</Badge>
+                  <Badge variant="secondary" className="text-xs">Career &amp; Finance</Badge>
+                  <Badge variant="secondary" className="text-xs">Marriage Guidance</Badge>
+                  <Badge variant="secondary" className="text-xs">Muhurat &amp; Remedies</Badge>
                 </div>
               </div>
 
               {/* Languages */}
-              <div className="mb-4">
-                <h4 className="text-sm font-semibold text-white mb-2">Languages:</h4>
+              <div className="mb-5 flex items-center gap-2 text-sm">
+                <span className="font-semibold text-white">Languages:</span>
                 <div className="flex flex-wrap gap-1">
                   <Badge variant="outline" className="text-xs border-border/60">Hindi</Badge>
                   <Badge variant="outline" className="text-xs border-border/60">English</Badge>
-                </div>
-              </div>
-
-              {/* Qualifications */}
-              <div className="mb-4">
-                <h4 className="text-sm font-semibold text-white mb-2">Qualifications:</h4>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <CheckCircle className="w-3 h-3 text-green-400" />
-                    Certified Vedic Astrologer
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <CheckCircle className="w-3 h-3 text-green-400" />
-                    10+ years of experience
-                  </div>
                 </div>
               </div>
 
@@ -442,7 +418,10 @@ const TalkToAstrologer = () => {
                         <Phone className="w-4 h-4 text-accent" />
                         <span className="text-sm text-white">Call</span>
                       </div>
-                      <span className="text-lg font-bold text-accent">₹499</span>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-accent">₹499</p>
+                        <p className="text-xs text-accent">Unlimited Calls</p>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between bg-card/20 rounded-lg p-2">
                       <div className="flex items-center gap-2">
