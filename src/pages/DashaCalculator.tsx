@@ -27,6 +27,7 @@ const INTERPRETATIONS: Record<string, string> = {
   Mercury: "A period traditionally read through study, communication, trade, analysis, adaptability, and practical decisions.",
 };
 const RELATED_PAGES = [
+  { href: "/manglik-dosha-calculator", title: "Manglik Dosha Calculator", description: "Check natal Mars from Lagna, Moon and Venus separately from planetary timing." },
   { href: "/free-5-minutes-astrology-ai", title: "Free 5 Minute Astrology", description: "Get a quick Vedic overview when you want a broader reading beyond Dasha timing." },
   { href: "/free-ai-astrologer-chat", title: "Free AI Astrologer Chat", description: "Ask follow-up questions about the periods shown in your Dasha timeline." },
   { href: "/ai-marriage-prediction-by-date-of-birth", title: "Marriage Prediction by Date of Birth", description: "Explore relationship and marriage timing alongside your active Dasha." },

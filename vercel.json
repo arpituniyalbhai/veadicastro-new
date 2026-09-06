@@ -27,6 +27,7 @@
     { "source": "/astrology-by-date-of-birth", "destination": "/api/meta?path=astrology-by-date-of-birth" },
     { "source": "/rashi-calculator-by-date-of-birth", "destination": "/api/meta?path=rashi-calculator-by-date-of-birth" },
     { "source": "/dasha-calculator", "destination": "/api/meta?path=dasha-calculator" },
+    { "source": "/manglik-dosha-calculator", "destination": "/api/meta?path=manglik-dosha-calculator" },
     { "source": "/nakshatra-calculator", "destination": "/api/meta?path=nakshatra-calculator" },
 
     { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },

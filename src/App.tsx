@@ -110,6 +110,7 @@ const AstrologyByDateOfBirth = lazy(() => import("@/pages/AstrologyByDateOfBirth
 const Feedback = lazy(() => import("@/pages/Feedback"));
 const RashiCalculatorByDateOfBirth = lazy(() => import("@/pages/RashiCalculatorByDateOfBirth"));
 const DashaCalculator = lazy(() => import("@/pages/DashaCalculator"));
+const ManglikDoshaCalculator = lazy(() => import("@/pages/ManglikDoshaCalculator"));
 const NakshatraCalculator = lazy(() => import("@/pages/NakshatraCalculator"));
 const AndroidApp = lazy(() => import("@/pages/AndroidApp"));
 
@@ -231,6 +232,7 @@ const AuthenticatedRoutes = ({
         <Route path="/astrology-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><AstrologyByDateOfBirth /></Suspense>} />
         <Route path="/rashi-calculator-by-date-of-birth" element={<Suspense fallback={<PageLoading />}><RashiCalculatorByDateOfBirth /></Suspense>} />
         <Route path="/dasha-calculator/" element={<Suspense fallback={<PageLoading />}><DashaCalculator /></Suspense>} />
+        <Route path="/manglik-dosha-calculator" element={<Suspense fallback={<PageLoading />}><ManglikDoshaCalculator /></Suspense>} />
         <Route path="/nakshatra-calculator" element={<Suspense fallback={<PageLoading />}><NakshatraCalculator /></Suspense>} />
         <Route path="/ai-numerology-free-chat" element={<Suspense fallback={<PageLoading />}><AiNumerologyFreeChat /></Suspense>} />
         <Route path="/android-app" element={<Suspense fallback={<PageLoading />}><AndroidApp /></Suspense>} />

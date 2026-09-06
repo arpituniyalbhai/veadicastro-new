@@ -189,6 +189,7 @@ const ManglikDoshaMythsVsReality = () => {
             {/* WHAT IS MANGLIK DOSHA */}
             <section className="px-4 pt-8">
               <h2 className="text-3xl font-bold text-white mb-8 text-left">What is Manglik Dosha — The Actual Definition</h2>
+              <p className="mb-6 leading-relaxed">Use our <Link to="/manglik-dosha-calculator" className="text-pink-400 underline underline-offset-4">free Manglik Dosha calculator</Link> to check your Mars placement from Lagna, Moon and Venus with your exact birth details.</p>
               <p className="text-gray-300 leading-relaxed mb-5">
                 Manglik Dosha, also called Mangal Dosha or Kuja Dosha, occurs when Mars is placed in specific houses of a person's{" "}
                 <Link to="/free-kundli-generator" className="text-purple-400 hover:text-purple-300 underline">

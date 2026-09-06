@@ -78,6 +78,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    exclude: ['farmhash-modern', 'firebase-admin'],
+    // Swiss EP H loads its WASM glue with a relative dynamic import. Keep it
+    // outside Vite's dev prebundle so that URL remains tied to the package.
+    exclude: ['farmhash-modern', 'firebase-admin', 'sweph-wasm'],
   },
 }));

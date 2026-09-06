@@ -234,7 +234,11 @@ const getSwe = async (): Promise<SwissEphInstance> => {
       swe.swe_set_sid_mode(swe.SE_SIDM_LAHIRI, 0, 0);
       (window as any).preloadedSwe = swe; // Store for future use
       return swe;
-    })();
+    })().catch((error) => {
+      // A failed import/download must not poison every later calculation.
+      swePromise = null;
+      throw error;
+    });
   }
   return swePromise;
 };

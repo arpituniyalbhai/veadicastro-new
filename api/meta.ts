@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import fs from 'fs';
 import path from 'path';
+import { MANGLIK_TITLE, MANGLIK_DESCRIPTION, MANGLIK_URL, MANGLIK_DATE_PUBLISHED, MANGLIK_DATE_MODIFIED, manglikSections, manglikFaqs } from '../src/lib/manglikContent';
 
 type SchemaType = 'WebPage' | 'Article' | 'SoftwareApplication';
 
@@ -13,6 +14,12 @@ type Meta = {
 };
 
 const META_BASE: Record<string, Meta> = {
+  '/manglik-dosha-calculator': {
+    title: MANGLIK_TITLE,
+    description: MANGLIK_DESCRIPTION,
+    canonical: MANGLIK_URL,
+    breadcrumb: 'Manglik Dosha Calculator',
+  },
   '/': {
   title: 'AI Astrology — Free AI Chat, Daily Horoscope & Detailed Report | Veadicastro',
   description: "India's most accurate AI Astrology platform. Get personalized Kundli, daily health, wealth & self predictions, AI chat with Vedika — in Hindi & English. Plans from ₹149/month.",
@@ -447,6 +454,7 @@ const META_BASE: Record<string, Meta> = {
 };
 
 const INTERACTIVE_TOOL_PATHS = new Set([
+  '/manglik-dosha-calculator',
   '/',
   '/free-ai-astrologer-chat',
   '/free-5-minutes-astrology-ai',
@@ -501,6 +509,13 @@ function buildHtml(meta: Meta & { schemaType: SchemaType }, pathname: string) {
     name: meta.title,
     description: meta.description,
     url: meta.canonical,
+    ...(pathname === '/manglik-dosha-calculator' ? {
+      applicationCategory: 'LifestyleApplication',
+      operatingSystem: 'Web Browser',
+      datePublished: MANGLIK_DATE_PUBLISHED,
+      dateModified: MANGLIK_DATE_MODIFIED,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+    } : {}),
   }).replace(/</g, '\\u003c');
 
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
@@ -538,6 +553,28 @@ function buildHtml(meta: Meta & { schemaType: SchemaType }, pathname: string) {
 <script type="application/ld+json">${pageSchema}</script>`;
 
   html = html.replace('</head>', `${inject}\n</head>`);
+  if (pathname === '/manglik-dosha-calculator') {
+    const faqSchema = JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      mainEntity: manglikFaqs.map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })),
+    }).replace(/</g, '\\u003c');
+    html = html.replace('</head>', `<script type="application/ld+json" data-rh="true">${faqSchema}</script></head>`);
+    const content = `<main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Manglik Dosha Calculator</nav>
+      <h1>Manglik Dosha Calculator</h1><p>${escapeHtml(MANGLIK_DESCRIPTION)}</p>
+      <p>The interactive birth form loads here. Enable JavaScript to calculate your result.</p>
+      ${manglikSections.map(section => `<section><h2>${escapeHtml(section.title)}</h2><p>${escapeHtml(section.text)}</p><p>Explore <a href="${escapeHtml(section.link)}">${escapeHtml(section.anchor)}</a>; ${escapeHtml(section.after)}</p></section>`).join('')}
+      <section><h2>Manglik calculator FAQs</h2>${manglikFaqs.map(([question, answer]) => `<details><summary>${escapeHtml(question)}</summary><p>${escapeHtml(answer)}</p></details>`).join('')}</section>
+    </main>`;
+    // React's createRoot replaces this identical guide when the app mounts.
+    const rootStart = html.indexOf('<div id="root">');
+    const moduleStart = html.indexOf('<script type="module"', rootStart);
+    const bodyEnd = moduleStart >= 0 ? moduleStart : html.indexOf('</body>', rootStart);
+    const rootEnd = html.lastIndexOf('</div>', bodyEnd);
+    if (rootStart >= 0 && rootEnd > rootStart) {
+      html = html.slice(0, rootStart + '<div id="root">'.length) + content + html.slice(rootEnd);
+    }
+  }
   return html;
 }
 
@@ -554,6 +591,13 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
   const rawHtml = fs.readFileSync(indexPath, 'utf-8');
+
+  // Deliver the same indexable guide and metadata to visitors and crawlers.
+  if (pathname === '/manglik-dosha-calculator') {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
+    return res.send(buildHtml(META[pathname], pathname));
+  }
 
   if (!isBot) {
     res.setHeader('Content-Type', 'text/html');

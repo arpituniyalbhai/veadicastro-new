@@ -27,6 +27,7 @@ const linkGroups = [
       { name: "Astrology by Date of Birth", path: "/astrology-by-date-of-birth" },
       { name: "Rashi Calculator", path: "/rashi-calculator-by-date-of-birth" },
       { name: "Dasha Calculator", path: "/dasha-calculator/" },
+      { name: "Manglik Dosha Calculator", path: "/manglik-dosha-calculator" },
       { name: "Nakshatra Calculator", path: "/nakshatra-calculator" },
       { name: "Future Spouse Prediction", path: "/ai-future-spouse-prediction" },
       { name: "Astrology AI Tools", path: "/#features" },

@@ -75,6 +75,9 @@ const Footer = () => {
             <Link to="/dasha-calculator/" className="text-white/80 hover:text-white transition-colors">
               Dasha Calculator
             </Link>
+            <Link to="/manglik-dosha-calculator" className="text-white/80 hover:text-white transition-colors">
+              Manglik Dosha Calculator
+            </Link>
             <Link to="/chatgpt-astrology" className="text-white/80 hover:text-white transition-colors">
               ChatGPT Astrology
             </Link>

@@ -456,6 +456,14 @@ const Index = () => {
             </div>
 
             {/* Tools Cards - First Row */}
+            <a href="/manglik-dosha-calculator" className="group mb-6 flex flex-col gap-4 rounded-2xl border border-border/60 bg-card/40 p-6 transition-colors hover:border-secondary/40 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-secondary">Free Vedic calculator</span>
+                <h3 className="mt-2 text-xl font-bold text-foreground">Manglik Dosha Calculator</h3>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">Check Mars from Lagna, Moon and Venus using your birth details, Swiss Ephemeris and Lahiri ayanamsa.</p>
+              </div>
+              <span className="shrink-0 rounded-full bg-secondary/15 px-5 py-3 text-sm font-semibold text-secondary">Check Manglik Dosha →</span>
+            </a>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               {/* AI Chat Tool */}
               <article className="group relative bg-card/40 border border-border/60 rounded-2xl hover:border-secondary/40 transition-all duration-300 cursor-pointer hover:shadow-xl overflow-hidden"
