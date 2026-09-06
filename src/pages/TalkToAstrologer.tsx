@@ -310,9 +310,6 @@ const TalkToAstrologer = () => {
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-secondary/40 via-accent/50 to-primary/40 blur-2xl -z-10 scale-110"></div>
             </h1>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Get personal guidance from an experienced Vedic astrologer.
-            </p>
           </div>
 
         {/* Astrologers Grid */}
@@ -382,8 +379,7 @@ const TalkToAstrologer = () => {
               </div>
 
               <p className="text-sm leading-relaxed text-muted-foreground text-center mb-5">
-                Acharya ji provides practical, personalised guidance through Vedic astrology,
-                Vastu Shastra, Kundli matching, career and marriage consultations.
+                Whether it’s career, marriage, relationships, or an important life decision, Acharya Ji offers clear Vedic guidance to help you move forward with confidence. His readings go beyond predictions—uncovering key patterns, timing, and practical direction so you can make wiser choices with greater clarity.
               </p>
 
               {/* Areas of Expertise */}
