@@ -1175,103 +1175,89 @@ export default function Chat() {
     if (!chatMessages.length || isExportingChat) return;
 
     setIsExportingChat(true);
-    const exportRoot = document.createElement("div");
-
     try {
       const { jsPDF } = await import("jspdf");
       const activeSession = sessions.find((session) => session.id === activeSessionId);
       const documentTitle = activeSession?.title?.trim() || "Vedika AI Chat";
+      const pdf = new jsPDF({ unit: "mm", format: "a4" });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 18;
+      const contentWidth = pageWidth - margin * 2;
+      let y = 27;
 
-      Object.assign(exportRoot.style, {
-        position: "fixed",
-        left: "-100000px",
-        top: "0",
-        width: "794px",
-        padding: "48px",
-        background: "#ffffff",
-        color: "#1f2937",
-        fontFamily: 'Arial, "Noto Sans Devanagari", sans-serif',
-        fontSize: "14px",
-        lineHeight: "1.6",
-      });
+      const addHeader = () => {
+        pdf.setFillColor(27, 16, 32);
+        pdf.rect(0, 0, pageWidth, 17, "F");
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(14);
+        pdf.text("Veadicastro - Vedika AI Chat", margin, 11);
+        pdf.setTextColor(30, 30, 30);
+      };
 
-      const heading = document.createElement("h1");
-      heading.textContent = "Veadicastro - Vedika AI Chat";
-      Object.assign(heading.style, {
-        margin: "0 0 8px",
-        color: "#301934",
-        fontSize: "26px",
-        lineHeight: "1.25",
-      });
-      exportRoot.appendChild(heading);
+      const addPage = () => {
+        pdf.addPage();
+        addHeader();
+        y = 27;
+      };
 
-      const subtitle = document.createElement("p");
-      subtitle.textContent = `${documentTitle} - Exported ${new Date().toLocaleString()}`;
-      Object.assign(subtitle.style, {
-        margin: "0 0 28px",
-        color: "#6b7280",
-        fontSize: "12px",
-      });
-      exportRoot.appendChild(subtitle);
+      const ensureSpace = (height: number) => {
+        if (y + height > pageHeight - 18) addPage();
+      };
+
+      const addWrappedText = (text: string) => {
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        const paragraphs = text.replace(/\r/g, "").trim().split("\n");
+
+        paragraphs.forEach((paragraph) => {
+          if (!paragraph.trim()) {
+            y += 3;
+            return;
+          }
+
+          const wrappedLines = pdf.splitTextToSize(paragraph.trim(), contentWidth);
+          wrappedLines.forEach((line: string) => {
+            ensureSpace(6);
+            pdf.text(line, margin, y);
+            y += 5.5;
+          });
+        });
+      };
+
+      addHeader();
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(12);
+      pdf.text(documentTitle, margin, y);
+      y += 6;
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(8);
+      pdf.setTextColor(105, 105, 105);
+      pdf.text(`Exported ${new Date().toLocaleString()}`, margin, y);
+      pdf.setTextColor(30, 30, 30);
+      y += 10;
 
       chatMessages.forEach((chatMessage) => {
-        const messageBlock = document.createElement("section");
-        Object.assign(messageBlock.style, {
-          marginBottom: "18px",
-          padding: "16px 18px",
-          border: "1px solid #e5e7eb",
-          borderRadius: "12px",
-          background: chatMessage.role === "user" ? "#fdf2f8" : "#f9fafb",
-          breakInside: "avoid",
-          pageBreakInside: "avoid",
-        });
+        ensureSpace(16);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(11);
+        if (chatMessage.role === "user") {
+          pdf.setTextColor(190, 24, 93);
+          pdf.text("You", margin, y);
+        } else {
+          pdf.setTextColor(126, 34, 206);
+          pdf.text("Vedika AI", margin, y);
+        }
+        pdf.setTextColor(30, 30, 30);
+        y += 6.5;
+        addWrappedText(chatMessage.content);
+        y += 5;
 
-        const roleLabel = document.createElement("div");
-        roleLabel.textContent = chatMessage.role === "user" ? "You" : "Vedika AI";
-        Object.assign(roleLabel.style, {
-          marginBottom: "7px",
-          color: chatMessage.role === "user" ? "#be185d" : "#7e22ce",
-          fontSize: "12px",
-          fontWeight: "700",
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-        });
-        messageBlock.appendChild(roleLabel);
-
-        const content = document.createElement("div");
-        content.textContent = chatMessage.content.trim();
-        Object.assign(content.style, {
-          whiteSpace: "pre-wrap",
-          overflowWrap: "anywhere",
-        });
-        messageBlock.appendChild(content);
-        exportRoot.appendChild(messageBlock);
-      });
-
-      const disclaimer = document.createElement("p");
-      disclaimer.textContent = "Generated by Veadicastro. For guidance and reflection only.";
-      Object.assign(disclaimer.style, {
-        margin: "28px 0 0",
-        color: "#6b7280",
-        fontSize: "11px",
-        textAlign: "center",
-      });
-      exportRoot.appendChild(disclaimer);
-      document.body.appendChild(exportRoot);
-
-      if (document.fonts?.ready) await document.fonts.ready;
-
-      const pdf = new jsPDF({ unit: "mm", format: "a4", compress: true });
-      await pdf.html(exportRoot, {
-        margin: [14, 14, 16, 14],
-        autoPaging: "text",
-        width: 182,
-        windowWidth: 794,
-        html2canvas: {
-          backgroundColor: "#ffffff",
-          scale: 1.5,
-          useCORS: true,
-        },
+        ensureSpace(4);
+        pdf.setDrawColor(225, 225, 225);
+        pdf.line(margin, y, pageWidth - margin, y);
+        y += 7;
       });
 
       const pageCount = pdf.getNumberOfPages();
@@ -1288,7 +1274,6 @@ export default function Chat() {
       console.error("[Chat] Failed to export conversation", error);
       window.alert("The chat could not be exported right now. Please try again.");
     } finally {
-      exportRoot.remove();
       setIsExportingChat(false);
     }
   }, [activeSessionId, isExportingChat, messages, sessions]);
