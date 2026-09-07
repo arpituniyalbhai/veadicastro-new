@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole, BarChart3, UserRound, Crown, Sparkles, Volume2, Square, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole, BarChart3, UserRound, Crown, Sparkles, Copy, Download, RotateCcw, ThumbsUp, ThumbsDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -254,7 +254,8 @@ export default function Chat() {
   const [hasTyped, setHasTyped] = useState<boolean>(false);
   const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
   const [loadingSuggestions, setLoadingSuggestions] = useState<Record<number, boolean>>({});
-  const [playingAnswerIndex, setPlayingAnswerIndex] = useState<number | null>(null);
+  const [copiedAnswerIndex, setCopiedAnswerIndex] = useState<number | null>(null);
+  const [exportingAnswerIndex, setExportingAnswerIndex] = useState<number | null>(null);
   const [answerFeedback, setAnswerFeedback] = useState<Record<number, "like" | "dislike">>({});
   const [lowCreditOfferIndex, setLowCreditOfferIndex] = useState<number | null>(null);
   const lowCreditOfferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -274,7 +275,6 @@ export default function Chat() {
   useEffect(() => {
     return () => {
       if (lowCreditOfferTimerRef.current) clearTimeout(lowCreditOfferTimerRef.current);
-      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     };
   }, []);
 
@@ -482,33 +482,15 @@ export default function Chat() {
     }
   }, []);
 
-  const speakAnswer = useCallback((content: string, index: number) => {
-    if (!("speechSynthesis" in window)) return;
-
-    if (playingAnswerIndex === index) {
-      window.speechSynthesis.cancel();
-      setPlayingAnswerIndex(null);
-      return;
+  const copyAnswer = useCallback(async (content: string, index: number) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      setCopiedAnswerIndex(index);
+      window.setTimeout(() => setCopiedAnswerIndex((current) => current === index ? null : current), 1800);
+    } catch {
+      // Clipboard access can be unavailable in a few browser privacy modes.
     }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(content.replace(/\s+/g, " ").trim());
-    const voices = window.speechSynthesis.getVoices();
-    const languageCode = lang === "hi" ? "hi" : "en";
-    const isFemaleNamedVoice = (voice: SpeechSynthesisVoice) =>
-      /female|zira|samantha|victoria|karen|moira|tessa|veena|heera|susan|aria|jenny|sonia/i.test(voice.name);
-    const preferredFemaleVoice = voices.find((voice) => voice.lang.startsWith(languageCode) && isFemaleNamedVoice(voice))
-      || voices.find(isFemaleNamedVoice);
-    const matchingLanguageVoice = voices.find((voice) => voice.lang.startsWith(languageCode));
-
-    utterance.voice = preferredFemaleVoice || matchingLanguageVoice || null;
-    utterance.rate = 0.96;
-    utterance.pitch = 1.08;
-    utterance.onend = () => setPlayingAnswerIndex((current) => current === index ? null : current);
-    utterance.onerror = () => setPlayingAnswerIndex((current) => current === index ? null : current);
-    setPlayingAnswerIndex(index);
-    window.speechSynthesis.speak(utterance);
-  }, [lang, playingAnswerIndex]);
+  }, []);
 
   const setFeedback = useCallback((index: number, feedback: "like" | "dislike") => {
     setAnswerFeedback((current) => {
@@ -1132,6 +1114,61 @@ export default function Chat() {
     }
   };
 
+  const exportAnswerAsPdf = useCallback(async (answer: string, index: number) => {
+    setExportingAnswerIndex(index);
+    try {
+      const { jsPDF } = await import("jspdf");
+      const pdf = new jsPDF({ unit: "mm", format: "a4" });
+      const previousQuestion = [...messages.slice(0, index)]
+        .reverse()
+        .find((chatMessage) => chatMessage.role === "user")?.content || "Your astrology question";
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 18;
+      const contentWidth = pageWidth - margin * 2;
+      let y = 24;
+
+      const addHeader = () => {
+        pdf.setFillColor(27, 16, 32);
+        pdf.rect(0, 0, pageWidth, 17, "F");
+        pdf.setTextColor(255, 255, 255);
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(14);
+        pdf.text("Veadicastro - Vedika AI Guidance", margin, 11);
+        pdf.setTextColor(30, 30, 30);
+      };
+      const addTextBlock = (label: string, text: string) => {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(11);
+        pdf.text(label, margin, y);
+        y += 7;
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(10);
+        const wrappedLines = pdf.splitTextToSize(text.replace(/\s+/g, " ").trim(), contentWidth);
+        for (const line of wrappedLines) {
+          if (y > pageHeight - 20) {
+            pdf.addPage();
+            addHeader();
+            y = 28;
+          }
+          pdf.text(line, margin, y);
+          y += 5.5;
+        }
+        y += 7;
+      };
+
+      addHeader();
+      addTextBlock("Your question", previousQuestion);
+      addTextBlock("Vedika AI answer", answer);
+      pdf.setFontSize(8);
+      pdf.setTextColor(105, 105, 105);
+      pdf.text("Generated by Veadicastro. For guidance and reflection only.", margin, pageHeight - 10);
+      pdf.save(`vedika-ai-guidance-${Date.now()}.pdf`);
+    } finally {
+      setExportingAnswerIndex(null);
+    }
+  }, [messages]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row scroll-smooth">
       <style>{`/* Hide scrollbar for mobile, show for desktop/laptop */
@@ -1453,16 +1490,44 @@ export default function Chat() {
                       </div>
                     </Card>
                     {m.role === "assistant" && !m.isOutOfCredits && (
-                      <div className="mt-2 ml-0 flex items-center gap-1.5 sm:ml-1" aria-label="Answer actions">
+                      <div className="mt-2 ml-0 flex flex-wrap items-center gap-1.5 sm:ml-1" aria-label="Answer actions">
                         <button
                           type="button"
-                          onClick={() => speakAnswer(m.content || "", idx)}
+                          onClick={() => copyAnswer(m.content || "", idx)}
                           className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/60 bg-card/45 px-3 text-xs font-medium text-muted-foreground transition hover:border-secondary/45 hover:bg-secondary/10 hover:text-foreground"
-                          aria-label={playingAnswerIndex === idx ? "Stop reading answer" : "Read answer aloud"}
-                          title={playingAnswerIndex === idx ? "Stop" : "Listen"}
+                          aria-label="Copy this answer"
+                          title="Copy answer"
                         >
-                          {playingAnswerIndex === idx ? <Square className="h-3.5 w-3.5 fill-current" /> : <Volume2 className="h-3.5 w-3.5" />}
-                          {playingAnswerIndex === idx ? "Stop" : "Listen"}
+                          <Copy className="h-3.5 w-3.5" />
+                          {copiedAnswerIndex === idx ? "Copied" : "Copy"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => exportAnswerAsPdf(m.content || "", idx)}
+                          disabled={exportingAnswerIndex === idx}
+                          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/60 bg-card/45 px-3 text-xs font-medium text-muted-foreground transition hover:border-secondary/45 hover:bg-secondary/10 hover:text-foreground disabled:cursor-wait disabled:opacity-60"
+                          aria-label="Export this answer as PDF"
+                          title="Export PDF"
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          {exportingAnswerIndex === idx ? "Exporting" : "Export"}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={sending || credits <= 0}
+                          onClick={() => {
+                            if (credits <= 0) return;
+                            const previousQuestion = [...messages.slice(0, idx)]
+                              .reverse()
+                              .find((chatMessage) => chatMessage.role === "user")?.content;
+                            if (previousQuestion) send(previousQuestion);
+                          }}
+                          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/60 bg-card/45 px-3 text-xs font-medium text-muted-foreground transition hover:border-secondary/45 hover:bg-secondary/10 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                          aria-label={credits <= 0 ? "No credits available to ask again" : "Ask Vedika to answer again"}
+                          title={credits <= 0 ? "No credits available" : "Ask again"}
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" />
+                          Ask again
                         </button>
                         <button
                           type="button"
