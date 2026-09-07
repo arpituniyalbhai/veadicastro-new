@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole, BarChart3, UserRound, Crown, Sparkles } from "lucide-react";
+import { Send, Home, MessageSquare, Receipt, Plus, RefreshCw, ChevronLeft, ChevronRight, ChevronDown, Menu, Trash2, ChevronUp, Brain, LockKeyhole, BarChart3, UserRound, Crown, Sparkles, Volume2, Square, ThumbsUp, ThumbsDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
@@ -254,6 +254,8 @@ export default function Chat() {
   const [hasTyped, setHasTyped] = useState<boolean>(false);
   const [answerSuggestions, setAnswerSuggestions] = useState<Record<number, string[]>>({});
   const [loadingSuggestions, setLoadingSuggestions] = useState<Record<number, boolean>>({});
+  const [playingAnswerIndex, setPlayingAnswerIndex] = useState<number | null>(null);
+  const [answerFeedback, setAnswerFeedback] = useState<Record<number, "like" | "dislike">>({});
   const [lowCreditOfferIndex, setLowCreditOfferIndex] = useState<number | null>(null);
   const lowCreditOfferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showMemoryPrompt, setShowMemoryPrompt] = useState(false);
@@ -272,6 +274,7 @@ export default function Chat() {
   useEffect(() => {
     return () => {
       if (lowCreditOfferTimerRef.current) clearTimeout(lowCreditOfferTimerRef.current);
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     };
   }, []);
 
@@ -477,6 +480,43 @@ export default function Chat() {
     if (inputRef.current) {
       inputRef.current.focus({ preventScroll: true });
     }
+  }, []);
+
+  const speakAnswer = useCallback((content: string, index: number) => {
+    if (!("speechSynthesis" in window)) return;
+
+    if (playingAnswerIndex === index) {
+      window.speechSynthesis.cancel();
+      setPlayingAnswerIndex(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(content.replace(/\s+/g, " ").trim());
+    const voices = window.speechSynthesis.getVoices();
+    const languageCode = lang === "hi" ? "hi" : "en";
+    const isFemaleNamedVoice = (voice: SpeechSynthesisVoice) =>
+      /female|zira|samantha|victoria|karen|moira|tessa|veena|heera|susan|aria|jenny|sonia/i.test(voice.name);
+    const preferredFemaleVoice = voices.find((voice) => voice.lang.startsWith(languageCode) && isFemaleNamedVoice(voice))
+      || voices.find(isFemaleNamedVoice);
+    const matchingLanguageVoice = voices.find((voice) => voice.lang.startsWith(languageCode));
+
+    utterance.voice = preferredFemaleVoice || matchingLanguageVoice || null;
+    utterance.rate = 0.96;
+    utterance.pitch = 1.08;
+    utterance.onend = () => setPlayingAnswerIndex((current) => current === index ? null : current);
+    utterance.onerror = () => setPlayingAnswerIndex((current) => current === index ? null : current);
+    setPlayingAnswerIndex(index);
+    window.speechSynthesis.speak(utterance);
+  }, [lang, playingAnswerIndex]);
+
+  const setFeedback = useCallback((index: number, feedback: "like" | "dislike") => {
+    setAnswerFeedback((current) => {
+      const next = { ...current };
+      if (next[index] === feedback) delete next[index];
+      else next[index] = feedback;
+      return next;
+    });
   }, []);
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -1412,6 +1452,48 @@ export default function Chat() {
                         )}
                       </div>
                     </Card>
+                    {m.role === "assistant" && !m.isOutOfCredits && (
+                      <div className="mt-2 ml-0 flex items-center gap-1.5 sm:ml-1" aria-label="Answer actions">
+                        <button
+                          type="button"
+                          onClick={() => speakAnswer(m.content || "", idx)}
+                          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border/60 bg-card/45 px-3 text-xs font-medium text-muted-foreground transition hover:border-secondary/45 hover:bg-secondary/10 hover:text-foreground"
+                          aria-label={playingAnswerIndex === idx ? "Stop reading answer" : "Read answer aloud"}
+                          title={playingAnswerIndex === idx ? "Stop" : "Listen"}
+                        >
+                          {playingAnswerIndex === idx ? <Square className="h-3.5 w-3.5 fill-current" /> : <Volume2 className="h-3.5 w-3.5" />}
+                          {playingAnswerIndex === idx ? "Stop" : "Listen"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setFeedback(idx, "like")}
+                          className={`inline-flex h-8 w-8 items-center justify-center rounded-full border transition ${
+                            answerFeedback[idx] === "like"
+                              ? "border-secondary/60 bg-secondary/15 text-secondary"
+                              : "border-border/60 bg-card/45 text-muted-foreground hover:border-secondary/45 hover:text-foreground"
+                          }`}
+                          aria-label="Like this answer"
+                          aria-pressed={answerFeedback[idx] === "like"}
+                          title="Like"
+                        >
+                          <ThumbsUp className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setFeedback(idx, "dislike")}
+                          className={`inline-flex h-8 w-8 items-center justify-center rounded-full border transition ${
+                            answerFeedback[idx] === "dislike"
+                              ? "border-rose-400/60 bg-rose-400/10 text-rose-300"
+                              : "border-border/60 bg-card/45 text-muted-foreground hover:border-rose-400/45 hover:text-foreground"
+                          }`}
+                          aria-label="Dislike this answer"
+                          aria-pressed={answerFeedback[idx] === "dislike"}
+                          title="Dislike"
+                        >
+                          <ThumbsDown className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    )}
                     {m.role === "assistant" && loadingSuggestions[idx] && (
                       <div className="mt-2 ml-0 sm:ml-1 flex flex-col gap-2 sm:flex-row sm:flex-wrap" aria-label="Loading suggested questions">
                         {[0, 1].map((item) => (
