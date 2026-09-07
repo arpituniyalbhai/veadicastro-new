@@ -84,6 +84,12 @@ export default function Dashboard() {
   const [sending, setSending] = useState(false);
   const [askFocused, setAskFocused] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState<string | null>(null);
+  const [movingSuggestion, setMovingSuggestion] = useState<{
+    text: string;
+    from: { left: number; top: number; width: number };
+    to: { left: number; top: number; width: number };
+    isMoving: boolean;
+  } | null>(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const promoIconUrl = "";
   const [sectionModalOpen, setSectionModalOpen] = useState(false);
@@ -101,6 +107,7 @@ export default function Dashboard() {
   // monthlySummaryLoading declared above; old monthly state removed
   const pendingDateRef = useRef<string | null>(null);
   const askInputRef = useRef<HTMLInputElement | null>(null);
+  const suggestionAnimationTimerRef = useRef<number | null>(null);
   const midnightTimerRef = useRef<number | null>(null);
   const OFFER_END_DATE = new Date('2026-06-02T23:59:59+05:30').getTime();
   const [timeRemaining, setTimeRemaining] = useState(() => {
@@ -663,11 +670,45 @@ export default function Dashboard() {
     }
   };
 
-  const handleSuggestionClick = (q: string) => {
+  const handleSuggestionClick = (q: string, source?: HTMLElement) => {
     setSelectedSuggestion(q);
-    setQuestion(q);
-    askInputRef.current?.focus();
-    window.setTimeout(() => setSelectedSuggestion(null), 420);
+
+    const input = askInputRef.current;
+    if (!source || !input) {
+      setQuestion(q);
+      input?.focus();
+      window.setTimeout(() => setSelectedSuggestion(null), 420);
+      return;
+    }
+
+    if (suggestionAnimationTimerRef.current) {
+      window.clearTimeout(suggestionAnimationTimerRef.current);
+    }
+
+    const sourceRect = source.getBoundingClientRect();
+    const inputRect = input.getBoundingClientRect();
+    setMovingSuggestion({
+      text: q,
+      from: { left: sourceRect.left, top: sourceRect.top, width: sourceRect.width },
+      to: {
+        left: inputRect.left + 12,
+        top: inputRect.top + 9,
+        width: Math.max(120, inputRect.width - 76),
+      },
+      isMoving: false,
+    });
+
+    window.requestAnimationFrame(() => {
+      setMovingSuggestion((current) => current ? { ...current, isMoving: true } : null);
+    });
+
+    suggestionAnimationTimerRef.current = window.setTimeout(() => {
+      setQuestion(q);
+      input.focus();
+      setMovingSuggestion(null);
+      setSelectedSuggestion(null);
+      suggestionAnimationTimerRef.current = null;
+    }, 360);
   };
 
   const handleTabChange = (val: string) => {
@@ -979,7 +1020,7 @@ export default function Dashboard() {
               {suggestions.map((q) => (
                 <button
                   key={q}
-                  onClick={() => handleSuggestionClick(q)}
+                  onClick={(event) => handleSuggestionClick(q, event.currentTarget)}
                   disabled={sending}
                   className={cn(
                     "flex min-h-14 items-center rounded-xl border border-border/60 bg-background/50 px-3 py-2 text-left text-xs sm:text-sm",
@@ -1415,6 +1456,21 @@ export default function Dashboard() {
           </div>
         </DialogContent>
       </Dialog>
+      {movingSuggestion && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed z-[100] flex h-10 items-center rounded-full border border-secondary/50 bg-background/95 px-4 text-xs font-medium text-foreground shadow-lg shadow-secondary/20 transition-[left,top,width,opacity,transform] duration-[360ms] ease-out"
+          style={{
+            left: movingSuggestion.isMoving ? movingSuggestion.to.left : movingSuggestion.from.left,
+            top: movingSuggestion.isMoving ? movingSuggestion.to.top : movingSuggestion.from.top,
+            width: movingSuggestion.isMoving ? movingSuggestion.to.width : movingSuggestion.from.width,
+            opacity: movingSuggestion.isMoving ? 0.72 : 1,
+            transform: movingSuggestion.isMoving ? "scale(0.92)" : "scale(1)",
+          }}
+        >
+          <span className="truncate">{movingSuggestion.text}</span>
+        </div>
+      )}
       </div>
   );
 }
