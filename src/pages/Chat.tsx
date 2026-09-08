@@ -913,7 +913,6 @@ export default function Chat() {
         return;
       }
       let planetsBlock = "";
-      let transitBlock = "";
       if (details?.dob && details?.time && (details?.lat != null) && (details?.lng != null)) {
         try {
           const [y, m, d] = details.dob.split('-').map((n: string) => parseInt(n, 10));
@@ -930,23 +929,35 @@ export default function Chat() {
             tzone: tzone,
           };
           const payload = await getPlanetaryData(body);
-          planetsBlock = `Planetary Data:\n${JSON.stringify(payload)}`;
           persistAstroPayload(payload);
 
-          const questionTopic = classifyChatQuestionTopic(userText);
-          const transitDate = new Date();
-          const transitDateKey = `${transitDate.getFullYear()}-${String(transitDate.getMonth() + 1).padStart(2, "0")}-${String(transitDate.getDate()).padStart(2, "0")}`;
-          const transitPlanets = await getOrComputeTodayTransits(transitDateKey, transitDate);
-          const transitToNatal = getTransitToNatalSummary(
-            transitPlanets,
-            payload.planetsList,
-            payload.ascendantSign,
-            8,
-            questionTopic,
-          );
-          transitBlock = `Current Gochar / Transit-to-Natal Mapping (for ${transitDateKey}; question topic: ${questionTopic}):\n${transitToNatal || "No relevant transit-to-natal mapping is available."}`;
+          let transitToNatal = "";
+          try {
+            const questionTopic = classifyChatQuestionTopic(userText);
+            const transitDate = new Date();
+            const transitDateKey = `${transitDate.getFullYear()}-${String(transitDate.getMonth() + 1).padStart(2, "0")}-${String(transitDate.getDate()).padStart(2, "0")}`;
+            const transitPlanets = await getOrComputeTodayTransits(transitDateKey, transitDate);
+            const transitSummary = getTransitToNatalSummary(
+              transitPlanets,
+              payload.planetsList,
+              payload.ascendantSign,
+              8,
+              questionTopic,
+            );
+            transitToNatal = transitSummary
+              ? `For ${transitDateKey}; question topic: ${questionTopic}\n${transitSummary}`
+              : "";
+          } catch (transitError) {
+            console.debug('[Chat] Transit calculation failed; continuing with natal chart only.', transitError);
+          }
+
+          const payloadWithTransits = {
+            ...payload,
+            transits: transitToNatal || null,
+          };
+          planetsBlock = `Planetary Data:\n${JSON.stringify(payloadWithTransits)}`;
         } catch (e) {
-          console.debug('[Chat] Astrology or transit calculation failed, will try local cache.', e);
+          console.debug('[Chat] Astrology calculation failed, will try local cache.', e);
         }
       }
       if (!planetsBlock) {
@@ -970,7 +981,7 @@ export default function Chat() {
           }
         } catch { /* Ignore invalid local memory. */ }
       }
-      const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}${transitBlock ? `\n\n${transitBlock}` : ""}${memoryBlock ? `\n\n${memoryBlock}` : ""}`.trim();
+      const systemExtra = `${planetsBlock || 'Planetary Data: (not available)'}\n\n${detailsBlock}${memoryBlock ? `\n\n${memoryBlock}` : ""}`.trim();
       
       // The chart is already supplied once through systemExtra. Keep the user
       // message to the user's question so the same chart is not duplicated in

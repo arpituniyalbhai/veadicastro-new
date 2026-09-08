@@ -43,9 +43,27 @@ function buildVedicSummary(systemExtra: string, userName?: string): string {
       return systemExtra;
     }
 
-    // The local-cache fallback contains only PlanetEntry[]. Preserve it rather
-    // than pretending it is a complete, verified chart.
-    if (Array.isArray(chart)) return systemExtra;
+    // The local-cache fallback contains only PlanetEntry[]. Keep the available
+    // signs, but explicitly prevent unsupported house, dasha, and timing claims.
+    if (Array.isArray(chart)) {
+      const basicPlanetSigns = chart
+        .map((planet: any) => {
+          const name = planet?.name || planet?.planet || planet?.key;
+          return name && planet?.sign ? `${name}: ${planet.sign}` : '';
+        })
+        .filter(Boolean)
+        .join('\n');
+
+      return `
+CHART DATA: Partial only (calculation failed).
+Available: Basic planet signs only.
+${basicPlanetSigns || 'No valid planet signs available.'}
+NOT available: Houses, Dasha, Ascendant, Nakshatras.
+
+STRICT RULE: Answer using planet signs only. Do not mention houses, dasha timing, or ascendant. If user asks for timing, say "I need your complete birth details recalculated for accurate timing."
+
+${planetaryData.additionalContext}`.trim();
+    }
 
     // 🔒 ASTRO LOCK VALIDATION (CRITICAL)
     if (chart.astro_locked !== true || chart.source !== "swiss_ephemeris_v1") {
@@ -108,6 +126,9 @@ Antardasha: ${dasha.antardasha || 'N/A'} (${dasha.antarStart || 'N/A'} to ${dash
 Next Mahadasha after current one ends: ${dasha.nextMahadasha || 'N/A'}
 Future Mahadashas:
 ${futureMahadashaLines.length ? futureMahadashaLines.join('\n') : 'Not available'}
+
+ACTIVE TRANSITS (PRE-CALCULATED):
+${chart.transits || 'No transit data supplied. Do not mention any planetary transits.'}
 === END PRE-CALCULATED FACTS ===
 
 ${planetaryData.additionalContext}`.trim();
@@ -316,6 +337,8 @@ ${toneInstruction}
 4.When Timing mode is ON, independently derive the strongest realistic timing window from the supplied chart.
 5. Do not repeatedly mention the same astrological fact, house, mahadasha, or antardasha in every messages.
 6. Never start two consecutive answers with the same sentence structure or dasha explanation.
+7. If no transit data is supplied, never mention any planetary movement or transit. State only dasha-based timing.
+8. If Mahadasha start date appears to be before user's birth year, ignore that start date. Use only the end date for timing references.
 
 ## LANGUAGE & TONE RULE
 
