@@ -447,15 +447,15 @@ Wrong format = rewrite before sending.`;
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
     const maxTokens = isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
-    // Normal chat and follow-up questions use Mistral Small. Specialized
+    // Normal chat and follow-up questions use Mistral Medium. Specialized
     // report, JSON, and compatibility pipelines retain their existing model.
     const model = isFollowUp
-      ? 'ministral-14b-latest'
+      ? 'mistral-medium-latest'
       : isMonthly
         ? 'ministral-14b-latest'
         : (isReport || isJsonRequest || isCompatibility)
           ? 'ministral-14b-latest'
-          : 'ministral-14b-latest';
+          : 'mistral-medium-latest';
     const streamingTemperature = 0.62;
     const nonStreamingTemperature = isFollowUp ? 0.6 : 0.68;
     

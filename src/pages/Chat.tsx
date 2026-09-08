@@ -1038,11 +1038,11 @@ export default function Chat() {
         if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(flushBuffer);
         deltaCount++;
-      }, systemExtra, lang, displayName, "primary", "mistral-small-latest");
+      }, systemExtra, lang, displayName, "primary", "mistral-medium-latest");
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
-        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-small-latest");
+        const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-medium-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
@@ -2271,7 +2271,7 @@ ${memoryBlock}` : ""}`;
           requestType: "follow_up",
           lang,
           apiKeySlot: "secondary",
-          model: "mistral-small-latest",
+          model: "mistral-medium-latest",
         }),
       signal: controller.signal,
     });
