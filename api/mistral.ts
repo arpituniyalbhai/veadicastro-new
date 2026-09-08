@@ -315,7 +315,7 @@ export default async function handler(req: Request) {
     const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
-- Use only 1 mutually supporting chart factors that directly answer this question: normally the relevant house, its lord's actual placement, and one supporting planet, nakshatra, or dasha factor.
+- Use only 2-3 mutually supporting chart factors — one must be the psychological driver (Moon sign or ascendant lord placement).
 - Recently mentioned anchors: ${recentAstrologyAnchors}
 - Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
 - Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
@@ -456,8 +456,8 @@ Wrong format = rewrite before sending.`;
         : (isReport || isJsonRequest || isCompatibility)
           ? 'ministral-14b-latest'
           : 'ministral-14b-latest';
-    const streamingTemperature = 0.62;
-    const nonStreamingTemperature = isFollowUp ? 0.6 : 0.68;
+    const streamingTemperature = 0.55;
+    const nonStreamingTemperature = isFollowUp ? 0.5 : 0.58;
     
     console.log('DEBUG: isJsonRequest:', isJsonRequest, 'prompt contains JSON keywords:', {
       'Return ONLY': prompt.includes('Return ONLY the JSON object'),
