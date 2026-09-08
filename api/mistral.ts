@@ -450,12 +450,12 @@ Wrong format = rewrite before sending.`;
     // Normal chat and follow-up questions use Mistral Medium. Specialized
     // report, JSON, and compatibility pipelines retain their existing model.
     const model = isFollowUp
-      ? 'mistral-small-latest'
+      ? 'ministral-14b-latest'
       : isMonthly
         ? 'ministral-14b-latest'
         : (isReport || isJsonRequest || isCompatibility)
           ? 'ministral-14b-latest'
-          : 'mistral-small-latest';
+          : 'ministral-14b-latest';
     const streamingTemperature = 0.62;
     const nonStreamingTemperature = isFollowUp ? 0.6 : 0.68;
     
