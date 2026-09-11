@@ -224,7 +224,7 @@ export default function Chat() {
   const [message, setMessage] = useState(initial);
   const [sending, setSending] = useState(false);
   const [composerMenuOpen, setComposerMenuOpen] = useState(false);
-  const [deepReasoningOpen, setDeepReasoningOpen] = useState(false);
+  const [deepReasoningMode, setDeepReasoningMode] = useState(false);
   const [deepReasoningQuestion, setDeepReasoningQuestion] = useState("");
   const [deepReasoningLoading, setDeepReasoningLoading] = useState(false);
   const [deepReasoningResult, setDeepReasoningResult] = useState("");
@@ -436,6 +436,12 @@ export default function Chat() {
     ));
     return () => timers.forEach(window.clearTimeout);
   }, [deepReasoningLoading]);
+
+  useEffect(() => {
+    if (deepReasoningLoading || deepReasoningResult || deepReasoningError) {
+      requestAnimationFrame(() => scrollToBottom(true));
+    }
+  }, [deepReasoningLoading, deepReasoningResult, deepReasoningError, scrollToBottom]);
 
   // Update input bar position based on sidebar state and screen size
   useEffect(() => {
@@ -833,10 +839,17 @@ export default function Chat() {
     setSuggestions(base.slice(0, 4));
   }, [lang]);
 
-  const runDeepReasoning = async () => {
-    const fullQuestion = deepReasoningQuestion.trim();
+  const runDeepReasoning = async (questionOverride?: string) => {
+    const fullQuestion = (questionOverride ?? deepReasoningQuestion).trim();
     if (!fullQuestion || deepReasoningLoading) return;
 
+    setDeepReasoningQuestion(fullQuestion);
+    setMessages((current) => [...current, { role: "user", content: fullQuestion }]);
+    setMessage("");
+    setHasChatted(true);
+    userScrolledUp.current = false;
+    setShowScrollFab(false);
+    requestAnimationFrame(() => scrollToBottom(false));
     setDeepReasoningLoading(true);
     setDeepReasoningResult("");
     setDeepReasoningError("");
@@ -926,6 +939,11 @@ export default function Chat() {
   const send = async (overrideMessage?: string) => {
     const outgoingMessage = (overrideMessage ?? message).trim();
     if (!outgoingMessage || sending) return;
+
+    if (deepReasoningMode) {
+      await runDeepReasoning(outgoingMessage);
+      return;
+    }
 
     if (lowCreditOfferTimerRef.current) {
       clearTimeout(lowCreditOfferTimerRef.current);
@@ -2033,6 +2051,51 @@ export default function Chat() {
                 </div>
               </div>
             )}
+            {deepReasoningLoading && (
+              <div className="flex animate-in items-start gap-2.5 pl-1 duration-300 fade-in slide-in-from-bottom-2 sm:gap-3 sm:pl-2" role="status" aria-live="polite">
+                <div className="relative mt-1 shrink-0">
+                  <img src={assistantAvatarUrl} alt="Vedika" className="h-8 w-8 rounded-full border border-border/70 object-cover shadow-sm" />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-pink-400" />
+                </div>
+                <div className="relative w-[min(34rem,calc(100vw-4.75rem))] overflow-hidden rounded-[22px] rounded-tl-md border border-border/70 bg-gradient-to-br from-card/95 via-card/90 to-pink-400/[0.07] px-5 py-5 shadow-[0_14px_38px_rgba(0,0,0,0.18)] backdrop-blur-xl sm:px-6 sm:py-6">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2.5">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-pink-400/20 bg-pink-400/10 text-pink-300"><Brain className="h-4 w-4" /></span>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground/90">Vedika is reasoning deeply</p>
+                        <p key={deepReasoningStatus} className="mt-0.5 animate-in text-xs text-muted-foreground duration-300 fade-in">{deepReasoningStatus}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-1" aria-hidden="true">
+                      {[0, 1, 2].map((dot) => <span key={dot} className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink-400" style={{ animationDelay: `${dot * 180}ms` }} />)}
+                    </div>
+                  </div>
+                  <div className="mt-7 space-y-3" aria-hidden="true">
+                    {["w-full", "w-[92%]", "w-[76%]", "w-[86%]", "w-[58%]"].map((width, index) => (
+                      <div key={`${width}-${index}`} className={`relative h-2 overflow-hidden rounded-full bg-muted/70 ${width}`}>
+                        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-foreground/15 to-transparent [animation:loading_1.8s_ease-in-out_infinite]" style={{ animationDelay: `${index * 120}ms` }} />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-6 text-xs leading-5 text-muted-foreground">Reading every part of your question and checking it against your chart.</p>
+                </div>
+              </div>
+            )}
+            {!deepReasoningLoading && deepReasoningResult && (
+              <div className="flex animate-in items-start gap-2.5 pl-1 duration-300 fade-in slide-in-from-bottom-2 sm:gap-3 sm:pl-2">
+                <img src={assistantAvatarUrl} alt="Vedika" className="mt-1 h-8 w-8 shrink-0 rounded-full border border-border/70 object-cover shadow-sm" />
+                <div className="w-[min(34rem,calc(100vw-4.75rem))] rounded-[22px] rounded-tl-md border border-emerald-400/20 bg-emerald-400/[0.06] p-5 sm:p-6">
+                  <p className="text-sm font-semibold text-foreground">Your Deep Reasoning is ready</p>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">Vedika has analyzed your complete question with the strongest available chart evidence.</p>
+                  <Button variant="cosmic" onClick={openDeepReasoningResult} className="mt-4 rounded-full">
+                    See your result <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            )}
+            {!deepReasoningLoading && deepReasoningError && (
+              <div className="ml-11 max-w-xl rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-300 sm:ml-12">{deepReasoningError}</div>
+            )}
             <style>{`@keyframes loading {0%{transform:translateX(-100%)}50%{transform:translateX(50%)}100%{transform:translateX(200%)}}`}</style>
             <div ref={endRef} className="scroll-mt-[110px] sm:scroll-mt-0" />
           </div>
@@ -2106,7 +2169,24 @@ export default function Chat() {
                   className="pointer-events-none absolute -inset-2 z-0 animate-typing-glow rounded-full bg-pink-500/15 blur-xl"
                 />
               )}
-              <div className="relative z-10 flex items-center gap-2 sm:gap-3 flex-wrap">
+              <div className="relative z-10 w-full">
+                {deepReasoningMode && (
+                  <div className="mb-2 flex items-center justify-between gap-3 rounded-xl border border-pink-400/25 bg-pink-400/[0.08] px-3 py-2">
+                    <div className="flex min-w-0 items-center gap-2 text-xs font-medium text-pink-200">
+                      <Brain className="h-3.5 w-3.5 shrink-0" />
+                      <span>Deep Reasoning selected</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setDeepReasoningMode(false)}
+                      className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
+                      aria-label="Turn off Deep Reasoning"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <div className="relative flex-1 min-w-[220px]">
                   <Popover open={composerMenuOpen} onOpenChange={setComposerMenuOpen}>
                     <PopoverTrigger asChild>
@@ -2138,10 +2218,8 @@ export default function Chat() {
                         </Button>
                         <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => {
                           setComposerMenuOpen(false);
-                          setDeepReasoningQuestion(message.trim());
-                          setDeepReasoningResult("");
                           setDeepReasoningError("");
-                          setDeepReasoningOpen(true);
+                          setDeepReasoningMode(true);
                         }}>
                           <Brain className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <span><span className="block text-sm font-medium">Deep Reasoning</span><span className="block text-xs text-muted-foreground">Get a detailed answer</span></span>
@@ -2165,7 +2243,7 @@ export default function Chat() {
                         send();
                       }
                     }}
-                    disabled={sending}
+                    disabled={sending || deepReasoningLoading}
                     className={`h-14 rounded-full border-border/60 bg-background/65 pl-14 pr-16 text-sm shadow-inner shadow-black/10 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-secondary/35 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 ${message.trim() ? "border-secondary/50 bg-background/80 shadow-[0_0_24px_rgba(236,72,153,0.18)]" : ""}`}
                   />
                   <Button
@@ -2173,111 +2251,18 @@ export default function Chat() {
                     size="icon"
                     className="absolute right-2 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
                     onClick={() => send()}
-                    disabled={sending || !message.trim()}
+                    disabled={sending || deepReasoningLoading || !message.trim()}
                     aria-label="Send"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
+                </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
-
-      {deepReasoningOpen && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/65 p-3 backdrop-blur-sm sm:p-6" role="presentation">
-          <aside
-            className="w-full max-w-2xl animate-in overflow-hidden rounded-[28px] border border-border/70 bg-card shadow-[0_28px_90px_rgba(0,0,0,0.55)] duration-300 fade-in zoom-in-95"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="deep-reasoning-title"
-          >
-            <div className="flex items-start justify-between gap-5 border-b border-border/60 px-5 py-5 sm:px-7">
-              <div className="flex items-start gap-3.5">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-pink-400/20 bg-pink-400/10 text-pink-300">
-                  <Brain className="h-5 w-5" />
-                </span>
-                <div>
-                  <h2 id="deep-reasoning-title" className="text-lg font-semibold tracking-tight">Deep Reasoning</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">A detailed 300–500 word chart-based analysis.</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                disabled={deepReasoningLoading}
-                onClick={() => setDeepReasoningOpen(false)}
-                className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-border/60 text-lg text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
-                aria-label="Close Deep Reasoning"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="p-5 sm:p-7">
-              {!deepReasoningLoading && !deepReasoningResult && (
-                <div>
-                  <label htmlFor="deep-reasoning-question" className="text-sm font-medium text-foreground/90">Your question</label>
-                  <textarea
-                    id="deep-reasoning-question"
-                    value={deepReasoningQuestion}
-                    onChange={(event) => setDeepReasoningQuestion(event.target.value)}
-                    rows={5}
-                    autoFocus
-                    placeholder="Describe the complete situation you want Vedika to analyze…"
-                    className="mt-2 w-full resize-none rounded-2xl border border-border/70 bg-background/60 px-4 py-3 text-sm leading-6 text-foreground outline-none transition placeholder:text-muted-foreground/70 focus:border-pink-400/50 focus:ring-2 focus:ring-pink-400/15"
-                  />
-                  {deepReasoningError && (
-                    <p className="mt-3 rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2.5 text-sm text-red-300">{deepReasoningError}</p>
-                  )}
-                  <div className="mt-5 flex items-center justify-between gap-4">
-                    <p className="text-xs text-muted-foreground">Uses 1 question credit</p>
-                    <Button variant="cosmic" disabled={!deepReasoningQuestion.trim()} onClick={runDeepReasoning} className="min-w-36 rounded-full">
-                      Analyze deeply
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {deepReasoningLoading && (
-                <div className="rounded-3xl border border-border/70 bg-gradient-to-br from-background/80 via-background/60 to-pink-400/[0.06] p-6 sm:p-8" role="status" aria-live="polite">
-                  <div className="flex items-center justify-between gap-4">
-                    <div>
-                      <p className="text-base font-semibold">Vedika is reasoning deeply</p>
-                      <p key={deepReasoningStatus} className="mt-2 animate-in text-sm text-muted-foreground duration-300 fade-in">{deepReasoningStatus}</p>
-                    </div>
-                    <div className="flex gap-1.5" aria-hidden="true">
-                      {[0, 1, 2].map((dot) => <span key={dot} className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink-400" style={{ animationDelay: `${dot * 180}ms` }} />)}
-                    </div>
-                  </div>
-                  <div className="mt-8 space-y-3" aria-hidden="true">
-                    {["w-full", "w-[92%]", "w-[76%]", "w-[86%]", "w-[58%]"].map((width, index) => (
-                      <div key={`${width}-${index}`} className={`relative h-2 overflow-hidden rounded-full bg-muted/70 ${width}`}>
-                        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-foreground/15 to-transparent [animation:loading_1.8s_ease-in-out_infinite]" style={{ animationDelay: `${index * 120}ms` }} />
-                      </div>
-                    ))}
-                  </div>
-                  <p className="mt-7 text-center text-xs text-muted-foreground">Reading every part of your question and checking it against your chart.</p>
-                </div>
-              )}
-
-              {!deepReasoningLoading && deepReasoningResult && (
-                <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6 text-center sm:p-8">
-                  <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
-                    <CheckCircle className="h-6 w-6" />
-                  </span>
-                  <h3 className="mt-4 text-xl font-semibold">Your Deep Reasoning is ready</h3>
-                  <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Vedika has covered your complete question using the strongest available chart evidence.</p>
-                  <Button variant="cosmic" onClick={openDeepReasoningResult} className="mt-6 w-full rounded-full sm:w-auto sm:min-w-52">
-                    See your result
-                    <ChevronRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </div>
-              )}
-            </div>
-          </aside>
-        </div>
-      )}
 
       {/* Mobile Sidebar Overlay */}
       {sidebarOpen && (
