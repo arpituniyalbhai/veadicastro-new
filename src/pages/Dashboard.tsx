@@ -51,6 +51,23 @@ import { getDailyLuckyData, sanitizeModelJson } from "@/lib/dailyInsights";
 import { getLifeScores, getOverallScore, overallLabel, getMonthKey, scoreLabel } from "@/lib/monthlyInsights";
 import { generateDashboardPrediction } from "@/lib/dailyPredictionsPipeline";
 
+const VedicChartIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="2.25" />
+    <path d="M12 3.25 20.75 12 12 20.75 3.25 12 12 3.25Z" />
+    <path d="m3.25 3.25 8.75 8.75 8.75-8.75M20.75 20.75 12 12l-8.75 8.75" />
+  </svg>
+);
+
 export default function Dashboard() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
@@ -835,20 +852,16 @@ export default function Dashboard() {
                     const sessionId = Math.random().toString(36).substr(2, 9);
                     navigate(`/chart/${sessionId}?referral=dashboard`);
                   }}
+                  title="My Chart"
                   className={cn(
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
                     "text-muted-foreground hover:bg-accent/10 hover:text-foreground",
                     sidebarCollapsed && "justify-center px-0 py-3"
                   )}
                 >
-                  {sidebarCollapsed ? (
-                    <span className="text-sm font-medium">Chart</span>
-                  ) : (
-                    <>
-                      <span className="flex-1 text-left text-sm font-medium">My Chart</span>
-                      <ChevronRight className="w-5 h-5" />
-                    </>
-                  )}
+                  <VedicChartIcon className={cn(sidebarCollapsed ? "w-6 h-6" : "w-5 h-5", "shrink-0")} />
+                  {!sidebarCollapsed && <span className="flex-1 text-left text-sm font-medium">My Chart</span>}
+                  {!sidebarCollapsed && <ChevronRight className="w-5 h-5" />}
                 </button>
               </div>
             </div>

@@ -31,6 +31,7 @@ const Pricing = lazy(() => import("@/pages/Pricing"));
 const PricingOnboarding = lazy(() => import("@/pages/PricingOnboarding"));
 const SubscriptionOnboarding = lazy(() => import("@/pages/SubscriptionOnboarding"));
 const Chat = lazy(() => import("@/pages/Chat"));
+const DeepReasoningResult = lazy(() => import("@/pages/DeepReasoningResult"));
 const Terms = lazy(() => import("@/pages/Terms"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
 const Disclaimer = lazy(() => import("@/pages/Disclaimer"));
@@ -290,6 +291,7 @@ const AuthenticatedRoutes = ({
         <Route path="/pricing/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><PricingOnboarding /></PlanProvider></Suspense>} />
         <Route path="/subscription/onboarding" element={<Suspense fallback={<PageLoading />}><PlanProvider><SubscriptionOnboarding /></PlanProvider></Suspense>} />
         <Route path="/chat" element={protectedPage(<Chat />)} />
+        <Route path="/deep-reasoning-result" element={protectedPage(<DeepReasoningResult />)} />
         <Route path="/chart/:sessionId" element={protectedPage(<Chart />)} />
         <Route path="/chart" element={protectedPage(<Chart />)} />
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />

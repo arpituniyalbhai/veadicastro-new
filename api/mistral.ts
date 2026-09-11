@@ -1,3 +1,5 @@
+import { DEEP_REASONING_PROMPT } from '../src/lib/deep reasoning';
+
 export const config = {
   runtime: 'edge',
 };
@@ -432,6 +434,7 @@ Wrong format = rewrite before sending.`;
 
     // Detect request type before choosing the prompt pipeline.
     const isFollowUp = requestType === 'follow_up';
+    const isDeepReasoning = requestType === 'deep_reasoning';
     const isReport =
       prompt.includes('Generate exactly 8 numbered sections') ||
       prompt.includes('Soul Overview') ||
@@ -448,7 +451,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
-    const maxTokens = isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
+    const maxTokens = isDeepReasoning ? 2200 : isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 350;
     
     // Normal chat and follow-up questions use Mistral Medium. Specialized
     // report, JSON, and compatibility pipelines retain their existing model.
@@ -470,7 +473,10 @@ Wrong format = rewrite before sending.`;
     });
 
     // Append format reminder to user message
-    const messagesWithReminder = isFollowUp ? [
+    const messagesWithReminder = isDeepReasoning ? [
+      { role: 'system', content: `${dateContext}\n\n${DEEP_REASONING_PROMPT}\nRequested language: ${lang}\n\n${buildVedicSummary(systemExtra || '', userName)}` },
+      ...contents,
+    ] : isFollowUp ? [
       {
         role: 'system',
         content: `${dateContext}\n\nThis is today's exact date and current time. Use it when generating follow-up questions.\n\n${systemExtra || 'Generate exactly two follow-up questions and return valid JSON only.'}`

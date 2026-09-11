@@ -9,6 +9,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
 import { usePlan } from "@/context/PlanContext";
 import { generateGeminiStream, generateGemini, type ChatTurn } from "@/lib/gemini";
+import { generateDeepReasoning } from "@/lib/deep reasoning";
 import { persistAstroPayload } from "@/lib/astroStorage";
 import { getPlanetaryData, type AstroInput } from "@/lib/astroCalc";
 import {
@@ -160,6 +161,23 @@ function truncateTitle(text: string, max = 30) {
   return text.length > max ? text.slice(0, max).trimEnd() + "…" : text;
 }
 
+const VedicChartIcon = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.6"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    aria-hidden="true"
+  >
+    <rect x="3.25" y="3.25" width="17.5" height="17.5" rx="2.25" />
+    <path d="M12 3.25 20.75 12 12 20.75 3.25 12 12 3.25Z" />
+    <path d="m3.25 3.25 8.75 8.75 8.75-8.75M20.75 20.75 12 12l-8.75 8.75" />
+  </svg>
+);
+
 const SidebarItem = ({ to, icon: Icon, label, expanded, selected, onClick, isMobileOpen }:
   { to: string; icon: any; label: string; expanded: boolean; selected?: boolean; onClick?: (e: React.MouseEvent) => void; isMobileOpen?: boolean }) => {
   // On mobile, show labels when sidebar is open; on desktop, use expanded state
@@ -207,6 +225,11 @@ export default function Chat() {
   const [sending, setSending] = useState(false);
   const [composerMenuOpen, setComposerMenuOpen] = useState(false);
   const [deepReasoningOpen, setDeepReasoningOpen] = useState(false);
+  const [deepReasoningQuestion, setDeepReasoningQuestion] = useState("");
+  const [deepReasoningLoading, setDeepReasoningLoading] = useState(false);
+  const [deepReasoningResult, setDeepReasoningResult] = useState("");
+  const [deepReasoningError, setDeepReasoningError] = useState("");
+  const [deepReasoningStatus, setDeepReasoningStatus] = useState("Reading your complete question…");
   // Keep sidebar closed on mobile, open on desktop
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth >= 768);
   const [sidebarOpen, setSidebarOpen] = useState(false); // Always start closed on mobile
@@ -394,6 +417,25 @@ export default function Chat() {
 
     return () => timers.forEach(window.clearTimeout);
   }, [isTyping, thinkingUserName]);
+
+  useEffect(() => {
+    if (!deepReasoningLoading) {
+      setDeepReasoningStatus("Reading your complete question…");
+      return;
+    }
+    const statuses = [
+      "Reading your complete question…",
+      "Cross-checking the strongest chart evidence…",
+      "Connecting patterns with your life context…",
+      "Writing your detailed interpretation…",
+    ];
+    setDeepReasoningStatus(statuses[0]);
+    const timers = statuses.slice(1).map((status, index) => window.setTimeout(
+      () => setDeepReasoningStatus(status),
+      2600 * (index + 1),
+    ));
+    return () => timers.forEach(window.clearTimeout);
+  }, [deepReasoningLoading]);
 
   // Update input bar position based on sidebar state and screen size
   useEffect(() => {
@@ -790,6 +832,96 @@ export default function Chat() {
     }
     setSuggestions(base.slice(0, 4));
   }, [lang]);
+
+  const runDeepReasoning = async () => {
+    const fullQuestion = deepReasoningQuestion.trim();
+    if (!fullQuestion || deepReasoningLoading) return;
+
+    setDeepReasoningLoading(true);
+    setDeepReasoningResult("");
+    setDeepReasoningError("");
+    const minimumThinkingEndsAt = Date.now() + 4000;
+
+    try {
+      if (loading) throw new Error("Your account is still loading. Please try again in a moment.");
+      const canAsk = await canAskMoreQuestions();
+      if (!canAsk) throw new Error(getOutOfCreditsMessage());
+
+      const details = (() => {
+        try { return JSON.parse(localStorage.getItem("onboarding_details") || "null"); }
+        catch { return null; }
+      })();
+      if (!details?.dob || !details?.time || details?.lat == null || details?.lng == null) {
+        throw new Error("Please complete onboarding with your birth date, time, and place before using Deep Reasoning.");
+      }
+
+      let planetsBlock = "";
+      try {
+        const [year, month, day] = details.dob.split("-").map((value: string) => Number.parseInt(value, 10));
+        const [hour, min] = details.time.split(":").map((value: string) => Number.parseInt(value, 10));
+        const tzone = typeof details.tzone === "number" ? details.tzone : (-new Date().getTimezoneOffset() / 60);
+        const payload = await getPlanetaryData({ day, month, year, hour, min, lat: details.lat, lon: details.lng, tzone });
+        persistAstroPayload(payload);
+
+        let transitToNatal = "";
+        try {
+          const questionTopic = classifyChatQuestionTopic(fullQuestion);
+          const transitDate = new Date();
+          const transitDateKey = `${transitDate.getFullYear()}-${String(transitDate.getMonth() + 1).padStart(2, "0")}-${String(transitDate.getDate()).padStart(2, "0")}`;
+          const transitPlanets = await getOrComputeTodayTransits(transitDateKey, transitDate);
+          const transitSummary = getTransitToNatalSummary(transitPlanets, payload.planetsList, payload.ascendantSign, 8, questionTopic);
+          transitToNatal = transitSummary ? `For ${transitDateKey}; question topic: ${questionTopic}\n${transitSummary}` : "";
+        } catch (transitError) {
+          console.debug("[Deep Reasoning] Transit calculation failed; using natal chart only.", transitError);
+        }
+
+        planetsBlock = `Planetary Data:\n${JSON.stringify({ ...payload, transits: transitToNatal || null })}`;
+      } catch (chartError) {
+        console.debug("[Deep Reasoning] Fresh chart calculation failed; trying local cache.", chartError);
+        try {
+          const cached = JSON.parse(localStorage.getItem("astrology_planets") || "null");
+          if (cached) planetsBlock = `Planetary Data:\n${JSON.stringify(cached)}`;
+        } catch { /* Local chart cache is optional. */ }
+      }
+
+      const birthDate = new Date(details.dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      if (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) age--;
+      const detailsBlock = `User Details:\nDate of Birth: ${details.dob}\nCurrent Age: ${age} years\nGender: ${details.gender || "N/A"}`;
+
+      let memoryBlock = "";
+      if (isMemoryEligible) {
+        try {
+          const storedMemory = JSON.parse(localStorage.getItem(memoryStorageKey) || "null") as VedikaMemory | null;
+          if (storedMemory) memoryBlock = `User Memory (provided by the user; use only when relevant):\n${Object.entries(storedMemory).map(([key, value]) => `${key}: ${value}`).join("\n")}`;
+        } catch { /* Invalid memory must not block an analysis. */ }
+      }
+
+      const systemExtra = `${planetsBlock || "Planetary Data: (not available)"}\n\n${detailsBlock}${memoryBlock ? `\n\n${memoryBlock}` : ""}`;
+      const result = await generateDeepReasoning(fullQuestion, messages.slice(-20), systemExtra, lang, displayName);
+      const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
+      if (remainingDelay) await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
+
+      const creditDeducted = await deductCredit();
+      if (!creditDeducted) throw new Error(getOutOfCreditsMessage());
+
+      const storedResult = { question: fullQuestion, result, createdAt: Date.now() };
+      sessionStorage.setItem("vedika_deep_reasoning_result", JSON.stringify(storedResult));
+      setDeepReasoningResult(result);
+    } catch (error: any) {
+      setDeepReasoningError(error?.name === "AbortError" ? "Deep Reasoning took too long. Please try again." : (error?.message || "Deep Reasoning could not be generated."));
+    } finally {
+      setDeepReasoningLoading(false);
+    }
+  };
+
+  const openDeepReasoningResult = () => {
+    if (!deepReasoningResult) return;
+    navigate("/deep-reasoning-result", {
+      state: { question: deepReasoningQuestion.trim(), result: deepReasoningResult },
+    });
+  };
 
   const send = async (overrideMessage?: string) => {
     const outgoingMessage = (overrideMessage ?? message).trim();
@@ -1393,6 +1525,20 @@ export default function Chat() {
             }
           }}
         />
+        <SidebarItem
+          to="/chart"
+          icon={VedicChartIcon}
+          label="My Chart"
+          expanded={sidebarExpanded}
+          selected={activeItem === "My Chart"}
+          isMobileOpen={sidebarOpen}
+          onClick={() => {
+            setActiveItem("My Chart");
+            if (window.innerWidth < 768) {
+              setSidebarOpen(false);
+            }
+          }}
+        />
         <SidebarItem 
           to="/pricing" 
           icon={Receipt} 
@@ -1990,8 +2136,14 @@ export default function Chat() {
                           <Crown className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <span><span className="block text-sm font-medium">Upgrade</span><span className="block text-xs text-muted-foreground">Get more questions and features</span></span>
                         </Button>
-                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => { setComposerMenuOpen(false); setDeepReasoningOpen(true); }}>
-                          <Sparkles className="h-4 w-4 shrink-0 text-muted-foreground" />
+                        <Button variant="ghost" className="h-auto w-full justify-start gap-3 px-2 py-2 text-left" onClick={() => {
+                          setComposerMenuOpen(false);
+                          setDeepReasoningQuestion(message.trim());
+                          setDeepReasoningResult("");
+                          setDeepReasoningError("");
+                          setDeepReasoningOpen(true);
+                        }}>
+                          <Brain className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <span><span className="block text-sm font-medium">Deep Reasoning</span><span className="block text-xs text-muted-foreground">Get a detailed answer</span></span>
                         </Button>
                       </div>
@@ -2034,13 +2186,97 @@ export default function Chat() {
       </main>
 
       {deepReasoningOpen && (
-        <aside className="fixed right-4 top-1/2 z-[60] w-[calc(100vw-2rem)] max-w-sm -translate-y-1/2 animate-in slide-in-from-right-8 fade-in duration-300">
-          <div className="rounded-2xl border border-pink-500/35 bg-card p-5 shadow-[0_18px_50px_rgba(0,0,0,0.42)]">
-            <p className="text-lg font-semibold">Hey {thinkingUserName}</p>
-            <p className="mt-2 text-sm leading-6 text-muted-foreground">Deep Reasoning is coming soon.</p>
-            <Button className="mt-5 w-full" onClick={() => setDeepReasoningOpen(false)}>Got it</Button>
-          </div>
-        </aside>
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/65 p-3 backdrop-blur-sm sm:p-6" role="presentation">
+          <aside
+            className="w-full max-w-2xl animate-in overflow-hidden rounded-[28px] border border-border/70 bg-card shadow-[0_28px_90px_rgba(0,0,0,0.55)] duration-300 fade-in zoom-in-95"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="deep-reasoning-title"
+          >
+            <div className="flex items-start justify-between gap-5 border-b border-border/60 px-5 py-5 sm:px-7">
+              <div className="flex items-start gap-3.5">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-pink-400/20 bg-pink-400/10 text-pink-300">
+                  <Brain className="h-5 w-5" />
+                </span>
+                <div>
+                  <h2 id="deep-reasoning-title" className="text-lg font-semibold tracking-tight">Deep Reasoning</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">A detailed 300–500 word chart-based analysis.</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                disabled={deepReasoningLoading}
+                onClick={() => setDeepReasoningOpen(false)}
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-border/60 text-lg text-muted-foreground transition hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Close Deep Reasoning"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="p-5 sm:p-7">
+              {!deepReasoningLoading && !deepReasoningResult && (
+                <div>
+                  <label htmlFor="deep-reasoning-question" className="text-sm font-medium text-foreground/90">Your question</label>
+                  <textarea
+                    id="deep-reasoning-question"
+                    value={deepReasoningQuestion}
+                    onChange={(event) => setDeepReasoningQuestion(event.target.value)}
+                    rows={5}
+                    autoFocus
+                    placeholder="Describe the complete situation you want Vedika to analyze…"
+                    className="mt-2 w-full resize-none rounded-2xl border border-border/70 bg-background/60 px-4 py-3 text-sm leading-6 text-foreground outline-none transition placeholder:text-muted-foreground/70 focus:border-pink-400/50 focus:ring-2 focus:ring-pink-400/15"
+                  />
+                  {deepReasoningError && (
+                    <p className="mt-3 rounded-xl border border-red-400/20 bg-red-400/10 px-3 py-2.5 text-sm text-red-300">{deepReasoningError}</p>
+                  )}
+                  <div className="mt-5 flex items-center justify-between gap-4">
+                    <p className="text-xs text-muted-foreground">Uses 1 question credit</p>
+                    <Button variant="cosmic" disabled={!deepReasoningQuestion.trim()} onClick={runDeepReasoning} className="min-w-36 rounded-full">
+                      Analyze deeply
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {deepReasoningLoading && (
+                <div className="rounded-3xl border border-border/70 bg-gradient-to-br from-background/80 via-background/60 to-pink-400/[0.06] p-6 sm:p-8" role="status" aria-live="polite">
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <p className="text-base font-semibold">Vedika is reasoning deeply</p>
+                      <p key={deepReasoningStatus} className="mt-2 animate-in text-sm text-muted-foreground duration-300 fade-in">{deepReasoningStatus}</p>
+                    </div>
+                    <div className="flex gap-1.5" aria-hidden="true">
+                      {[0, 1, 2].map((dot) => <span key={dot} className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink-400" style={{ animationDelay: `${dot * 180}ms` }} />)}
+                    </div>
+                  </div>
+                  <div className="mt-8 space-y-3" aria-hidden="true">
+                    {["w-full", "w-[92%]", "w-[76%]", "w-[86%]", "w-[58%]"].map((width, index) => (
+                      <div key={`${width}-${index}`} className={`relative h-2 overflow-hidden rounded-full bg-muted/70 ${width}`}>
+                        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-foreground/15 to-transparent [animation:loading_1.8s_ease-in-out_infinite]" style={{ animationDelay: `${index * 120}ms` }} />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-7 text-center text-xs text-muted-foreground">Reading every part of your question and checking it against your chart.</p>
+                </div>
+              )}
+
+              {!deepReasoningLoading && deepReasoningResult && (
+                <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/[0.06] p-6 text-center sm:p-8">
+                  <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-400/25 bg-emerald-400/10 text-emerald-300">
+                    <CheckCircle className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-4 text-xl font-semibold">Your Deep Reasoning is ready</h3>
+                  <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">Vedika has covered your complete question using the strongest available chart evidence.</p>
+                  <Button variant="cosmic" onClick={openDeepReasoningResult} className="mt-6 w-full rounded-full sm:w-auto sm:min-w-52">
+                    See your result
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
       )}
 
       {/* Mobile Sidebar Overlay */}
