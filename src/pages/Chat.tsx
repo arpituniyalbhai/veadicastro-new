@@ -2130,11 +2130,14 @@ export default function Chat() {
             {!deepReasoningLoading && deepReasoningResult && (
               <div className="flex animate-in items-start gap-2.5 pl-1 duration-300 fade-in slide-in-from-bottom-2 sm:gap-3 sm:pl-2">
                 <img src={assistantAvatarUrl} alt="Vedika" className="mt-1 h-8 w-8 shrink-0 rounded-full border border-border/70 object-cover shadow-sm" />
-                <div className="w-[min(34rem,calc(100vw-4.75rem))] rounded-[22px] rounded-tl-md border border-emerald-400/20 bg-emerald-400/[0.06] p-5 sm:p-6">
-                  <p className="text-sm font-semibold text-foreground">Your Deep Reasoning is ready</p>
+                <div className="w-[min(34rem,calc(100vw-4.75rem))] rounded-[22px] rounded-tl-md border border-border/70 bg-card/90 p-5 shadow-[0_14px_38px_rgba(0,0,0,0.16)] backdrop-blur sm:p-6">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-pink-400/20 bg-pink-400/10 text-pink-300"><Brain className="h-4 w-4" /></span>
+                    <p className="text-sm font-semibold text-foreground">Your Deep Reasoning is ready</p>
+                  </div>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">Vedika has analyzed your complete question with the strongest available chart evidence.</p>
                   {deepReasoningPreview && (
-                    <div className="mt-4 rounded-xl border border-border/60 bg-background/40 px-3.5 py-3 text-left">
+                    <div className="mt-4 rounded-xl border border-border/60 bg-background/55 px-3.5 py-3 text-left">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Preview</p>
                       <p className="mt-1.5 line-clamp-3 text-sm leading-6 text-foreground/75">{deepReasoningPreview}</p>
                     </div>
