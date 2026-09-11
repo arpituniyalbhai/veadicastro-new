@@ -525,7 +525,7 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
   </div>
 
   <div className="bg-gray-900/50 border border-gray-700/50 rounded-lg p-4">
-    <h3 className="text-lg font-semibold text-purple-300 mb-2">Quick Ask — ₹149 (one-time)</h3>
+    <h3 className="text-lg font-semibold text-purple-300 mb-2">Quick Ask — ₹199 (one-time)</h3>
     <ul className="list-disc list-inside space-y-1 text-gray-300">
       <li>5 personalized questions</li>
       <li>Career, love, finance & more</li>
@@ -535,7 +535,7 @@ Meet Vedika AI — India's first AI astrologer built on authentic Vedic knowledg
   </div>
 
   <div className="bg-gray-900/50 border border-gray-700/50 rounded-lg p-4">
-    <h3 className="text-lg font-semibold text-purple-300 mb-2">Deep Dive — ₹399 (one-time)</h3>
+    <h3 className="text-lg font-semibold text-purple-300 mb-2">Deep Dive — ₹299 (one-time)</h3>
     <ul className="list-disc list-inside space-y-1 text-gray-300">
       <li>15 personalized questions</li>
       <li>Vedika Advanced AI Model</li>

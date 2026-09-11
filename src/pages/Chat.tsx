@@ -366,43 +366,33 @@ export default function Chat() {
   // Dynamic thinking messages
   const thinkingUserName = displayName.trim().split(/\s+/)[0] || "User";
 
-  // Cycle through processing messages in a different order for each answer.
+  // Move through a calm, deterministic analysis flow while the first token is prepared.
   useEffect(() => {
     if (!isTyping) {
       setThinkingMessage("");
       return;
     }
 
-    let previousMessage = "";
-    const showRandomMessage = () => {
-      const formattedDate = new Intl.DateTimeFormat("en-GB", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        timeZone: "Asia/Kolkata",
-      }).format(new Date());
-      const messages = [
-        `Loading ${thinkingUserName}'s birth profile...`,
-        `Calculating ${thinkingUserName}'s planetary positions...`,
-        `Mapping houses and ascendant for ${thinkingUserName}...`,
-        "Running Dasha and Nakshatra calculations...",
-        "Reading current planetary transits...",
-        `Reviewing ${formattedDate} planetary positions for ${thinkingUserName}...`,
-      ];
-      const availableMessages = messages.filter((message) => message !== previousMessage);
-      const nextMessage = availableMessages[Math.floor(Math.random() * availableMessages.length)];
+    const formattedDate = new Intl.DateTimeFormat("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "Asia/Kolkata",
+    }).format(new Date());
+    const messages = [
+      `Analyzing ${formattedDate} positions…`,
+      "Connecting the relevant houses, lords and dasha…",
+      "Matching chart patterns to your question…",
+      "Writing your personalized guidance…",
+    ];
+    const delays = [1800, 4000, 6500];
 
-      previousMessage = nextMessage;
-      setThinkingMessage(nextMessage);
-    };
+    setThinkingMessage(messages[0]);
+    const timers = delays.map((delay, index) => window.setTimeout(() => {
+      setThinkingMessage(messages[index + 1]);
+    }, delay));
 
-    showRandomMessage();
-
-    const interval = setInterval(() => {
-      showRandomMessage();
-    }, 1000); // Change message every second
-
-    return () => clearInterval(interval);
+    return () => timers.forEach(window.clearTimeout);
   }, [isTyping, thinkingUserName]);
 
   // Update input bar position based on sidebar state and screen size
@@ -555,8 +545,8 @@ export default function Chat() {
     if (!isProPlan) return originalPrice;
     
     const normalizedPlan = planName.toLowerCase();
-    if (normalizedPlan.includes("quick ask")) return 99;
-    if (normalizedPlan.includes("deep dive")) return 349; // 399 -> 349
+    if (normalizedPlan.includes("quick ask")) return 199;
+    if (normalizedPlan.includes("deep dive")) return 299;
     if (normalizedPlan.includes("power pack")) return 599; // 699 -> 599
     return originalPrice;
   };
@@ -837,6 +827,7 @@ export default function Chat() {
     setHasChatted(true);
     setSending(true);
     setIsTyping(true);
+    const minimumThinkingEndsAt = Date.now() + 3000 + Math.floor(Math.random() * 3001);
     // Insert assistant placeholder for streaming (real answer)
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
     
@@ -1009,6 +1000,8 @@ export default function Chat() {
       };
 
       let firstChunkReceived = false;
+      let streamRevealReady = false;
+      let streamRevealTimer: number | null = null;
       let streamBuffer = "";
       let rafId: number | null = null;
       const flushBuffer = () => {
@@ -1025,20 +1018,43 @@ export default function Chat() {
           return copy;
         });
       };
+      const revealStream = () => {
+        if (streamRevealReady) return;
+        streamRevealReady = true;
+        setIsTyping(false);
+        if (streamBuffer) {
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(flushBuffer);
+        }
+      };
       await generateGeminiStream(promptText, messages.slice(-20), (delta) => {
         streamedAnswer += delta;
         if (sanitize(streamedAnswer).trim()) {
           aiAnswerCompleted = true;
         }
+        streamBuffer += delta;
+        deltaCount++;
         if (!firstChunkReceived) {
           firstChunkReceived = true;
-          setIsTyping(false);
+          const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
+          if (remainingDelay > 0) {
+            streamRevealTimer = window.setTimeout(revealStream, remainingDelay);
+          } else {
+            revealStream();
+          }
         }
-        streamBuffer += delta;
+        if (!streamRevealReady) return;
         if (rafId) cancelAnimationFrame(rafId);
         rafId = requestAnimationFrame(flushBuffer);
-        deltaCount++;
       }, systemExtra, lang, displayName, "primary", "mistral-medium-latest");
+      if (firstChunkReceived && !streamRevealReady) {
+        if (streamRevealTimer) window.clearTimeout(streamRevealTimer);
+        const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
+        if (remainingDelay > 0) {
+          await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
+        }
+        revealStream();
+      }
       if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
@@ -1576,7 +1592,7 @@ export default function Chat() {
               variant="cosmic"
               size="sm"
               className="gap-1.5 text-xs h-9 px-4"
-              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(399, 'Deep Dive')}&type=pack`)}
+              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(299, 'Deep Dive')}&type=pack`)}
             >
               Upgrade
             </Button>
@@ -1750,7 +1766,7 @@ export default function Chat() {
                           </div>
                           <div className="space-y-2.5 pt-3">
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=Quick%20Ask&amount=${getDiscountedPrice(99, 'Quick Ask')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Quick%20Ask&amount=${getDiscountedPrice(199, 'Quick Ask')}&type=pack`)}
                               className="group w-full rounded-2xl bg-white/[0.04] border border-white/10 hover:border-pink-500/40 hover:bg-white/[0.07] px-4 py-3 cursor-pointer transition-all"
                             >
                               <div className="flex justify-between items-center">
@@ -1759,13 +1775,13 @@ export default function Chat() {
                                   <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">5 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && getDiscountedPrice(99, 'Quick Ask') !== 99 && <span className="text-xs text-muted-foreground line-through">₹99</span>}
-                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(99, 'Quick Ask')}</div>
+                                  {isProPlan && getDiscountedPrice(199, 'Quick Ask') !== 199 && <span className="text-xs text-muted-foreground line-through">₹199</span>}
+                                  <div className="text-base font-semibold text-white">₹{getDiscountedPrice(199, 'Quick Ask')}</div>
                                 </div>
                               </div>
                             </div>
                             <div
-                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(399, 'Deep Dive')}&type=pack`)}
+                              onClick={() => navigate(`/pricing/onboarding?plan=Deep%20Dive&amount=${getDiscountedPrice(299, 'Deep Dive')}&type=pack`)}
                               className="group w-full rounded-2xl bg-pink-500/10 border border-pink-500/60 px-4 py-3 cursor-pointer relative shadow-[0_0_24px_rgba(236,72,153,0.14),0_0_0_1px_rgba(236,72,153,0.12)] transition-all hover:bg-pink-500/15 hover:shadow-[0_0_30px_rgba(236,72,153,0.2),0_0_0_1px_rgba(236,72,153,0.16)]"
                             >
                               <span className="absolute -top-2 right-3 bg-pink-500 text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full shadow-sm">Popular</span>
@@ -1775,8 +1791,7 @@ export default function Chat() {
                                   <div className="mt-1 inline-flex rounded-full border border-pink-500/30 bg-pink-500/10 px-2.5 py-0.5 text-[11px] font-semibold text-pink-200">15 Questions</div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                  {isProPlan && <span className="text-xs text-muted-foreground line-through">₹399</span>}
-                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(399, 'Deep Dive')}</div>
+                                  <div className="text-base font-semibold text-pink-400">₹{getDiscountedPrice(299, 'Deep Dive')}</div>
                                 </div>
                               </div>
                             </div>
@@ -1827,26 +1842,48 @@ export default function Chat() {
               )
             ))}
             {isTyping && (
-              <div className="flex items-start gap-3 pl-1 sm:pl-2" role="status" aria-live="polite">
+              <div
+                className="flex animate-in items-start gap-2.5 pl-1 duration-300 fade-in slide-in-from-bottom-2 sm:gap-3 sm:pl-2"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 <div className="relative mt-1 shrink-0">
-                  <img src={assistantAvatarUrl} alt="Vedika" className="w-8 h-8 rounded-full object-cover ring-2 ring-pink-400/20" />
-                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <img
+                    src={assistantAvatarUrl}
+                    alt="Vedika"
+                    className="h-8 w-8 rounded-full border border-border/70 object-cover shadow-sm"
+                  />
+                  <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-pink-400" />
                 </div>
-                <div className="min-w-0 rounded-2xl rounded-tl-md border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.025] px-3.5 py-2.5 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-sm">
-                  <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-pink-200/90">
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-pink-400/15">
-                      <span className="h-1.5 w-1.5 rounded-full bg-pink-300 animate-pulse" />
-                    </span>
-                    Vedika is thinking
-                    <div className="thinking-dots" aria-hidden="true">
-                      <div className="thinking-dot" />
-                      <div className="thinking-dot" />
-                      <div className="thinking-dot" />
+                <div className="relative w-[min(24rem,calc(100vw-4.75rem))] min-w-0 overflow-hidden rounded-[20px] rounded-tl-md border border-border/70 bg-gradient-to-br from-card/95 via-card/90 to-secondary/[0.06] px-4 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.14),0_1px_2px_rgba(0,0,0,0.08)] backdrop-blur-xl sm:px-5 sm:py-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-[13px] font-semibold tracking-[-0.01em] text-foreground/90">
+                      Vedika is thinking
+                    </p>
+                    <div className="flex items-center gap-1" aria-hidden="true">
+                      {[0, 1, 2].map((dot) => (
+                        <span
+                          key={dot}
+                          className="h-1 w-1 animate-pulse rounded-full bg-muted-foreground/60"
+                          style={{ animationDelay: `${dot * 180}ms` }}
+                        />
+                      ))}
                     </div>
                   </div>
-                  <p className="mt-1.5 max-w-[min(21rem,calc(100vw-8rem))] text-sm leading-relaxed text-muted-foreground">
-                    {thinkingMessage || "Preparing your astrological guidance..."}
+                  <p key={thinkingMessage} className="mt-2 animate-in text-xs leading-5 text-muted-foreground duration-300 fade-in">
+                    {thinkingMessage || "Putting your reading together…"}
                   </p>
+                  <div className="mt-5 space-y-2" aria-hidden="true">
+                    {["w-[82%]", "w-[58%]"].map((width, index) => (
+                      <div key={width} className={`relative h-1.5 overflow-hidden rounded-full bg-muted/70 ${width}`}>
+                        <div
+                          className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-foreground/15 to-transparent [animation:loading_1.8s_ease-in-out_infinite]"
+                          style={{ animationDelay: `${index * 220}ms` }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
