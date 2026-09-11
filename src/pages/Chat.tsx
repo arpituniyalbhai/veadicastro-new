@@ -230,6 +230,10 @@ export default function Chat() {
   const [deepReasoningResult, setDeepReasoningResult] = useState("");
   const [deepReasoningError, setDeepReasoningError] = useState("");
   const [deepReasoningStatus, setDeepReasoningStatus] = useState("Reading your complete question…");
+  const [showDeepReasoningAnnouncement, setShowDeepReasoningAnnouncement] = useState(() => {
+    try { return sessionStorage.getItem("vedika_deep_reasoning_announcement_dismissed") !== "true"; }
+    catch { return true; }
+  });
   // Keep sidebar closed on mobile, open on desktop
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth >= 768);
   const [sidebarOpen, setSidebarOpen] = useState(false); // Always start closed on mobile
@@ -579,6 +583,14 @@ export default function Chat() {
     const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard", "day pass"];
     return paidPlanKeywords.some((keyword) => planName?.toLowerCase().includes(keyword));
   }, [planName]);
+  const deepReasoningPreview = useMemo(() => {
+    const clean = deepReasoningResult
+      .replace(/#/g, "")
+      .replace(/^(Direct answer|Chart evidence|What this means for you|Practical next steps):?\s*/gim, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    return clean.length > 230 ? `${clean.slice(0, 230).trimEnd()}…` : clean;
+  }, [deepReasoningResult]);
   useEffect(() => {
     if (!planLoading && !isProPlan && credits <= 1) return;
     if (lowCreditOfferTimerRef.current) {
@@ -912,7 +924,8 @@ export default function Chat() {
       }
 
       const systemExtra = `${planetsBlock || "Planetary Data: (not available)"}\n\n${detailsBlock}${memoryBlock ? `\n\n${memoryBlock}` : ""}`;
-      const result = await generateDeepReasoning(fullQuestion, messages.slice(-20), systemExtra, lang, displayName);
+      const rawResult = await generateDeepReasoning(fullQuestion, messages.slice(-20), systemExtra, lang, displayName);
+      const result = rawResult.replace(/#/g, "").trim();
       const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
       if (remainingDelay) await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
 
@@ -1779,6 +1792,44 @@ export default function Chat() {
                 </p>
               </div>
             )}
+            {showDeepReasoningAnnouncement && isProPlan && (
+              <section className="mx-auto mb-5 w-full max-w-xl animate-in overflow-hidden rounded-[24px] border border-border/70 bg-card/80 shadow-[0_18px_50px_rgba(0,0,0,0.22)] duration-300 fade-in slide-in-from-bottom-2">
+                <div className="relative h-36 overflow-hidden sm:h-44">
+                  <img src="/optimized/deep-reasoning-hero.webp" alt="" className="h-full w-full object-cover" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                  <button
+                    type="button"
+                    aria-label="Dismiss Deep Reasoning announcement"
+                    onClick={() => {
+                      setShowDeepReasoningAnnouncement(false);
+                      sessionStorage.setItem("vedika_deep_reasoning_announcement_dismissed", "true");
+                    }}
+                    className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-black/25 text-lg text-white/80 backdrop-blur transition hover:bg-black/45 hover:text-white"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div className="relative -mt-5 px-5 pb-5">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-pink-300">
+                    <Brain className="h-3.5 w-3.5" /> Selected users
+                  </span>
+                  <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground">Deep Reasoning is available</h2>
+                  <p className="mt-1.5 text-sm leading-6 text-muted-foreground">Hey {thinkingUserName}, get a deeper Vedika calculation for any question you want to explore.</p>
+                  <Button
+                    variant="cosmic"
+                    className="mt-4 rounded-full"
+                    onClick={() => {
+                      setDeepReasoningMode(true);
+                      setShowDeepReasoningAnnouncement(false);
+                      sessionStorage.setItem("vedika_deep_reasoning_announcement_dismissed", "true");
+                      requestAnimationFrame(focusInput);
+                    }}
+                  >
+                    Try Deep Reasoning <ChevronRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </section>
+            )}
             {messages.map((m, idx) => (
               m.role === "assistant" && !m.content?.trim() ? null : (
                 <div key={idx} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"} px-0.5 sm:px-4 scroll-mt-[110px] sm:scroll-mt-0`}>
@@ -2087,6 +2138,12 @@ export default function Chat() {
                 <div className="w-[min(34rem,calc(100vw-4.75rem))] rounded-[22px] rounded-tl-md border border-emerald-400/20 bg-emerald-400/[0.06] p-5 sm:p-6">
                   <p className="text-sm font-semibold text-foreground">Your Deep Reasoning is ready</p>
                   <p className="mt-1 text-sm leading-6 text-muted-foreground">Vedika has analyzed your complete question with the strongest available chart evidence.</p>
+                  {deepReasoningPreview && (
+                    <div className="mt-4 rounded-xl border border-border/60 bg-background/40 px-3.5 py-3 text-left">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Preview</p>
+                      <p className="mt-1.5 line-clamp-3 text-sm leading-6 text-foreground/75">{deepReasoningPreview}</p>
+                    </div>
+                  )}
                   <Button variant="cosmic" onClick={openDeepReasoningResult} className="mt-4 rounded-full">
                     See your result <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>

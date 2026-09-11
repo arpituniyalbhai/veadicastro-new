@@ -18,6 +18,9 @@ const renderInline = (text: string) => text.split(/(\*\*[^*]+\*\*)/g).map((part,
 const renderAnalysis = (result: string) => result.split("\n").map((rawLine, index) => {
   const line = rawLine.trim();
   if (!line) return <div key={`space-${index}`} className="h-2" />;
+  if (["Direct answer", "Chart evidence", "What this means for you", "Practical next steps"].some((label) => line.toLowerCase() === label.toLowerCase() || line.toLowerCase() === `${label.toLowerCase()}:`)) {
+    return <h2 key={index} className="mb-2 mt-7 text-lg font-semibold tracking-tight text-foreground first:mt-0">{line.replace(/:$/, "")}</h2>;
+  }
   if (line.startsWith("## ")) return <h2 key={index} className="mb-2 mt-7 text-lg font-semibold tracking-tight text-foreground first:mt-0">{renderInline(line.slice(3))}</h2>;
   if (line.startsWith("# ")) return <h2 key={index} className="mb-2 mt-7 text-lg font-semibold tracking-tight text-foreground first:mt-0">{renderInline(line.slice(2))}</h2>;
   if (/^[-•*]\s+/.test(line)) return (
