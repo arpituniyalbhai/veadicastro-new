@@ -1790,8 +1790,9 @@ export default function Chat() {
               </div>
             )}
             {showDeepReasoningAnnouncement && (
-              <section className="mx-auto mb-5 w-full max-w-xl animate-in overflow-hidden rounded-[24px] border border-border/70 bg-card/80 shadow-[0_18px_50px_rgba(0,0,0,0.22)] duration-300 fade-in slide-in-from-bottom-2">
-                <div className="relative h-36 overflow-hidden sm:h-44">
+              <section className="fixed inset-0 z-[80] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in duration-300 fade-in">
+                <div className="w-full max-w-2xl animate-in overflow-hidden rounded-[28px] border border-border/70 bg-card shadow-[0_28px_90px_rgba(0,0,0,0.42)] duration-300 zoom-in-95 slide-in-from-bottom-4">
+                <div className="relative h-48 overflow-hidden sm:h-56">
                   <img src="/optimized/deep-reasoning-hero.webp" alt="" className="h-full w-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                   <button
@@ -1803,12 +1804,12 @@ export default function Chat() {
                     ×
                   </button>
                 </div>
-                <div className="relative -mt-5 px-5 pb-5">
+                <div className="relative -mt-7 px-6 pb-6 sm:px-8 sm:pb-8">
                   <span className="inline-flex items-center gap-2 rounded-full border border-pink-400/25 bg-pink-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.13em] text-pink-300">
                     <Brain className="h-3.5 w-3.5" /> Selected users
                   </span>
-                  <h2 className="mt-3 text-xl font-semibold tracking-tight text-foreground">Deep Reasoning is available</h2>
-                  <p className="mt-1.5 text-sm leading-6 text-muted-foreground">Hey {thinkingUserName}, get a deeper Vedika calculation for any question you want to explore.</p>
+                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Deep Reasoning is available</h2>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground sm:text-[15px]">Hey {thinkingUserName}, get a deeper Vedika calculation for any question you want to explore.</p>
                   <Button
                     variant="cosmic"
                     className="mt-4 rounded-full"
@@ -1820,6 +1821,7 @@ export default function Chat() {
                   >
                     Try Deep Reasoning <ChevronRight className="ml-2 h-4 w-4" />
                   </Button>
+                </div>
                 </div>
               </section>
             )}
