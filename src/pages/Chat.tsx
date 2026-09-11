@@ -230,10 +230,7 @@ export default function Chat() {
   const [deepReasoningResult, setDeepReasoningResult] = useState("");
   const [deepReasoningError, setDeepReasoningError] = useState("");
   const [deepReasoningStatus, setDeepReasoningStatus] = useState("Reading your complete question…");
-  const [showDeepReasoningAnnouncement, setShowDeepReasoningAnnouncement] = useState(() => {
-    try { return sessionStorage.getItem("vedika_deep_reasoning_announcement_dismissed") !== "true"; }
-    catch { return true; }
-  });
+  const [showDeepReasoningAnnouncement, setShowDeepReasoningAnnouncement] = useState(true);
   // Keep sidebar closed on mobile, open on desktop
   const [sidebarExpanded, setSidebarExpanded] = useState(window.innerWidth >= 768);
   const [sidebarOpen, setSidebarOpen] = useState(false); // Always start closed on mobile
@@ -1792,7 +1789,7 @@ export default function Chat() {
                 </p>
               </div>
             )}
-            {showDeepReasoningAnnouncement && isProPlan && (
+            {showDeepReasoningAnnouncement && (
               <section className="mx-auto mb-5 w-full max-w-xl animate-in overflow-hidden rounded-[24px] border border-border/70 bg-card/80 shadow-[0_18px_50px_rgba(0,0,0,0.22)] duration-300 fade-in slide-in-from-bottom-2">
                 <div className="relative h-36 overflow-hidden sm:h-44">
                   <img src="/optimized/deep-reasoning-hero.webp" alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -1800,10 +1797,7 @@ export default function Chat() {
                   <button
                     type="button"
                     aria-label="Dismiss Deep Reasoning announcement"
-                    onClick={() => {
-                      setShowDeepReasoningAnnouncement(false);
-                      sessionStorage.setItem("vedika_deep_reasoning_announcement_dismissed", "true");
-                    }}
+                    onClick={() => setShowDeepReasoningAnnouncement(false)}
                     className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-black/25 text-lg text-white/80 backdrop-blur transition hover:bg-black/45 hover:text-white"
                   >
                     ×
@@ -1821,7 +1815,6 @@ export default function Chat() {
                     onClick={() => {
                       setDeepReasoningMode(true);
                       setShowDeepReasoningAnnouncement(false);
-                      sessionStorage.setItem("vedika_deep_reasoning_announcement_dismissed", "true");
                       requestAnimationFrame(focusInput);
                     }}
                   >
