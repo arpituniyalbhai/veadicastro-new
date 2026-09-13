@@ -1838,11 +1838,14 @@ export default function Chat() {
                       <div className={`text-sm sm:text-[15px] leading-7 ${m.isOutOfCredits ? "font-medium text-yellow-300" : "text-foreground/90"}`}>
                         {m.role === "assistant" ? (
                           <div className="space-y-3">
-                            {formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => (
-                              <p key={paragraphIndex} className="whitespace-pre-wrap">
-                                {highlightAstroText(paragraph)}
-                              </p>
-                            ))}
+                            {(() => {
+                              let highlightedWords = 0;
+                              return formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => {
+                                const highlighted = highlightFirst30Words(paragraph, highlightedWords);
+                                highlightedWords = highlighted.count;
+                                return <p key={paragraphIndex} className="whitespace-pre-wrap">{highlighted.nodes}</p>;
+                              });
+                            })()}
                           </div>
                         ) : (
                           <span className="whitespace-pre-wrap">{m.content}</span>
@@ -2622,4 +2625,14 @@ function formatAssistantContent(content: string): string[] {
     chunks.push(sentences.slice(i, i + 2).join(" "));
   }
   return chunks;
+}
+
+function highlightFirst30Words(text: string, alreadyHighlighted: number): { nodes: React.ReactNode[]; count: number } {
+  let count = alreadyHighlighted;
+  const nodes = text.split(/(\s+)/).map((part, index) => {
+    if (!part.trim() || count >= 30) return part;
+    count += 1;
+    return <strong key={`answer-lead-${index}`} className="font-bold text-secondary">{part}</strong>;
+  });
+  return { nodes, count };
 }
