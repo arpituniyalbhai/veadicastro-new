@@ -2645,9 +2645,9 @@ function highlightFirst30Words(text: string, alreadyHighlighted: number, animate
   const nodes: React.ReactNode[] = [];
   let wordIndex = alreadyHighlighted;
   nodes.push(...parts.slice(0, cutoff).map((part, index) => {
-    const delay = `${(wordIndex - alreadyHighlighted) * 55}ms`;
+    const delay = `${wordIndex * 55}ms`;
     wordIndex += 1;
-    return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : "bg-secondary/30"} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
+    return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : undefined} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
   }));
   nodes.push(parts.slice(cutoff).join(""));
   return { nodes, count };

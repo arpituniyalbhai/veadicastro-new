@@ -287,3 +287,18 @@ html, body {
     }
   }
 }
+@keyframes answer-highlight-in {
+  0% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: hsl(var(--secondary) / 30%);
+  }
+}
+
+.answer-highlight-word {
+  background-color: hsl(var(--secondary) / 30%);
+  animation: answer-highlight-in 350ms ease-out both;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
