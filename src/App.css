@@ -42,11 +42,12 @@
 }
 @keyframes answer-highlight-in {
   from { background-color: transparent; }
-  to { background-color: hsl(var(--secondary) / 0.3); }
+  to { background-color: hsl(var(--secondary) / 30%); }
 }
 
 .answer-highlight-word {
   animation: answer-highlight-in 350ms ease-out both;
+  background-color: hsl(var(--secondary) / 30%);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }

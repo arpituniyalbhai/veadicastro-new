@@ -2635,17 +2635,16 @@ function formatAssistantContent(content: string): string[] {
 }
 
 function highlightFirst30Words(text: string, alreadyHighlighted: number, animate: boolean): { nodes: React.ReactNode[]; count: number } {
-  const parts = text.split(/(\s+)/);
+  const parts = text.match(/\S+\s*/g) || [];
   let count = alreadyHighlighted;
   let cutoff = 0;
   while (cutoff < parts.length && count < 30) {
-    if (parts[cutoff].trim()) count += 1;
+    count += 1;
     cutoff += 1;
   }
   const nodes: React.ReactNode[] = [];
   let wordIndex = alreadyHighlighted;
   nodes.push(...parts.slice(0, cutoff).map((part, index) => {
-    if (!part.trim()) return part;
     const delay = `${(wordIndex - alreadyHighlighted) * 55}ms`;
     wordIndex += 1;
     return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : "bg-secondary/30"} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
