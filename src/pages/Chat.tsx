@@ -1852,11 +1852,11 @@ export default function Chat() {
                         {m.role === "assistant" ? (
                           <div className="space-y-3">
                             {(() => {
-                              let highlightedWords = 0;
                               return formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => {
-                                const highlighted = highlightFirst30Words(paragraph, highlightedWords, !!animatedHighlightAnswers[idx]);
-                                highlightedWords = highlighted.count;
-                                return <p key={paragraphIndex} className="whitespace-pre-wrap">{highlighted.nodes}</p>;
+                                const content = paragraphIndex === 0
+                                  ? highlightFirstSentence(paragraph, !!animatedHighlightAnswers[idx])
+                                  : highlightAstroText(paragraph);
+                                return <p key={paragraphIndex} className="whitespace-pre-wrap">{content}</p>;
                               });
                             })()}
                           </div>
@@ -2640,21 +2640,22 @@ function formatAssistantContent(content: string): string[] {
   return chunks;
 }
 
-function highlightFirst30Words(text: string, alreadyHighlighted: number, animate: boolean): { nodes: React.ReactNode[]; count: number } {
-  const parts = text.match(/\S+\s*/g) || [];
-  let count = alreadyHighlighted;
-  let cutoff = 0;
-  while (cutoff < parts.length && count < 30) {
-    count += 1;
-    cutoff += 1;
-  }
-  const nodes: React.ReactNode[] = [];
-  let wordIndex = alreadyHighlighted;
-  nodes.push(...parts.slice(0, cutoff).map((part, index) => {
-    const delay = `${wordIndex * 55}ms`;
-    wordIndex += 1;
-    return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : undefined} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
-  }));
-  nodes.push(...highlightAstroText(parts.slice(cutoff).join("")));
-  return { nodes, count };
+function highlightFirstSentence(text: string, animate: boolean): React.ReactNode[] {
+  const sentenceMatch = text.match(/^.*?[.!?।](?=\s|$)|^.*$/);
+  const firstSentence = sentenceMatch?.[0] || text;
+  const remainder = text.slice(firstSentence.length);
+  const sentenceParts = firstSentence.match(/\S+\s*/g) || [];
+
+  return [
+    ...sentenceParts.map((part, index) => (
+      <span
+        key={`answer-lead-${index}`}
+        className={animate ? "answer-highlight-word" : undefined}
+        style={animate ? { animationDelay: `${index * 55}ms` } : undefined}
+      >
+        {part}
+      </span>
+    )),
+    ...highlightAstroText(remainder),
+  ];
 }
