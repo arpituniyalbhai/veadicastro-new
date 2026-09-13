@@ -33,7 +33,13 @@ const CAREER_FIELDS = [
   "coding", "programming", "research", "digital content", "content creation", "astrology",
   "teaching", "education", "marketing", "sales", "finance", "banking", "business",
   "entrepreneurship", "consulting", "management", "design", "law", "medicine", "healthcare",
-  "government job", "civil services", "media", "writing",
+  "government job", "civil services", "media", "writing", "engineering", "engineer",
+  "developer", "designer", "teacher", "professor", "doctor", "nurse", "lawyer", "advocate",
+  "accountant", "chartered accountant", "architect", "scientist", "analyst", "consultant",
+  "manager", "journalist", "writer", "artist", "musician", "actor", "photographer",
+  "politician", "police", "defence", "army", "navy", "aviation", "pilot", "agriculture",
+  "farmer", "real estate", "human resources", "operations", "administration", "pharmacist",
+  "dentist", "psychologist", "therapist", "social worker", "freelancing", "freelancer",
 ];
 
 const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -47,7 +53,7 @@ const HIGHLIGHT_RULES: Array<{ type: HighlightType; regex: RegExp }> = [
       "gi"
     ),
   },
-  { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th)(?:\s+house)?\b/gi },
+  { type: "house", regex: /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)(?:\s+house)?\b/gi },
   {
     type: "date",
     regex: new RegExp(`\\b(?:(?:${MONTHS})\\s+\\d{1,2}(?:st|nd|rd|th)?(?:,)?\\s+\\d{4}|\\d{1,2}(?:st|nd|rd|th)?\\s+(?:${MONTHS})(?:\\s+\\d{4})?|(?:${MONTHS})\\s+\\d{4})\\b`, "gi"),
@@ -88,7 +94,7 @@ function getHighlights(text: string): HighlightMatch[] {
   for (const match of matches) {
     if (match.start >= lastEnd) { filtered.push(match); lastEnd = match.end; }
   }
-  return filtered.slice(0, 3);
+  return filtered;
 }
 
 function highlightAstroText(text: string): React.ReactNode[] {
@@ -99,7 +105,7 @@ function highlightAstroText(text: string): React.ReactNode[] {
   matches.forEach((match, index) => {
     if (match.start > cursor) output.push(text.slice(cursor, match.start));
     output.push(
-      <span key={`${match.start}-${match.end}-${index}`} className="rounded-sm bg-secondary/15 px-0.5 font-semibold text-foreground" data-highlight-type={match.type}>
+      <span key={`${match.start}-${match.end}-${index}`} className="rounded-sm bg-secondary/15 px-0.5 text-inherit" data-highlight-type={match.type}>
         {match.value}
       </span>
     );
@@ -2649,6 +2655,6 @@ function highlightFirst30Words(text: string, alreadyHighlighted: number, animate
     wordIndex += 1;
     return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : undefined} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
   }));
-  nodes.push(parts.slice(cutoff).join(""));
+  nodes.push(...highlightAstroText(parts.slice(cutoff).join("")));
   return { nodes, count };
 }
