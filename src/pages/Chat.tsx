@@ -282,6 +282,7 @@ export default function Chat() {
   const [exportingAnswerIndex, setExportingAnswerIndex] = useState<number | null>(null);
   const [isExportingChat, setIsExportingChat] = useState(false);
   const [answerFeedback, setAnswerFeedback] = useState<Record<number, "like" | "dislike">>({});
+  const [animatedHighlightAnswers, setAnimatedHighlightAnswers] = useState<Record<number, boolean>>({});
   const [lowCreditOfferIndex, setLowCreditOfferIndex] = useState<number | null>(null);
   const lowCreditOfferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showMemoryPrompt, setShowMemoryPrompt] = useState(false);
@@ -1239,6 +1240,12 @@ export default function Chat() {
       }
       const assistantIndex = messagesRef.current.map((item) => item.role).lastIndexOf("assistant");
 
+      if (assistantIndex >= 0) {
+        window.setTimeout(() => {
+          setAnimatedHighlightAnswers((previous) => ({ ...previous, [assistantIndex]: true }));
+        }, 2_000);
+      }
+
       const creditDeducted = await deductCredit();
       if (!creditDeducted) {
         setMessages((m) => {
@@ -1841,7 +1848,7 @@ export default function Chat() {
                             {(() => {
                               let highlightedWords = 0;
                               return formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => {
-                                const highlighted = highlightFirst30Words(paragraph, highlightedWords);
+                                const highlighted = highlightFirst30Words(paragraph, highlightedWords, !!animatedHighlightAnswers[idx]);
                                 highlightedWords = highlighted.count;
                                 return <p key={paragraphIndex} className="whitespace-pre-wrap">{highlighted.nodes}</p>;
                               });
@@ -2627,7 +2634,7 @@ function formatAssistantContent(content: string): string[] {
   return chunks;
 }
 
-function highlightFirst30Words(text: string, alreadyHighlighted: number): { nodes: React.ReactNode[]; count: number } {
+function highlightFirst30Words(text: string, alreadyHighlighted: number, animate: boolean): { nodes: React.ReactNode[]; count: number } {
   const parts = text.split(/(\s+)/);
   let count = alreadyHighlighted;
   let cutoff = 0;
@@ -2636,9 +2643,13 @@ function highlightFirst30Words(text: string, alreadyHighlighted: number): { node
     cutoff += 1;
   }
   const nodes: React.ReactNode[] = [];
-  if (cutoff > 0) {
-    nodes.push(<span key="answer-lead" className="bg-secondary/30 font-normal text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">{parts.slice(0, cutoff).join("")}</span>);
-  }
+  let wordIndex = alreadyHighlighted;
+  nodes.push(...parts.slice(0, cutoff).map((part, index) => {
+    if (!part.trim()) return part;
+    const delay = `${(wordIndex - alreadyHighlighted) * 55}ms`;
+    wordIndex += 1;
+    return <span key={`answer-lead-${index}`} className={animate ? "answer-highlight-word" : "bg-secondary/30"} style={animate ? { animationDelay: delay } : undefined}>{part}</span>;
+  }));
   nodes.push(parts.slice(cutoff).join(""));
   return { nodes, count };
 }
