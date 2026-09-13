@@ -1852,11 +1852,13 @@ export default function Chat() {
                         {m.role === "assistant" ? (
                           <div className="space-y-3">
                             {(() => {
-                              return formatAssistantContent(m.content || "").map((paragraph, paragraphIndex) => {
+                              const paragraphs = formatAssistantContent(m.content || "");
+                              return paragraphs.map((paragraph, paragraphIndex) => {
                                 const content = paragraphIndex === 0
                                   ? highlightFirstSentence(paragraph, !!animatedHighlightAnswers[idx])
                                   : highlightAstroText(paragraph);
-                                return <p key={paragraphIndex} className="whitespace-pre-wrap">{content}</p>;
+                                const isConclusion = paragraphIndex === paragraphs.length - 1;
+                                return <p key={paragraphIndex} className={`whitespace-pre-wrap ${isConclusion ? "font-medium text-foreground/95" : ""}`}>{content}</p>;
                               });
                             })()}
                           </div>
