@@ -2632,7 +2632,7 @@ function highlightFirst30Words(text: string, alreadyHighlighted: number): { node
   const nodes = text.split(/(\s+)/).map((part, index) => {
     if (!part.trim() || count >= 30) return part;
     count += 1;
-    return <strong key={`answer-lead-${index}`} className="font-bold text-secondary">{part}</strong>;
+    return <strong key={`answer-lead-${index}`} className="rounded-sm bg-secondary/30 px-0.5 font-bold text-inherit shadow-[0_0_0_1px_hsl(var(--secondary)/0.12)]">{part}</strong>;
   });
   return { nodes, count };
 }
