@@ -2628,11 +2628,17 @@ function formatAssistantContent(content: string): string[] {
 }
 
 function highlightFirst30Words(text: string, alreadyHighlighted: number): { nodes: React.ReactNode[]; count: number } {
+  const parts = text.split(/(\s+)/);
   let count = alreadyHighlighted;
-  const nodes = text.split(/(\s+)/).map((part, index) => {
-    if (!part.trim() || count >= 30) return part;
-    count += 1;
-    return <strong key={`answer-lead-${index}`} className="rounded-sm bg-secondary/30 px-0.5 font-bold text-inherit shadow-[0_0_0_1px_hsl(var(--secondary)/0.12)]">{part}</strong>;
-  });
+  let cutoff = 0;
+  while (cutoff < parts.length && count < 30) {
+    if (parts[cutoff].trim()) count += 1;
+    cutoff += 1;
+  }
+  const nodes: React.ReactNode[] = [];
+  if (cutoff > 0) {
+    nodes.push(<span key="answer-lead" className="bg-secondary/30 font-normal text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]">{parts.slice(0, cutoff).join("")}</span>);
+  }
+  nodes.push(parts.slice(cutoff).join(""));
   return { nodes, count };
 }
