@@ -169,74 +169,8 @@ const AuthModal = () => {
   };
 
   const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email || !email.includes('@')) {
-      setError("Please enter a valid email address");
-      return;
-    }
-
-    if (mode === "signup" && !name) {
-      setError("Please enter your name");
-      return;
-    }
-
-    if (!password) {
-      setError("Please enter your password");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    try {
-      if (mode === "signup") {
-        // For signup: create account and send OTP
-        skipNextAuthEvent.current = true; // Skip next auth state change
-
-        const auth = await getAuthInstance();
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
-        if (name) await updateProfile(cred.user, { displayName: name });
-        
-        // Sign out immediately - user will sign back in after OTP verification
-        await auth.signOut();
-
-        // Send OTP for email verification (only for signup)
-        const response = await fetch("/api/send-otp", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          setSuccess("Account created! Please verify your email with OTP.");
-          setStep("otp");
-          setTimeLeft(300);
-          setIsResendEnabled(false);
-        } else {
-          // If OTP fails, still proceed but show warning
-          setSuccess("Account created! Email verification sent.");
-          setStep("otp");
-          setTimeLeft(300);
-          setIsResendEnabled(false);
-        }
-      } else {
-        // For login: direct login without OTP
-        await handlePasswordAuth(e);
-      }
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Authentication failed";
-      setError(message);
-    } finally {
-      if (mode === "signup") {
-        setLoading(false);
-      }
-    }
+    // Temporary production flow: keep email/password auth, but bypass signup OTP.
+    await handlePasswordAuth(e);
   };
 
   const handlePasswordAuth = async (e: React.FormEvent) => {
