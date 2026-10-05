@@ -3,15 +3,15 @@ import { initializeApp } from "firebase/app";
 // SECURITY: Firebase config loaded from environment variables
 // These are public keys (apiKey is safe to expose), but sensitive operations are restricted by Firestore rules
 
-// Primary app: Auth + Analytics (Project: veadicastro-website)
+// Primary app: Auth + Analytics (Project: vedicastro111)
 const authAppConfig = {
-  apiKey: "AIzaSyC_vbDBm3IFEqqXCG2QaHflFbPCTkQb-Hc",
-  authDomain: "veadicastro-website.firebaseapp.com",
-  projectId: "veadicastro-website",
-  storageBucket: "veadicastro-website.firebasestorage.app",
-  messagingSenderId: "175813844955",
-  appId: "1:175813844955:web:49e0510c7465a5228f51fe",
-  measurementId: "G-KTEG3EQNDJ",
+  apiKey: "AIzaSyDj9p3Fgq5ROH4xaKNXe8F_OYtxJolIJ64",
+  authDomain: "vedicastro111.firebaseapp.com",
+  projectId: "vedicastro111",
+  storageBucket: "vedicastro111.firebasestorage.app",
+  messagingSenderId: "1049781843509",
+  appId: "1:1049781843509:web:b363de2309a6ed66a4237c",
+  measurementId: "G-45B55YYWDL",
 };
 
 // Secondary app: Firestore for premium users (Project: vedicastro-data)
@@ -72,14 +72,14 @@ export const startAnalytics = async () => {
 };
 
 // Configure cross-project authentication
-// The auth token from veadicastro-website should work with vedicastro-data if projects are linked
+// The auth token from vedicastro111 should work with vedicastro-data if projects are linked
 
 /**
  * Save premium user document in vedicastro-data Firestore.
  * Path: /users/{uid}
  * 
  * IMPORTANT: This uses cross-project authentication
- * User must be authenticated in primary project (veadicastro-website)
+ * User must be authenticated in primary project (vedicastro111)
  * Data is stored in secondary project (vedicastro-data)
  */
 export async function savePremiumUserToFirestore(params: {
