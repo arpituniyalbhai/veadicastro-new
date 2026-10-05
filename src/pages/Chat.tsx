@@ -290,6 +290,7 @@ export default function Chat() {
   const [answerFeedback, setAnswerFeedback] = useState<Record<number, "like" | "dislike">>({});
   const [animatedHighlightAnswers, setAnimatedHighlightAnswers] = useState<Record<number, boolean>>({});
   const [lowCreditOfferIndex, setLowCreditOfferIndex] = useState<number | null>(null);
+  const [showLowCreditPlans, setShowLowCreditPlans] = useState(false);
   const lowCreditOfferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showMemoryPrompt, setShowMemoryPrompt] = useState(false);
   const [showMemoryQuestions, setShowMemoryQuestions] = useState(false);
@@ -578,10 +579,10 @@ export default function Chat() {
       promptsHi: ["मुझे किस क्षेत्र में अध्ययन करना चाहिए?", "क्या मैं अपनी परीक्षाओं में सफल होऊंगा?", "मेरी पढ़ाई के बाद सबसे अच्छा करियर क्या है?", "मैं अपनी एकाग्रता और फोकस कैसे सुधारूं?", "क्या मुझे विदेश में पढ़ाई करनी चाहिए?"] },
   ];
 
+  const firstName = useMemo(() => displayName.trim().split(/\s+/)[0] || "there", [displayName]);
   const getOutOfCreditsMessage = useCallback(() => {
-    const firstName = displayName.trim().split(/\s+/)[0] || "there";
     return `Hey ${firstName}, you have used all your credits. Please choose a plan below to continue chatting with Vedika AI.`;
-  }, [displayName]);
+  }, [firstName]);
   const initials = useMemo(() => displayName.split(" ").map((p: string) => p[0]).slice(0, 2).join("").toUpperCase(), [displayName]);
   const isProPlan = useMemo(() => {
     const paidPlanKeywords = ["quick ask", "deep dive", "power pack", "premium", "standard", "day pass"];
@@ -1276,7 +1277,7 @@ export default function Chat() {
           setLowCreditOfferIndex(assistantIndex);
           lowCreditOfferTimerRef.current = null;
           requestAnimationFrame(() => scrollToBottom(true));
-        }, 6_000);
+        }, 9_000);
       }
 
       // Generate suggestions in background without blocking - no loading state
@@ -1946,36 +1947,41 @@ export default function Chat() {
                       </div>
                     )}
                     {m.role === "assistant" && !planLoading && !isProPlan && credits <= 1 && lowCreditOfferIndex === idx && !m.isOutOfCredits && (
-                      <div className="mt-4 ml-0 w-full max-w-2xl overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xl shadow-black/20 sm:ml-1">
-                        <div className="h-1 w-full bg-pink-500" />
+                      <div className="mt-4 ml-0 w-full max-w-2xl overflow-hidden rounded-3xl border border-pink-500/25 bg-gradient-to-br from-card via-card to-pink-500/10 shadow-2xl shadow-pink-950/20 sm:ml-1">
                         <div className="p-5 sm:p-6">
-                          <div className="flex flex-wrap items-center justify-between gap-2">
-                            <span className="text-xs font-semibold uppercase tracking-[0.16em] text-pink-300">
-                              Low on credits
-                            </span>
-                            <span className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground">
-                              Choose any plan
-                            </span>
-                          </div>
-
-                          <div className="mt-4">
-                            <div>
-                              <h3 className="text-xl font-bold leading-tight text-foreground sm:text-2xl">
-                                Continue your conversation with Vedika
+                          <div className="flex items-start gap-4">
+                            <div className="relative shrink-0">
+                              <div className="absolute -inset-1 rounded-full bg-pink-500/30 blur-md" />
+                              <img
+                                src={assistantAvatarUrl}
+                                alt="Vedika AI"
+                                className="relative h-14 w-14 rounded-full border-2 border-pink-400/70 object-cover shadow-lg"
+                              />
+                              <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-card bg-pink-500">
+                                <Sparkles className="h-2.5 w-2.5 text-white" />
+                              </span>
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-sm font-semibold text-pink-300">Vedika</span>
+                                <span className="rounded-full border border-pink-500/20 bg-pink-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-pink-200">
+                                  Personal message
+                                </span>
+                              </div>
+                              <h3 className="mt-2 text-lg font-bold leading-snug text-foreground sm:text-xl">
+                                Hey {firstName}, I know you want to go deeper.
                               </h3>
-                              <p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">
-                                Explore every question pack and monthly plan, then choose the one that suits you.
+                              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                                You’ve used your available credits. Every answer has a real processing cost, which is why Vedika isn’t completely free. But don’t worry—every rupee you spend helps me give you a focused, personalized answer made for your question.
                               </p>
                             </div>
                           </div>
 
-                          <div className="my-5 h-px bg-border/70" />
-
-                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                            <p className="text-sm text-muted-foreground">View all plans and their included credits.</p>
+                          <div className="mt-5 flex flex-col gap-3 border-t border-border/60 pt-5 sm:flex-row sm:items-center sm:justify-between">
+                            <p className="text-xs leading-5 text-muted-foreground">Choose a one-time question pack or continue monthly.</p>
                             <Button
                               type="button"
-                              onClick={() => navigate("/pricing?referral=chat-low-credit")}
+                              onClick={() => setShowLowCreditPlans(true)}
                               className="h-12 w-full rounded-xl bg-pink-500 px-7 text-sm font-semibold text-white shadow-none hover:bg-pink-600 sm:w-auto"
                               aria-label="View all Veadicastro plans"
                             >
@@ -2434,6 +2440,62 @@ export default function Chat() {
               )}
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showLowCreditPlans} onOpenChange={setShowLowCreditPlans}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto border-border/70 bg-card p-0 shadow-2xl">
+          <div className="overflow-hidden rounded-lg">
+            <div className="border-b border-border/60 bg-gradient-to-br from-pink-500/15 via-card to-purple-500/10 px-6 py-6 sm:px-8">
+              <div className="flex items-center gap-3">
+                <img src={assistantAvatarUrl} alt="Vedika AI" className="h-12 w-12 rounded-full border-2 border-pink-400/60 object-cover" />
+                <div>
+                  <DialogHeader className="space-y-1 text-left">
+                    <DialogTitle className="text-2xl">Continue with Vedika</DialogTitle>
+                    <DialogDescription>Choose the plan that matches how deeply you want to explore.</DialogDescription>
+                  </DialogHeader>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-3 p-5 sm:grid-cols-2 sm:p-6">
+              {[
+                { name: "Quick Ask", price: "₹199", detail: "5 personalized questions", badge: "Starter", path: "/pricing/onboarding?plan=Quick%20Ask&amount=199&type=pack" },
+                { name: "Deep Dive", price: "₹299", detail: "15 personalized questions", badge: "Most popular", path: "/pricing/onboarding?plan=Deep%20Dive&amount=299&type=pack" },
+                { name: "Power Pack", price: "₹699", detail: "30 personalized questions", badge: "More depth", path: "/pricing/onboarding?plan=The%20Power%20Pack&amount=699&type=pack" },
+                { name: "Monthly Pro", price: "₹499/month", detail: "30 questions + advanced features", badge: "Best value", path: "/subscription/onboarding" },
+              ].map((plan) => (
+                <button
+                  key={plan.name}
+                  type="button"
+                  onClick={() => {
+                    setShowLowCreditPlans(false);
+                    navigate(plan.path);
+                  }}
+                  className={`group relative rounded-2xl border p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-lg ${plan.name === "Deep Dive" ? "border-pink-500/60 bg-pink-500/10 shadow-pink-950/20" : plan.name === "Monthly Pro" ? "border-purple-400/50 bg-purple-500/10 shadow-purple-950/20" : "border-border/70 bg-background/45 hover:border-pink-500/40"}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <span className="inline-flex rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                        {plan.badge}
+                      </span>
+                      <h3 className="mt-3 text-lg font-bold text-foreground">{plan.name}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">{plan.detail}</p>
+                    </div>
+                    <Crown className={`mt-1 h-5 w-5 shrink-0 ${plan.name === "Monthly Pro" ? "text-purple-300" : "text-pink-300"}`} />
+                  </div>
+                  <div className="mt-5 flex items-end justify-between gap-3 border-t border-border/60 pt-4">
+                    <span className="text-xl font-bold text-foreground">{plan.price}</span>
+                    <span className="text-xs font-semibold text-pink-300 transition group-hover:translate-x-0.5">Choose plan →</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="border-t border-border/60 px-6 py-4 text-center text-xs leading-5 text-muted-foreground">
+              Secure payment · Credits appear in your account after successful payment
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
