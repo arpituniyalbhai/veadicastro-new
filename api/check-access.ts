@@ -210,8 +210,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           };
         }
 
-        // Handle question credit deduction (existing logic)
-        if (unlimitedExpiry && new Date() < unlimitedExpiry) {
+        // Deep Reasoning always costs 2 credits; a normal question costs 1.
+        const creditsToDeduct = type === 'deep_reasoning' ? 2 : 1;
+
+        // Day Pass remains unlimited for normal questions only.
+        if (type !== 'deep_reasoning' && unlimitedExpiry && new Date() < unlimitedExpiry) {
           // Day Pass active - no deduction needed
           return {
             deducted: false,
@@ -222,19 +225,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           };
         }
 
-        if (credits <= 0) {
-          // No credits available
+        if (credits < creditsToDeduct) {
+          // Not enough credits for this question type
           return {
             deducted: false,
-            credits: 0,
+            credits,
             reportCredits: reportCredits,
             compatibilityCredits: compatibilityCredits,
-            reason: 'no_credits'
+            reason: credits <= 0 ? 'no_credits' : 'insufficient_credits'
           };
         }
 
-        // Deduct one credit atomically
-        const newCredits = credits - 1;
+        // Deduct the full cost atomically
+        const newCredits = credits - creditsToDeduct;
         transaction.update(userDocRef, {
           credits: newCredits,
           updatedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -245,7 +248,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           credits: newCredits,
           reportCredits: reportCredits,
           compatibilityCredits: compatibilityCredits,
-          reason: 'deducted'
+          reason: type === 'deep_reasoning' ? 'deep_reasoning_deducted' : 'deducted'
         };
       }),
         new Promise((_, reject) =>

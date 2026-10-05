@@ -860,6 +860,15 @@ export default function Chat() {
     const fullQuestion = (questionOverride ?? deepReasoningQuestion).trim();
     if (!fullQuestion || deepReasoningLoading) return;
 
+    if (loading) {
+      setDeepReasoningError("Your account is still loading. Please try again in a moment.");
+      return;
+    }
+    if (credits < 2) {
+      setDeepReasoningError(`Deep Reasoning requires 2 credits. You currently have ${credits} ${credits === 1 ? "credit" : "credits"}.`);
+      return;
+    }
+
     setDeepReasoningQuestion(fullQuestion);
     setMessages((current) => [...current, { role: "user", content: fullQuestion }]);
     setMessage("");
@@ -873,7 +882,6 @@ export default function Chat() {
     const minimumThinkingEndsAt = Date.now() + 4000;
 
     try {
-      if (loading) throw new Error("Your account is still loading. Please try again in a moment.");
       const canAsk = await canAskMoreQuestions();
       if (!canAsk) throw new Error(getOutOfCreditsMessage());
 
@@ -934,7 +942,7 @@ export default function Chat() {
       const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
       if (remainingDelay) await new Promise((resolve) => window.setTimeout(resolve, remainingDelay));
 
-      const creditDeducted = await deductCredit();
+      const creditDeducted = await deductCredit("deep_reasoning");
       if (!creditDeducted) throw new Error(getOutOfCreditsMessage());
 
       const storedResult = { question: fullQuestion, result, createdAt: Date.now() };
@@ -2249,30 +2257,14 @@ export default function Chat() {
                 />
               )}
               <div className="relative z-10 w-full">
-                {deepReasoningMode && (
-                  <div className="mb-2 flex items-center justify-between gap-3 rounded-xl border border-pink-400/25 bg-pink-400/[0.08] px-3 py-2">
-                    <div className="flex min-w-0 items-center gap-2 text-xs font-medium text-pink-200">
-                      <Brain className="h-3.5 w-3.5 shrink-0" />
-                      <span>Deep Reasoning selected</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setDeepReasoningMode(false)}
-                      className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-sm text-muted-foreground transition hover:bg-white/10 hover:text-foreground"
-                      aria-label="Turn off Deep Reasoning"
-                    >
-                      ×
-                    </button>
-                  </div>
-                )}
                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                <div className="relative flex-1 min-w-[220px]">
+                <div className={`relative flex h-14 min-w-[220px] flex-1 items-center rounded-full border bg-background/65 shadow-inner shadow-black/10 transition-all duration-300 focus-within:ring-2 focus-within:ring-secondary/35 ${message.trim() ? "border-secondary/50 bg-background/80 shadow-[0_0_24px_rgba(236,72,153,0.18)]" : "border-border/60"}`}>
                   <Popover open={composerMenuOpen} onOpenChange={setComposerMenuOpen}>
                     <PopoverTrigger asChild>
                       <button
                         type="button"
                         aria-label="Open chat tools"
-                        className="absolute left-4 top-1/2 z-20 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
+                        className="ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-white/10 hover:text-foreground"
                       >
                         <Plus className="h-5 w-5" />
                       </button>
@@ -2299,6 +2291,7 @@ export default function Chat() {
                           setComposerMenuOpen(false);
                           setDeepReasoningError("");
                           setDeepReasoningMode(true);
+                          requestAnimationFrame(focusInput);
                         }}>
                           <Brain className="h-4 w-4 shrink-0 text-muted-foreground" />
                           <span><span className="block text-sm font-medium">Deep Reasoning</span><span className="block text-xs text-muted-foreground">Get a detailed answer</span></span>
@@ -2306,6 +2299,22 @@ export default function Chat() {
                       </div>
                     </PopoverContent>
                   </Popover>
+                  {deepReasoningMode && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDeepReasoningMode(false);
+                        requestAnimationFrame(focusInput);
+                      }}
+                      className="flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-blue-400/25 bg-blue-400/10 px-2.5 py-1.5 text-xs font-medium text-blue-300 transition-colors hover:border-blue-400/40 hover:bg-blue-400/15"
+                      aria-label="Turn off Deep Reasoning"
+                      title="Turn off Deep Reasoning"
+                    >
+                      <span aria-hidden="true">📣</span>
+                      <span>Deep Reasoning</span>
+                      <span aria-hidden="true" className="ml-0.5 text-sm leading-none text-blue-200/70">×</span>
+                    </button>
+                  )}
                   <Input
                     ref={inputRef}
                     id="chat-input"
@@ -2323,12 +2332,12 @@ export default function Chat() {
                       }
                     }}
                     disabled={sending || deepReasoningLoading}
-                    className={`h-14 rounded-full border-border/60 bg-background/65 pl-14 pr-16 text-sm shadow-inner shadow-black/10 transition-all duration-300 focus-visible:ring-2 focus-visible:ring-secondary/35 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50 ${message.trim() ? "border-secondary/50 bg-background/80 shadow-[0_0_24px_rgba(236,72,153,0.18)]" : ""}`}
+                    className="h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-2 py-0 text-sm shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 disabled:cursor-not-allowed disabled:opacity-50"
                   />
                   <Button
                     variant="cosmic"
                     size="icon"
-                    className="absolute right-2 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
+                    className="mr-2 h-10 w-10 shrink-0 rounded-full shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
                     onClick={() => send()}
                     disabled={sending || deepReasoningLoading || !message.trim()}
                     aria-label="Send"

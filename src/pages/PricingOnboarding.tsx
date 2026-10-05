@@ -608,7 +608,7 @@ const PricingOnboarding = () => {
             <div>
               <DialogTitle className="text-2xl mb-2">Payment Failed</DialogTitle>
               <DialogDescription className="text-base">
-                Hey, your payment failed. If you think payment is successful then email or call us at 9411761184
+                Your payment could not be completed. If the amount was deducted from your account, please email us or call us at 9411761184 for assistance.
               </DialogDescription>
             </div>
             <div className="flex gap-3 w-full">

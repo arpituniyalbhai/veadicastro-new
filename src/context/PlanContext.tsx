@@ -53,7 +53,7 @@ type PlanContextType = {
   resetQuestionUsage: () => void;
   hasQuickPack: boolean;
   useQuickPackQuestion: () => Promise<boolean>;
-  deductCredit: () => Promise<boolean>;
+  deductCredit: (usageType?: "question" | "deep_reasoning") => Promise<boolean>;
   deductCompatibilityCredit: () => Promise<boolean>;
   canGenerateReport: () => boolean;
   registerReportUsage: () => Promise<void>;
@@ -296,7 +296,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
 
   // ── Atomic Credit Deduction ───────────────────────────────────────────────────
 
-  const deductCredit = useCallback(async (): Promise<boolean> => {
+  const deductCredit = useCallback(async (usageType: "question" | "deep_reasoning" = "question"): Promise<boolean> => {
     if (!user?.email) {
       console.log("User not logged in - blocking API call");
       return false;
@@ -305,8 +305,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
     // Use ref to get latest credits value, avoiding stale closure
     const currentCredits = creditsRef.current;
     const hasDayPass = unlimitedExpiry && new Date() < unlimitedExpiry;
-    if (!hasDayPass && currentCredits <= 0) {
-      console.log("🔒 Local guard: No credits available, blocking API call");
+    const creditsToDeduct = usageType === "deep_reasoning" ? 2 : 1;
+    const canUseUnlimitedAccess = usageType === "question" && hasDayPass;
+    if (!canUseUnlimitedAccess && currentCredits < creditsToDeduct) {
+      console.log(`🔒 Local guard: ${creditsToDeduct} credits required, blocking API call`);
       return false;
     }
 
@@ -320,7 +322,8 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           email: user.email, 
-          action: "deduct" 
+          action: "deduct",
+          type: usageType,
         }),
       });
       
@@ -340,7 +343,7 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       if (data.deducted) {
         console.log("✅ Credit successfully deducted, updating UI optimistically");
         console.log("💳 Before optimistic update - UI credits:", currentCredits);
-        const newCredits = Math.max(0, data.credits ?? currentCredits - 1);
+        const newCredits = Math.max(0, data.credits ?? currentCredits - creditsToDeduct);
         // Optimistic update - use ref value to avoid stale closure
         setCredits(prev => {
           console.log("💳 After optimistic update - UI credits:", newCredits);
@@ -350,9 +353,10 @@ export const PlanProvider = ({ children }: { children: ReactNode }) => {
       } else {
         console.log("❌ Credit deduction failed -", data.reason || "no credits available");
         // Force sync local state if backend says no credits
-        if (data.reason === 'no_credits') {
-          console.log("💳 Force syncing UI credits to 0 (backend says no credits)");
-          setCredits(0);
+        if (data.reason === 'no_credits' || data.reason === 'insufficient_credits') {
+          const syncedCredits = Math.max(0, data.credits ?? 0);
+          console.log("💳 Syncing UI credits from backend:", syncedCredits);
+          setCredits(syncedCredits);
         }
         return false;
       }
