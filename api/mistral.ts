@@ -175,16 +175,21 @@ function getRecentAstrologyAnchors(history: any[]): string {
     .map((item: any) => String(item?.content || ''))
     .join(' ');
 
-  const planetHouseCombinations = recentText.match(
-    /\b(Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\s+(in\s+)?(House\s+\d+|[\w]+\s+house|\d+th\s+house)/gi
+  const planetHouse = recentText.match(
+    /\b(Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\b.{0,20}?\b(\d+)(st|nd|rd|th)\s+house/gi
   ) || [];
 
-  const uniqueCombinations = Array.from(
-    new Set(planetHouseCombinations.map((combination) => combination.toLowerCase()))
-  );
+  const houseOnly = recentText.match(
+    /\b(\d+)(st|nd|rd|th)\s+house\b/gi
+  ) || [];
 
-  return uniqueCombinations.length
-    ? `BANNED COMBINATIONS THIS SESSION: ${uniqueCombinations.join(', ')}. Do not use these.`
+  const banned = Array.from(new Set([
+    ...planetHouse.map(p => p.toLowerCase()),
+    ...houseOnly.map(h => h.toLowerCase())
+  ]));
+
+  return banned.length
+    ? `BANNED THIS SESSION - DO NOT USE: ${banned.join(', ')}. Pick completely different planets and houses.`
     : 'No restrictions yet.';
 }
 
