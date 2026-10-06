@@ -316,9 +316,10 @@ export default async function handler(req: Request) {
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
 - ${recentAstrologyAnchors}
-- Use only 2 mutually supporting chart factors that are not in the banned list above.
-- The psychological driver must be different in each response — use the Moon, Ascendant, Sun, Mars, or any other relevant placement. Never use the same placement in two consecutive responses.
-- Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
+- HARD RULE: Every house and planet in the banned list above is COMPLETELY FORBIDDEN in this response. Not even once. No exceptions.
+- After any house is mentioned TWICE in this session, it enters permanent ban automatically.
+- Use maximum 1 house reference per response. Always pick the least recently used house from the chart.
+- Timing mode: ${timingRequested ? 'ON. Use only pre-calculated dates supplied in the chart.' : 'OFF. Do not mention timing unless the user explicitly asks for it.'}`;
 
     // System prompt - unified for both languages
     const toneInstruction = lang === "hi"
