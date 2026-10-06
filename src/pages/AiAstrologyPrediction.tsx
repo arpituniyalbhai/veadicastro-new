@@ -81,7 +81,6 @@ const internalLinks = [
   { label: "Free Kundli Generator", href: "/free-kundli-generator" },
   { label: "AI Astrology", href: "/ai-astrology" },
   { label: "Horoscope by Date of Birth", href: "/horoscope-by-date-of-birth" },
-  { label: "KundliGPT Alternative", href: "/kundligpt-alternative" },
 ];
 
 const calculateAge = (day: number, month: number, year: number) => {
@@ -409,7 +408,7 @@ export default function AiAstrologyPrediction() {
 
         {/* Announcement Banner */}
         {/* Announcement Banner */}
-<div className="mx-auto max-w-5xl px-4 py-4">
+{false && <div className="mx-auto max-w-5xl px-4 py-4">
   <div className="relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-red-500/10 p-4">
     <div className="absolute inset-0 opacity-20" style={{
       background: 'radial-gradient(circle at 15% 20%, rgba(251,146,60,0.3) 0%, transparent 40%), radial-gradient(circle at 85% 80%, rgba(239,68,68,0.3) 0%, transparent 45%)'
@@ -449,7 +448,7 @@ export default function AiAstrologyPrediction() {
       </button>
     </div>
   </div>
-</div>
+</div>}
         <section className="mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-5xl flex-col justify-center px-4 py-10 sm:py-12">
           {step === "form" && (
             <div className="mx-auto w-full max-w-2xl">

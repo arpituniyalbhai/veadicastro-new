@@ -393,8 +393,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro</title>
-        <meta name="description" content="Start a free AI astrologer chat with Vedic birth-chart context. Ask instantly in Hindi or English — no signup needed for your first question." />
+        <title>Free AI Astrologer Chat — Ask Your First Question Free</title>
+        <meta name="description" content="Chat with Vedika, a free AI astrologer for Vedic birth-chart questions. Ask your first question free in Hindi or English, then sign up free to ask more." />
         <meta name="keywords" content="free ai astrologer chat, chat with vedic astrologer online, ai astrologer no signup, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology, ai astrology free chat" />
         <link rel="canonical" href="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -405,8 +405,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <meta name="ICBM" content="20.5937,78.9629" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro" />
-        <meta property="og:description" content="Start a free AI astrologer chat with Vedic birth-chart context in Hindi or English." />
+        <meta property="og:title" content="Free AI Astrologer Chat — Ask Your First Question Free" />
+        <meta property="og:description" content="Ask Vedika your first Vedic birth-chart question free in Hindi or English, then sign up free to ask more." />
         <meta property="og:url" content="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
@@ -417,8 +417,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro" />
-        <meta name="twitter:description" content="Start a free AI astrologer chat with Vedic birth-chart context in Hindi or English." />
+        <meta name="twitter:title" content="Free AI Astrologer Chat — Ask Your First Question Free" />
+        <meta name="twitter:description" content="Ask Vedika your first Vedic birth-chart question free in Hindi or English, then sign up free to ask more." />
         <meta name="twitter:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
         <meta name="twitter:site" content="@veadicastro" />
         <meta name="twitter:creator" content="@veadicastro" />
@@ -437,7 +437,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         {
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": "Free AI Astrologer Chat - No Signup Required",
+          "name": "Free AI Astrologer Chat — Ask Your First Question Free",
           "alternateName": [
             "Vedika AI Chat",
             "Personal Birth Chart Analysis", 
@@ -455,7 +455,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             "@type": "Offer",
             "price": "0",
             "priceCurrency": "INR",
-            "description": "AI astrology free chat with no signup required"
+            "description": "First question free. Sign up free to continue."
           },
           "featureList": [
             "Personal Birth Chart Analysis",
@@ -527,7 +527,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               "name": "Is the AI astrology chat really free?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Veadicastro offers a free AI astrology chat — no signup required for your first question. Create a free account to get 1 free chat."
+                "text": "Yes. Your first question is free. Sign up free to continue asking questions."
               }
             },
             {
@@ -582,17 +582,17 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     {/* ── HERO STRIP ── */}
     <section className="relative py-14 text-center px-4">
       <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-pink-400 border border-pink-500/30 rounded-full px-4 py-1.5 mb-6">
-        <Sparkles className="w-3 h-3" /> Free Astrologer Chat — No Signup Required
+        <Sparkles className="w-3 h-3" /> First question free. Sign up free to continue.
       </p>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
         Free AI Astrologer Chat<br />
-        <span className="text-pink-400 pink-glow">with Vedika AI</span>
+        <span className="text-pink-400 pink-glow">Ask Your First Question Free</span>
       </h1>
       <p className="mx-auto max-w-2xl text-base leading-7 text-white/65">
-        Ask an instant Vedic astrology question using your birth-chart details. For a full overview of the subject, read our <a href="/ai-astrology" className="text-pink-400 hover:text-white">AI astrology guide</a>.
+        Enter your birth details and ask Vedika one question. First question free; sign up free to ask more.
       </p>
       <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-white/75">
-        {["No per-minute charges", "Chart-based - not sun-sign", "Hindi & English both"].map((chip) => (
+        {["First question free", "Chart-based, not sun-sign", "Hindi & English"].map((chip) => (
           <span key={chip} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">
             <CheckCircle2 className="h-4 w-4 text-green-400" />
             {chip}
@@ -600,23 +600,10 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         ))}
       </div>
       <div className="flex flex-wrap justify-center gap-4 mt-6">
-        <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5-Minutes Astrology</a>
-        <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Marriage Timing by DOB</a>
-        <a href="/chatgpt-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">ChatGPT Astrology</a>
-        <a href="/today-horoscope" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Today's Horoscope</a>
-        <a href="/blog/free-ai-astrology-chat-india" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free AI Astrology Chat India</a>
-        <a href="/blog/ai-astrology-prediction-for-2026" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions for 2026</a>
-        <a href="/blog/the-great-astrology-scam" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Astrologer Per Minute Scam</a>
-        <a href="/blog/ai-jyotish-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Jyotish</a>
-        <a href="/blog/is-ai-astrology-accurate" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Is AI Astrology Accurate?</a>
-        <a href="/blog/ai-astrologer-vs-human-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI vs Human Astrologer</a>
-        <a href="/blog/how-ai-is-transforming-vedic-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI is Transforming Vedic Astrology</a>
-        <a href="/blog/online-jyotishi-vs-ai-astrologer" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Online Jyotishi vs AI Astrologer</a>
-        <a href="/blog/top-10-vedic-astrology-platform" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Top 10 AI Astrology Tools</a>
-        <a href="/ai-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology — Complete Guide</a>
-        <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Birth Chart Calculator</a>
-        <a href="/free-kundali-matching" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Kundli Matching</a>
-        <a href="/" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Best Vedic astrology Platform</a>
+        <a href="/ai-astrology" className="text-sm text-white/60 hover:text-pink-400 transition-colors">How AI Astrology Works</a>
+        <a href="/ai-astrology-prediction" className="text-sm text-white/60 hover:text-pink-400 transition-colors">AI Astrology Predictions</a>
+        <a href="/free-5-minutes-astrology-ai" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free 5 Minute Astrology Reading</a>
+        <a href="/free-kundli-generator" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Free Kundli Generator</a>
       </div>
     </section>
 
@@ -624,9 +611,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
     <section className="max-w-5xl mx-auto px-4 pb-10">
       <div className="card-glass rounded-3xl border border-pink-500/20 p-6 text-left shadow-xl shadow-pink-950/10">
         <div className="mb-4 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-2 rounded-full bg-red-500/15 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-red-300">
-            <span className="h-2 w-2 rounded-full bg-red-400" />
-            Live
+          <span className="inline-flex items-center gap-2 rounded-full bg-pink-500/15 px-3 py-1 text-xs font-black uppercase tracking-[0.16em] text-pink-300">
+            <span className="h-2 w-2 rounded-full bg-pink-400" />
+            Popular questions
           </span>
           <span className="text-sm font-semibold text-white/70">{dailyQuestions.date}</span>
         </div>
@@ -928,9 +915,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             {[
               {
                 title: "Mathematical Precision",
-                desc: "We use JPL ephemeris data — the same as professional astronomers. Your planetary positions are calculated to arc-second accuracy, not approximated from simplified tables like most astrology apps.",
-                stat: "99.8%",
-                label: "Calculation Accuracy"
+                desc: "Enter precise birth details to create a Vedic chart and explore traditional chart factors.",
+                stat: "Chart",
+                label: "Birth-detail based"
               },
               {
                 title: "Authentic Vedic Methods",
@@ -1087,7 +1074,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                Sign up to unlock vedika ai free
               </h2>
               <p className="text-white/50 text-sm max-w-md mx-auto mb-6">
-                Join over million people who have discovered the power of AI-powered Vedic astrology. Your free reading takes less than 2 minutes.
+                First question free. Sign up free to continue with more questions and deeper chart context.
               </p>
               <button
                 onClick={() => {
@@ -1119,7 +1106,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
             <div className="card-glass rounded-2xl p-6 border-l-4 border-pink-500/50">
               <h3 className="font-semibold text-white/90 text-lg mb-3">What makes Veadicastro different from other astrology apps?</h3>
               <div className="text-white/50 text-sm leading-relaxed">
-                <p>We use JPL ephemeris data for arc-second accuracy and follow Parashari principles exactly as written in Bṛhat Parāśara Horāśāstra. No Western astrology mixing, no generic interpretations — pure Vedic Jyotish with calculations like professional astronomers use. You can also start from the <a href="/" className="text-pink-400 hover:text-pink-300 underline underline-offset-4">Veadicastro homepage</a> to explore the full AI astrology platform, Kundli tools, daily predictions, and reports together.</p>
+                <p>Vedika uses your birth details to present traditional Vedic chart context in simple language. Use the response as guidance and reflection, not as a guaranteed outcome.</p>
               </div>
             </div>
 
@@ -1157,7 +1144,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
           </div>
         </section>
 
-        <section className="max-w-5xl mx-auto px-4 mb-20">
+        {false && <section className="max-w-5xl mx-auto px-4 mb-20">
           <div className="card-glass rounded-3xl overflow-hidden border border-pink-500/20">
             <div className="grid md:grid-cols-[0.95fr_1.35fr]">
               <div className="min-h-[260px] bg-black/20">
@@ -1212,7 +1199,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               </div>
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* Additional Links Before Blog */}
         <div className="max-w-5xl mx-auto px-4 mb-8">
@@ -1253,9 +1240,9 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
                 That is exactly what we've built with Free AI Astrology.
               </p>
               
-              <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">No Signup, Just Answers</h4>
+              <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">First question free</h4>
               <p>
-                Most astrology sites feel like a trap—they ask for your data before they give you value. On our platform, we believe the stars should be accessible to everyone. You simply enter your birth details, and you're in. No credit cards, no passwords, just instant cosmic clarity.
+                Enter your birth details and ask one question free. Sign up free if you want to continue the conversation.
               </p>
               
               <h4 className="font-bold text-xl font-bold mt-8 mb-4 text-white">Meet "Vedika AI" — Your Personal Digital Guru</h4>
@@ -1299,7 +1286,7 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
               </p>
               
               <p className="font-semibold text-pink-400 mt-4">
-                No catch. No signup. Just the truth.
+                First question free. Sign up free to continue.
               </p>
             </div>
           </div>

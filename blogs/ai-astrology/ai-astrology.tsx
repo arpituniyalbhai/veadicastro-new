@@ -98,14 +98,14 @@ export default function AiAstrology() {
             {/* Social Proof Section */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
               <div className="flex items-center gap-2">
-                <img src="/optimized/reviews.webp" alt="Veadicastro Reviews - 30,000+ Happy Users" className="h-8 rounded-lg" />
-                <span className="text-white/80 text-sm">30,000+ Happy Users</span>
+                <img src="/optimized/reviews.webp" alt="Veadicastro user feedback" className="h-8 rounded-lg" />
+                <span className="text-white/80 text-sm">Veadicastro user feedback</span>
               </div>
               <div className="flex items-center gap-1">
                 {[1,2,3,4,5].map(i => (
                   <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 ))}
-                <span className="text-white/80 text-sm ml-1">4.8 Rating</span>
+                <span className="text-white/80 text-sm ml-1">Vedic astrology tools</span>
               </div>
             </div>
             
@@ -114,7 +114,7 @@ export default function AiAstrology() {
               <div className="flex items-start gap-4">
                 <img src="/optimized/reviews.webp" alt="Veadicastro Reviews - User Testimonials" className="w-10 h-10 rounded-lg flex-shrink-0" />
                 <div className="flex-1">
-                  <p className="text-white/80 italic mb-2">"Vedika AI predicted my marriage timing exactly as per my Kundali. The dasha analysis was spot-on! I used their <Link to="/free-kundli-generator" className="text-pink-400 hover:text-pink-300 underline">free kundali generator in India</Link> and <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-pink-300 underline">AI astrology chat in India</Link> for accurate predictions."</p>
+                  <p className="text-white/80 italic mb-2">"Vedika AI helped me understand my Kundli and dasha timing in simple language."</p>
                   <p className="text-white/60 text-sm">- Rohit Kumar, Delhi</p>
                 </div>
               </div>
@@ -160,10 +160,10 @@ export default function AiAstrology() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  title: "Free 5-Minutes Astrology",
-                  desc: "Quick AI astrology readings in just 5 minutes",
-                  icon: <Zap className="w-6 h-6" />,
-                  link: "/free-5-minutes-astrology-ai",
+                  title: "Free AI Astrologer Chat",
+                  desc: "Ask your first Vedic birth-chart question free",
+                  icon: <MessageSquare className="w-6 h-6" />,
+                  link: "/free-ai-astrologer-chat",
                   free: true
                 },
                 {
@@ -174,10 +174,10 @@ export default function AiAstrology() {
                   free: true
                 },
                 {
-                  title: "Ask Vedika AI",
-                  desc: "Get personalized answers to your astrology questions",
-                  icon: <MessageSquare className="w-6 h-6" />,
-                  link: "/free-ai-astrologer-chat",
+                  title: "Free 5-Minutes Astrology",
+                  desc: "Quick AI astrology readings in just 5 minutes",
+                  icon: <Zap className="w-6 h-6" />,
+                  link: "/free-5-minutes-astrology-ai",
                   free: true
                 },
                 {
@@ -258,7 +258,7 @@ export default function AiAstrology() {
                       {tool.desc}
                     </p>
                     <div className="flex items-center gap-2 text-pink-400 text-sm font-medium">
-                      {tool.title === "Ask Vedika AI" && "Free AI Astrology Chat in India"}
+                      {tool.title === "Free AI Astrologer Chat" && "Start a free AI astrologer chat"}
                       {tool.title === "Kundali Generator" && "Free AI Kundali Generator in India"}
                       {tool.title === "Kundali Matching" && "AI Kundali Matching for Marriage"}
                       {tool.title === "Angel Numbers" && "Lucky Number Calculator"}
@@ -746,9 +746,9 @@ export default function AiAstrology() {
                   <h3 className="text-xl font-semibold mb-4 text-pink-400">Health & Wellness</h3>
                   <ul className="space-y-2 text-white/70">
                     <li>• Health concerns timing</li>
-                    <li>• Best medical treatments</li>
-                    <li>• Mental health guidance</li>
-                    <li>• Recovery predictions</li>
+                    <li>• General wellness reflection</li>
+                    <li>• Healthy routine planning</li>
+                    <li>• Questions to discuss with a qualified professional</li>
                   </ul>
                 </div>
               </div>
@@ -877,42 +877,26 @@ export default function AiAstrology() {
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-xl font-semibold mb-3 text-white">Coming Soon</h3>
+                <h3 className="text-xl font-semibold mb-3 text-white">What to consider</h3>
                     <ul className="space-y-2">
-                      <li>• <strong>Voice-based consultations</strong> - Talk to AI in Hindi/English</li>
-                      <li>• <strong>Real-time predictions</strong> - Live dasha tracking</li>
-                      <li>• <strong>AR kundali visualization</strong> - 3D chart displays</li>
-                      <li>• <strong>Personalized remedial suggestions</strong> - AI-generated pujas</li>
+                      <li>• Use exact birth details where possible</li>
+                      <li>• Treat a reading as reflection, not certainty</li>
+                      <li>• Compare chart context before acting on a decision</li>
                     </ul>
                   </div>
                   <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-                    <h3 className="text-xl font-semibold mb-3 text-white">Long-term Vision</h3>
+                    <h3 className="text-xl font-semibold mb-3 text-white">Use AI astrology responsibly</h3>
                     <ul className="space-y-2">
-                      <li>• <strong>Quantum computing integration</strong> - Instant complex calculations</li>
-                      <li>• <strong>Cross-cultural astrology</strong> - Vedic + Western synthesis</li>
-                      <li>• <strong>Predictive health alerts</strong> - Astro-based wellness</li>
-                      <li>• <strong>Global astrological network</strong> - Shared insights database</li>
+                      <li>• Ask focused questions about the chart</li>
+                      <li>• Use it alongside your own judgment</li>
+                      <li>• Seek qualified professional help for health, legal, or financial decisions</li>
                     </ul>
                   </div>
                 </div>
                 
                 <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl p-6 border border-blue-500/30">
-                  <h3 className="text-xl font-semibold mb-3 text-white">Industry Impact</h3>
-                  <p className="mb-4">AI astrology is revolutionizing how people access spiritual guidance:</p>
-                  <div className="grid md:grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-2xl font-bold text-blue-400">3.2M+</div>
-                      <div className="text-sm text-white/60">AI consultations in 2025</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-purple-400">78%</div>
-                      <div className="text-sm text-white/60">User satisfaction rate</div>
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-pink-400">92%</div>
-                      <div className="text-sm text-white/60">Accuracy in timing predictions</div>
-                    </div>
-                  </div>
+                  <h3 className="text-xl font-semibold mb-3 text-white">A practical approach</h3>
+                  <p>AI can organise chart information quickly, but astrology cannot guarantee outcomes. Use a reading as one perspective alongside facts, personal judgment, and qualified advice where needed.</p>
                 </div>
               </div>
             </div>
@@ -927,7 +911,7 @@ export default function AiAstrology() {
               {[
                 {
                   q: "Is AI astrology accurate?",
-                  a: "Yes, AI astrology can be quite accurate when it follows authentic Vedic principles. It analyzes your exact birth details using traditional astrological knowledge to give you personalized predictions that actually relate to your life. Our accuracy rate is 87-94% depending on the prediction type."
+                  a: "AI astrology can organise traditional Vedic chart information using your birth details. It cannot guarantee outcomes, and the usefulness of a reading depends on accurate details and the question you ask."
                 },
                 {
                   q: "Is AI astrology real or fake?",
@@ -1005,8 +989,8 @@ export default function AiAstrology() {
           </div>
         </section>
         
-        {/* Veadicastro Store Section */}
-        <section className="py-16 px-4">
+        {/* Veadicastro Store Section intentionally removed from this educational guide. */}
+        {false && <section className="py-16 px-4">
           <div className="max-w-5xl mx-auto">
             <div className="card-glass rounded-3xl overflow-hidden border border-pink-500/20">
               <div className="grid md:grid-cols-[0.95fr_1.35fr]">
@@ -1063,7 +1047,7 @@ export default function AiAstrology() {
               </div>
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* Bottom CTA */}
         <section className="py-16 px-4">
@@ -1074,6 +1058,12 @@ export default function AiAstrology() {
                 Get Your Free AI Kundali in 30 Seconds. Limited free questions per day - ask about marriage, career, or life predictions today!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/free-ai-astrologer-chat"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold rounded-xl hover:from-pink-700 hover:to-purple-700 transition-all"
+                >
+                  Free AI Astrologer Chat <MessageSquare className="w-4 h-4" />
+                </Link>
                 <Link 
                   to="/free-5-minutes-astrology-ai" 
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-full hover:from-blue-700 hover:to-purple-700 transition-all"

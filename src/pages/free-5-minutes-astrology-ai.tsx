@@ -454,6 +454,9 @@ KEY INSIGHTS:
             Get Your Personalized Reading<br />
             <span className="text-pink-400 pink-glow">In Just 5 Minutes</span>
           </h1>
+          <p className="mx-auto max-w-2xl text-base leading-7 text-white/65">
+            This is a one-time instant reading. Enter your birth details, pick a topic and get a short Vedic reading. Want to ask follow-up questions? Try our <Link to="/free-ai-astrologer-chat" className="text-pink-400 hover:text-white">free AI astrologer chat</Link>.
+          </p>
           <div className="flex flex-wrap justify-center gap-4 mt-6">
             <button onClick={() => setAuthOpen(true)} className="text-sm text-white/60 hover:text-pink-400 transition-colors">Chat with Vedika AI</button>
             <a href="/ai-marriage-prediction-by-date-of-birth" className="text-sm text-white/60 hover:text-pink-400 transition-colors">Check Marriage Timing</a>
@@ -1010,7 +1013,7 @@ KEY INSIGHTS:
               </p>
             </div>
 
-            <h2 className="text-2xl font-bold text-white mt-12 mb-6">Is Free AI Astrology Actually Accurate?</h2>
+            <h2 className="text-2xl font-bold text-white mt-12 mb-6">How accurate is a 5-minute reading?</h2>
             
             <div className="text-white/80 leading-relaxed space-y-4">
               <p>
@@ -1033,8 +1036,7 @@ KEY INSIGHTS:
               </p>
               
               <p>
-                Over 2 lakh people have used Veadicastro. The feedback we get most often
-                is — "this felt like it was written just for me."
+                A short reading can be a useful starting point, but it cannot guarantee a specific outcome.
               </p>
               
               <p>
@@ -1043,8 +1045,7 @@ KEY INSIGHTS:
               </p>
             </div>
 
-            <h2 className="text-2xl font-bold text-white mt-12 mb-6">Why Veadicastro and Not Some Other App?</h2>
-            
+            {false && <><h2 className="text-2xl font-bold text-white mt-12 mb-6">Why Veadicastro and Not Some Other App?</h2>
             <div className="text-white/80 leading-relaxed space-y-4">
               <p>
                 There are hundreds of astrology apps in India. Most of them show you the
@@ -1074,7 +1075,7 @@ KEY INSIGHTS:
                 Not generic astrology blog content. Real sources — Brihat Parashara Hora
                 Shastra, Saravali, Phaladeepika.</li>
               </ul>
-            </div>
+            </div></>}
 
             <h2 className="text-2xl font-bold text-white mt-12 mb-6">Questions People Ask About Free 5 Minute Astrology AI</h2>
             
@@ -1140,7 +1141,7 @@ KEY INSIGHTS:
               </p>
             </div>
 
-            <div className="mt-12 rounded-3xl border border-pink-500/20 bg-white/[0.04] overflow-hidden">
+            {false && <div className="mt-12 rounded-3xl border border-pink-500/20 bg-white/[0.04] overflow-hidden">
               <div className="grid md:grid-cols-[0.95fr_1.35fr] gap-0">
                 <div className="min-h-[260px] bg-black/20">
                   <img
@@ -1190,7 +1191,7 @@ KEY INSIGHTS:
                   </div>
                 </div>
               </div>
-            </div>
+            </div>}
 
             {/* Internal Links */}
             <div className="mt-12 pt-8 border-t border-white/10">

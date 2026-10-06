@@ -61,8 +61,8 @@ const META_BASE: Record<string, Meta> = {
   breadcrumb: 'Home',
 },
   '/free-ai-astrologer-chat': {
-    title: 'Free AI Astrologer Chat — No Signup | Veadicastro',
-    description: 'Start a free AI astrologer chat with Vedic birth-chart context. Ask questions instantly in Hindi or English — no signup needed for your first question.',
+    title: 'Free AI Astrologer Chat — Ask Your First Question Free',
+    description: 'Chat with Vedika, a free AI astrologer for Vedic birth-chart questions. Ask your first question free in Hindi or English, then sign up free to ask more.',
     canonical: 'https://veadicastro.in/free-ai-astrologer-chat',
     breadcrumb: 'Free AI Astrologer Chat',
   },
@@ -545,12 +545,12 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
       <nav aria-label="Breadcrumb"><a href="/">Home</a> / Free AI Astrologer Chat</nav>
       <h1>Free AI Astrologer Chat</h1>
-      <p>Start a free AI astrologer chat for immediate Vedic birth-chart questions. Ask Vedika about your Kundli, dasha, relationships, career direction, and everyday concerns without waiting for an appointment.</p>
+      <p>Enter your birth details and ask Vedika one Vedic birth-chart question. Your first question is free; sign up free to ask more in Hindi or English.</p>
       <p>Share your date of birth, birth time, and birthplace for more personalised context. Vedika AI can explain traditional chart factors in Hindi or English and help you ask focused follow-up questions.</p>
       <p>Looking for a broad explanation of the technology? Read our <a href="/ai-astrology">AI astrology guide</a>. This page is specifically for starting a free AI astrologer chat.</p>
       <section>
         <h2>Free AI Astrologer Chat FAQs</h2>
-        <details><summary>Can I chat with an AI astrologer for free?</summary><p>Yes. You can start a free AI astrology chat and ask questions about your Vedic birth chart.</p></details>
+        <details><summary>Can I chat with an AI astrologer for free?</summary><p>Yes. Your first question is free. Sign up free to continue asking questions.</p></details>
         <details><summary>Does the AI astrologer need my birth details?</summary><p>Date of birth, birth time, and birthplace help provide more relevant Vedic astrology context.</p></details>
         <details><summary>What can I ask an AI astrologer?</summary><p>You can ask about career, love, marriage, Kundli, dashas, personality, and general astrology topics.</p></details>
         <details><summary>Can I use the AI astrologer in Hindi?</summary><p>Yes. Vedika AI supports astrology questions in Hindi and English.</p></details>
