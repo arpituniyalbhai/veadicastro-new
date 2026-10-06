@@ -216,6 +216,12 @@ const META_BASE: Record<string, Meta> = {
     canonical: 'https://veadicastro.in/ai-kundli-analysis',
     breadcrumb: 'AI Kundli Analysis',
   },
+  '/ai-numerology-free-chat': {
+    title: 'AI Numerology Free Chat — Number Reading Online | Veadicastro',
+    description: 'Chat with AI about numerology, life path numbers, and traditional number meanings. Get free online numerology guidance from Veadicastro.',
+    canonical: 'https://veadicastro.in/ai-numerology-free-chat',
+    breadcrumb: 'AI Numerology Free Chat',
+  },
 
   '/ai-astrology': {
     title: 'AI Astrology — Vedic Astrology Powered by AI | Veadicastro',
@@ -549,6 +555,108 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
         <details><summary>What can I ask an AI astrologer?</summary><p>You can ask about career, love, marriage, Kundli, dashas, personality, and general astrology topics.</p></details>
         <details><summary>Can I use the AI astrologer in Hindi?</summary><p>Yes. Vedika AI supports astrology questions in Hindi and English.</p></details>
       </section>
+    </main>`,
+  '/ai-marriage-prediction-by-date-of-birth': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Marriage Prediction by Date of Birth</nav><h1>AI Marriage Prediction by Date of Birth</h1>
+      <p>Explore marriage astrology guidance using your date of birth, birth time, and birthplace. Vedika AI explains traditional Vedic chart factors connected with relationships, compatibility, and timing.</p><p>Your birth chart can be used to explore the seventh house, Venus, planetary periods, and relationship patterns. The result is intended as a starting point for reflection, not a guaranteed outcome.</p><p>For a fuller traditional reading, review your Kundli details and ask focused follow-up questions about marriage or relationships.</p>
+      <section><h2>Marriage Prediction FAQs</h2><details><summary>What birth details are needed?</summary><p>Date of birth, birth time, and birthplace provide the most useful chart context.</p></details><details><summary>Can astrology guarantee a marriage date?</summary><p>No. Astrology cannot guarantee life events or make decisions for you.</p></details><details><summary>Can I ask about love or arranged marriage?</summary><p>Yes. You can explore traditional relationship factors and ask follow-up questions.</p></details></section>
+    </main>`,
+  '/love-astrology-by-date-of-birth': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Love Astrology by Date of Birth</nav><h1>Love Astrology by Date of Birth</h1>
+      <p>Get a love astrology reading based on your date of birth, birth time, and birthplace. Vedika AI explains traditional Vedic chart themes related to romance, relationships, and emotional patterns.</p><p>The reading can explore the fifth house, Venus, Moon, and dasha periods as traditional chart references. Every relationship depends on real communication, consent, and shared values.</p><p>Use the result as a prompt for self-reflection and explore related Kundli or compatibility tools for more context.</p>
+      <section><h2>Love Astrology FAQs</h2><details><summary>What does love astrology use?</summary><p>It uses birth details to explain traditional Vedic chart factors connected with relationships.</p></details><details><summary>Can it predict a specific person?</summary><p>No. It cannot identify or guarantee a particular partner or relationship outcome.</p></details><details><summary>Do I need an exact birth time?</summary><p>An accurate birth time improves the chart context, especially for house-based interpretation.</p></details></section>
+    </main>`,
+  '/chatgpt-astrology': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / ChatGPT Astrology</nav><h1>ChatGPT Astrology and Vedic AI Guidance</h1>
+      <p>Explore ChatGPT astrology questions with Veadicastro and Vedika AI. Ask about Vedic astrology concepts, Kundli details, relationships, career, and day-to-day questions in Hindi or English.</p><p>Personalised chart context is stronger when you add your date of birth, time, and birthplace. The AI can then explain traditional factors such as signs, houses, dashas, and planetary placements.</p><p>Use the chat for guidance and learning rather than certainty about health, finance, law, or major life decisions.</p>
+      <section><h2>ChatGPT Astrology FAQs</h2><details><summary>Can I ask astrology questions for free?</summary><p>Yes. You can begin with general or birth-chart-based questions.</p></details><details><summary>What makes a reading more personal?</summary><p>Accurate birth date, time, and place provide more relevant Vedic chart context.</p></details><details><summary>Can I use Hindi?</summary><p>Yes. Vedika AI supports Hindi and English questions.</p></details></section>
+    </main>`,
+  '/ai-astrology': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology</nav><h1>AI Astrology Powered by Vedic Birth Chart Insights</h1>
+      <p>AI astrology combines traditional Vedic astrology concepts with technology that helps explain birth-chart information in a clear, conversational format.</p><p>With your date of birth, time, and birthplace, Vedika AI can help you explore Kundli placements, dashas, career, relationships, and daily astrology questions.</p><p>AI astrology is designed for learning and reflection. It does not provide certainty or replace qualified professional advice.</p>
+      <section><h2>AI Astrology FAQs</h2><details><summary>What is AI astrology?</summary><p>It is a digital way to explore astrology questions and traditional birth-chart concepts.</p></details><details><summary>Does it require birth details?</summary><p>Birth details make Kundli-based explanations more personalised.</p></details><details><summary>Can AI astrology predict the future exactly?</summary><p>No. It should not be treated as a guarantee of future events.</p></details></section>
+    </main>`,
+  '/ai-kundli-analysis': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Kundli Analysis</nav><h1>AI Kundli Analysis</h1>
+      <p>Get an AI Kundli analysis using your date of birth, birth time, and birthplace. Vedika AI helps explain planets, houses, signs, nakshatras, and dasha periods in your Vedic birth chart.</p><p>A Kundli is a traditional chart representation of the sky at birth. The analysis can help you understand chart terms and explore questions about career, relationships, personality, and timing.</p><p>Use your results as educational guidance and verify important decisions with reliable real-world information.</p>
+      <section><h2>AI Kundli Analysis FAQs</h2><details><summary>What is a Kundli analysis?</summary><p>It is an explanation of traditional Vedic birth-chart placements and their commonly used interpretations.</p></details><details><summary>What details are needed?</summary><p>Date, accurate birth time, and birthplace are needed for a complete chart.</p></details><details><summary>Can I ask questions after viewing my Kundli?</summary><p>Yes. You can use AI chat to explore the chart further.</p></details></section>
+    </main>`,
+  '/free-kundli-generator': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Free Kundli Generator</nav><h1>Free Kundli Generator Online</h1>
+      <p>Generate a free Vedic Kundli online using your date of birth, birth time, and birthplace. View a birth chart with planetary positions, houses, nakshatra, and dasha information.</p><p>Accurate birth details matter because the ascendant and house placements can change with time and location. Review the generated chart before interpreting individual placements.</p><p>After creating your Kundli, you can use AI guidance to understand traditional chart terms and ask focused questions.</p>
+      <section><h2>Free Kundli Generator FAQs</h2><details><summary>Is the Kundli generator free?</summary><p>Yes. You can generate a basic Vedic birth chart online.</p></details><details><summary>Why is birth time important?</summary><p>Birth time helps calculate the ascendant and houses accurately.</p></details><details><summary>What does a Kundli include?</summary><p>It can include signs, planets, houses, nakshatra, and dasha details.</p></details></section>
+    </main>`,
+  '/lucky-colour-for-today': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Lucky Colour for Today</nav><h1>Lucky Colour for Today</h1>
+      <p>Find a lucky colour for today using Vedic astrology-inspired guidance and your Rashi or birth-chart details. The page provides a simple daily prompt for reflection and personal preference.</p><p>Colours do not guarantee an outcome. Use them as a light, optional part of your day rather than as a basis for financial, health, or relationship decisions.</p><p>For more personal context, explore your Kundli, Rashi, and daily astrology guidance.</p>
+      <section><h2>Lucky Colour for Today FAQs</h2><details><summary>How is a lucky colour chosen?</summary><p>The recommendation uses traditional astrology-inspired colour associations.</p></details><details><summary>Do I need my birth details?</summary><p>Rashi or birth details can provide more personal context.</p></details><details><summary>Will a lucky colour guarantee success?</summary><p>No. It is a traditional and optional form of guidance, not a guarantee.</p></details></section>
+    </main>`,
+  '/talk-to-astrologer': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Talk to Astrologer</nav><h1>Talk to an Astrologer Online</h1>
+      <p>Talk to an astrologer online for traditional Vedic astrology guidance about your Kundli, career, marriage, relationships, and life questions.</p><p>Bring accurate date of birth, birth time, and birthplace details so the consultation can use the right chart context. Prepare specific questions to make the conversation more useful.</p><p>Astrology guidance is for reflection and should not replace medical, legal, financial, or other professional advice.</p>
+      <section><h2>Talk to Astrologer FAQs</h2><details><summary>What should I share before a consultation?</summary><p>Share your date of birth, birth time, birthplace, and the topics you want to discuss.</p></details><details><summary>What topics can I discuss?</summary><p>You can discuss traditional career, marriage, relationship, and Kundli questions.</p></details><details><summary>Is astrology professional advice?</summary><p>No. Use it as personal guidance, not as a replacement for qualified advice.</p></details></section>
+    </main>`,
+  '/': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <h1>AI Astrology, Free AI Chat, and Vedic Kundli Guidance</h1>
+      <p>Veadicastro is an AI astrology platform for exploring Vedic birth-chart concepts, Kundli information, daily guidance, and personalised AI chat in Hindi and English.</p><p>Enter your date of birth, time, and birthplace to generate a Kundli and ask questions about traditional astrology topics such as dashas, career, relationships, and planetary placements.</p><p>The platform is designed for reflection and learning. It does not promise certainty or replace professional health, legal, or financial advice.</p>
+      <section><h2>AI Astrology FAQs</h2><details><summary>What can I do on Veadicastro?</summary><p>You can explore Kundli generation, AI astrology chat, daily guidance, and Vedic astrology tools.</p></details><details><summary>Can I ask questions in Hindi?</summary><p>Yes. AI astrology guidance is available in Hindi and English.</p></details><details><summary>What birth details are useful?</summary><p>Date, time, and birthplace give the most useful Kundli context.</p></details></section>
+    </main>`,
+  '/ai-future-spouse-prediction': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Future Spouse Prediction</nav><h1>AI Future Spouse Prediction</h1>
+      <p>Explore traditional Vedic astrology themes related to a future spouse, relationship patterns, and marriage timing using your birth details.</p><p>Vedika AI can explain chart factors often considered in relationship readings, including the seventh house, Venus, Jupiter, and planetary periods. These interpretations are not guarantees about a person or event.</p><p>Use the reading for reflection and keep relationship decisions grounded in consent, communication, compatibility, and real behaviour.</p>
+      <section><h2>Future Spouse Prediction FAQs</h2><details><summary>Can astrology identify my future spouse?</summary><p>No. It cannot identify or guarantee a specific person.</p></details><details><summary>What birth details are needed?</summary><p>Date, time, and birthplace provide the best chart context.</p></details><details><summary>Can I ask about marriage timing?</summary><p>You can explore traditional timing factors, but they are not certain predictions.</p></details></section>
+    </main>`,
+  '/ai-astrology-prediction': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology Prediction</nav><h1>AI Astrology Prediction</h1>
+      <p>Get AI astrology guidance based on traditional Vedic birth-chart concepts. Vedika AI can help explain your Kundli, current dasha, planetary transits, and common life questions.</p><p>Add your date of birth, time, and birthplace for more relevant chart context. Explore career, relationships, personality, and daily topics through a traditional astrology lens.</p><p>Predictions are interpretive guidance, not certainty. Do not use them as the sole basis for medical, financial, legal, or personal decisions.</p>
+      <section><h2>AI Astrology Prediction FAQs</h2><details><summary>How does AI astrology prediction work?</summary><p>It explains traditional Vedic chart concepts using your birth details and questions.</p></details><details><summary>Can it give exact future events?</summary><p>No. It cannot guarantee future events or outcomes.</p></details><details><summary>Can I ask follow-up questions?</summary><p>Yes. Use AI chat to explore a chart topic in more detail.</p></details></section>
+    </main>`,
+  '/blog/next-pm-india-2029-astrology-prediction': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / Next PM of India 2029 Astrology Prediction</nav><h1>Next PM of India 2029: Astrology Commentary</h1>
+      <p>This article discusses the 2029 Indian political landscape through a traditional Vedic astrology lens. It is commentary for readers interested in astrology, not political reporting or a factual election forecast.</p><p>Election outcomes depend on voters, candidates, campaigns, institutions, and events. Astrology cannot establish who will become Prime Minister or replace reliable news and official election information.</p><p>Read this page as an exploration of astrological symbolism and return to trusted sources for current political information.</p>
+      <section><h2>Next PM India 2029 FAQs</h2><details><summary>Does this article predict an election result with certainty?</summary><p>No. It is astrology commentary and not a factual election prediction.</p></details><details><summary>What should I use for election information?</summary><p>Use official election authorities and reputable news sources.</p></details><details><summary>Why is astrology included?</summary><p>The article explains a traditional astrology perspective for interested readers.</p></details></section>
+    </main>`,
+  '/ai-numerology-free-chat': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Numerology Free Chat</nav><h1>AI Numerology Free Chat</h1>
+      <p>Chat with an AI numerology guide to explore common numerology themes, life-path numbers, and number meanings in a simple conversational format.</p><p>Share the information requested by the tool and ask questions about traditional numerology concepts, personality themes, or everyday reflection.</p><p>Numerology is for personal interest and reflection. It should not be used as a guarantee or as professional advice.</p>
+      <section><h2>AI Numerology FAQs</h2><details><summary>Is the numerology chat free?</summary><p>You can start with free AI numerology guidance.</p></details><details><summary>What can I ask?</summary><p>Ask about common numerology meanings, numbers, and traditional themes.</p></details><details><summary>Can numerology guarantee outcomes?</summary><p>No. It is interpretive guidance, not certainty.</p></details></section>
+    </main>`,
+  '/hi-astro-alternative': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / HiAstro Alternative</nav><h1>HiAstro Alternative for Free AI Astrology Chat</h1>
+      <p>Looking for a HiAstro alternative? Veadicastro offers AI astrology chat with Vedic birth-chart context, Kundli exploration, and questions about career, marriage, and relationships.</p><p>Add your date of birth, time, and birthplace for more personalised traditional chart explanations. You can ask questions in Hindi or English.</p><p>Compare services based on the features, pricing, privacy practices, and guidance style that suit you. Astrology should remain a source of reflection, not certainty.</p>
+      <section><h2>HiAstro Alternative FAQs</h2><details><summary>What can I use Veadicastro for?</summary><p>You can explore AI chat, Kundli information, and Vedic astrology tools.</p></details><details><summary>Can I use Hindi?</summary><p>Yes. Hindi and English questions are supported.</p></details><details><summary>Does AI astrology guarantee results?</summary><p>No. It provides traditional interpretive guidance only.</p></details></section>
+    </main>`,
+  '/ai-pandit': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Pandit</nav><h1>AI Pandit for Online Vedic Astrology Guidance</h1>
+      <p>Use AI Pandit for online Vedic astrology guidance on Kundli, career, love, marriage, and everyday life questions. Vedika AI explains traditional astrology concepts in a conversational format.</p><p>Your date of birth, time, and birthplace can provide personal chart context. Ask focused questions to understand common interpretations of houses, planets, dashas, and transits.</p><p>This guidance is for reflection and learning. It should not replace a qualified professional for medical, legal, financial, or mental-health concerns.</p>
+      <section><h2>AI Pandit FAQs</h2><details><summary>What is an AI Pandit?</summary><p>It is an AI guide that explains traditional Vedic astrology concepts.</p></details><details><summary>Can I ask career or marriage questions?</summary><p>Yes. You can explore those topics through traditional chart context.</p></details><details><summary>Is it available online?</summary><p>Yes. You can use the AI guide online whenever it is available.</p></details></section>
+    </main>`,
+  '/dasha-calculator': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Dasha Calculator</nav><h1>Dasha Calculator for Mahadasha and Antardasha</h1>
+      <p>Use the free Dasha Calculator to find your Vimshottari Mahadasha, Antardasha, and related dasha timeline from your Vedic birth details.</p><p>The calculation uses your birth date, time, and place to determine chart context. Dashas are traditional timing systems used in Vedic astrology and should be interpreted alongside the wider Kundli.</p><p>Review the dates as a chart reference and avoid treating them as certain predictions about major events.</p>
+      <section><h2>Dasha Calculator FAQs</h2><details><summary>What is a Mahadasha?</summary><p>It is a major planetary period in the traditional Vimshottari Dasha system.</p></details><details><summary>Why is birth time needed?</summary><p>Accurate birth details help calculate the relevant chart and timing sequence.</p></details><details><summary>Can a Dasha predict events exactly?</summary><p>No. It is a traditional timing reference, not a guarantee.</p></details></section>
+    </main>`,
+  '/best-astrologer-in-dehradun': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Best Astrologer in Dehradun</nav><h1>Best Astrologer in Dehradun</h1>
+      <p>Connect with an astrologer in Dehradun for a traditional Vedic astrology consultation on career, marriage, relationships, Kundli, and general life questions.</p><p>Bring accurate date of birth, birth time, and birthplace details, along with the questions you want to discuss. This helps create a more focused consultation.</p><p>Astrology is personal guidance and reflection. It should not replace professional medical, legal, financial, or mental-health advice.</p>
+      <section><h2>Astrologer in Dehradun FAQs</h2><details><summary>What should I prepare for a consultation?</summary><p>Prepare your birth details and a short list of questions or concerns.</p></details><details><summary>What topics can I discuss?</summary><p>Common topics include career, marriage, relationships, and Kundli interpretation.</p></details><details><summary>Is consultation advice guaranteed?</summary><p>No. Astrology is interpretive guidance and cannot guarantee outcomes.</p></details></section>
     </main>`,
 };
 

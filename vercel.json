@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/api/mistral", "destination": "/api/mistral.ts" },
     { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/", "destination": "/api/meta" },
     { "source": "/free-ai-astrologer-chat", "destination": "/api/meta?path=free-ai-astrologer-chat" },
     { "source": "/ai-marriage-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-marriage-prediction-by-date-of-birth" },
     { "source": "/ai-career-prediction-by-date-of-birth", "destination": "/api/meta?path=ai-career-prediction-by-date-of-birth" },
@@ -29,6 +30,7 @@
     { "source": "/dasha-calculator", "destination": "/api/meta?path=dasha-calculator" },
     { "source": "/manglik-dosha-calculator", "destination": "/api/meta?path=manglik-dosha-calculator" },
     { "source": "/nakshatra-calculator", "destination": "/api/meta?path=nakshatra-calculator" },
+    { "source": "/ai-numerology-free-chat", "destination": "/api/meta?path=ai-numerology-free-chat" },
 
     { "source": "/ai-astrology", "destination": "/api/meta?path=ai-astrology" },
     { "source": "/talk-to-astrologer", "destination": "/api/meta?path=talk-to-astrologer" },
