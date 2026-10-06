@@ -422,7 +422,7 @@ Your job: think like a very smart astrologer, interpret those facts confidently,
     const FORMAT_REMINDER = `
 
 [MANDATORY FORMAT - STRICT]
-- Max 600 tokens. Keep the answer concise enough to read comfortably, but complete the thought and closing sentence before ending. Never more than 5 paragraph breaks.
+- Max 450 tokens. Keep the answer concise enough to read comfortably, but complete the thought and closing sentence before ending. Never more than 5 paragraph breaks.
 - Line 1: direct answer. Line 2: one internal pattern from chart (psychological mirror).
 - Never repeat a psychological observation already made in this conversation. Check chat history and use a fresh chart-based insight.
 - Zero bullets. Zero headers. Zero section labels.
@@ -449,7 +449,7 @@ Wrong format = rewrite before sending.`;
       prompt.includes('Generate personalized predictions for TODAY only') ||
       prompt.includes('Generate personalized tomorrow\'s predictions');
     const isCompatibility = prompt.includes('Compatibility Score') || prompt.includes('Ashta Koot') || prompt.includes('compatibility analysis');
-    const maxTokens = isDeepReasoning ? 2200 : isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 600;
+    const maxTokens = isDeepReasoning ? 2200 : isFollowUp ? 200 : isReport ? 8000 : isMonthly ? 3000 : isJsonRequest ? 800 : isCompatibility ? 2000 : 450;
     
     // Normal chat and follow-up questions use Mistral Medium. Specialized
     // report, JSON, and compatibility pipelines retain their existing model.
