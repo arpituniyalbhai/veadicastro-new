@@ -168,35 +168,6 @@ function getQuestionFocus(prompt: string): string {
   return 'General life question: identify the life area first, then select the 2 to 3 chart factors most directly connected to that area. Do not default automatically to the current dasha.';
 }
 
-function getRecentAstrologyAnchors(history: any[]): string {
-  const recentAssistantText = (Array.isArray(history) ? history : [])
-    .filter((item: any) => item?.role !== 'user')
-    .slice(-8)
-    .map((item: any) => String(item?.content || ''))
-    .join(' ');
-
-  if (!recentAssistantText.trim()) return 'None; this is the first answer with visible assistant history.';
-
-  const planetPattern = /\b(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\b/gi;
-  const housePattern = /\b(?:1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th)\s+house\b/gi;
-  const dashaPattern = /\b(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)(?:\s*[-–]\s*(?:Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu))?\s+(?:Mahadasha|Antardasha|Dasha)\b/gi;
-  const datePattern = /\b(?:\d{4}-\d{2}-\d{2}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4}|20\d{2})\b/gi;
-  const unique = (matches: RegExpMatchArray | null) => Array.from(new Set((matches || []).map((value) => value.toLowerCase())));
-
-  const planets = unique(recentAssistantText.match(planetPattern));
-  const houses = unique(recentAssistantText.match(housePattern));
-  const dashas = unique(recentAssistantText.match(dashaPattern));
-  const dates = unique(recentAssistantText.match(datePattern));
-  const parts = [
-    planets.length ? `planets: ${planets.join(', ')}` : '',
-    houses.length ? `houses: ${houses.join(', ')}` : '',
-    dashas.length ? `dashas: ${dashas.join(', ')}` : '',
-    dates.length ? `dates: ${dates.join(', ')}` : '',
-  ].filter(Boolean);
-
-  return parts.length ? parts.join('; ') : 'No explicit planet, house, dasha, or date anchors detected.';
-}
-
 // Simple rate limiting (in production, use Redis)
 const requestCounts: Record<string, { count: number; resetTime: number }> = {};
 const RATE_LIMIT_REQUESTS = 100;
@@ -314,12 +285,11 @@ export default async function handler(req: Request) {
 
     const timingRequested = /\b(?:when|what date|which date|month|year|timing|timeline|period|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
     const questionFocus = getQuestionFocus(prompt);
-    const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
-- Use only 2-3 mutually supporting chart factors — one must be the psychological driver (Moon sign or ascendant lord placement).
-- Recently mentioned anchors: ${recentAstrologyAnchors}
-- Prefer a different valid combination from recent answers. Reuse an anchor only when it is indispensable to this exact question, and then explain a genuinely new consequence rather than repeating the old wording.
+- Use only 2-3 mutually supporting chart factors.
+- The psychological driver must be different in each response — use the Moon, Ascendant, Sun, Mars, or any other relevant placement. Never use the same placement in two consecutive responses.
+- ANTI-REPETITION PROHIBITION: Check the last 3 assistant responses in the provided conversation history. If any planet-house combination was already used, skip that combination even when it was described with different wording, and choose another valid factor from the chart.
 - Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
@@ -357,9 +327,8 @@ ${toneInstruction}
 ## REALITY FILTER
 
 1. Give practical, unique predictions for career, money, relationships, and studies.
-2. For every prediction, identify the internal pattern behind the external event — state it as fact from the chart (Moon sign, ascendant lord placement). This must appear in line 2 of every response, in one sentence.
-3. If situation unknown, assume the most likely scenario for their age and predict directly. Never ask.
-4. BANNED PHRASES (never use these): "hidden potential", "suits you well", "you may find", "unconventional bonds", "stay grounded", "trust your instincts", "balance is key", and "things will improve".
+2. If situation unknown, assume the most likely scenario for their age and predict directly. Never ask.
+3. BANNED PHRASES (never use these): "hidden potential", "suits you well", "you may find", "unconventional bonds", "stay grounded", "trust your instincts", "balance is key", and "things will improve".
 
 ## ANSWER RATIO — STRICT 70/30
 
@@ -396,7 +365,7 @@ ${toneInstruction}
 
 ## END
 
-1. Last line must name one specific tension between two planets or houses in this chart — not life advice, not motivation, just one astrological conflict the user is living without knowing it.
+1. In the last line, use a chart factor that has not been mentioned anywhere in this conversation. If no unused factor remains, make the closing observation about a life pattern without naming a planet.
 2. Do not sound generic , do predictions that not apply in 99 percent people.
 3. No follow-up questions — handled separately.
 
