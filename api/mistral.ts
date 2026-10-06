@@ -168,6 +168,26 @@ function getQuestionFocus(prompt: string): string {
   return 'General life question: identify the life area first, then select the 2 to 3 chart factors most directly connected to that area. Do not default automatically to the current dasha.';
 }
 
+function getRecentAstrologyAnchors(history: any[]): string {
+  const recentText = (Array.isArray(history) ? history : [])
+    .filter((item: any) => item?.role !== 'user')
+    .slice(-4)
+    .map((item: any) => String(item?.content || ''))
+    .join(' ');
+
+  const planetHouseCombinations = recentText.match(
+    /\b(Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\s+(in\s+)?(House\s+\d+|[\w]+\s+house|\d+th\s+house)/gi
+  ) || [];
+
+  const uniqueCombinations = Array.from(
+    new Set(planetHouseCombinations.map((combination) => combination.toLowerCase()))
+  );
+
+  return uniqueCombinations.length
+    ? `BANNED COMBINATIONS THIS SESSION: ${uniqueCombinations.join(', ')}. Do not use these.`
+    : 'No restrictions yet.';
+}
+
 // Simple rate limiting (in production, use Redis)
 const requestCounts: Record<string, { count: number; resetTime: number }> = {};
 const RATE_LIMIT_REQUESTS = 100;
@@ -285,11 +305,12 @@ export default async function handler(req: Request) {
 
     const timingRequested = /\b(?:when|what date|which date|month|year|timing|timeline|period|how soon|kab|kitne time|kis mahine|kis saal)\b|कब|किस महीने|किस साल/i.test(prompt);
     const questionFocus = getQuestionFocus(prompt);
+    const recentAstrologyAnchors = getRecentAstrologyAnchors(history);
     const evidenceSelectionContext = `QUESTION-SPECIFIC EVIDENCE SELECTION:
 - Topic focus: ${questionFocus}
-- Use only 2-3 mutually supporting chart factors.
+- ${recentAstrologyAnchors}
+- Use only 2 mutually supporting chart factors that are not in the banned list above.
 - The psychological driver must be different in each response — use the Moon, Ascendant, Sun, Mars, or any other relevant placement. Never use the same placement in two consecutive responses.
-- ANTI-REPETITION PROHIBITION: Check the last 3 assistant responses in the provided conversation history. If any planet-house combination was already used, skip that combination even when it was described with different wording, and choose another valid factor from the chart.
 - Timing mode: ${timingRequested ? 'ON. The user explicitly asked for timing. Use only pre-calculated dates supplied in the chart,' : 'OFF. if user ask for timing. for timing related questions  mention an exact date, month, year, dasha end date, or future period merely because it exists in the chart.'}`;
 
     // System prompt - unified for both languages
