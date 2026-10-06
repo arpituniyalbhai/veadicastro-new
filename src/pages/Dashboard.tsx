@@ -251,6 +251,7 @@ export default function Dashboard() {
   };
 
   const moreItems = [
+    { id: "referal", label: "Refer & Earn", icon: Wallet },
     { id: "profile", label: "Profile", icon: User },
     { id: "language", label: "Switch Language", icon: Globe },
     { id: "notifications", label: "Notification Settings", icon: Bell },
@@ -313,6 +314,9 @@ export default function Dashboard() {
 
   const handleNav = (id: string) => {
     switch (id) {
+      case "referal":
+        navigate("/referal");
+        break;
       case "chat":
         navigate(`/chat?referral=dashboard`);
         break;

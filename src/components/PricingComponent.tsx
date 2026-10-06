@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 const plans = [
   {
     name: "Quick Ask",
-    price: 199,
+    price: 149,
     period: "one-time",
     questions: 5,
     description: "Perfect for urgent questions - get clarity fast",

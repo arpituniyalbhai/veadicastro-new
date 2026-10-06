@@ -22,6 +22,7 @@ import { Analytics } from "@vercel/analytics/react";
 const Welcome = lazy(() => import("@/pages/Welcome"));
 const Onboarding = lazy(() => import("@/pages/Onboarding"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Referral = lazy(() => import("@/pages/Referral"));
 const Instruction = lazy(() => import("@/pages/Instruction"));
 const Reports = lazy(() => import("@/pages/Reports"));
 const DeepReports = lazy(() => import("@/pages/DeepReports"));
@@ -136,6 +137,7 @@ const RouterShell = () => {
   const p = location.pathname;
   const dashboardPaths = [
     "/dashboard",
+    "/referal",
     "/dynamic",
     "/reports",
     "/deep-reports",
@@ -297,6 +299,7 @@ const AuthenticatedRoutes = ({
         <Route path="/dynamic/:id" element={protectedPage(<DynamicPage />)} />
         <Route path="/settings/language" element={protectedPage(<LanguageSettings />)} />
         <Route path="/profile" element={protectedPage(<Profile />)} />
+        <Route path="/referal" element={protectedPage(<Referral />)} />
         <Route path="/feedback" element={protectedPage(<Feedback />)} />
         <Route path="/compatibility" element={protectedPage(<Compatibility />)} />
         <Route path="/compatibility/result" element={protectedPage(<CompatibilityResult />)} />

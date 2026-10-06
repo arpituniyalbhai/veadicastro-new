@@ -6,8 +6,8 @@ import admin from 'firebase-admin';
 
 // CRITICAL: Server-side price source of truth
 const VALID_PLAN_PRICES: Record<string, number> = {
-  'Quick Ask': 19900,      // ₹199 in paise
-  'Quick Ask Discounted': 19900, // ₹199 in paise for Pro users
+  'Quick Ask': 14900,      // ₹149 in paise
+  'Quick Ask Discounted': 14900, // ₹149 in paise for Pro users
   'Deep Dive': 29900,     // ₹299 in paise
   'Deep Dive Discounted': 29900, // ₹299 in paise for Pro users
   'The Power Pack': 69900, // ₹699 in paise
