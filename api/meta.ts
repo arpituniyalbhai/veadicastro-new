@@ -517,6 +517,52 @@ function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
+// This content is served in the initial HTML for these public landing pages.
+// React replaces it with the interactive page once the app mounts.
+const STATIC_PAGE_CONTENT: Record<string, string> = {
+  '/free-5-minutes-astrology-ai': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Free 5 Minute Astrology AI Reading</nav>
+      <h1>Free 5 Minute Astrology AI Reading</h1>
+      <p>Get a free 5-minute Vedic astrology AI reading based on your birth details. Veadicastro helps you explore personalised guidance for love, career, health, and everyday life questions.</p>
+      <p>Enter your date of birth, birth time, and birthplace to begin. Vedika AI uses Vedic astrology concepts such as your Kundli, planetary placements, and dasha periods to provide an easy-to-read starting point.</p>
+      <p>This free astrology reading is designed for quick questions and general guidance. For a more complete view, you can continue with a detailed Kundli analysis or ask follow-up questions in the AI astrologer chat.</p>
+      <section>
+        <h2>Free 5 Minute Astrology AI FAQs</h2>
+        <details><summary>Is the 5-minute astrology reading free?</summary><p>Yes. You can start a free Vedic astrology AI reading with your birth details.</p></details>
+        <details><summary>What details do I need for an astrology reading?</summary><p>Your date of birth, birth time, and birthplace help create a more personalised reading.</p></details>
+        <details><summary>What can I ask Vedika AI?</summary><p>You can ask about love, career, marriage, personality, Kundli insights, and daily life questions.</p></details>
+        <details><summary>Does this replace professional advice?</summary><p>No. Astrology is for personal reflection and traditional guidance, not medical, legal, financial, or relationship decisions.</p></details>
+      </section>
+    </main>`,
+  '/free-ai-astrologer-chat': `
+    <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / Free AI Astrologer Chat</nav>
+      <h1>Free AI Astrologer Chat</h1>
+      <p>Chat with a free AI astrologer powered by Vedic astrology concepts and your birth-chart details. Ask questions about your Kundli, dasha, relationships, career direction, and everyday concerns.</p>
+      <p>Share your date of birth, birth time, and birthplace for more personalised context. Vedika AI can explain traditional chart factors in simple Hindi or English and help you explore follow-up questions.</p>
+      <p>The AI astrologer chat is available whenever you need a starting point for understanding your birth chart. It is intended for reflection and guidance, not certainty or professional medical, legal, or financial advice.</p>
+      <section>
+        <h2>Free AI Astrologer Chat FAQs</h2>
+        <details><summary>Can I chat with an AI astrologer for free?</summary><p>Yes. You can start a free AI astrology chat and ask questions about your Vedic birth chart.</p></details>
+        <details><summary>Does the AI astrologer need my birth details?</summary><p>Date of birth, birth time, and birthplace help provide more relevant Vedic astrology context.</p></details>
+        <details><summary>What can I ask an AI astrologer?</summary><p>You can ask about career, love, marriage, Kundli, dashas, personality, and general astrology topics.</p></details>
+        <details><summary>Can I use the AI astrologer in Hindi?</summary><p>Yes. Vedika AI supports astrology questions in Hindi and English.</p></details>
+      </section>
+    </main>`,
+};
+
+function replaceRootContent(html: string, content: string): string {
+  const rootStart = html.indexOf('<div id="root">');
+  const moduleStart = html.indexOf('<script type="module"', rootStart);
+  const bodyEnd = moduleStart >= 0 ? moduleStart : html.indexOf('</body>', rootStart);
+  const rootEnd = html.lastIndexOf('</div>', bodyEnd);
+
+  if (rootStart < 0 || rootEnd <= rootStart) return html;
+
+  return html.slice(0, rootStart + '<div id="root">'.length) + content + html.slice(rootEnd);
+}
+
 function buildHtml(meta: Meta & { schemaType: SchemaType }, pathname: string) {
   const breadcrumbItems = meta.isBlog
     ? [
@@ -601,13 +647,10 @@ function buildHtml(meta: Meta & { schemaType: SchemaType }, pathname: string) {
       <section><h2>Manglik calculator FAQs</h2>${manglikFaqs.map(([question, answer]) => `<details><summary>${escapeHtml(question)}</summary><p>${escapeHtml(answer)}</p></details>`).join('')}</section>
     </main>`;
     // React's createRoot replaces this identical guide when the app mounts.
-    const rootStart = html.indexOf('<div id="root">');
-    const moduleStart = html.indexOf('<script type="module"', rootStart);
-    const bodyEnd = moduleStart >= 0 ? moduleStart : html.indexOf('</body>', rootStart);
-    const rootEnd = html.lastIndexOf('</div>', bodyEnd);
-    if (rootStart >= 0 && rootEnd > rootStart) {
-      html = html.slice(0, rootStart + '<div id="root">'.length) + content + html.slice(rootEnd);
-    }
+    html = replaceRootContent(html, content);
+  } else {
+    const content = STATIC_PAGE_CONTENT[pathname];
+    if (content) html = replaceRootContent(html, content);
   }
   return html;
 }
