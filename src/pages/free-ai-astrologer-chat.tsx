@@ -393,8 +393,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
   return (
     <>
       <Helmet>
-        <title>Chat with AI Astrologer - Free &amp; Instant | Veadicastro</title>
-        <meta name="description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
+        <title>Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro</title>
+        <meta name="description" content="Start a free AI astrologer chat with Vedic birth-chart context. Ask instantly in Hindi or English — no signup needed for your first question." />
         <meta name="keywords" content="free ai astrologer chat, chat with vedic astrologer online, ai astrologer no signup, Vedic astrology consultation, birth chart analysis online, dosha remedies, Parashari astrology, Jaimini astrology, Nadi astrology, Vimshottari Dasha, planetary transits, Nakshatra analysis, ascendant predictions, house lordship, yoga combinations, astrology remedies, personalized predictions, Vedic astrologer chat, birth chart reading, sidereal astrology, ai astrology free chat" />
         <link rel="canonical" href="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -405,8 +405,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <meta name="ICBM" content="20.5937,78.9629" />
         
         {/* Open Graph */}
-        <meta property="og:title" content="Chat with AI Astrologer - Free &amp; Instant | Veadicastro" />
-        <meta property="og:description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
+        <meta property="og:title" content="Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro" />
+        <meta property="og:description" content="Start a free AI astrologer chat with Vedic birth-chart context in Hindi or English." />
         <meta property="og:url" content="https://veadicastro.in/free-ai-astrologer-chat" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
@@ -417,8 +417,8 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Chat with AI Astrologer - Free &amp; Instant | Veadicastro" />
-        <meta name="twitter:description" content="Get a free AI astrology chat powered by your Vedic birth chart. Instant kundli analysis, dasha predictions & dosha remedies — no signup needed. Ask in Hindi or English." />
+        <meta name="twitter:title" content="Free AI Astrologer Chat — Instant Vedic Guidance | Veadicastro" />
+        <meta name="twitter:description" content="Start a free AI astrologer chat with Vedic birth-chart context in Hindi or English." />
         <meta name="twitter:image" content="https://veadicastro.in/og-ai-astrology-chat.jpg" />
         <meta name="twitter:site" content="@veadicastro" />
         <meta name="twitter:creator" content="@veadicastro" />
@@ -585,9 +585,12 @@ ${langText === "Respond in Hindi" ? "IMPORTANT: Respond in Hindi (Devanagari scr
         <Sparkles className="w-3 h-3" /> Free Astrologer Chat — No Signup Required
       </p>
       <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-none mb-4">
-        Chat with Your Personal Ai Assistant<br />
-        <span className="text-pink-400 pink-glow">Vedika AI</span>
+        Free AI Astrologer Chat<br />
+        <span className="text-pink-400 pink-glow">with Vedika AI</span>
       </h1>
+      <p className="mx-auto max-w-2xl text-base leading-7 text-white/65">
+        Ask an instant Vedic astrology question using your birth-chart details. For a full overview of the subject, read our <a href="/ai-astrology" className="text-pink-400 hover:text-white">AI astrology guide</a>.
+      </p>
       <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm text-white/75">
         {["No per-minute charges", "Chart-based - not sun-sign", "Hindi & English both"].map((chip) => (
           <span key={chip} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2">

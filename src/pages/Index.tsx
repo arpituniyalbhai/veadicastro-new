@@ -122,8 +122,8 @@ const Index = () => {
   // FAQ data for structured data
   const faqs = [
     {
-      q: "Which is the best Vedic Astrology AI tool in India?",
-      a: "Veadicastro is India's most accurate Vedic Astrology AI platform. It uses the Lahiri sidereal system to calculate your exact Sun sign, Moon sign, Lagna, and Nakshatra from your date of birth - then lets you chat with an AI astrologer with plans starting from ₹149/month.",
+      q: "What can I do on Veadicastro?",
+      a: "Veadicastro brings together Vedic Kundli tools, daily insights, AI chat, and chart-based prediction tools. Choose the tool that matches your question and enter accurate birth details for the most useful chart context.",
     },
     {
       q: "What are the pricing plans for AI astrology on Veadicastro?",
@@ -134,8 +134,8 @@ const Index = () => {
       a: "Veadicastro's AI powered astrology uses real-time ephemeris data with arc-second precision for planetary calculations - making it more accurate than many traditional methods. It strictly follows the Vedic sidereal system, not Western tropical astrology.",
     },
     {
-      q: "What is the most accurate AI astrology website in India?",
-      a: "Veadicastro is rated the most accurate AI astrology website in India. It calculates your complete Vedic birth chart and provides personalized predictions through conversational AI - available in Hindi and English with plans from ₹149/month.",
+      q: "Where can I learn how AI astrology works?",
+      a: "Visit the AI Astrology guide to learn how Vedic birth-chart calculations, dashas, transits, and AI guidance work together before choosing a chat or prediction tool.",
     },
     {
       q: "Can I use AI astrology chat in Hindi?",
@@ -181,12 +181,12 @@ const Index = () => {
         </AuthProvider>
       )}
       <SEO
-        title="AI Astrology — Free AI Chat | Daily Horoscope & Detailed Report — Veadicastro"
-        description="India's most accurate AI Astrologer — Get daily health, wealth & self predictions, Kundli, family member charts, lucky numbers, and personalized Vedic AI chat. Sign up now. Hindi & English."
-        ogTitle="AI Astrology | Daily Horoscope AI | Vedic Astrology AI — Veadicastro"
-        ogDescription="India's most advanced AI Astrology platform — AI astrologer chat, daily predictions, instant Kundli, lucky numbers and detailed Vedic reports. Sign up now. Hindi & English."
-        twitterTitle="AI Astrology | Daily Horoscope AI | Vedic Astrology AI — Veadicastro"
-        twitterDescription="AI Astrology Chat — daily predictions, Kundli, lucky numbers and detailed Vedic reports. Sign up now and start now!"
+        title="Veadicastro — AI Astrology Platform, Kundli & Vedic Guidance"
+        description="Explore Veadicastro's Kundli tools, daily astrology insights, and personalised Vedic guidance in Hindi and English."
+        ogTitle="Veadicastro — AI Astrology Platform"
+        ogDescription="Explore Kundli tools, daily insights, and personalised Vedic guidance from Veadicastro."
+        twitterTitle="Veadicastro — AI Astrology Platform"
+        twitterDescription="Explore Kundli tools, daily insights, and personalised Vedic guidance from Veadicastro."
         keywords={[
           "Veadicastro",
           "AI Vedic astrology",

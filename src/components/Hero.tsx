@@ -50,7 +50,7 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
             margin: 0,
             letterSpacing: '-0.02em',
           }}>
-            India's Most Accurate
+            Veadicastro
             <span style={{ color: '#d9277a', fontSize: '0.85em', display: 'block', marginTop: '-0.1em' }}>AI Astrology Platform</span>
           </h1>
 
@@ -62,10 +62,10 @@ const Hero = ({ user = null, onAuthOpen }: HeroProps) => {
             maxWidth: '480px',
             margin: '0 auto',
           }}>
-            AI-powered Vedic astrology that predicts your{' '}
+            Explore Vedic Kundli tools, daily insights, and personalised guidance for{' '}
             <span style={{ color: '#d9277a', fontWeight: 600 }}>love</span>,{' '}
             <span style={{ color: '#d9277a', fontWeight: 600 }}>career</span> and{' '}
-            <span style={{ color: '#d9277a', fontWeight: 600 }}>money</span> — instantly.
+            <span style={{ color: '#d9277a', fontWeight: 600 }}>life questions</span>.
           </p>
 
           {/* CTA Button — capsule shape */}

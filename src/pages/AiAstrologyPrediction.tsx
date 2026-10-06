@@ -312,10 +312,10 @@ export default function AiAstrologyPrediction() {
   return (
     <>
       <Helmet>
-        <title>AI Astrology predictions by date of birth - No Signup | Veadicastro</title>
+        <title>AI Astrology Prediction — Personalised Vedic Birth Chart Forecast</title>
         <meta
           name="description"
-          content="Get 10 free AI astrology predictions based on your Vedic birth chart. Career, marriage, money, health and more - personalized to your age and kundli."
+          content="Get personalised AI astrology predictions from your Vedic birth chart. Explore dashas, transits, timing, and life-area forecasts with Vedika AI."
         />
         <link rel="canonical" href="https://veadicastro.in/ai-astrology-prediction" />
         <script type="application/ld+json">
@@ -373,10 +373,10 @@ export default function AiAstrologyPrediction() {
     },
     {
       "@type": "Question",
-      "name": "Can AI astrology predict the future?",
+      "name": "Are Vedic birth-chart predictions certain?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "AI astrology can give future guidance by reading chart patterns, planetary positions, and Vedic timing. It should be used for clarity and planning."
+        "text": "No. Birth-chart predictions are interpretive guidance based on chart patterns, planetary positions, and Vedic timing; they should be used for reflection and planning."
       }
     }
   ]
@@ -456,10 +456,10 @@ export default function AiAstrologyPrediction() {
               <div className="mb-8 text-center">
                 <p className="text-sm font-medium text-[#d9277a]">Free Vedic Astrology Tool</p>
                 <h1 className="mt-3 text-3xl font-semibold tracking-normal text-white sm:text-5xl">
-                  AI Astrology Prediction
+                  Personalised AI Astrology Predictions
                 </h1>
                 <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-white/60">
-                  Enter your date of birth, time of birth, and birth place to generate 10 personalized Vedic predictions.
+                  Enter your birth details to generate Vedic birth-chart predictions based on dashas, transits, and your Kundli.
                 </p>
               </div>
 
@@ -798,9 +798,9 @@ export default function AiAstrologyPrediction() {
             </p>
           </section>
           <section className="mb-6">
-            <h3 className="mb-2 text-lg font-semibold text-white">Can AI astrology predict my future?</h3>
+            <h3 className="mb-2 text-lg font-semibold text-white">Are Vedic birth-chart predictions certain?</h3>
             <p className="leading-7">
-              AI astrology can show likely themes, timing, and life patterns based on your chart. It is best used for guidance and planning. It should help you make better choices instead of making you feel stuck.
+              No. This tool explains likely themes, timing, and life patterns based on your chart. Use it for guidance and planning rather than as a guarantee about future events.
             </p>
           </section>
           <section className="mb-6">

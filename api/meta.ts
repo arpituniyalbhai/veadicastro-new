@@ -55,14 +55,14 @@ const META_BASE: Record<string, Meta> = {
     breadcrumb: 'Manglik Dosha Calculator',
   },
   '/': {
-  title: 'AI Astrology — Free AI Chat, Daily Horoscope & Detailed Report | Veadicastro',
-  description: "India's most accurate AI Astrology platform. Get personalized Kundli, daily health, wealth & self predictions, AI chat with Vedika — in Hindi & English. Plans from ₹149/month.",
+  title: 'Veadicastro — AI Astrology Platform, Kundli & Vedic Guidance',
+  description: 'Veadicastro is an AI astrology platform for Kundli tools, Vedic guidance, daily insights, and personalised readings in Hindi and English.',
   canonical: 'https://veadicastro.in/',
   breadcrumb: 'Home',
 },
   '/free-ai-astrologer-chat': {
     title: 'Free AI Astrologer Chat — No Signup | Veadicastro',
-    description: 'Get free AI astrology chat powered by Vedic birth chart. Instant kundli analysis, dasha predictions — no signup needed. Ask in Hindi or English.',
+    description: 'Start a free AI astrologer chat with Vedic birth-chart context. Ask questions instantly in Hindi or English — no signup needed for your first question.',
     canonical: 'https://veadicastro.in/free-ai-astrologer-chat',
     breadcrumb: 'Free AI Astrologer Chat',
   },
@@ -175,8 +175,8 @@ const META_BASE: Record<string, Meta> = {
     breadcrumb: 'ChatGPT Astrology',
   },
   '/ai-astrology-prediction': {
-    title: 'AI Astrology Prediction — Free Vedic Forecast | Veadicastro',
-    description: 'Get free AI astrology prediction based on your Vedic birth chart. Accurate 2026 forecasts powered by Vedika AI.',
+    title: 'AI Astrology Prediction — Personalised Vedic Birth Chart Forecast',
+    description: 'Get personalised AI astrology predictions from your Vedic birth chart. Explore dashas, transits, timing, and life-area forecasts with Vedika AI.',
     canonical: 'https://veadicastro.in/ai-astrology-prediction',
     breadcrumb: 'AI Astrology Prediction',
   },
@@ -224,8 +224,8 @@ const META_BASE: Record<string, Meta> = {
   },
 
   '/ai-astrology': {
-    title: 'AI Astrology — Vedic Astrology Powered by AI | Veadicastro',
-    description: 'Explore AI astrology with Veadicastro. Get accurate Vedic astrology predictions powered by artificial intelligence.',
+    title: 'AI Astrology: How Vedic Astrology Works with AI | Veadicastro',
+    description: 'Learn what AI astrology is, how Vedic birth-chart calculations work with AI, and how to use Kundli, chat, and prediction tools responsibly.',
     canonical: 'https://veadicastro.in/ai-astrology',
     breadcrumb: 'AI Astrology',
   },
@@ -545,9 +545,9 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
       <nav aria-label="Breadcrumb"><a href="/">Home</a> / Free AI Astrologer Chat</nav>
       <h1>Free AI Astrologer Chat</h1>
-      <p>Chat with a free AI astrologer powered by Vedic astrology concepts and your birth-chart details. Ask questions about your Kundli, dasha, relationships, career direction, and everyday concerns.</p>
-      <p>Share your date of birth, birth time, and birthplace for more personalised context. Vedika AI can explain traditional chart factors in simple Hindi or English and help you explore follow-up questions.</p>
-      <p>The AI astrologer chat is available whenever you need a starting point for understanding your birth chart. It is intended for reflection and guidance, not certainty or professional medical, legal, or financial advice.</p>
+      <p>Start a free AI astrologer chat for immediate Vedic birth-chart questions. Ask Vedika about your Kundli, dasha, relationships, career direction, and everyday concerns without waiting for an appointment.</p>
+      <p>Share your date of birth, birth time, and birthplace for more personalised context. Vedika AI can explain traditional chart factors in Hindi or English and help you ask focused follow-up questions.</p>
+      <p>Looking for a broad explanation of the technology? Read our <a href="/ai-astrology">AI astrology guide</a>. This page is specifically for starting a free AI astrologer chat.</p>
       <section>
         <h2>Free AI Astrologer Chat FAQs</h2>
         <details><summary>Can I chat with an AI astrologer for free?</summary><p>Yes. You can start a free AI astrology chat and ask questions about your Vedic birth chart.</p></details>
@@ -576,8 +576,8 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     </main>`,
   '/ai-astrology': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
-      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology</nav><h1>AI Astrology Powered by Vedic Birth Chart Insights</h1>
-      <p>AI astrology combines traditional Vedic astrology concepts with technology that helps explain birth-chart information in a clear, conversational format.</p><p>With your date of birth, time, and birthplace, Vedika AI can help you explore Kundli placements, dashas, career, relationships, and daily astrology questions.</p><p>AI astrology is designed for learning and reflection. It does not provide certainty or replace qualified professional advice.</p>
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology</nav><h1>AI Astrology: How Vedic Astrology Works with AI</h1>
+      <p>AI astrology combines traditional Vedic astrology concepts with technology that helps explain birth-chart information in a clear, conversational format. This guide explains what AI astrology is, how it works, and where its limits are.</p><p>With your date of birth, time, and birthplace, Vedic calculations can identify chart placements, dashas, and transits. AI can then help make those technical ideas easier to understand.</p><p>Use the <a href="/free-ai-astrologer-chat">free AI astrologer chat</a> for questions, or get <a href="/ai-astrology-prediction">personalised AI astrology predictions</a> when you want a chart-based forecast.</p>
       <section><h2>AI Astrology FAQs</h2><details><summary>What is AI astrology?</summary><p>It is a digital way to explore astrology questions and traditional birth-chart concepts.</p></details><details><summary>Does it require birth details?</summary><p>Birth details make Kundli-based explanations more personalised.</p></details><details><summary>Can AI astrology predict the future exactly?</summary><p>No. It should not be treated as a guarantee of future events.</p></details></section>
     </main>`,
   '/ai-kundli-analysis': `
@@ -606,9 +606,9 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     </main>`,
   '/': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
-      <h1>AI Astrology, Free AI Chat, and Vedic Kundli Guidance</h1>
-      <p>Veadicastro is an AI astrology platform for exploring Vedic birth-chart concepts, Kundli information, daily guidance, and personalised AI chat in Hindi and English.</p><p>Enter your date of birth, time, and birthplace to generate a Kundli and ask questions about traditional astrology topics such as dashas, career, relationships, and planetary placements.</p><p>The platform is designed for reflection and learning. It does not promise certainty or replace professional health, legal, or financial advice.</p>
-      <section><h2>AI Astrology FAQs</h2><details><summary>What can I do on Veadicastro?</summary><p>You can explore Kundli generation, AI astrology chat, daily guidance, and Vedic astrology tools.</p></details><details><summary>Can I ask questions in Hindi?</summary><p>Yes. AI astrology guidance is available in Hindi and English.</p></details><details><summary>What birth details are useful?</summary><p>Date, time, and birthplace give the most useful Kundli context.</p></details></section>
+      <h1>Veadicastro: Your AI Astrology Platform</h1>
+      <p>Veadicastro brings together Vedic Kundli tools, daily astrology insights, and personalised AI guidance in Hindi and English. Start with the tool that matches your question instead of using one generic reading for everything.</p><p>Generate a Kundli, explore a personal forecast, or learn how AI and Vedic astrology work together. Date of birth, time, and birthplace provide the most useful chart context.</p><p>Explore our <a href="/ai-astrology">AI astrology guide</a>, <a href="/free-ai-astrologer-chat">free AI astrologer chat</a>, or <a href="/ai-astrology-prediction">AI astrology prediction tool</a>.</p>
+      <section><h2>About Veadicastro</h2><details><summary>What can I do on Veadicastro?</summary><p>You can explore Kundli generation, daily guidance, AI chat, and chart-based prediction tools.</p></details><details><summary>Can I ask questions in Hindi?</summary><p>Yes. AI guidance is available in Hindi and English.</p></details><details><summary>What birth details are useful?</summary><p>Date, time, and birthplace give the most useful Kundli context.</p></details></section>
     </main>`,
   '/ai-future-spouse-prediction': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
@@ -618,8 +618,8 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     </main>`,
   '/ai-astrology-prediction': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
-      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology Prediction</nav><h1>AI Astrology Prediction</h1>
-      <p>Get AI astrology guidance based on traditional Vedic birth-chart concepts. Vedika AI can help explain your Kundli, current dasha, planetary transits, and common life questions.</p><p>Add your date of birth, time, and birthplace for more relevant chart context. Explore career, relationships, personality, and daily topics through a traditional astrology lens.</p><p>Predictions are interpretive guidance, not certainty. Do not use them as the sole basis for medical, financial, legal, or personal decisions.</p>
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Astrology Prediction</nav><h1>Personalised AI Astrology Predictions from Your Birth Chart</h1>
+      <p>Get personalised AI astrology predictions based on your Vedic birth chart. Vedika AI uses your date of birth, time, and birthplace to explain dashas, transits, timing, and life-area forecasts.</p><p>This tool is for chart-based predictions about themes such as career, relationships, money, and personal growth. It is not a generic daily horoscope or a live chat page.</p><p>For an immediate question, use the <a href="/free-ai-astrologer-chat">free AI astrologer chat</a>. To understand the wider subject, read our <a href="/ai-astrology">AI astrology guide</a>.</p>
       <section><h2>AI Astrology Prediction FAQs</h2><details><summary>How does AI astrology prediction work?</summary><p>It explains traditional Vedic chart concepts using your birth details and questions.</p></details><details><summary>Can it give exact future events?</summary><p>No. It cannot guarantee future events or outcomes.</p></details><details><summary>Can I ask follow-up questions?</summary><p>Yes. Use AI chat to explore a chart topic in more detail.</p></details></section>
     </main>`,
   '/blog/next-pm-india-2029-astrology-prediction': `

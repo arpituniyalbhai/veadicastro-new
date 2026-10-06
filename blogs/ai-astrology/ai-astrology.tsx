@@ -27,9 +27,9 @@ export default function AiAstrology() {
       </div>
 
       <Helmet>
-        <title>AI Astrology Tools & Free Vedic AI Astrologer – Veadicastro</title>
-        <meta name="description" content="AI Astrology by Veadicastro — India's most accurate free Vedic AI astrologer. Get personalized predictions, kundali analysis, and instant answers from authentic Vedic Jyotish combined with AI precision." />
-        <meta name="keywords" content="free ai astrology, accurate ai astrology, vedic astrology ai, kundli generator free, ask ai astrologer free, vedika ai, jyotish ai, birth chart analysis, planetary predictions, dasha analysis, nakshatra predictions" />
+        <title>AI Astrology: How Vedic Astrology Works with AI | Veadicastro</title>
+        <meta name="description" content="Learn what AI astrology is, how Vedic birth-chart calculations work with AI, its benefits and limitations, and which Veadicastro tool suits your question." />
+        <meta name="keywords" content="ai astrology, vedic ai astrology, ai jyotish, how ai astrology works, vedic birth chart ai" />
         <link rel="canonical" href="https://veadicastro.in/ai-astrology" />
         <meta name="robots" content="index, follow" />
         
@@ -65,10 +65,10 @@ export default function AiAstrology() {
             },
             {
               "@type": "Question",
-              "name": "Is AI astrology free?",
+              "name": "Which AI astrology tool should I use?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, you can try AI astrology for free at Veadicastro. You can get your birth chart analyzed and ask questions without paying. No signup needed for your first reading - just instant access to genuine Vedic insights."
+                "text": "Use the AI astrology guide to understand the subject, the free AI astrologer chat for a direct question, and the prediction tool for a personalised birth-chart forecast."
               }
             }
           ]
@@ -85,13 +85,13 @@ export default function AiAstrology() {
               <span className="text-sm font-medium text-accent">India's Most Trusted AI Astrology Platform</span>
             </div>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-none mb-6">
-              AI Astrology India: Free Vedic AI Astrologer
+              AI Astrology: How Vedic Astrology Works with AI
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-8">
-              Try India's most trusted free AI astrologer - get instant kundali analysis, personalized predictions, and answers to your questions. No signup required for your first consultation.
+              Learn how Vedic birth-chart calculations and AI work together, what they can explain, and which tool to use for chat, Kundli analysis, or personal predictions.
             </p>
             <button onClick={() => setAuthOpen(true)} className="inline-flex items-center gap-2 rounded-full bg-[#d9277a] px-6 py-3 text-sm font-semibold text-white hover:bg-[#c01e6a] transition-colors shadow-lg shadow-pink-500/25 mb-8">
-              Try Free AI Astrology
+              Explore AI Astrology Tools
               <ArrowRight className="w-4 h-4" />
             </button>
             
@@ -938,8 +938,8 @@ export default function AiAstrology() {
                   a: "The best AI for astrology combines real Vedic knowledge with accurate calculations. Look for systems that are trained on authentic astrological texts and can give you specific, personalized answers rather than vague predictions. Our Vedika AI is specifically trained on Parashari system."
                 },
                 {
-                  q: "Is AI astrology free?",
-                  a: "Yes, you can try AI astrology for free at Veadicastro. You can get your birth chart analyzed and ask questions without paying. No signup needed for your first reading - just instant access to genuine Vedic insights. Premium features available for detailed analysis."
+                  q: "Which AI astrology tool should I use?",
+                  a: "Use this guide to understand AI astrology, the free AI astrologer chat for a direct question, and the prediction tool for a personalised birth-chart forecast."
                 },
                 {
                   q: "Can AI predict marriage timing?",
