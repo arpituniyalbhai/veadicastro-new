@@ -171,14 +171,16 @@ function getQuestionFocus(prompt: string): string {
 function getRecentAstrologyAnchors(history: any[]): string {
   const recentText = (Array.isArray(history) ? history : [])
     .filter((item: any) => item?.role !== 'user')
-    .slice(-4)
+    .slice(-6)  // last 3-4 responses track karo
     .map((item: any) => String(item?.content || ''))
     .join(' ');
 
+  // Planet + House combinations
   const planetHouse = recentText.match(
     /\b(Sun|Moon|Mars|Mercury|Jupiter|Venus|Saturn|Rahu|Ketu)\b.{0,20}?\b(\d+)(st|nd|rd|th)\s+house/gi
   ) || [];
 
+  // Sirf House numbers — planet ke bina bhi
   const houseOnly = recentText.match(
     /\b(\d+)(st|nd|rd|th)\s+house\b/gi
   ) || [];
@@ -189,7 +191,7 @@ function getRecentAstrologyAnchors(history: any[]): string {
   ]));
 
   return banned.length
-    ? `BANNED THIS SESSION - DO NOT USE: ${banned.join(', ')}. Pick completely different planets and houses.`
+    ? `BANNED THIS SESSION - DO NOT MENTION AT ALL: ${banned.join(', ')}. These planets AND houses are completely off-limits for the next 3 responses. Use only chart factors not in this list.`
     : 'No restrictions yet.';
 }
 
