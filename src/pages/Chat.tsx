@@ -1178,51 +1178,93 @@ export default function Chat() {
       let firstChunkReceived = false;
       let streamRevealReady = false;
       let streamRevealTimer: number | null = null;
-      let streamBuffer = "";
-      let rafId: number | null = null;
-      const flushBuffer = () => {
-        if (!streamBuffer) return;
-        const chunk = streamBuffer;
-        streamBuffer = "";
+      let wordRevealTimer: number | null = null;
+      let pendingWordFragment = "";
+      let revealedRawText = "";
+      let streamFinished = false;
+      let revealDrainResolved = false;
+      const wordQueue: string[] = [];
+      let resolveRevealDrain: (() => void) | null = null;
+      const revealDrainPromise = new Promise<void>((resolve) => {
+        resolveRevealDrain = resolve;
+      });
+      const resolveDrainIfComplete = () => {
+        if (!streamFinished || wordQueue.length > 0 || pendingWordFragment || wordRevealTimer || revealDrainResolved) return;
+        revealDrainResolved = true;
+        resolveRevealDrain?.();
+      };
+      const revealNextWord = () => {
+        wordRevealTimer = null;
+        if (!streamRevealReady) return;
+        const nextWord = wordQueue.shift();
+        if (!nextWord) {
+          resolveDrainIfComplete();
+          return;
+        }
+        revealedRawText += nextWord;
         setMessages((m) => {
           const copy = [...m];
           const lastIndex = copy.length - 1;
           if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-            const next = (copy[lastIndex].content || "") + chunk;
-            copy[lastIndex] = { role: "assistant", content: sanitize(next) };
+            copy[lastIndex] = { role: "assistant", content: sanitize(revealedRawText) };
           }
           return copy;
         });
+        wordRevealTimer = window.setTimeout(revealNextWord, 32);
+      };
+      const startWordReveal = () => {
+        if (!streamRevealReady || wordRevealTimer || wordQueue.length === 0) {
+          resolveDrainIfComplete();
+          return;
+        }
+        revealNextWord();
+      };
+      const queueWords = (text: string, flushTrailingWord = false) => {
+        const combined = pendingWordFragment + text;
+        pendingWordFragment = "";
+        let completeText = combined;
+        if (!flushTrailingWord && combined && !/\s$/.test(combined)) {
+          const lastWhitespaceIndex = Math.max(combined.lastIndexOf(" "), combined.lastIndexOf("\n"), combined.lastIndexOf("\t"));
+          if (lastWhitespaceIndex < 0) {
+            pendingWordFragment = combined;
+            return;
+          }
+          completeText = combined.slice(0, lastWhitespaceIndex + 1);
+          pendingWordFragment = combined.slice(lastWhitespaceIndex + 1);
+        }
+        const words = completeText.match(/\S+\s*|\s+/g);
+        if (words) wordQueue.push(...words);
+        startWordReveal();
       };
       const revealStream = () => {
         if (streamRevealReady) return;
         streamRevealReady = true;
         setIsTyping(false);
-        if (streamBuffer) {
-          if (rafId) cancelAnimationFrame(rafId);
-          rafId = requestAnimationFrame(flushBuffer);
-        }
+        startWordReveal();
       };
-      await generateGeminiStream(promptText, messages.slice(-20), (delta) => {
-        streamedAnswer += delta;
-        if (sanitize(streamedAnswer).trim()) {
-          aiAnswerCompleted = true;
-        }
-        streamBuffer += delta;
-        deltaCount++;
-        if (!firstChunkReceived) {
-          firstChunkReceived = true;
-          const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
-          if (remainingDelay > 0) {
-            streamRevealTimer = window.setTimeout(revealStream, remainingDelay);
-          } else {
-            revealStream();
+      try {
+        await generateGeminiStream(promptText, messages.slice(-20), (delta) => {
+          streamedAnswer += delta;
+          if (sanitize(streamedAnswer).trim()) {
+            aiAnswerCompleted = true;
           }
-        }
-        if (!streamRevealReady) return;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(flushBuffer);
-      }, systemExtra, lang, displayName, "primary", "mistral-medium-latest");
+          queueWords(delta);
+          deltaCount++;
+          if (!firstChunkReceived) {
+            firstChunkReceived = true;
+            const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
+            if (remainingDelay > 0) {
+              streamRevealTimer = window.setTimeout(revealStream, remainingDelay);
+            } else {
+              revealStream();
+            }
+          }
+        }, systemExtra, lang, displayName, "primary", "mistral-medium-latest");
+      } catch (streamError) {
+        if (streamRevealTimer) window.clearTimeout(streamRevealTimer);
+        if (wordRevealTimer) window.clearTimeout(wordRevealTimer);
+        throw streamError;
+      }
       if (firstChunkReceived && !streamRevealReady) {
         if (streamRevealTimer) window.clearTimeout(streamRevealTimer);
         const remainingDelay = Math.max(0, minimumThinkingEndsAt - Date.now());
@@ -1231,22 +1273,30 @@ export default function Chat() {
         }
         revealStream();
       }
-      if (rafId) { cancelAnimationFrame(rafId); flushBuffer(); }
       if (deltaCount === 0) {
         // Fallback: non-streaming final response
         const final = await generateGemini(promptText, messages.slice(-20), systemExtra, lang, displayName, "primary", "mistral-medium-latest");
         const sanitizedFinal = sanitize(final || "");
         finalAnswerForSuggestions = sanitizedFinal;
         aiAnswerCompleted = !!sanitizedFinal.trim();
-          setMessages((m) => {
-          const copy = [...m];
-          const lastIndex = copy.length - 1;
-          if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
-              copy[lastIndex] = { role: "assistant", content: sanitizedFinal };
-          }
-          return copy;
-        });
+        streamedAnswer = final || "";
+        queueWords(streamedAnswer, true);
+        revealStream();
+      } else {
+        queueWords("", true);
       }
+      streamFinished = true;
+      startWordReveal();
+      await revealDrainPromise;
+      const completedAnswer = sanitize(streamedAnswer || "");
+      setMessages((m) => {
+        const copy = [...m];
+        const lastIndex = copy.length - 1;
+        if (lastIndex >= 0 && copy[lastIndex].role === "assistant") {
+          copy[lastIndex] = { role: "assistant", content: completedAnswer };
+        }
+        return copy;
+      });
       if (!aiAnswerCompleted) {
         throw new Error("AI response was empty");
       }
