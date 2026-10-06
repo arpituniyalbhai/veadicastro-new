@@ -211,8 +211,8 @@ const META_BASE: Record<string, Meta> = {
     breadcrumb: 'Astrology by Date of Birth',
   },
   '/ai-kundli-analysis': {
-    title: 'AI Kundli Analysis Free — Vedic Birth Chart Reading | Veadicastro',
-    description: 'Free AI Kundli analysis online. Vedika reads your complete birth chart — planets, doshas, yogas & dasha explained in simple language. No signup needed.',
+    title: 'AI Kundli Analysis: Free Vedic Birth Chart Reading | Veadicastro',
+    description: 'Get a free AI Kundli analysis from your date, time, and place of birth. Explore Lagna, planets, houses, Nakshatra, Dasha, Yogas, and Doshas in simple language.',
     canonical: 'https://veadicastro.in/ai-kundli-analysis',
     breadcrumb: 'AI Kundli Analysis',
   },
@@ -582,9 +582,12 @@ const STATIC_PAGE_CONTENT: Record<string, string> = {
     </main>`,
   '/ai-kundli-analysis': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">
-      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Kundli Analysis</nav><h1>AI Kundli Analysis</h1>
-      <p>Get an AI Kundli analysis using your date of birth, birth time, and birthplace. Vedika AI helps explain planets, houses, signs, nakshatras, and dasha periods in your Vedic birth chart.</p><p>A Kundli is a traditional chart representation of the sky at birth. The analysis can help you understand chart terms and explore questions about career, relationships, personality, and timing.</p><p>Use your results as educational guidance and verify important decisions with reliable real-world information.</p>
-      <section><h2>AI Kundli Analysis FAQs</h2><details><summary>What is a Kundli analysis?</summary><p>It is an explanation of traditional Vedic birth-chart placements and their commonly used interpretations.</p></details><details><summary>What details are needed?</summary><p>Date, accurate birth time, and birthplace are needed for a complete chart.</p></details><details><summary>Can I ask questions after viewing my Kundli?</summary><p>Yes. You can use AI chat to explore the chart further.</p></details></section>
+      <nav aria-label="Breadcrumb"><a href="/">Home</a> / AI Kundli Analysis</nav><h1>AI Kundli Analysis: Free Vedic Birth Chart Reading</h1>
+      <p>Enter your date of birth, accurate birth time, and birthplace for an AI Kundli analysis. Vedika explains your Vedic birth chart, including Lagna, Moon sign, planets, houses, Nakshatra, current Dasha, Yogas, and Doshas.</p><p>This page analyses and explains a Kundli in simple language. A <a href="/free-kundli-generator">free Kundli generator</a> creates and displays the chart; this AI Kundli analysis page helps you understand the chart and its traditional terms.</p>
+      <section><h2>What an AI Kundli analysis includes</h2><ul><li>Lagna, Moon sign, and Nakshatra</li><li>Planetary positions and house placements</li><li>Current Mahadasha and Antardasha</li><li>Traditional Yogas and Doshas where available</li><li>Chart themes for career, relationships, and personality</li></ul></section>
+      <section><h2>How AI Kundli analysis works</h2><ol><li>Enter your birth date, time, and birthplace.</li><li>Generate a Vedic birth chart.</li><li>Review the chart placements and AI explanation.</li><li>Ask a focused follow-up question in the <a href="/free-ai-astrologer-chat">free AI astrologer chat</a>.</li></ol></section>
+      <section><h2>Sample AI Kundli analysis</h2><p><strong>Example only:</strong> Lagna: Virgo. Moon sign: Taurus. Current Dasha: Jupiter Mahadasha. A sample analysis may explain how house placements, Nakshatra, and the active Dasha are traditionally considered together. Your result depends on your own exact birth details and is not a guaranteed prediction.</p></section>
+      <section><h2>AI Kundli Analysis FAQs</h2><details><summary>What is AI Kundli analysis?</summary><p>It explains traditional Vedic birth-chart placements using date, time, and birthplace details.</p></details><details><summary>What birth details are needed?</summary><p>Date, accurate birth time, and birthplace provide the most complete chart context.</p></details><details><summary>Is AI Kundli analysis different from a Kundli generator?</summary><p>Yes. A generator creates the chart; this page explains the chart placements and traditional interpretations.</p></details><details><summary>Can AI Kundli analysis predict the future with certainty?</summary><p>No. It provides traditional chart-based guidance, not guaranteed outcomes.</p></details><details><summary>Can I ask questions after viewing my Kundli?</summary><p>Yes. Use the free AI astrologer chat to explore a chart topic further.</p></details></section>
     </main>`,
   '/free-kundli-generator': `
     <main style="max-width:900px;margin:auto;padding:32px 20px;color:#e5e5e5;background:#0a0a0f;line-height:1.8">

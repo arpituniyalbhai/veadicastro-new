@@ -65,11 +65,11 @@ const minutes = Array.from({ length: 60 }, (_, i) => i);
 const faqs = [
   {
     q: "What is AI kundli analysis?",
-    a: "AI kundli analysis uses artificial intelligence to read your Vedic birth chart. Vedika analyzes your planetary positions, houses, doshas, yogas, and dasha to give you personalized predictions in simple language.",
+    a: "AI Kundli analysis uses your date, time, and birthplace to calculate and explain traditional Vedic birth-chart placements such as planets, houses, Nakshatra, Yogas, Doshas, and Dasha periods in simple language.",
   },
   {
     q: "Is AI kundli analysis accurate?",
-    a: "AI kundli analysis is based on authentic Vedic astrology calculations using Swiss Ephemeris. While no prediction is 100% guaranteed, Vedika gives you accurate chart-based insights for clarity and guidance.",
+    a: "The calculation depends on accurate birth details. The interpretation is traditional chart-based guidance, not a guaranteed prediction or certainty about future events.",
   },
   {
     q: "Which doshas are checked?",
@@ -94,6 +94,10 @@ const faqs = [
   {
     q: "Is birth time required for kundli analysis?",
     a: "Birth time is strongly recommended for accurate kundli analysis as it determines the ascendant and house placements. Without it, predictions become more general and less precise.",
+  },
+  {
+    q: "How is AI Kundli analysis different from a Kundli generator?",
+    a: "A Kundli generator creates and displays the birth chart. AI Kundli analysis explains the chart placements and their traditional interpretation in simple language.",
   },
   {
     q: "How is Vedic kundli different from Western birth chart?",
@@ -347,10 +351,10 @@ export default function AiKundliAnalysis() {
   return (
     <>
       <Helmet>
-        <title>AI Kundli Analysis Free — Vedic Birth Chart Reading Online | Veadicastro</title>
+        <title>AI Kundli Analysis: Free Vedic Birth Chart Reading | Veadicastro</title>
         <meta
           name="description"
-          content="Get a free AI Kundli analysis instantly. Vedika reads your complete birth chart — planets, houses, doshas, yogas & dasha explained in simple language. No signup needed."
+          content="Get a free AI Kundli analysis from your date, time, and place of birth. Explore Lagna, planets, houses, Nakshatra, Dasha, Yogas, and Doshas in simple language."
         />
         <meta
           name="keywords"
@@ -358,15 +362,15 @@ export default function AiKundliAnalysis() {
         />
         <link rel="canonical" href={PAGE_URL} />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-        <meta property="og:title" content="AI Kundli Analysis Free — Vedic Birth Chart Reading Online | Veadicastro" />
-        <meta property="og:description" content="Get a free AI Kundli analysis instantly. Vedika reads your complete birth chart — planets, houses, doshas, yogas & dasha explained in simple language." />
+        <meta property="og:title" content="AI Kundli Analysis: Free Vedic Birth Chart Reading | Veadicastro" />
+        <meta property="og:description" content="Explore Lagna, planets, houses, Nakshatra, Dasha, Yogas, and Doshas from your Vedic birth chart." />
         <meta property="og:url" content={PAGE_URL} />
         <meta property="og:type" content="website" />
         <meta property="og:image" content={PAGE_IMAGE} />
         <meta property="og:site_name" content="Veadicastro" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="AI Kundli Analysis Free — Vedic Birth Chart Reading Online | Veadicastro" />
-        <meta name="twitter:description" content="Get a free AI Kundli analysis instantly. Vedika reads your complete birth chart — planets, houses, doshas, yogas & dasha explained in simple language." />
+        <meta name="twitter:title" content="AI Kundli Analysis: Free Vedic Birth Chart Reading | Veadicastro" />
+        <meta name="twitter:description" content="Explore Lagna, planets, houses, Nakshatra, Dasha, Yogas, and Doshas from your Vedic birth chart." />
         <meta name="twitter:image" content={PAGE_IMAGE} />
         <script type="application/ld+json">{JSON.stringify(appSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
@@ -387,10 +391,10 @@ export default function AiKundliAnalysis() {
                 </div>
 
                 <h1 className="text-4xl font-black leading-tight tracking-normal sm:text-5xl lg:text-6xl">
-                  AI Kundli Analysis —<br className="hidden sm:block" /> Free Vedic Birth Chart Reading
+                  AI Kundli Analysis:<br className="hidden sm:block" /> Free Vedic Birth Chart Reading
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
-                  Enter your birth details and get a complete AI analysis of your Kundli — planets, houses, active doshas, yogas, and current dasha explained in simple English. Instantly.
+                  Enter your date of birth, birth time, and birthplace to explore your Lagna, Moon sign, planets, houses, Nakshatra, Dasha, Yogas, and Doshas in simple language.
                 </p>
 
                 <div className="mt-6 flex flex-wrap gap-3 text-sm">
@@ -941,6 +945,42 @@ export default function AiKundliAnalysis() {
                 <p className="mt-2 text-sm leading-6 text-white/55">{desc}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* ── WHAT THIS TOOL ANALYSES ── */}
+        <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <article className="rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+              <h2 className="text-2xl font-black">What your AI Kundli analysis includes</h2>
+              <p className="mt-3 leading-7 text-white/65">This tool calculates a Vedic birth chart, then explains the chart information in plain language.</p>
+              <ul className="mt-5 space-y-3 text-sm leading-6 text-white/75">
+                {[
+                  "Lagna, Moon sign, and Nakshatra",
+                  "Planetary positions and house placements",
+                  "Current Mahadasha and Antardasha",
+                  "Traditional Yogas and Doshas where available",
+                  "Career, relationship, and personality themes",
+                ].map((item) => <li key={item} className="flex gap-3"><CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-green-300" />{item}</li>)}
+              </ul>
+            </article>
+            <article className="rounded-[1.75rem] border border-pink-400/20 bg-pink-400/[0.06] p-6 sm:p-8">
+              <h2 className="text-2xl font-black">Sample AI Kundli analysis</h2>
+              <p className="mt-3 text-sm font-semibold text-pink-200">Example only — not a personal prediction</p>
+              <dl className="mt-5 space-y-3 text-sm leading-6 text-white/75">
+                <div className="flex justify-between gap-4 border-b border-white/10 pb-2"><dt>Lagna</dt><dd className="font-semibold text-white">Virgo</dd></div>
+                <div className="flex justify-between gap-4 border-b border-white/10 pb-2"><dt>Moon sign</dt><dd className="font-semibold text-white">Taurus</dd></div>
+                <div className="flex justify-between gap-4 border-b border-white/10 pb-2"><dt>Current Dasha</dt><dd className="font-semibold text-white">Jupiter Mahadasha</dd></div>
+              </dl>
+              <p className="mt-5 text-sm leading-7 text-white/65">A reading may explain how house placements, Nakshatra, and the active Dasha are traditionally considered together. Your own result depends on your exact birth details and cannot guarantee an outcome.</p>
+            </article>
+          </div>
+          <div className="mt-6 rounded-[1.75rem] border border-white/10 bg-black/20 p-6 sm:p-8">
+            <h2 className="text-2xl font-black">Kundli generator vs AI Kundli analysis</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 text-sm leading-7 text-white/70">
+              <p><Link to="/free-kundli-generator" className="font-semibold text-pink-300 underline">Free Kundli Generator</Link> creates and displays your Vedic birth chart.</p>
+              <p><strong className="text-white">AI Kundli Analysis</strong> explains those placements and their traditional chart context. For a focused follow-up, use the <Link to="/free-ai-astrologer-chat" className="font-semibold text-pink-300 underline">free AI astrologer chat</Link>.</p>
+            </div>
           </div>
         </section>
 
