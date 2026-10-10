@@ -101,6 +101,13 @@ const Onboarding = () => {
     setShowUnknownTimeDialog(false);
   };
 
+  const continueWithoutBirthTime = () => {
+    setHour(0);
+    setMinute(0);
+    setApproximateBirthPeriod("Unknown");
+    setShowUnknownTimeDialog(false);
+  };
+
   const handleUnknownTimeDialogChange = (open: boolean) => {
     setShowUnknownTimeDialog(open);
     if (!open && !approximateBirthPeriod) {
@@ -352,7 +359,9 @@ useEffect(() => {
                   </label>
                   {unknownBirthTime && approximateBirthPeriod && hour !== undefined && (
                     <p className="text-xs text-secondary">
-                      Using {approximateBirthPeriod.toLowerCase()} time: {String(hour).padStart(2, '0')}:00
+                      {approximateBirthPeriod === "Unknown"
+                        ? "Birth time unknown — using default time: 12:00 AM"
+                        : `Using ${approximateBirthPeriod.toLowerCase()} time: ${String(hour).padStart(2, '0')}:00`}
                     </p>
                   )}
                 </div>
@@ -600,6 +609,15 @@ useEffect(() => {
               </button>
             ))}
           </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={continueWithoutBirthTime}
+            className="w-full border-border/60 bg-background/50 hover:bg-secondary/10"
+          >
+            Still I don&apos;t know — use 12:00 AM
+          </Button>
 
           <p className="text-xs leading-5 text-muted-foreground">
             Exact birth time gives the most accurate chart. You can return and enter it manually if you find it later.
