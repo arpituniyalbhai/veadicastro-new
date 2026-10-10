@@ -1,10 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/context/I18nContext";
 import { useAuth } from "@/context/AuthContext";
 import { usePlan } from "@/context/PlanContext";
-import { Sparkles, ArrowLeft, Lock, User, Heart, TrendingUp, Calendar, FileText, Star, Crown, Gem, Target, Compass, DollarSign, BarChart3, Eye, Shield, Check, Zap, Coins } from "lucide-react";
+import { Sparkles, ArrowLeft, Lock, User, Heart, TrendingUp, FileText, Star, Crown, Compass, DollarSign, BarChart3, Check, ShieldCheck, Gem, Target, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type ReportCategory = {
@@ -34,10 +34,8 @@ const Reports = () => {
       navigate("/");
     }
   }, [loading, user, navigate]);
-  const [selectedReport, setSelectedReport] = useState<string | null>(null);
-
   // Determine if reports are locked based on plan and credits
-  const isReportLocked = (reportId: string) => {
+  const isReportLocked = () => {
     // All reports require credits (no more free reports)
     return !canGenerateReport();
   };
@@ -51,7 +49,7 @@ const Reports = () => {
       subtitle: "Complete kundali analysis and birth chart reading",
       duration: "Lifetime",
       icon: <Compass className="w-6 h-6" />,
-      locked: isReportLocked("life-guidance"),
+      locked: isReportLocked(),
       category: "Personal Growth",
       description: "Comprehensive analysis of your life path, purpose, and destiny",
       price: "₹199",
@@ -69,7 +67,7 @@ const Reports = () => {
       subtitle: "Analysis of 20+ personality characteristics",
       duration: "1 Year",
       icon: <User className="w-6 h-6" />,
-      locked: isReportLocked("personality"),
+      locked: isReportLocked(),
       category: "Personal Growth",
       description: "Discover your strengths, weaknesses, and growth potential",
       price: "₹1",
@@ -87,7 +85,7 @@ const Reports = () => {
       subtitle: "Your romantic style and relationship strengths",
       duration: "1 Year",
       icon: <Heart className="w-6 h-6" />,
-      locked: isReportLocked("love-navigator"),
+      locked: isReportLocked(),
       category: "Love & Relationships",
       description: "Navigate your romantic journey with astrological insights",
       price: "₹1",
@@ -104,7 +102,7 @@ const Reports = () => {
       subtitle: "Your ideal life partner and marriage timing",
       duration: "Lifetime",
       icon: <Crown className="w-6 h-6" />,
-      locked: isReportLocked("life-partner"),
+      locked: isReportLocked(),
       category: "Love & Relationships",
       description: "Discover your ideal partner and marriage compatibility",
       price: "₹1",
@@ -123,7 +121,7 @@ const Reports = () => {
       subtitle: "Complete financial guidance and wealth creation",
       duration: "Lifetime",
       icon: <DollarSign className="w-6 h-6" />,
-      locked: isReportLocked("wealth-lifetime"),
+      locked: isReportLocked(),
       category: "Career & Wealth",
       description: "Lifetime financial guidance and wealth creation strategies",
       price: "₹1",
@@ -142,7 +140,7 @@ const Reports = () => {
       subtitle: "Your yearly financial predictions and opportunities",
       duration: "1 Year",
       icon: <BarChart3 className="w-6 h-6" />,
-      locked: isReportLocked("wealth-year"),
+      locked: isReportLocked(),
       category: "Career & Wealth",
       description: "Annual wealth forecast and investment timing",
       price: "₹1",
@@ -151,6 +149,74 @@ const Reports = () => {
         "Best investment periods",
         "Career opportunities",
         "Financial challenges"
+      ]
+    },
+    {
+      id: "billionaire-potential",
+      title: "Billionaire Potential",
+      subtitle: "A direct reading of your chart’s wealth combinations",
+      duration: "Lifetime",
+      icon: <Gem className="w-6 h-6" />,
+      locked: isReportLocked(),
+      category: "Career & Wealth",
+      description: "Explore wealth yogas, financial strengths, obstacles, and the periods associated with major growth.",
+      price: "₹1",
+      features: [
+        "Wealth combinations and planetary support",
+        "Peak wealth periods in your dasha sequence",
+        "Your strongest financial advantage",
+        "Key obstacles and a clear verdict"
+      ]
+    },
+    {
+      id: "job-vs-business",
+      title: "Job vs Business",
+      subtitle: "See which career path better fits your chart",
+      duration: "Career",
+      icon: <Target className="w-6 h-6" />,
+      locked: isReportLocked(),
+      category: "Career & Wealth",
+      description: "Get a clear reading on service, entrepreneurship, suitable fields, and career timing.",
+      price: "₹1",
+      features: [
+        "A clear job or business direction",
+        "Planetary evidence and suitable fields",
+        "Career timing through dashas",
+        "Risks of choosing against your chart"
+      ]
+    },
+    {
+      id: "government-job",
+      title: "Government Job Potential",
+      subtitle: "Assess public service and exam potential",
+      duration: "Career",
+      icon: <Shield className="w-6 h-6" />,
+      locked: isReportLocked(),
+      category: "Career & Wealth",
+      description: "Review authority, competition, supportive periods, and government sectors aligned with your chart.",
+      price: "₹1",
+      features: [
+        "Strong, moderate, or weak potential",
+        "Supportive and challenging combinations",
+        "Exam prospects and favorable timing",
+        "Suitable sectors and alternatives"
+      ]
+    },
+    {
+      id: "ideal-partner",
+      title: "Ideal Partner Report",
+      subtitle: "A specific reading of partner traits and marriage timing",
+      duration: "Lifetime",
+      icon: <Heart className="w-6 h-6" />,
+      locked: isReportLocked(),
+      category: "Love & Relationships",
+      description: "Explore partner tendencies, relationship patterns, marriage timing, and chart-supported challenges.",
+      price: "₹1",
+      features: [
+        "Partner personality and background",
+        "Love or arranged marriage indicators",
+        "Marriage timing and possible delays",
+        "Dosha interpretation without fearmongering"
       ]
     }
   ];
@@ -163,189 +229,211 @@ const Reports = () => {
     acc[report.category].push(report);
     return acc;
   }, {} as Record<string, ReportCategory[]>);
+  const trendingReportIds = ["billionaire-potential", "job-vs-business", "government-job", "ideal-partner"];
+  const trendingReports = trendingReportIds
+    .map((id) => reportCategories.find((report) => report.id === id))
+    .filter((report): report is ReportCategory => Boolean(report));
 
-  const handleReportClick = (reportId: string, locked: boolean) => {
-    if (locked) {
-      // Navigate to pricing page for locked reports
-      navigate("/pricing");
-    } else {
-      navigate(`/report/${reportId}`);
-    }
+  const handleReportClick = (reportId: string) => {
+    // The report detail page checks credits when the user starts generation.
+    navigate(`/report/${reportId}`);
   };
 
   return (
-    <div className="min-h-screen bg-background px-4 lg:px-6 py-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Modern Header Section */}
-        <div className="relative overflow-hidden rounded-2xl lg:rounded-3xl bg-gradient-to-br from-secondary/20 via-primary/10 to-accent/20 border-border/60 p-4 sm:p-6 lg:p-8">
-          <div className="absolute inset-0 bg-gradient-to-r from-secondary/5 to-primary/5" />
-          <div className="relative z-10">
-            <Button variant="outline" size="sm" className="gap-2 w-fit backdrop-blur-sm bg-background/50 mb-4 sm:mb-6" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="w-4 h-4" />
-              Back to Dashboard
-            </Button>
-            
-            {/* Mobile-friendly header layout */}
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="flex-1">
-                <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-3 sm:mb-4">
-                  Astrological Reports
-                </h1>
-                <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl">
-                  Get personalized insights based on your birth chart. Unlock your potential with detailed astrological analysis.
-                </p>
-              </div>
-              
-              {/* Credits Display - Mobile Optimized */}
-              <div className="flex flex-row lg:flex-col items-center justify-center lg:items-end space-x-4 lg:space-x-0 lg:space-y-4">
-                <div className="text-center lg:text-right">
-                  <div className="text-sm text-muted-foreground mb-1">Available Reports</div>
-                  <div className="text-3xl sm:text-4xl font-bold text-secondary">
-                    {reportCredits}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {planName === "Free" ? "Free Plan" : `${planName} Plan`}
-                  </div>
-                </div>
-                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl bg-gradient-to-br from-secondary/20 to-accent/20 flex items-center justify-center backdrop-blur-sm border border-secondary/30">
-                  <FileText className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-secondary" />
-                </div>
-              </div>
+    <div className="relative min-h-screen overflow-hidden bg-background px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div className="absolute inset-0 bg-background" />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse 112% 56% at 50% 102%, rgba(226, 35, 143, 0.38) 0%, rgba(174, 38, 132, 0.27) 36%, rgba(91, 30, 78, 0.2) 63%, transparent 82%)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(ellipse 78% 38% at 53% 43%, rgba(128, 34, 104, 0.2) 0%, transparent 76%), linear-gradient(180deg, transparent 0%, rgba(8, 7, 12, 0.05) 65%, rgba(8, 7, 12, 0.42) 100%)",
+          }}
+        />
+      </div>
+
+      <div className="relative mx-auto w-full max-w-7xl space-y-7 sm:space-y-9">
+        <Button variant="outline" className="h-10 gap-2 rounded-xl border-border/60 bg-card/40 px-3 text-sm text-muted-foreground hover:text-foreground" onClick={() => navigate("/dashboard")}>
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
+        <header className="relative grid min-w-0 gap-6 overflow-hidden rounded-3xl border border-border/60 bg-gradient-to-br from-card/90 via-card/65 to-secondary/10 p-5 shadow-xl shadow-black/10 sm:p-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-center lg:p-9">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-secondary/5 via-transparent to-primary/10" aria-hidden="true" />
+          <div className="relative min-w-0">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-secondary/25 bg-secondary/10 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-secondary">
+              <Sparkles className="h-3.5 w-3.5" />
+              Your report library
+            </div>
+            <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">Astrological Reports</h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
+              Explore personalized readings for your relationships, personal growth, career, and wealth—all based on your birth chart.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/35 px-3 py-1.5"><ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> Chart-based insights</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/35 px-3 py-1.5"><FileText className="h-3.5 w-3.5 text-secondary" /> {reportCategories.length} reports to explore</span>
             </div>
           </div>
-        </div>
 
-        {/* Reports by Category - Modern Layout */}
-        {Object.entries(groupedReports).map(([category, reports], categoryIndex) => (
-          <div key={category} className="space-y-8">
-            {/* Category Header */}
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center ${
-                categoryIndex === 0 ? "from-blue-500/20 to-cyan-500/20" :
-                categoryIndex === 1 ? "from-pink-500/20 to-rose-500/20" :
-                "from-green-500/20 to-emerald-500/20"
-              }`}>
-                {
-                  categoryIndex === 0 ? <User className="w-6 h-6 text-blue-500" /> :
-                  categoryIndex === 1 ? <Heart className="w-6 h-6 text-pink-500" /> :
-                  <TrendingUp className="w-6 h-6 text-green-500" />
-                }
-              </div>
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold text-foreground mb-2">{category}</h2>
-                <p className="text-muted-foreground">
-                  {category === "Personal Growth" && "Discover your true nature and unlock your full potential"}
-                  {category === "Love & Relationships" && "Find your path to meaningful relationships and love"}
-                  {category === "Career & Wealth" && "Build your financial success and career growth"}
-                </p>
-              </div>
+          <div className="relative grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-secondary/20 bg-background/45 p-4 sm:p-5 lg:grid-cols-1 lg:justify-items-center lg:gap-2 lg:text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-secondary/25 bg-secondary/10 text-secondary lg:mb-1 lg:h-14 lg:w-14">
+              <FileText className="h-6 w-6" />
             </div>
-            
-            {/* Modern Report Cards Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reports.map((report) => (
-                <Card
-                  key={report.id}
-                  className={`relative overflow-hidden bg-gradient-to-br from-card/80 to-card/60 backdrop-blur-md border-border/40 rounded-3xl hover:border-secondary/60 transition-all duration-300 cursor-pointer group hover:shadow-2xl hover:shadow-secondary/10 hover:scale-105 ${
-                    report.popular ? "ring-2 ring-secondary/50 bg-gradient-to-br from-secondary/10 to-accent/10" : ""
-                  }`}
-                  onClick={() => handleReportClick(report.id, report.locked)}
+            <div className="min-w-0 lg:col-auto">
+              <p className="text-xs font-medium text-muted-foreground">Available report credits</p>
+              <p className="mt-0.5 text-3xl font-bold tabular-nums text-foreground">{reportCredits}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{planName === "Free" ? "Free plan" : `${planName} plan`}</p>
+            </div>
+            {reportCredits <= 0 && (
+              <div className="col-span-2 flex items-center gap-2 rounded-xl border border-amber-500/20 bg-amber-500/5 px-3 py-2 text-xs text-amber-300 lg:col-span-1 lg:mt-2">
+                <Lock className="h-3.5 w-3.5 shrink-0" />
+                <span>No credits available. You can still open a report to review it.</span>
+              </div>
+            )}
+          </div>
+        </header>
+
+        <section aria-labelledby="trending-reports-title" className="space-y-4 sm:space-y-5">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-secondary/25 bg-secondary/10 text-secondary">
+              <TrendingUp className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 id="trending-reports-title" className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">Trending</h2>
+                <span className="rounded-full border border-secondary/25 bg-secondary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-secondary">Featured reports</span>
+              </div>
+              <p className="mt-1 text-sm text-muted-foreground">Popular readings people are exploring right now.</p>
+            </div>
+          </div>
+
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {trendingReports.map((report) => (
+              <Card key={report.id} className="group flex min-w-0 flex-col rounded-2xl border border-secondary/20 bg-card/55 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-secondary/45 hover:bg-card/75 hover:shadow-lg hover:shadow-secondary/5 sm:p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-secondary/20 bg-secondary/10 text-secondary">
+                    {report.icon}
+                  </div>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-secondary/20 bg-secondary/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-secondary">
+                    <TrendingUp className="h-3 w-3" /> Trending
+                  </span>
+                </div>
+                <h3 className="mt-4 text-base font-semibold leading-snug text-foreground group-hover:text-secondary">{report.title}</h3>
+                <p className="mt-1.5 flex-1 text-sm leading-5 text-muted-foreground">{report.subtitle}</p>
+                <Button
+                  variant="cosmic"
+                  className="mt-4 h-10 w-full rounded-full text-sm font-semibold"
+                  onClick={() => handleReportClick(report.id)}
                 >
-                  {/* Popular Badge */}
-                  {report.popular && (
-                    <div className="absolute top-4 left-4 z-20">
-                      <div className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-secondary to-accent text-white text-xs font-bold rounded-full shadow-lg">
-                        <Star className="w-3 h-3" />
-                        POPULAR
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Report Content - Modern Layout */}
-                  <div className="p-6 space-y-6">
-                    {/* Header Section */}
-                    <div className="flex items-start justify-between gap-4">
-                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br flex items-center justify-center group-hover:scale-105 transition-transform ${
-                        categoryIndex === 0 ? "from-blue-500/20 to-cyan-500/20" :
-                        categoryIndex === 1 ? "from-pink-500/20 to-rose-500/20" :
-                        "from-green-500/20 to-emerald-500/20"
-                      }`}>
-                        <div className={categoryIndex === 0 ? "text-blue-500" : categoryIndex === 1 ? "text-pink-500" : "text-green-500"}>
+                  Generate report
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <nav aria-label="Report categories" className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+          {Object.keys(groupedReports).map((category, index) => {
+            const categoryId = `report-category-${index}`;
+            return (
+              <a key={category} href={`#${categoryId}`} className="shrink-0 rounded-full border border-border/60 bg-card/40 px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-secondary/40 hover:bg-secondary/10 hover:text-foreground">
+                {category}
+              </a>
+            );
+          })}
+        </nav>
+
+        <div className="space-y-10 sm:space-y-12">
+          {Object.entries(groupedReports).map(([category, reports], categoryIndex) => (
+            <section key={category} id={`report-category-${categoryIndex}`} className="scroll-mt-6 space-y-5 sm:space-y-6">
+              <div className="flex min-w-0 items-start gap-3 sm:gap-4">
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border sm:h-12 sm:w-12 ${
+                  categoryIndex === 0 ? "border-blue-500/20 bg-blue-500/10 text-blue-400" :
+                  categoryIndex === 1 ? "border-pink-500/20 bg-pink-500/10 text-pink-400" :
+                  "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                }`}>
+                  {categoryIndex === 0 ? <User className="h-5 w-5" /> : categoryIndex === 1 ? <Heart className="h-5 w-5" /> : <TrendingUp className="h-5 w-5" />}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h2 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{category}</h2>
+                    <span className="rounded-full border border-border/60 bg-card/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">{reports.length} reports</span>
+                  </div>
+                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                    {category === "Personal Growth" && "Discover your strengths, purpose, and direction."}
+                    {category === "Love & Relationships" && "Explore relationships, connection, and partnership."}
+                    {category === "Career & Wealth" && "Find clarity around work, opportunities, and finances."}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-5">
+                {reports.map((report) => (
+                  <Card key={report.id} className={`group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border bg-card/45 transition-all duration-200 hover:-translate-y-0.5 hover:border-secondary/40 hover:bg-card/70 hover:shadow-xl hover:shadow-secondary/5 ${report.popular ? "border-secondary/45 ring-1 ring-secondary/15" : "border-border/60"}`}>
+                    <div className="flex flex-1 flex-col p-5 sm:p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border ${
+                          categoryIndex === 0 ? "border-blue-500/20 bg-blue-500/10 text-blue-400" :
+                          categoryIndex === 1 ? "border-pink-500/20 bg-pink-500/10 text-pink-400" :
+                          "border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
+                        }`}>
                           {report.icon}
                         </div>
-                      </div>
-                      
-                      {/* Duration */}
-                      <div className="text-right">
-                        <div className="text-xs text-muted-foreground">
-                          {report.duration}
+                        <div className="flex flex-wrap justify-end gap-1.5">
+                          {report.popular && <span className="inline-flex items-center gap-1 rounded-full border border-secondary/25 bg-secondary/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-secondary"><Star className="h-3 w-3 fill-current" /> Popular</span>}
+                          <span className="rounded-full border border-border/60 bg-background/40 px-2.5 py-1 text-[10px] font-medium text-muted-foreground">{report.duration}</span>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* Title and Description */}
-                    <div className="space-y-3">
-                      <h3 className="text-xl font-bold text-foreground group-hover:text-secondary transition-colors">
-                        {report.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {report.subtitle}
-                      </p>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {report.description}
-                      </p>
-                    </div>
-                    
-                    {/* Features List */}
-                    {report.features && (
-                      <div className="space-y-2">
-                        <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Includes</div>
-                        <div className="space-y-1.5">
-                          {report.features.slice(0, 3).map((feature, index) => (
-                            <div key={index} className="flex items-center gap-2 text-xs text-muted-foreground">
-                              <Check className="w-3 h-3 text-green-500 flex-shrink-0" />
-                              <span>{feature}</span>
-                            </div>
-                          ))}
-                          {report.features.length > 3 && (
-                            <div className="text-xs text-muted-foreground">
-                              +{report.features.length - 3} more features
-                            </div>
+
+                      <div className="mt-5 min-w-0">
+                        <h3 className="text-lg font-semibold leading-snug text-foreground transition-colors group-hover:text-secondary sm:text-xl">{report.title}</h3>
+                        <p className="mt-1.5 text-sm font-medium leading-5 text-foreground/80">{report.subtitle}</p>
+                        <p className="mt-2 text-sm leading-6 text-muted-foreground">{report.description}</p>
+                      </div>
+
+                      {report.features && (
+                        <div className="mt-5 flex-1 border-t border-border/50 pt-4">
+                          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">What&apos;s inside</p>
+                          <ul className="space-y-2">
+                            {report.features.slice(0, 3).map((feature) => (
+                              <li key={feature} className="flex items-start gap-2.5 text-sm leading-5 text-muted-foreground">
+                                <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                            {report.features.length > 3 && <li className="pl-6 text-xs text-muted-foreground">+{report.features.length - 3} more insights</li>}
+                          </ul>
+                        </div>
+                      )}
+
+                      <div className="mt-5 flex flex-col gap-3 border-t border-border/50 pt-4">
+                        <div className="flex min-h-5 items-center gap-2 text-xs">
+                          {report.locked ? (
+                            <><Lock className="h-3.5 w-3.5 text-amber-300" /><span className="text-muted-foreground">Credits are checked before generation</span></>
+                          ) : (
+                            <><ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /><span className="text-muted-foreground">Uses 1 report credit</span></>
                           )}
                         </div>
+                        <Button
+                          variant="cosmic"
+                          className="h-11 w-full rounded-full text-sm font-semibold shadow-md shadow-secondary/10 transition-transform active:scale-[0.99]"
+                          onClick={() => handleReportClick(report.id)}
+                        >
+                          Generate report
+                        </Button>
                       </div>
-                    )}
-                    
-                    {/* Action Button */}
-                    <div className="pt-4 border-t border-border/40 flex justify-end">
-                      <Button 
-                        variant="cosmic" 
-                        size="sm" 
-                        className="w-auto h-10 px-4 rounded-lg font-bold text-sm transition-all bg-gradient-to-r from-secondary to-accent hover:from-secondary/90 hover:to-accent/90 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
-                        onClick={() => {
-                          if (report.locked && planName === "Free") {
-                            navigate("/pricing");
-                          } else {
-                            handleReportClick(report.id, report.locked);
-                          }
-                        }}
-                      >
-                        {report.locked ? (
-                          <span className="text-white font-bold">
-                            {planName === "Free" ? "Upgrade to Premium" : "Buy Report"}
-                          </span>
-                        ) : (
-                          <span className="text-white font-bold">Generate Report</span>
-                        )}
-                      </Button>
                     </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </div>
-        ))}
-
+                  </Card>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     </div>
   );

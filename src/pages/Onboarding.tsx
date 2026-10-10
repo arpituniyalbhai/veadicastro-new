@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useI18n } from "@/context/I18nContext";
-import { Calendar, Clock, MapPin, Lock, Moon, Sunrise, Sun, Sunset } from "lucide-react";
+import { Calendar, Clock, MapPin, CheckCircle2, Moon, Sunrise, Sun, Sunset } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Calendar as CalendarUI } from "@/components/ui/calendar";
@@ -38,6 +38,7 @@ const Onboarding = () => {
   const placeBoxRef = useRef<HTMLDivElement | null>(null);
   const [animating, setAnimating] = useState(false);
   const [animStatus, setAnimStatus] = useState<string>("");
+  const [animationStep, setAnimationStep] = useState(0);
   const [placeError, setPlaceError] = useState("");
   const [wasmPreloaded, setWasmPreloaded] = useState(false);
   const [wasmLoading, setWasmLoading] = useState(false);
@@ -69,15 +70,10 @@ const Onboarding = () => {
     return `${dd}-${mm}-${yyyy}`;
   }, [dob]);
 
-  const requiredFilled = useMemo(() => {
-    return (
-      !!dob &&
-      hour !== undefined &&
-      minute !== undefined &&
-      !!selectedPlace &&
-      !!gender
-    );
-  }, [dob, hour, minute, selectedPlace, gender]);
+  const requiredFilled = useMemo(
+    () => !!dob && hour !== undefined && minute !== undefined && !!selectedPlace && !!gender,
+    [dob, hour, minute, selectedPlace, gender],
+  );
 
   const handleUnknownBirthTimeChange = (checked: boolean) => {
     setUnknownBirthTime(checked);
@@ -232,7 +228,7 @@ useEffect(() => {
           <p className="text-xs sm:text-sm text-muted-foreground mt-2">{t('onboardingSubtitle')}</p>
         </div>
 
-        <div className="rounded-xl border border-border/60 bg-card/30 backdrop-blur p-4 sm:p-6 md:p-8">
+        <div className="rounded-2xl border border-border/60 bg-card/30 backdrop-blur p-4 sm:p-6 md:p-8">
           {/* Step indicators */}
           <div className="flex items-center justify-center gap-2 mb-6">
             {[1, 2].map((i) => (
@@ -241,30 +237,34 @@ useEffect(() => {
           </div>
 
           {step === 1 && (
-            <div className="space-y-4">
+            <div className="space-y-5 sm:space-y-6">
               <h2 className="text-lg sm:text-xl font-semibold">{t('birthDetails')}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-4">
-                <div className="space-y-2 w-full">
-                  <Label className="text-sm font-medium whitespace-nowrap">{t('dateOfBirth')}</Label>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-5 sm:gap-y-6">
+                <div className="min-w-0 space-y-2 w-full">
+                  <Label className="text-sm font-medium">{t('dateOfBirth')}</Label>
                   {/* Mobile: Native date input */}
-                  <input
-                    type="date"
-                    className="md:hidden w-full h-11 px-3 rounded-md bg-background/50 border border-border/60 text-foreground text-sm"
-                    value={dob ? `${dob.getFullYear()}-${String(dob.getMonth()+1).padStart(2,'0')}-${String(dob.getDate()).padStart(2,'0')}` : ""}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        const [y, m, d] = e.target.value.split('-').map(Number);
-                        setDob(new Date(y, m - 1, d));
-                      }
-                    }}
-                  />
+                  <div className="relative md:hidden">
+                    <Calendar aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="date"
+                      aria-label={t('dateOfBirth')}
+                      className="h-12 w-full min-w-0 rounded-xl border border-border/70 bg-background/60 pl-10 pr-3 text-sm text-foreground shadow-sm outline-none transition-colors focus:border-secondary focus:ring-2 focus:ring-secondary/20 [color-scheme:dark]"
+                      value={dob ? `${dob.getFullYear()}-${String(dob.getMonth()+1).padStart(2,'0')}-${String(dob.getDate()).padStart(2,'0')}` : ""}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const [y, m, d] = e.target.value.split('-').map(Number);
+                          setDob(new Date(y, m - 1, d));
+                        }
+                      }}
+                    />
+                  </div>
                   {/* Desktop: Calendar popover */}
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
-                          "hidden md:flex w-full justify-start h-11 rounded-md bg-background/50 border-border/60 hover:bg-accent/10",
+                          "hidden md:flex w-full justify-start h-12 rounded-xl bg-background/60 border-border/70 shadow-sm hover:bg-accent/10",
                           !dob && "text-muted-foreground",
                         )}
                       >
@@ -283,29 +283,33 @@ useEffect(() => {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <div className="space-y-2 w-full">
-                  <Label className="text-sm font-medium whitespace-nowrap">{t('timeOfBirth')}</Label>
+                <div className="min-w-0 space-y-2 w-full">
+                  <Label className="text-sm font-medium">{t('timeOfBirth')}</Label>
                   {/* Mobile: Native time input */}
-                  <input
-                    type="time"
-                    className="md:hidden w-full h-11 px-3 rounded-md bg-background/50 border border-border/60 text-foreground text-sm"
-                    disabled={unknownBirthTime}
-                    value={hour !== undefined && minute !== undefined ? `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}` : ""}
-                    onChange={(e) => {
-                      if (e.target.value) {
-                        const [h, m] = e.target.value.split(':').map(Number);
-                        setHour(h);
-                        setMinute(m);
-                      }
-                    }}
-                  />
+                  <div className="relative md:hidden">
+                    <Clock aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <input
+                      type="time"
+                      aria-label={t('timeOfBirth')}
+                      className="h-12 w-full min-w-0 rounded-xl border border-border/70 bg-background/60 pl-10 pr-3 text-sm text-foreground shadow-sm outline-none transition-colors focus:border-secondary focus:ring-2 focus:ring-secondary/20 disabled:cursor-not-allowed disabled:opacity-50 [color-scheme:dark]"
+                      disabled={unknownBirthTime}
+                      value={hour !== undefined && minute !== undefined ? `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}` : ""}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const [h, m] = e.target.value.split(':').map(Number);
+                          setHour(h);
+                          setMinute(m);
+                        }
+                      }}
+                    />
+                  </div>
                   {/* Desktop: Custom time picker */}
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         disabled={unknownBirthTime}
-                        className={"hidden md:flex w-full justify-start h-11 rounded-md bg-background/50 border-border/60 hover:bg-accent/10"}
+                        className={"hidden md:flex w-full justify-start h-12 rounded-xl bg-background/60 border-border/70 shadow-sm hover:bg-accent/10"}
                       >
                         <Clock className="mr-2 h-4 w-4" />
                         {hour !== undefined && minute !== undefined ? `${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')}` : "--:--"}
@@ -348,14 +352,14 @@ useEffect(() => {
                       </div>
                     </PopoverContent>
                   </Popover>
-                  <label className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border border-border/50 bg-background/30 px-3 py-2 text-xs leading-relaxed text-muted-foreground transition-colors hover:border-secondary/40 hover:bg-accent/5 sm:min-h-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:hover:border-transparent sm:hover:bg-transparent">
                     <input
                       type="checkbox"
                       checked={unknownBirthTime}
                       onChange={(e) => handleUnknownBirthTimeChange(e.target.checked)}
-                      className="h-3.5 w-3.5 rounded border-border/60 accent-pink-500"
+                      className="h-4 w-4 shrink-0 rounded border-border/60 accent-pink-500"
                     />
-                    I don't know my exact time of birth
+                    <span>I don't know my exact time of birth</span>
                   </label>
                   {unknownBirthTime && approximateBirthPeriod && hour !== undefined && (
                     <p className="text-xs text-secondary">
@@ -365,14 +369,14 @@ useEffect(() => {
                     </p>
                   )}
                 </div>
-                <div className="space-y-2 w-full md:col-span-1" ref={placeBoxRef}>
-                  <Label htmlFor="place" className="text-sm font-medium whitespace-nowrap">{t('placeOfBirth')}</Label>
+                <div className="min-w-0 space-y-2 w-full md:col-span-1" ref={placeBoxRef}>
+                  <Label htmlFor="place" className="text-sm font-medium">{t('placeOfBirth')}</Label>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground flex-shrink-0" />
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="place"
                       placeholder="City, Country"
-                      className="pl-10 h-11 bg-background/50 border-border/60 text-sm w-full"
+                      className="h-12 w-full rounded-xl border-border/70 bg-background/60 pl-10 text-sm shadow-sm focus-visible:border-secondary focus-visible:ring-secondary/20"
                       value={placeQuery}
                       onChange={(e) => {
                         setPlaceQuery(e.target.value);
@@ -382,13 +386,9 @@ useEffect(() => {
                       onFocus={() => placeSuggestions.length && setPlaceOpen(true)}
                     />
                     {placeOpen && (
-                      <div className="absolute z-20 mt-1 left-0 right-0 rounded-lg border border-border/60 bg-card/95 backdrop-blur shadow-xl max-h-48 sm:max-h-64 overflow-auto">
-                        {placeLoading && (
-                          <div className="px-3 py-2 text-xs text-muted-foreground">Searching…</div>
-                        )}
-                        {!placeLoading && placeSuggestions.length === 0 && (
-                          <div className="px-3 py-2 text-xs text-muted-foreground">No results</div>
-                        )}
+                      <div className="absolute left-0 right-0 z-20 mt-1 max-h-48 overflow-auto rounded-xl border border-border/60 bg-card/95 shadow-xl backdrop-blur sm:max-h-64">
+                        {placeLoading && <div className="px-3 py-2 text-xs text-muted-foreground">Searching…</div>}
+                        {!placeLoading && placeSuggestions.length === 0 && <div className="px-3 py-2 text-xs text-muted-foreground">No results</div>}
                         {placeSuggestions.map((s, i) => (
                           <button
                             key={i}
@@ -400,7 +400,7 @@ useEffect(() => {
                               localStorage.setItem('onboarding_place', JSON.stringify({ label: s.label, lat: s.lat, lng: s.lng, tzone: s.tzone, uid: user?.uid || null }));
                               setPlaceError("");
                             }}
-                            className="w-full text-left px-3 py-2 text-sm hover:bg-accent/20"
+                            className="w-full px-3 py-3 text-left text-sm hover:bg-accent/20"
                           >
                             {s.label}
                           </button>
@@ -408,28 +408,27 @@ useEffect(() => {
                       </div>
                     )}
                   </div>
+                  {placeError && <p className="text-xs text-red-500">{placeError}</p>}
                 </div>
-                {placeError && (
-                  <p className="text-xs text-red-500">{placeError}</p>
-                )}
-                <div className="space-y-2 w-full md:col-span-3">
+                <div className="min-w-0 space-y-2 w-full md:col-span-3">
                   <Label className="text-sm font-medium">{t('gender')}</Label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
                     {[
-                      {key:'female', label:'F♀️'},
-                      {key:'male', label:'M♂️'},
-                      {key:'other', label:'Oth⚧️'},
-                    ].map(opt => (
+                      { key: 'female', label: 'F ♀️' },
+                      { key: 'male', label: 'M ♂️' },
+                      { key: 'other', label: 'Other ⚧️' },
+                    ].map((option) => (
                       <button
-                        key={opt.key}
+                        key={option.key}
                         type="button"
-                        onClick={() => setGender(opt.key)}
+                        aria-pressed={gender === option.key}
+                        onClick={() => setGender(option.key)}
                         className={cn(
-                          'h-11 rounded-md border border-border/60 bg-background/50 hover:bg-accent/10 text-sm',
-                          gender === opt.key && 'border-secondary text-foreground'
+                          'h-12 rounded-xl border border-border/60 bg-background/40 text-sm transition-colors hover:border-secondary/50 hover:bg-accent/10',
+                          gender === option.key && 'border-secondary bg-secondary/10 text-foreground ring-1 ring-secondary/30',
                         )}
                       >
-                        {opt.label}
+                        {option.label}
                       </button>
                     ))}
                   </div>
@@ -437,7 +436,6 @@ useEffect(() => {
               </div>
             </div>
           )}
-
 
           {step === 2 && (
             <div className="space-y-6">
@@ -459,14 +457,29 @@ useEffect(() => {
             </div>
           )}
 
-          <div className="flex justify-between mt-8">
-            <Button variant="ghost" onClick={back} disabled={step === 1}>{t('back')}</Button>
+          <div className="mt-7 flex items-stretch gap-3 sm:mt-8 sm:gap-4">
+            <Button
+              variant="ghost"
+              onClick={back}
+              disabled={step === 1}
+              className="h-12 min-w-0 flex-1 rounded-xl border border-border/60 bg-background/30 px-4 text-sm font-semibold transition-colors hover:bg-accent/10 disabled:opacity-40 sm:flex-none sm:min-w-28"
+            >
+              {t('back')}
+            </Button>
             {step < 2 ? (
-              <Button variant="cosmic" onClick={next} disabled={step === 1 && !requiredFilled}>{t('next')}</Button>
+              <Button
+                variant="cosmic"
+                onClick={next}
+                disabled={step === 1 && !requiredFilled}
+                className="h-12 min-w-0 flex-[1.25] whitespace-nowrap rounded-xl px-4 text-sm font-semibold shadow-md shadow-secondary/20 transition-transform active:scale-[0.98] sm:flex-none sm:min-w-32 sm:px-6 sm:text-base"
+              >
+                {t('next')}
+              </Button>
             ) : (
               <Button
                 variant="cosmic"
                 disabled={!requiredFilled}
+                className="h-12 min-w-0 flex-[1.25] whitespace-nowrap rounded-xl px-3 text-sm font-semibold shadow-md shadow-secondary/20 transition-transform active:scale-[0.98] sm:flex-none sm:min-w-40 sm:px-6 sm:text-base"
                 onClick={async () => {
                   // Build details and persist
                   const storedPlace = (() => {
@@ -516,13 +529,14 @@ useEffect(() => {
                   };
                   localStorage.setItem('onboarding_details', JSON.stringify(details));
                   setAnimating(true);
-                  setAnimStatus("Connecting to astrology servers…");
+                  setAnimationStep(0);
+                  setAnimStatus("Reviewing your birth details…");
+                  const animationStartedAt = Date.now();
 
-                  // WASM is already preloaded, no artificial delay needed
-                  const delay = new Promise((r) => setTimeout(r, 100));
                   // 1) Fetch planetary data (WASM should be preloaded)
                   async function fetchPlanets() {
                     try {
+                      setAnimationStep(1);
                       setAnimStatus(wasmPreloaded ? "Calculating planetary positions…" : "Loading astrology engine & calculating positions…");
                       const [y, m, d] = details.dob.split('-').map(n => parseInt(n,10));
                       const [hh, mm] = details.time.split(':').map(n => parseInt(n,10));
@@ -541,6 +555,8 @@ useEffect(() => {
                       };
                       const payload = await getPlanetaryData(body);
                       persistAstroPayload(payload);
+                      setAnimationStep(2);
+                      setAnimStatus("Planetary positions are ready. Preparing your birth chart…");
                       return true;
                     } catch (e) {
                       console.error("[Onboarding] Planet calc failed", e);
@@ -559,7 +575,12 @@ useEffect(() => {
                     return; // do not navigate; stay on animation as requested
                   }
 
-                  await delay;
+                  // Keep the loading animation visible for at least five seconds.
+                  const remainingAnimationTime = Math.max(0, 5000 - (Date.now() - animationStartedAt));
+                  await new Promise((resolve) => setTimeout(resolve, remainingAnimationTime));
+                  setAnimationStep(3);
+                  setAnimStatus("Your chart is ready. Opening your dashboard…");
+                  await new Promise((resolve) => setTimeout(resolve, 550));
                   setAnimating(false);
                   // Save referral source
                   localStorage.setItem('onboarding_complete', 'true');
@@ -573,9 +594,9 @@ useEffect(() => {
           </div>
 
           {/* Privacy Message */}
-          <div className="flex items-center justify-center gap-2 mt-6 text-xs text-muted-foreground">
-            <Lock className="w-3 h-3" />
-            <span>Your birth details are private and securely stored</span>
+          <div className="mx-auto mt-5 flex w-fit max-w-full items-center justify-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-center text-[11px] font-medium leading-snug text-emerald-400 sm:mt-6 sm:text-xs">
+            <CheckCircle2 aria-hidden="true" className="h-4 w-4 shrink-0 text-emerald-400" />
+            <span>Your birth details are handled securely and kept private</span>
           </div>
         </div>
       </div>
@@ -625,28 +646,91 @@ useEffect(() => {
         </DialogContent>
       </Dialog>
       {animating && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          <div className="absolute inset-0 bg-background/95" />
-          {/* Starry background */}
-          <div className="absolute inset-0 opacity-30" style={{background:
-            'radial-gradient(circle at 20% 30%, rgba(147,51,234,0.25) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(236,72,153,0.25) 0%, transparent 45%)'}} />
-          {/* Astrology image silhouettes */}
-          <img src="/optimized/vedika.webp" alt="Vedika" className="absolute left-8 bottom-8 w-24 h-24 rounded-full object-cover opacity-70" />
-          <div className="relative mx-6 max-w-xl text-center">
-            <div className="animate-pulse text-lg text-muted-foreground mb-3">{animStatus || 'Personalizing your dashboard…'}</div>
-            <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur p-6">
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-secondary animate-bounce" /> Gathering your birth details…</div>
-                <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-secondary animate-bounce" style={{animationDelay:'150ms'}}/> Calculating planetary positions…</div>
-                <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-secondary animate-bounce" style={{animationDelay:'300ms'}}/> Preparing remedies and insights…</div>
-                <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-secondary animate-bounce" style={{animationDelay:'450ms'}}/> Warming up Vedika ✨</div>
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-background/95 px-4 py-6 backdrop-blur-md"
+          role="status"
+          aria-live="polite"
+          aria-label="Preparing your birth chart"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 opacity-40"
+            style={{ background: 'radial-gradient(circle at 20% 25%, rgba(147,51,234,0.22) 0%, transparent 38%), radial-gradient(circle at 82% 72%, rgba(236,72,153,0.2) 0%, transparent 42%)' }}
+          />
+          <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-border/70 bg-card/90 p-5 shadow-2xl shadow-secondary/10 backdrop-blur-xl sm:p-7">
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-secondary/80 to-transparent" />
+
+            <div className="mb-6 flex flex-col items-center text-center">
+              <div className="relative mb-4 h-20 w-20 rounded-full border border-secondary/50 bg-secondary/10 p-1 shadow-lg shadow-secondary/20">
+                <div className="absolute inset-0 animate-ping rounded-full border border-secondary/30 [animation-duration:2.4s]" />
+                <img src="/optimized/vedika.webp" alt="" className="relative h-full w-full rounded-full object-cover" />
               </div>
-              <div className="mt-4 h-2 w-full rounded-full bg-border/60">
-                <div className="h-2 rounded-full bg-secondary animate-[progress_0.5s_linear_forwards]" style={{width:'0%'}} />
-              </div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-secondary">Your personal birth chart</p>
+              <h2 className="font-display text-2xl font-semibold text-foreground sm:text-3xl">The stars are aligning</h2>
+              <p className="mt-2 min-h-5 text-sm text-muted-foreground" aria-live="polite">{animStatus || 'Reviewing your birth details…'}</p>
             </div>
+
+            <div className="relative space-y-4" aria-label={`Progress step ${animationStep + 1} of 4`}>
+              <div className="absolute bottom-4 left-[15px] top-4 w-px bg-border/70" aria-hidden="true">
+                <div
+                  className="w-full bg-secondary transition-all duration-700 ease-out"
+                  style={{ height: `${(animationStep / 3) * 100}%` }}
+                />
+              </div>
+              {[
+                'Reviewing your birth details',
+                'Calculating planetary positions',
+                'Preparing your birth chart',
+                'Opening your personalized dashboard',
+              ].map((label, index) => {
+                const complete = index < animationStep;
+                const active = index === animationStep;
+                return (
+                  <div key={label} className="relative flex min-h-8 items-center gap-3">
+                    <div className={cn(
+                      'relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-all duration-500',
+                      complete && 'border-secondary bg-secondary text-secondary-foreground',
+                      active && 'border-secondary bg-background text-secondary shadow-[0_0_18px_hsl(var(--secondary)/0.35)]',
+                      !complete && !active && 'border-border bg-card text-muted-foreground',
+                    )}>
+                      {complete ? (
+                        <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                      ) : active ? (
+                        <span className="relative flex h-2.5 w-2.5">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-secondary opacity-50" />
+                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-secondary" />
+                        </span>
+                      ) : (
+                        <span className="h-2 w-2 rounded-full bg-border" />
+                      )}
+                    </div>
+                    <span className={cn(
+                      'text-sm transition-colors duration-500',
+                      active && 'font-semibold text-foreground',
+                      complete && 'text-muted-foreground',
+                      !complete && !active && 'text-muted-foreground/70',
+                    )}>
+                      {label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div
+              className="mt-6 h-1.5 overflow-hidden rounded-full bg-border/60"
+              role="progressbar"
+              aria-label="Birth chart preparation progress"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round((animationStep / 3) * 100)}
+            >
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-[width] duration-700 ease-out"
+                style={{ width: `${Math.max(8, (animationStep / 3) * 100)}%` }}
+              />
+            </div>
+            <p className="mt-3 text-center text-xs text-muted-foreground">This usually takes just a few moments.</p>
           </div>
-          <style>{`@keyframes progress{from{width:0%}to{width:100%}}`}</style>
         </div>
       )}
     </div>
