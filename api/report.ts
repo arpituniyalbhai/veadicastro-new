@@ -48,7 +48,7 @@ export default async function handler(req: Request) {
         'Authorization': `Bearer ${key}`,
       },
       body: JSON.stringify({
-        model: 'mistral-small-latest',
+        model: 'ministral-14b-latest',
         temperature: 0.4,
         max_tokens: REPORT_MAX_TOKENS,
         stream: true,

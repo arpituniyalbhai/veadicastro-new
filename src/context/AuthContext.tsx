@@ -4,6 +4,7 @@ interface User {
   uid: string;
   email: string;
   displayName?: string;
+  photoURL?: string | null;
   planName?: string;
   isPremium?: boolean;
   questionsUsed?: number;
@@ -77,6 +78,7 @@ export const AuthProvider = ({
           uid: firebaseUser.uid,
           email: firebaseUser.email || "",
           displayName: firebaseUser.displayName || "",
+          photoURL: firebaseUser.photoURL,
           createdAt: firebaseUser.metadata.creationTime,
           lastLoginAt: firebaseUser.metadata.lastSignInTime,
         };
